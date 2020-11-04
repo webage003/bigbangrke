@@ -1,5 +1,5 @@
 configs:
   "registry1.dsop.io":
     auth:
-      username: ${CI_REGISTRY_USER}
-      password: ${CI_REGISTRY_PASSWORD}
+      username: ${CI_REGISTRY1_USER}
+      password: ${CI_REGISTRY1_PASSWORD}
