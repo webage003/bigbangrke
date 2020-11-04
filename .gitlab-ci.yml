@@ -36,6 +36,8 @@ package tests:
     
     # Inject image pull secrets into k3d
     - envsubst < tests/registries.yaml.template > tests/registries.yaml
+    - docker login registry1.dsop.io  -p ${REGISTRY1_PASSWORD} -u ${REGISTRY1_USER}
+    - docker pull registry1.dsop.io/ironbank/opensource/openpolicyagent/gatekeeper:v3.1.2
     
     # Standup cluster
     - k3d cluster create umbrella --volume ${PWD}/tests/registries.yaml:/etc/rancher/k3s/registries.yaml --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" -p 80:80@loadbalancer -p 443:443@loadbalancer --wait --agents 1 --servers 1
