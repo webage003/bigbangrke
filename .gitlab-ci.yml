@@ -81,9 +81,7 @@ package tests:
   script:
     # Place kubernetes package test here
     - echo "Package tests go here"
-    - ls -la
-    - kubectl get all -A
-    - kubectl get nodes -o wide
+    - kubectl get hr -A
 
   after_script:
     # Delete Cluster
