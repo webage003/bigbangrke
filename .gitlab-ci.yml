@@ -35,7 +35,9 @@ package tests:
     - echo "nameserver 127.0.0.1" >> /etc/resolv.conf
     
     # Inject image pull secrets into k3d
+    - env
     - envsubst < tests/registries.yaml.template > tests/registries.yaml
+    - cat tests/registries.yaml
     - docker login registry1.dsop.io  -p ${REGISTRY1_PASSWORD} -u ${REGISTRY1_USER}
     - docker pull registry1.dsop.io/ironbank/opensource/openpolicyagent/gatekeeper:v3.1.2
     
