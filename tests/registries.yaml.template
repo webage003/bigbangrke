@@ -1,12 +1,3 @@
-mirrors:
-  "*":
-    endpoint:
-      - "http://registry.localhost:5000"
-
-  "docker.io":
-    endpoint:
-      - "http://proxy-registry.localhost:5001"
-
 configs:
   "registry1.dsop.io":
     auth:
