@@ -17,8 +17,6 @@ package tests:
     DOCKER_HOST: tcp://localhost:2375/
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
-    REGISTRY1_USER: runyontr
-    REGISTRY1_PASSWORD: fake
 
   before_script:
     # Downloading Tools needed for cluster creation
