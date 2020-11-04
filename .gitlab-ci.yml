@@ -43,9 +43,11 @@ package tests:
     - k3d node list
     # Install Flux
     - which flux
-    - flux install --verbose
+    # Stage some images:
+    - docker pull ghcr.io/fluxcd/source-controller:v0.2.1
+    - docker pull ghcr.io/fluxcd/helm-controller:v0.2.0
+    - flux install --verbose --components source-controller,helm-controller
     - kubectl get ns,pods,hr,gitrepositories -A
-
     # Install Big Bang
     - helm upgrade -i bigbang chart -n flux-system 
     # Wait for healthy
