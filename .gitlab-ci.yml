@@ -47,6 +47,7 @@ package tests:
     - docker pull ghcr.io/fluxcd/source-controller:v0.2.1
     - docker pull ghcr.io/fluxcd/helm-controller:v0.2.0
     - flux install --verbose --components source-controller,helm-controller --timeout 3m0s
+    - sleep 10
     - kubectl get ns,pods,hr,gitrepositories -A
     # Install Big Bang
     - helm upgrade -i bigbang chart -n flux-system 
