@@ -76,4 +76,6 @@ package tests:
 
   after_script:
     # Delete Cluster
+    - kubectl describe deployment -n flux-system source-controller
+    - kubectl get ns,deployments,pods -A
     - k3d cluster delete umbrella
