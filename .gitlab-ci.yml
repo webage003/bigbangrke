@@ -87,7 +87,4 @@ package tests:
 
   after_script:
     # Delete Cluster
-    - kubectl describe deployment,pods -A
-    - kubectl get events -A
-    - kubectl get ns,deployments,pods -A
     - k3d cluster delete umbrella
