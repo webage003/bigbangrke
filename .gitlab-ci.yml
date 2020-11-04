@@ -37,7 +37,6 @@ package tests:
     - envsubst < tests/registries.yaml.template > tests/registries.yaml
     
     # Standup cluster
-    - k3d cluster delete umbrella | true
     - k3d cluster create umbrella --volume ${PWD}/tests/registries.yaml:/etc/rancher/k3s/registries.yaml --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" -p 80:80@loadbalancer -p 443:443@loadbalancer --wait --agents 1 --servers 1
     - while ! (kubectl get node | grep "agent" > /dev/null); do sleep 3; done
     - kubectl get nodes
