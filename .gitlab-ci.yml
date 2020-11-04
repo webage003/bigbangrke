@@ -2,7 +2,7 @@ stages:
   - package tests
 
 # Start with all in one
-# break down into infra setup (pass kubeconfig), install, test, cleanup
+
 
 package tests:
   stage: package tests
@@ -20,6 +20,7 @@ package tests:
 
   before_script:
     # Downloading Tools needed for cluster creation
+    - cat k3d.config
     - echo "Installing wget npm git and docker-ce-cli"
     - yum -y install wget npm git gettext > /dev/null && wget https://download.docker.com/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo > /dev/null && yum -y install docker-ce-cli > /dev/null && yum -y clean all > /dev/null
     - wget -q "https://get.helm.sh/helm-v3.4.0-linux-amd64.tar.gz" && tar xzf helm-v3.4.0-linux-amd64.tar.gz -C /usr/local/bin/ --strip-components 1 && chmod +x /usr/local/bin/helm
@@ -30,9 +31,8 @@ package tests:
     - wget -q -O /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/v1.19.3/bin/linux/amd64/kubectl" && chmod +x /usr/local/bin/kubectl
     - wget -q "https://github.com/open-policy-agent/conftest/releases/download/v0.21.0/conftest_0.21.0_Linux_x86_64.tar.gz" && tar xzf conftest_0.21.0_Linux_x86_64.tar.gz -C /usr/local/bin/ && chmod +x /usr/local/bin/conftest
     # Starting dnsmasq for cluster dns resolution
-    # TODO why do I need these?
-    # - docker run -d -p 53:53/udp -p 53:53 janeczku/go-dnsmasq:latest
-    # - echo "nameserver 127.0.0.1" >> /etc/resolv.conf
+    - docker run -d -p 53:53/udp -p 53:53 janeczku/go-dnsmasq:latest
+    - echo "nameserver 127.0.0.1" >> /etc/resolv.conf
 
     # Inject image pull secrets into k3d
     - env
