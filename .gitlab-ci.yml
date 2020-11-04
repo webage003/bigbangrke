@@ -43,7 +43,7 @@ package tests:
     - k3d node list
     # Install Flux
     - which flux
-    - flux install
+    - flux install --verbose
     - kubectl get ns,pods,hr,gitrepositories -A
 
     # Install Big Bang
