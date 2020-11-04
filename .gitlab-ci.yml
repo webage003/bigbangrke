@@ -21,7 +21,7 @@ package tests:
   before_script:
     # Downloading Tools needed for cluster creation
     - echo "Installing wget npm git and docker-ce-cli"
-    - yum -y install wget npm git > /dev/null && wget https://download.docker.com/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo > /dev/null && yum -y install docker-ce-cli > /dev/null && yum -y clean all > /dev/null
+    - yum -y install wget npm git gettext > /dev/null && wget https://download.docker.com/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo > /dev/null && yum -y install docker-ce-cli > /dev/null && yum -y clean all > /dev/null
     - wget -q "https://get.helm.sh/helm-v3.4.0-linux-amd64.tar.gz" && tar xzf helm-v3.4.0-linux-amd64.tar.gz -C /usr/local/bin/ --strip-components 1 && chmod +x /usr/local/bin/helm
     - curl -s https://toolkit.fluxcd.io/install.sh | bash
     - wget -q -O /usr/local/bin/argocd "https://github.com/argoproj/argo-cd/releases/download/v1.7.8/argocd-linux-amd64" && chmod +x /usr/local/bin/argocd
