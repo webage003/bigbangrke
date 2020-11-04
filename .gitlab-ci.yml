@@ -49,7 +49,9 @@ package tests:
     # Install Big Bang
     - helm upgrade -i bigbang chart -n flux-system 
     # Wait for healthy
-    - kubectl wait --for=condition=Ready --timeout 1200s -A helmrelease --all
+    - sleep 5
+    - kubectl get ns,pods,hr,gitrepositories -A
+    - kubectl wait --for=condition=Ready --timeout 120s -A helmrelease --all
     # Install cypress
 #    - npm install cypress
     # Clean up previous cluster
@@ -74,7 +76,7 @@ package tests:
 
   after_script:
     # Delete Cluster
-    - kubectl describe deployment,pods -n flux-system
-    - kubectl get events -n flux-system
+    - kubectl describe deployment,pods -A
+    - kubectl get events -A
     - kubectl get ns,deployments,pods -A
     - k3d cluster delete umbrella
