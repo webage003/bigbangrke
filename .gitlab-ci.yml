@@ -38,7 +38,7 @@ package tests:
     - env
     - envsubst < tests/registries.yaml.template > tests/registries.yaml
     - cat tests/registries.yaml
-    - docker login registry1.dsop.io  -p ${REGISTRY1_PASSWORD} -u ${REGISTRY1_USER}
+    - docker login registry1.dsop.io  -p ${CI_REGISTRY_PASSWORD} -u ${CI_REGISTRY_USER}
     - docker pull registry1.dsop.io/ironbank/opensource/openpolicyagent/gatekeeper:v3.1.2
     
     # Standup cluster
