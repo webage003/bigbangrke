@@ -56,13 +56,13 @@ package tests:
     - sleep 5
     - kubectl get ns,pods,hr,gitrepositories -A
     - kubectl wait --for=condition=Ready --timeout 30s helmrelease -n flux-system bigbang-certmanager
-    - kubectl wait --for=condition=Ready --timeout 30s helmrelease -n flux-system bigbang-gatekeeper
-    - kubectl wait --for=condition=Ready --timeout 30s helmrelease -n flux-system bigbang-istio-operator
-    - kubectl wait --for=condition=Ready --timeout 30s helmrelease -n flux-system bigbang-istio
-    - kubectl wait --for=condition=Ready --timeout 30s helmrelease -n flux-system bigbang-eck-operator
-    - kubectl wait --for=condition=Ready --timeout 30s helmrelease -n flux-system bigbang-logging-operator
-    - kubectl wait --for=condition=Ready --timeout 30s helmrelease -n flux-system bigbang-efk
-    - kubectl wait --for=condition=Ready --timeout 30s helmrelease -n flux-system bigbang-twistlock
+    - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n flux-system bigbang-gatekeeper
+    - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n flux-system bigbang-istio-operator
+    - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n flux-system bigbang-istio
+    - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n flux-system bigbang-eck-operator
+    - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n flux-system bigbang-logging-operator
+    - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n flux-system bigbang-efk
+    - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n flux-system bigbang-twistlock
     # Install cypress
 #    - npm install cypress
     # Clean up previous cluster
