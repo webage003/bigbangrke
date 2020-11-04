@@ -46,7 +46,7 @@ package tests:
     # Stage some images:
     - docker pull ghcr.io/fluxcd/source-controller:v0.2.1
     - docker pull ghcr.io/fluxcd/helm-controller:v0.2.0
-    - flux install --verbose --components source-controller,helm-controller
+    - flux install --verbose --components source-controller,helm-controller --timeout 3m0s
     - kubectl get ns,pods,hr,gitrepositories -A
     # Install Big Bang
     - helm upgrade -i bigbang chart -n flux-system 
@@ -76,6 +76,7 @@ package tests:
 
   after_script:
     # Delete Cluster
-    - kubectl describe deployment -n flux-system source-controller
+    - kubectl describe deployment,pods -n flux-system
+    - kubectl get events -n flux-system
     - kubectl get ns,deployments,pods -A
     - k3d cluster delete umbrella
