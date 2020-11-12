@@ -1,0 +1,7 @@
+hostname: local.dsop.io
+
+monitoring:
+  enabled: "false"
+
+twistlock:
+  enabled: "false"

@@ -19,12 +19,13 @@ spec:
         kind: GitRepository
         name: bigbang-repo
         namespace: bigbang
-      valuesFile: {{ .Values.valuesFile }}
   interval: {{ .Values.HelmRelease.interval }}
   valuesFrom:
-    - name: bigbang-values
-      kind: ConfigMap
+    - kind: ConfigMap
+      name: bigbang-values
       optional: true
-    - name: bigbang-values
-      kind: Secret
+    - kind: Secret
+      name: bigbang-secrets
       optional: true
+  values:
+{{ .Files.Get (printf "overrides/%s/%s-values.yaml" .Values.tenant .Values.cluster) | indent 4 }}

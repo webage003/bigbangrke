@@ -6,5 +6,5 @@ GitRepository:
 HelmRelease:
   interval: 5m0s
 
-# Must be relative to Big Bang chart
-valuesFile: overrides\mytenant\mytenant-mycluster-values.yaml
+tenant: local
+cluster: dev
