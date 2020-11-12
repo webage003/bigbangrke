@@ -1,0 +1,11 @@
+GitRepository:
+  interval: 1m0s
+  url: https://repo1.dsop.io/platform-one/big-bang/umbrella.git
+  ref:
+    branch: toplevelhelm
+
+HelmRelease:
+  interval: 5m0s
+
+# Must be relative to Big Bang chart
+valuesFile: overrides\mytenant\mytenant-mycluster-values.yaml

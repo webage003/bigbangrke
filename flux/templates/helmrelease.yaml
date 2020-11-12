@@ -1,0 +1,30 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: bigbang-helm
+  namespace: bigbang
+  labels:
+    app.kubernetes.io/name: {{ template "bigbang.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: helmrelease
+    app.kubernetes.io/part-of: BigBang
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ template "bigbang.chart" . }}
+spec:
+  chart:
+    spec:
+      chart: chart
+      sourceRef:
+        kind: GitRepository
+        name: bigbang-repo
+        namespace: bigbang        
+      valuesFile: {{ .Values.valuesFile }}
+  interval: {{ .Values.HelmRelease.interval }}
+  valuesFrom:
+    - name: bigbang-values
+      kind: ConfigMap
+      optional: true
+    - name: bigbang-values
+      kind: Secret
+      optional: true
