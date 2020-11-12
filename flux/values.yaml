@@ -1,8 +1,7 @@
 GitRepository:
   interval: 1m0s
   url: https://repo1.dsop.io/platform-one/big-bang/umbrella.git
-  ref:
-    branch: toplevelhelm
+  branch: toplevelhelm
 
 HelmRelease:
   interval: 5m0s

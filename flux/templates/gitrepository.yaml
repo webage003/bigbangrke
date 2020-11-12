@@ -14,3 +14,5 @@ metadata:
 spec:
   interval: {{ .Values.GitRepository.interval }}
   url: {{ .Values.GitRepository.url }}
+  ref:
+    branch: {{ .Values.GitRepository.branch }}

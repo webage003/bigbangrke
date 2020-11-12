@@ -18,7 +18,7 @@ spec:
       sourceRef:
         kind: GitRepository
         name: bigbang-repo
-        namespace: bigbang        
+        namespace: bigbang
       valuesFile: {{ .Values.valuesFile }}
   interval: {{ .Values.HelmRelease.interval }}
   valuesFrom:
