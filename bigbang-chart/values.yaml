@@ -1,0 +1,20 @@
+namespace: bigbang
+
+# Flux reconciliation parameters
+flux:
+  interval: 1m0s
+
+# Curator helm chart location
+curator:
+  repo: https://repo1.dsop.io/platform-one/big-bang/umbrella.git
+  branch: toplevelhelm
+  chart: curator-chart
+
+# Secrets location
+secrets:
+  repo: https://repo1.dsop.io/platform-one/big-bang/umbrella.git
+  branch: toplevelhelm
+
+# Environment (used to lookup values in envs\<tenant>\<cluster> directory)
+tenant: local
+cluster: dev

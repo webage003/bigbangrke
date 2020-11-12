@@ -1,0 +1,37 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: curator-repo
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ template "bigbang.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: curator-repo
+    app.kubernetes.io/part-of: BigBang
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ template "bigbang.chart" . }}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.curator.repo }}
+  ref:
+    branch: {{ .Values.curator.branch }}
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: secrets-repo
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ template "bigbang.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: secrets-repo
+    app.kubernetes.io/part-of: BigBang
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ template "bigbang.chart" . }}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.secrets.repo }}
+  ref:
+    branch: {{ .Values.secrets.branch }}

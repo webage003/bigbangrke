@@ -1,25 +1,25 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: bigbang-helm
-  namespace: bigbang
+  name: curator-helm
+  namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ template "bigbang.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
-    app.kubernetes.io/component: helmrelease
+    app.kubernetes.io/component: curator-helm
     app.kubernetes.io/part-of: BigBang
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ template "bigbang.chart" . }}
 spec:
   chart:
     spec:
-      chart: chart
+      chart: {{ .Values.curator.chart }}
       sourceRef:
         kind: GitRepository
-        name: bigbang-repo
-        namespace: bigbang
-  interval: {{ .Values.HelmRelease.interval }}
+        name: curator-repo
+        namespace: {{ .Values.namespace }}
+  interval: {{ .Values.flux.interval }}
   valuesFrom:
     - kind: ConfigMap
       name: bigbang-values
@@ -28,4 +28,4 @@ spec:
       name: bigbang-secrets
       optional: true
   values:
-{{ .Files.Get (printf "overrides/%s/%s-values.yaml" .Values.tenant .Values.cluster) | indent 4 }}
+{{ .Files.Get (printf "envs/%s/%s/curator-values.yaml" .Values.tenant .Values.cluster) | indent 4 }}

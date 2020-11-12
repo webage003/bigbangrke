@@ -1,0 +1,48 @@
+# Overrides values
+hostname: bigbang.dev
+
+flux:
+  interval: 1m
+  rollback:
+    cleanupOnFail: false
+
+gatekeeper:
+  values:
+    replicas: 1
+
+istio:
+  values:
+    kiali:
+      dashboard:
+        auth:
+          strategy: anonymous
+
+logging:
+  values:
+    elasticsearch:
+      data:
+        count: 1
+        persistence:
+          size: 5Gi
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+      master:
+        count: 1
+        persistence:
+          size: 5Gi
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+
+monitoring:
+  enabled: false
+
+twistlock:
+  enabled: false
+  values:
+    console:
+      persistence:
+        size: 5Gi
