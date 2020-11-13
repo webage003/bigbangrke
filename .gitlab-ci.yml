@@ -158,5 +158,6 @@ rke2:clean:
       artifacts: true
       ref: rke2-pipeline
       project: platform-one/big-bang/umbrella
+    - job: rke2
   script:
     - echo "waited"
