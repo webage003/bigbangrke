@@ -156,7 +156,6 @@ rke2:clean:
   needs:
     - job: rke2:plan
       artifacts: true
-      ref: rke2-pipeline
       project: platform-one/big-bang/umbrella
     - job: rke2
   script:
