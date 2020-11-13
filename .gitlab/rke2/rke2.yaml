@@ -13,6 +13,10 @@ plan:
   script:
     - echo "plan"
     - export
+    - echo "afile" > saveme.txt
+  artifacts:
+    paths:
+      - saveme.txt
 
 apply:
   stage: apply
