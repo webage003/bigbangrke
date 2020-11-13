@@ -53,6 +53,7 @@ stages:
   - fast feedback
   - networking
   - cluster up
+  - cleanup
 
 .k3d:
   tags:
@@ -110,13 +111,21 @@ stages:
 #  only:
 #    - merge_requests
 
-create network:
-  stage: networking
-  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
-  script:
-    - echo "tmp"
+#create network:
+#  stage: networking
+#  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+#  script:
+#    - echo "tmp"
 
-rke2:
-  extends: .remote init
+rke2 up:
+  extends:
+    - .remote init
+    - .rke2 up
   stage: cluster up
   image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+
+rke2 down:
+  extends:
+    - .remote init
+    - .rke2 down
+  stage: cleanup
