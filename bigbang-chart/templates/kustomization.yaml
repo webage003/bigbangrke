@@ -1,0 +1,23 @@
+	apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+	kind: Kustomization
+	metadata:
+	  name: bigbang-sops
+	  namespace: {{ default "bigbang" .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ template "bigbang.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    app.kubernetes.io/component: sops
+    app.kubernetes.io/part-of: BigBang
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+	spec:
+      interval: {{ default "5m" .Values.flux.interval }}
+	  sourceRef:
+	    kind: GitRepository
+	    name: bigbang-secrets
+	  path: {{ default (printf "envs/%s/%s/secrets" .Values.tenant .Values.cluster) .Values.secrets.path }}
+	  prune: true
+	  decryption:
+	    provider: sops
+	    secretRef:
+        name: sops-gpg
