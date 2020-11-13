@@ -20,10 +20,12 @@ plan:
 
 apply:
   stage: apply
+  needs: [ plan ]
   script:
     - echo "apply"
 
 destroy:
   stage: destroy
+  needs: [ apply ]
   script:
     - echo "destroy"
