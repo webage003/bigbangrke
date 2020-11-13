@@ -53,7 +53,7 @@ stages:
   - fast feedback
   - networking
   - cluster up
-  - cleanup
+  - clean
 
 .k3d:
   tags:
@@ -149,3 +149,8 @@ rke2:
     include:
       - local: ".gitlab/rke2/rke2.yaml"
     strategy: depend
+
+rke2:clean:
+  stage: clean
+  script:
+    - echo "waited"
