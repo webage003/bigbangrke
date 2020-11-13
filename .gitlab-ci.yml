@@ -153,5 +153,8 @@ rke2:
 
 rke2:clean:
   stage: clean
+  needs:
+    - job: plan
+      artifacts: true
   script:
     - echo "waited"
