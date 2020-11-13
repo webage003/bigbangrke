@@ -144,6 +144,8 @@ create network:
 #  when: manual
 
 rke2:
+  stage: cluster up
   trigger:
     include:
       - local: ".gitlab/rke2/rke2.yaml"
+    strategy: depend
