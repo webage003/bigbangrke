@@ -117,18 +117,22 @@ stages:
 #  script:
 #    - echo "tmp"
 
-rke2 up:
-  extends:
-    - .rke2 up
-  stage: cluster up
-  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+.rke2 vars:
   variables:
     TF_VAR_cluster_name: "rke2-${CI_COMMIT_SHORT_SHA}"
     TF_VAR_vpc_id: "vpc-5f627a3b"
     TF_VAR_subnets: '["subnet-7cda1f35","subnet-8f2ad4e8","subnet-cd480894"]'
 
+rke2 up:
+  extends:
+    - .rke2 vars
+    - .rke2 up
+  stage: cluster up
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+
 rke2 down:
   extends:
+    - .rke2 vars
     - .rke2 down
   stage: cleanup
   when: always
