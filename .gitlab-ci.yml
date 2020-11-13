@@ -119,7 +119,6 @@ stages:
 
 rke2 up:
   extends:
-    - .remote init
     - .rke2 up
   stage: cluster up
   image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
@@ -130,7 +129,6 @@ rke2 up:
 
 rke2 down:
   extends:
-    - .remote init
     - .rke2 down
   stage: cleanup
   when: always
