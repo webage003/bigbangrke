@@ -1,0 +1,14 @@
+#include:
+#  - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
+#    file: '/jobs/rke2/tf-cluster-up.yaml'
+#    ref: rke2
+
+stages:
+  - plan
+  - apply
+  - destroy
+
+plan:
+  stage: plan
+  script:
+    - echo "hi"

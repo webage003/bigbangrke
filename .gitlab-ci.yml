@@ -1,7 +1,7 @@
-include:
-  - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
-    file: '/jobs/rke2/tf-cluster-up.yaml'
-    ref: rke2
+#include:
+#  - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
+#    file: '/jobs/rke2/tf-cluster-up.yaml'
+#    ref: rke2
 
 .deploy_k3d: &deploy_k3d
   # Starting dnsmasq for cluster dns resolution
@@ -111,11 +111,11 @@ stages:
 #  only:
 #    - merge_requests
 
-#create network:
-#  stage: networking
-#  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
-#  script:
-#    - echo "tmp"
+create network:
+  stage: networking
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+  script:
+    - echo "tmp"
 
 .rke2 vars:
   variables:
@@ -123,16 +123,27 @@ stages:
     TF_VAR_vpc_id: "vpc-5f627a3b"
     TF_VAR_subnets: '["subnet-7cda1f35","subnet-8f2ad4e8","subnet-cd480894"]'
 
-rke2 up:
-  extends:
-    - .rke2 vars
-    - .rke2 up
-  stage: cluster up
-  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+#rke2 init:
+#  extends:
+#    - .rke2 vars
+#    - .rke2 init
+#  stage:
+#
+#rke2 up:
+#  extends:
+#    - .rke2 vars
+#    - .rke2 up
+#  stage: cluster up
+#  when: manual
+#
+#rke2 down:
+#  extends:
+#    - .rke2 vars
+#    - .rke2 down
+#  stage: cleanup
+#  when: manual
 
-rke2 down:
-  extends:
-    - .rke2 vars
-    - .rke2 down
-  stage: cleanup
-  when: always
+rke2:
+  trigger:
+    include:
+      - local: ".gitlab/rke2/rke2.yaml"
