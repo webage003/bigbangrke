@@ -22,8 +22,14 @@ rke2:apply:
   stage: apply
   script:
     - echo "apply"
+  environment:
+    name: rke2/${CI_COMMIT_REF_NAME}
+    auto_stop_in: 1 hour
 
 rke2:destroy:
   stage: destroy
   script:
     - echo "destroy"
+  environment:
+    name: rke2/${CI_COMMIT_REF_NAME}
+    action: stop

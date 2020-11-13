@@ -153,12 +153,9 @@ rke2:
 
 rke2:clean:
   stage: clean
-  needs:
-    - job: rke2:plan
-      artifacts: true
-      ref: HEAD
-      project: platform-one/big-bang/umbrella
-    - job: rke2
   script:
     - echo "waited"
     - cat saveme.txt
+  environment:
+    name: rke2/${CI_COMMIT_REF_NAME}
+    on_stop: rke2:destroy
