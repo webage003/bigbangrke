@@ -1,3 +1,7 @@
+include:
+  - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
+    file: '/jobs/rke2/tf-cluster-up.yaml'
+
 .deploy_k3d: &deploy_k3d
   # Starting dnsmasq for cluster dns resolution
   - docker run -d -p 53:53/udp -p 53:53 janeczku/go-dnsmasq:release-1.0.7
@@ -46,6 +50,8 @@
 
 stages:
   - fast feedback
+  - networking
+  - cluster up
 
 .k3d:
   tags:
@@ -67,38 +73,49 @@ stages:
     # Delete Cluster
     - k3d cluster delete ${K3D_CLUSTER_NAME}
 
-fresh install:
-  stage: fast feedback
-  extends: .k3d
-  variables:
-    K3D_CLUSTER_NAME: fresh-install
-  script:
-    - echo "Install Big Bang From Current Branch"
-    # Install Big Bang From Current Branch
-    - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD}
-    - kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
-    - *wait_for_healthy
-    - *do_some_quick_tests
+#fresh install:
+#  stage: fast feedback
+#  extends: .k3d
+#  variables:
+#    K3D_CLUSTER_NAME: fresh-install
+#  script:
+#    - echo "Install Big Bang From Current Branch"
+#    # Install Big Bang From Current Branch
+#    - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD}
+#    - kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
+#    - *wait_for_healthy
+#    - *do_some_quick_tests
+#
+#upgrade from master:
+#  stage: fast feedback
+#  extends: .k3d
+#  variables:
+#    K3D_CLUSTER_NAME: upgrade-from-master
+#  script:
+#    - echo "Install Big Bang From Master"
+#    - git fetch
+#    - git checkout ${CI_DEFAULT_BRANCH}
+#    - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD}
+#    - kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
+#    - *wait_for_healthy
+#    - *do_some_quick_tests
+#
+#    - echo "Upgrade Big Bang to Current Branch"
+#    - git checkout ${CI_COMMIT_BRANCH}
+#    - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD}
+#    - kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
+#    - *wait_for_healthy
+#    - *do_some_quick_tests
+#  only:
+#    - merge_requests
 
-upgrade from master:
-  stage: fast feedback
-  extends: .k3d
-  variables:
-    K3D_CLUSTER_NAME: upgrade-from-master
+create network:
+  stage: networking
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
   script:
-    - echo "Install Big Bang From Master"
-    - git fetch
-    - git checkout ${CI_DEFAULT_BRANCH}
-    - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD}
-    - kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
-    - *wait_for_healthy
-    - *do_some_quick_tests
+    - echo "tmp"
 
-    - echo "Upgrade Big Bang to Current Branch"
-    - git checkout ${CI_COMMIT_BRANCH}
-    - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD}
-    - kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
-    - *wait_for_healthy
-    - *do_some_quick_tests
-  only:
-    - merge_requests
+rke2:
+  extends: .remote init
+  stage: cluster up
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
