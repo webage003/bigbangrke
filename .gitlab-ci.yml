@@ -133,3 +133,4 @@ rke2 down:
     - .remote init
     - .rke2 down
   stage: cleanup
+  when: always
