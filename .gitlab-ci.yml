@@ -153,5 +153,10 @@ rke2:
 
 rke2:clean:
   stage: clean
+  needs:
+    - job: rke2:plan
+      artifacts: true
+      ref: ${CI_COMMIT_REF_NAME}
+      project: ${CI_PROJECT_PATH}
   script:
     - echo "waited"

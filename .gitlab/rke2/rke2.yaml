@@ -8,7 +8,7 @@ stages:
   - apply
   - destroy
 
-plan:
+rke2:plan:
   stage: plan
   script:
     - echo "plan"
@@ -18,13 +18,13 @@ plan:
     paths:
       - saveme.txt
 
-apply:
+rke2:apply:
   stage: apply
   needs: [ plan ]
   script:
     - echo "apply"
 
-destroy:
+rke2:destroy:
   stage: destroy
   needs: [ apply ]
   script:
