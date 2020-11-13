@@ -1,6 +1,7 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
     file: '/jobs/rke2/tf-cluster-up.yaml'
+    ref: rke2
 
 .deploy_k3d: &deploy_k3d
   # Starting dnsmasq for cluster dns resolution
