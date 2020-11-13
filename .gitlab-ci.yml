@@ -161,3 +161,4 @@ rke2:clean:
     - job: rke2
   script:
     - echo "waited"
+    - cat saveme.txt
