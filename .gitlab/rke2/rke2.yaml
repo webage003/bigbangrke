@@ -20,12 +20,10 @@ rke2:plan:
 
 rke2:apply:
   stage: apply
-  needs: [ plan ]
   script:
     - echo "apply"
 
 rke2:destroy:
   stage: destroy
-  needs: [ apply ]
   script:
     - echo "destroy"
