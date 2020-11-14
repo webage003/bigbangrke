@@ -1,22 +1,18 @@
 # Overrides values
 hostname: bigbang.dev
-
 flux:
   interval: 1m
   rollback:
     cleanupOnFail: false
-
 gatekeeper:
   values:
     replicas: 1
-
 istio:
   values:
     kiali:
       dashboard:
         auth:
           strategy: anonymous
-
 logging:
   values:
     elasticsearch:
@@ -36,10 +32,8 @@ logging:
           limits:
             cpu: 1
             memory: 1Gi
-
 monitoring:
   enabled: false
-
 twistlock:
   enabled: false
   values:

@@ -1,21 +1,21 @@
-# Big Bang namespace
-#namespace: # Default "bigbang"
+ # Big Bang namespace
+namespace: bigbang
 
 # Flux polling interval
-#flux:
-#  interval: # Default is 5m for Kustomization/HelmRelease CRDs, 1m for GitRepositories/HelmCharts
+flux:
+  interval: 1m
 
 # Umbrella helm chart
 umbrella:
   repo: https://repo1.dsop.io/platform-one/big-bang/umbrella.git
-  branch: toplevelhelm # Default "master"
-#  chart: # Default "chart"
+  branch: toplevelhelm
+  chart: chart
 
 # SOPS Secrets
-#secrets:
-#  repo: "" # Defaults to  {{ .Values.umbrella.repo }}
-#  branch: "" # Default {{ .Values.umbrella.branch }}
-#  path: "" # Defaults to env/<tenant>/<cluster>/secrets
+secrets:
+  repo: # Defaults to {{ .Values.umbrella.repo }}
+  branch: # Default {{ .Values.umbrella.branch }}
+  path: # Defaults to env/<tenant>/<cluster>/secrets
 
 # Environment (used to lookup values in envs/<tenant>/<cluster> directory)
 tenant: local

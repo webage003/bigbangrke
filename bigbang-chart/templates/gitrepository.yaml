@@ -2,7 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
   name: bigbang
-  namespace: {{ default "bigbang" .Values.namespace }}
+  namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ template "bigbang.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -12,16 +12,16 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ template "bigbang.chart" . }}
 spec:
-  interval: {{ default "1m" .Values.flux.interval }}
+  interval: {{ .Values.flux.interval }}
   url: {{ .Values.umbrella.repo }}
   ref:
-    branch: {{ default "master" .Values.umbrella.branch }}
+    branch: {{ .Values.umbrella.branch }}
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
   name: bigbang-secrets
-  namespace: {{ default "bigbang" .Values.namespace }}
+  namespace: {{ .Values.namespace }}
   labels:
     app.kubernetes.io/name: {{ template "bigbang.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -31,7 +31,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ template "bigbang.chart" . }}
 spec:
-  interval: {{ default "1m" .Values.flux.interval }}
+  interval: {{ .Values.flux.interval }}
   url: {{ default .Values.umbrella.repo .Values.secrets.repo }}
   ref:
     branch: {{ default .Values.umbrella.branch .Values.secrets.branch }}
