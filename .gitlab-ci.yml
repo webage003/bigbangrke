@@ -211,7 +211,7 @@ aks|cluster up:
   script:
     - echo "aks cluster up"
   needs:
-    - aks|network up
+    - azure|network up
 
 aks|bigbang up:
   extends: .infra create
