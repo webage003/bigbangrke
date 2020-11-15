@@ -35,9 +35,15 @@ upgrade:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
-.cleanup:
+.infra create:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+.infra cleanup:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      allow_failure: true
+      when: always
 
 #
 # Networking
@@ -53,19 +59,19 @@ aws|network up:
   needs: []
 
 aws|network down:
-  extends: .cleanup
+  extends: .infra cleanup
   stage: network down
   script:
     - echo "aws network down"
-#    - rke2|cluster down
-#    - eks|cluster down
-
+  needs:
+    - rke2|cluster down
+    - eks|cluster down
 
 #
 # RKE2
 #
 rke2|cluster up:
-  extends: .mr
+  extends: .infra create
   stage: cluster up
   script:
     - echo "rke2 cluster up"
@@ -96,19 +102,19 @@ rke2|cluster up:
 #  needs:
 #    - rke2|e2e tests
 #
-#rke2|cluster down:
-#  extends: .cleanup
-#  stage: cluster down
-#  script:
-#    - echo "rke2 cluster down"
-#  needs:
-#    - rke2|bigbang down
-#
+rke2|cluster down:
+  extends: .infra cleanup
+  stage: cluster down
+  script:
+    - echo "rke2 cluster down"
+  needs:
+    - rke2|bigbang down
+
 #
 # EKS
 #
 eks|cluster up:
-  extends: .mr
+  extends: .infra create
   stage: cluster up
   script:
     - echo "eks cluster up"
@@ -139,10 +145,10 @@ eks|cluster up:
 #  needs:
 #    - eks|e2e tests
 #
-#eks|cluster down:
-#  extends: .cleanup
-#  stage: cluster down
-#  script:
-#    - echo "eks cluster down"
-#  needs:
-#    - eks|bigbang down
+eks|cluster down:
+  extends: .infra cleanup
+  stage: cluster down
+  script:
+    - echo "eks cluster down"
+  needs:
+    - eks|bigbang down
