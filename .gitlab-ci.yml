@@ -1,8 +1,8 @@
 workflow:
   rules:
-    - if: $CI_COMMIT_MESSAGE =~ /^wip/
+    - if: '$CI_COMMIT_MESSAGE =~ /^wip/'
       when: never
-    - if: $CI_COMMIT_BRANCH =~ /^docs-/
+    - if: '$CI_COMMIT_BRANCH =~ /^docs-/'
       when: never
     - when: always
 
@@ -35,16 +35,22 @@ upgrade:
   stage: network up
   needs: []
   rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix-/'
+      when: never
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: manual
       allow_failure: false
 
 .infra create:
   rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix-/'
+      when: never
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 .infra cleanup:
   rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix-/'
+      when: never
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       allow_failure: true
       when: always
