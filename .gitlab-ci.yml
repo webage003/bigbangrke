@@ -46,7 +46,7 @@ aws|network up:
   rules:
     - if: $CI_MERGE_REQUEST_ID
       when: manual
-      allow_failure: true
+      allow_failure: false
   stage: network up
   script:
     - echo "aws network up"
