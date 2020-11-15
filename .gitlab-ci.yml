@@ -27,8 +27,8 @@ upgrade:
   stage: smoke tests
   script:
     - echo "k3d upgrade smoke tests"
-  only:
-    - merge_requests
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 # E2E Matrix
 .infra fork:
