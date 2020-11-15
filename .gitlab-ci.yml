@@ -54,15 +54,16 @@ aws|network up:
     - echo "aws network up"
   needs: []
 
-#aws|network down:
-#  extends: .cleanup
-#  stage: network down
-#  script:
-#    - echo "aws network down"
-#  needs:
+aws|network down:
+  extends: .cleanup
+  stage: network down
+  script:
+    - echo "aws network down"
+  needs:
+    - aws|network up
 #    - rke2|cluster down
 #    - eks|cluster down
-#
+
 ##
 ## RKE2
 ##
