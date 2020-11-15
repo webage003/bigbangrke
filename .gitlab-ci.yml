@@ -52,7 +52,6 @@ upgrade:
 #
 # Networking
 #
-
 # AWS
 aws|network up:
   extends: .infra fork
