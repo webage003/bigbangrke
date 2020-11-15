@@ -46,6 +46,8 @@ rke2|cluster up:
   stage: cluster up
   script:
     - echo "rke2 cluster up"
+  needs:
+    - aws|network up
 
 rke2|bigbang up:
   stage: bigbang up
@@ -84,6 +86,8 @@ eks|cluster up:
   stage: cluster up
   script:
     - echo "eks cluster up"
+  needs:
+    - aws|network up
 
 eks|bigbang up:
   stage: bigbang up
