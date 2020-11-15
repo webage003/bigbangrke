@@ -36,6 +36,7 @@ aws|network up:
   script:
     - echo "aws network up"
   needs: []
+  when: manual
 
 aws|network down:
   extends: .mr
