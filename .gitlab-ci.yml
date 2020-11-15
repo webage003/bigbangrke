@@ -21,9 +21,6 @@ upgrade:
   script:
     - echo "k3d upgrade smoke tests"
 
-
-
-
 #
 # Networking
 #
@@ -31,6 +28,7 @@ aws|network up:
   stage: network up
   script:
     - echo "aws network up"
+  needs: []
 
 aws|network down:
   stage: network down
