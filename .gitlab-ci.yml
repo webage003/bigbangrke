@@ -21,11 +21,25 @@ upgrade:
   script:
     - echo "k3d upgrade smoke tests"
 
+
+
+
+#
+# Networking
+#
 aws|network up:
   stage: network up
   script:
     - echo "aws network up"
 
+aws|network down:
+  stage: network down
+  script:
+    - echo "aws network down"
+
+#
+# RKE2
+#
 rke2|cluster up:
   stage: cluster up
   script:
@@ -51,7 +65,30 @@ rke2|cluster down:
   script:
     - echo "rke2 cluster down"
 
-aws|network down:
-  stage: network down
+#
+# EKS
+#
+eks|cluster up:
+  stage: cluster up
   script:
-    - echo "aws network down"
+    - echo "eks cluster up"
+
+eks|bigbang up:
+  stage: bigbang up
+  script:
+    - echo "eks bigbang up"
+
+eks|e2e tests:
+  stage: tests
+  script:
+    - echo "eks e2e tests"
+
+eks|bigbang down:
+  stage: bigbang down
+  script:
+    - echo "eks bigbang down"
+
+eks|cluster down:
+  stage: cluster down
+  script:
+    - echo "eks cluster down"
