@@ -75,6 +75,7 @@ rke2|cluster up:
   stage: cluster up
   script:
     - echo "rke2 cluster up"
+    - exit 1
   needs:
     - aws|network up
 
