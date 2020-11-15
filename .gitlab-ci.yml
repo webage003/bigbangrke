@@ -46,7 +46,7 @@ upgrade:
 #
 aws|network up:
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_MERGE_REQUEST_ID
       when: manual
       allow_failure: true
   stage: network up
@@ -54,97 +54,97 @@ aws|network up:
     - echo "aws network up"
   needs: []
 
-aws|network down:
-  extends: .cleanup
-  stage: network down
-  script:
-    - echo "aws network down"
-  needs:
-    - rke2|cluster down
-    - eks|cluster down
-
+#aws|network down:
+#  extends: .cleanup
+#  stage: network down
+#  script:
+#    - echo "aws network down"
+#  needs:
+#    - rke2|cluster down
+#    - eks|cluster down
 #
-# RKE2
+##
+## RKE2
+##
+#rke2|cluster up:
+#  extends: .mr
+#  stage: cluster up
+#  script:
+#    - echo "rke2 cluster up"
+#  needs:
+#    - aws|network up
 #
-rke2|cluster up:
-  extends: .mr
-  stage: cluster up
-  script:
-    - echo "rke2 cluster up"
-  needs:
-    - aws|network up
-
-rke2|bigbang up:
-  extends: .mr
-  stage: bigbang up
-  script:
-    - echo "rke2 bigbang up"
-  needs:
-    - rke2|cluster up
-
-rke2|e2e tests:
-  extends: .mr
-  stage: tests
-  script:
-    - echo "rke2 e2e tests"
-  needs:
-    - rke2|bigbang up
-
-rke2|bigbang down:
-  extends: .cleanup
-  stage: bigbang down
-  script:
-    - echo "rke2 bigbang down"
-  needs:
-    - rke2|e2e tests
-
-rke2|cluster down:
-  extends: .cleanup
-  stage: cluster down
-  script:
-    - echo "rke2 cluster down"
-  needs:
-    - rke2|bigbang down
-
+#rke2|bigbang up:
+#  extends: .mr
+#  stage: bigbang up
+#  script:
+#    - echo "rke2 bigbang up"
+#  needs:
+#    - rke2|cluster up
 #
-# EKS
+#rke2|e2e tests:
+#  extends: .mr
+#  stage: tests
+#  script:
+#    - echo "rke2 e2e tests"
+#  needs:
+#    - rke2|bigbang up
 #
-eks|cluster up:
-  extends: .mr
-  stage: cluster up
-  script:
-    - echo "eks cluster up"
-  needs:
-    - aws|network up
-
-eks|bigbang up:
-  extends: .mr
-  stage: bigbang up
-  script:
-    - echo "eks bigbang up"
-  needs:
-    - eks|cluster up
-
-eks|e2e tests:
-  extends: .mr
-  stage: tests
-  script:
-    - echo "eks e2e tests"
-  needs:
-    - eks|bigbang up
-
-eks|bigbang down:
-  extends: .cleanup
-  stage: bigbang down
-  script:
-    - echo "eks bigbang down"
-  needs:
-    - eks|e2e tests
-
-eks|cluster down:
-  extends: .cleanup
-  stage: cluster down
-  script:
-    - echo "eks cluster down"
-  needs:
-    - eks|bigbang down
+#rke2|bigbang down:
+#  extends: .cleanup
+#  stage: bigbang down
+#  script:
+#    - echo "rke2 bigbang down"
+#  needs:
+#    - rke2|e2e tests
+#
+#rke2|cluster down:
+#  extends: .cleanup
+#  stage: cluster down
+#  script:
+#    - echo "rke2 cluster down"
+#  needs:
+#    - rke2|bigbang down
+#
+##
+## EKS
+##
+#eks|cluster up:
+#  extends: .mr
+#  stage: cluster up
+#  script:
+#    - echo "eks cluster up"
+#  needs:
+#    - aws|network up
+#
+#eks|bigbang up:
+#  extends: .mr
+#  stage: bigbang up
+#  script:
+#    - echo "eks bigbang up"
+#  needs:
+#    - eks|cluster up
+#
+#eks|e2e tests:
+#  extends: .mr
+#  stage: tests
+#  script:
+#    - echo "eks e2e tests"
+#  needs:
+#    - eks|bigbang up
+#
+#eks|bigbang down:
+#  extends: .cleanup
+#  stage: bigbang down
+#  script:
+#    - echo "eks bigbang down"
+#  needs:
+#    - eks|e2e tests
+#
+#eks|cluster down:
+#  extends: .cleanup
+#  stage: cluster down
+#  script:
+#    - echo "eks cluster down"
+#  needs:
+#    - eks|bigbang down
