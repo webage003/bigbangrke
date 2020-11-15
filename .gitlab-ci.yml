@@ -35,23 +35,17 @@ upgrade:
   stage: network up
   needs: []
   rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^hotfix-/'
-      when: never
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH =~ /^hotfix-/'
       when: manual
       allow_failure: false
 
 .infra create:
   rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^hotfix-/'
-      when: never
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH =~ /^hotfix-/'
 
 .infra cleanup:
   rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^hotfix-/'
-      when: never
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH =~ /^hotfix-/'
       allow_failure: true
       when: always
 
