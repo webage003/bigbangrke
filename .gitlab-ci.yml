@@ -15,7 +15,6 @@ clean install:
   script:
     - echo "k3d clean intall smoke tests"
 
-
 upgrade:
   stage: smoke tests
   script:
@@ -110,7 +109,6 @@ eks|cluster up:
     - echo "eks cluster up"
   needs:
     - aws|network up
-  when: manual
 
 eks|bigbang up:
   extends: .mr
