@@ -20,17 +20,25 @@ upgrade:
   stage: smoke tests
   script:
     - echo "k3d upgrade smoke tests"
+  only:
+    - merge_requests
+
+# E2E Matrix
+.mr:
+  only: [ merge_requests ]
 
 #
 # Networking
 #
 aws|network up:
+  extends: .mr
   stage: network up
   script:
     - echo "aws network up"
   needs: []
 
 aws|network down:
+  extends: .mr
   stage: network down
   script:
     - echo "aws network down"
@@ -43,6 +51,7 @@ aws|network down:
 # RKE2
 #
 rke2|cluster up:
+  extends: .mr
   stage: cluster up
   script:
     - echo "rke2 cluster up"
@@ -50,6 +59,7 @@ rke2|cluster up:
     - aws|network up
 
 rke2|bigbang up:
+  extends: .mr
   stage: bigbang up
   script:
     - echo "rke2 bigbang up"
@@ -57,6 +67,7 @@ rke2|bigbang up:
     - rke2|cluster up
 
 rke2|e2e tests:
+  extends: .mr
   stage: tests
   script:
     - echo "rke2 e2e tests"
@@ -64,6 +75,7 @@ rke2|e2e tests:
     - rke2|bigbang up
 
 rke2|bigbang down:
+  extends: .mr
   stage: bigbang down
   script:
     - echo "rke2 bigbang down"
@@ -72,6 +84,7 @@ rke2|bigbang down:
   when: always
 
 rke2|cluster down:
+  extends: .mr
   stage: cluster down
   script:
     - echo "rke2 cluster down"
@@ -83,6 +96,7 @@ rke2|cluster down:
 # EKS
 #
 eks|cluster up:
+  extends: .mr
   stage: cluster up
   script:
     - echo "eks cluster up"
@@ -90,6 +104,7 @@ eks|cluster up:
     - aws|network up
 
 eks|bigbang up:
+  extends: .mr
   stage: bigbang up
   script:
     - echo "eks bigbang up"
@@ -97,6 +112,7 @@ eks|bigbang up:
     - eks|cluster up
 
 eks|e2e tests:
+  extends: .mr
   stage: tests
   script:
     - echo "eks e2e tests"
@@ -104,6 +120,7 @@ eks|e2e tests:
     - eks|bigbang up
 
 eks|bigbang down:
+  extends: .mr
   stage: bigbang down
   script:
     - echo "eks bigbang down"
@@ -112,6 +129,7 @@ eks|bigbang down:
   when: always
 
 eks|cluster down:
+  extends: .mr
   stage: cluster down
   script:
     - echo "eks cluster down"
