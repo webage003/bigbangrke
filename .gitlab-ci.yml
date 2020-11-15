@@ -103,6 +103,7 @@ eks|cluster up:
     - echo "eks cluster up"
   needs:
     - aws|network up
+  when: manual
 
 eks|bigbang up:
   extends: .mr
