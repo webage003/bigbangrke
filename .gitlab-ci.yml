@@ -57,8 +57,6 @@ aws|network down:
   stage: network down
   script:
     - echo "aws network down"
-  needs:
-    - aws|network up
 #    - rke2|cluster down
 #    - eks|cluster down
 
