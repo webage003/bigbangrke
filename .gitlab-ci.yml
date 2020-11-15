@@ -91,6 +91,7 @@ azure|network down:
 #
 # RKE2
 #
+# AWS
 aws|rke2|cluster up:
   extends: .infra create
   stage: cluster up
@@ -131,6 +132,7 @@ aws|rke2|cluster down:
   needs:
     - aws|rke2|bigbang down
 
+# Azure
 azure|rke2|cluster up:
   extends: .infra create
   stage: cluster up
