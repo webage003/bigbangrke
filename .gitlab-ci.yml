@@ -35,6 +35,9 @@ aws|network down:
   script:
     - echo "aws network down"
   when: always
+  needs:
+    - rke2|cluster down
+    - eks|cluster down
 
 #
 # RKE2
