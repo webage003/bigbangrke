@@ -23,17 +23,13 @@ upgrade:
     - merge_requests
 
 # E2E Matrix
-.mr:
-#  only: [ merge_requests ]
-#  except:
-#    variables:
-#      # Don't run on documentation branches
-#      - $CI_COMMIT_REF_NAME =~ /^docs-/
-#
-#      # Don't run when 'wip' is in commit message
-#      - $CI_COMMIT_MESSAGE =~ /^wip/
+.infra fork:
+  stage: network up
+  needs: []
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: false
 
 .infra create:
   rules:
@@ -48,15 +44,12 @@ upgrade:
 #
 # Networking
 #
+
+# AWS
 aws|network up:
-  rules:
-    - if: $CI_MERGE_REQUEST_ID
-      when: manual
-      allow_failure: false
-  stage: network up
+  extends: .infra fork
   script:
     - echo "aws network up"
-  needs: []
 
 aws|network down:
   extends: .infra cleanup
@@ -64,52 +57,106 @@ aws|network down:
   script:
     - echo "aws network down"
   needs:
-    - rke2|cluster down
+    - aws|rke2|cluster down
     - eks|cluster down
+
+# Azure
+azure|network up:
+  extends: .infra fork
+  script:
+    - echo "azure network up"
+
+azure|network down:
+  extends: .infra cleanup
+  stage: network down
+  script:
+    - echo "aws network down"
+  needs:
+    - azure|rke2|cluster down
+    - aks|cluster down
 
 #
 # RKE2
 #
-rke2|cluster up:
+aws|rke2|cluster up:
   extends: .infra create
   stage: cluster up
   script:
-    - echo "rke2 cluster up"
-    - exit 1
+    - echo "aws rke2 cluster up"
   needs:
     - aws|network up
 
-rke2|bigbang up:
+aws|rke2|bigbang up:
   extends: .infra create
   stage: bigbang up
   script:
     - echo "rke2 bigbang up"
   needs:
-    - rke2|cluster up
+    - aws|rke2|cluster up
 
-rke2|e2e tests:
+aws|rke2|e2e tests:
   extends: .infra create
   stage: tests
   script:
     - echo "rke2 e2e tests"
   needs:
-    - rke2|bigbang up
+    - aws|rke2|bigbang up
 
-rke2|bigbang down:
+aws|rke2|bigbang down:
   extends: .infra cleanup
   stage: bigbang down
   script:
     - echo "rke2 bigbang down"
   needs:
-    - rke2|e2e tests
+    - aws|rke2|e2e tests
 
-rke2|cluster down:
+aws|rke2|cluster down:
   extends: .infra cleanup
   stage: cluster down
   script:
     - echo "rke2 cluster down"
   needs:
-    - rke2|bigbang down
+    - aws|rke2|bigbang down
+
+azure|rke2|cluster up:
+  extends: .infra create
+  stage: cluster up
+  script:
+    - echo "azure rke2 cluster up"
+  needs:
+    - azure|network up
+
+azure|rke2|bigbang up:
+  extends: .infra create
+  stage: bigbang up
+  script:
+    - echo "azure rke2 bigbang up"
+  needs:
+    - azure|rke2|cluster up
+
+azure|rke2|e2e tests:
+  extends: .infra create
+  stage: tests
+  script:
+    - echo "azure rke2 e2e tests"
+  needs:
+    - azure|rke2|bigbang up
+
+azure|rke2|bigbang down:
+  extends: .infra cleanup
+  stage: bigbang down
+  script:
+    - echo "azure rke2 bigbang down"
+  needs:
+    - azure|rke2|e2e tests
+
+azure|rke2|cluster down:
+  extends: .infra cleanup
+  stage: cluster down
+  script:
+    - echo "azure rke2 cluster down"
+  needs:
+    - azure|rke2|bigbang down
 
 #
 # EKS
@@ -127,6 +174,7 @@ eks|bigbang up:
   stage: bigbang up
   script:
     - echo "eks bigbang up"
+    - exit 1
   needs:
     - eks|cluster up
 
@@ -153,3 +201,47 @@ eks|cluster down:
     - echo "eks cluster down"
   needs:
     - eks|bigbang down
+
+#
+# AKS
+#
+aks|cluster up:
+  extends: .infra create
+  stage: cluster up
+  script:
+    - echo "aks cluster up"
+  needs:
+    - aks|network up
+
+aks|bigbang up:
+  extends: .infra create
+  stage: bigbang up
+  script:
+    - echo "aks bigbang up"
+    - exit 1
+  needs:
+    - aks|cluster up
+
+aks|e2e tests:
+  extends: .infra create
+  stage: tests
+  script:
+    - echo "aks e2e tests"
+  needs:
+    - aks|bigbang up
+
+aks|bigbang down:
+  extends: .infra cleanup
+  stage: bigbang down
+  script:
+    - echo "aks bigbang down"
+  needs:
+    - aks|e2e tests
+
+aks|cluster down:
+  extends: .infra cleanup
+  stage: cluster down
+  script:
+    - echo "aks cluster down"
+  needs:
+    - aks|bigbang down
