@@ -1,3 +1,11 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /^wip/
+      when: never
+    - if: $CI_COMMIT_BRANCH =~ /^docs-/
+      when: never
+    - when: always
+
 image: alpine:latest
 
 stages:
