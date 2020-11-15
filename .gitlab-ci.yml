@@ -53,7 +53,6 @@ aws|network down:
   stage: network down
   script:
     - echo "aws network down"
-  when: always
   needs:
     - rke2|cluster down
     - eks|cluster down
@@ -92,7 +91,6 @@ rke2|bigbang down:
     - echo "rke2 bigbang down"
   needs:
     - rke2|e2e tests
-  when: always
 
 rke2|cluster down:
   extends: .mr
@@ -101,7 +99,6 @@ rke2|cluster down:
     - echo "rke2 cluster down"
   needs:
     - rke2|bigbang down
-  when: always
 
 #
 # EKS
@@ -137,7 +134,6 @@ eks|bigbang down:
     - echo "eks bigbang down"
   needs:
     - eks|e2e tests
-  when: always
 
 eks|cluster down:
   extends: .mr
@@ -146,4 +142,3 @@ eks|cluster down:
     - echo "eks cluster down"
   needs:
     - eks|bigbang down
-  when: always
