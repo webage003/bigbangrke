@@ -80,6 +80,7 @@ rke2|bigbang up:
   script:
     - echo "rke2 bigbang up"
   needs:
+    - aws|network up
     - rke2|cluster up
 
 rke2|e2e tests:
@@ -88,6 +89,7 @@ rke2|e2e tests:
   script:
     - echo "rke2 e2e tests"
   needs:
+    - aws|network up
     - rke2|bigbang up
 
 rke2|bigbang down:
@@ -96,6 +98,7 @@ rke2|bigbang down:
   script:
     - echo "rke2 bigbang down"
   needs:
+    - aws|network up
     - rke2|e2e tests
 
 rke2|cluster down:
@@ -104,6 +107,7 @@ rke2|cluster down:
   script:
     - echo "rke2 cluster down"
   needs:
+    - aws|network up
     - rke2|bigbang down
 
 #
@@ -123,6 +127,7 @@ eks|bigbang up:
   script:
     - echo "eks bigbang up"
   needs:
+    - aws|network up
     - eks|cluster up
 
 eks|e2e tests:
@@ -131,6 +136,7 @@ eks|e2e tests:
   script:
     - echo "eks e2e tests"
   needs:
+    - aws|network up
     - eks|bigbang up
 
 eks|bigbang down:
@@ -139,6 +145,7 @@ eks|bigbang down:
   script:
     - echo "eks bigbang down"
   needs:
+    - aws|network up
     - eks|e2e tests
 
 eks|cluster down:
@@ -147,4 +154,5 @@ eks|cluster down:
   script:
     - echo "eks cluster down"
   needs:
+    - aws|network up
     - eks|bigbang down
