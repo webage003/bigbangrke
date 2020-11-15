@@ -64,7 +64,7 @@ aws|network up:
   script:
     - echo "aws network up"
   environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
 
 aws|network down:
@@ -76,7 +76,7 @@ aws|network down:
     - aws|rke2|cluster down
     - eks|cluster down
   environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     action: stop
 
 # Azure
@@ -85,7 +85,7 @@ azure|network up:
   script:
     - echo "azure network up"
   environment:
-    name: review/azure-${CI_COMMIT_REF_SLUG}
+    name: review/azure-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
 
 azure|network down:
@@ -97,7 +97,7 @@ azure|network down:
     - azure|rke2|cluster down
     - aks|cluster down
   environment:
-    name: review/azure-${CI_COMMIT_REF_SLUG}
+    name: review/azure-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     action: stop
 
 #
