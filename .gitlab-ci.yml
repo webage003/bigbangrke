@@ -35,6 +35,12 @@ upgrade:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
+.cleanup:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+      allow_failure: true
+
 #
 # Networking
 #
@@ -49,7 +55,7 @@ aws|network up:
   needs: []
 
 aws|network down:
-  extends: .mr
+  extends: .cleanup
   stage: network down
   script:
     - echo "aws network down"
@@ -85,7 +91,7 @@ rke2|e2e tests:
     - rke2|bigbang up
 
 rke2|bigbang down:
-  extends: .mr
+  extends: .cleanup
   stage: bigbang down
   script:
     - echo "rke2 bigbang down"
@@ -93,7 +99,7 @@ rke2|bigbang down:
     - rke2|e2e tests
 
 rke2|cluster down:
-  extends: .mr
+  extends: .cleanup
   stage: cluster down
   script:
     - echo "rke2 cluster down"
@@ -128,7 +134,7 @@ eks|e2e tests:
     - eks|bigbang up
 
 eks|bigbang down:
-  extends: .mr
+  extends: .cleanup
   stage: bigbang down
   script:
     - echo "eks bigbang down"
@@ -136,7 +142,7 @@ eks|bigbang down:
     - eks|e2e tests
 
 eks|cluster down:
-  extends: .mr
+  extends: .cleanup
   stage: cluster down
   script:
     - echo "eks cluster down"
