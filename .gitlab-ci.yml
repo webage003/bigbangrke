@@ -24,26 +24,29 @@ upgrade:
 
 # E2E Matrix
 .mr:
-  only: [ merge_requests ]
-  except:
-    variables:
-      # Don't run on documentation branches
-      - $CI_COMMIT_REF_NAME =~ /^docs-/
-
-      # Don't run when 'wip' is in commit message
-      - $CI_COMMIT_MESSAGE =~ /^wip/
+#  only: [ merge_requests ]
+#  except:
+#    variables:
+#      # Don't run on documentation branches
+#      - $CI_COMMIT_REF_NAME =~ /^docs-/
+#
+#      # Don't run when 'wip' is in commit message
+#      - $CI_COMMIT_MESSAGE =~ /^wip/
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 #
 # Networking
 #
 aws|network up:
-  extends: .mr
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: true
   stage: network up
   script:
     - echo "aws network up"
   needs: []
-  when: manual
-  allow_failure: true
 
 aws|network down:
   extends: .mr
