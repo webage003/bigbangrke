@@ -49,21 +49,29 @@ rke2|bigbang up:
   stage: bigbang up
   script:
     - echo "rke2 bigbang up"
+  needs:
+    - rke2|cluster up
 
 rke2|e2e tests:
   stage: tests
   script:
     - echo "rke2 e2e tests"
+  needs:
+    - rke2|bigbang up
 
 rke2|bigbang down:
   stage: bigbang down
   script:
     - echo "rke2 bigbang down"
+  needs:
+    - rke2|e2e tests
 
 rke2|cluster down:
   stage: cluster down
   script:
     - echo "rke2 cluster down"
+  needs:
+    - rke2|bigbang down
 
 #
 # EKS
@@ -77,18 +85,26 @@ eks|bigbang up:
   stage: bigbang up
   script:
     - echo "eks bigbang up"
+  needs:
+    - eks|cluster up
 
 eks|e2e tests:
   stage: tests
   script:
     - echo "eks e2e tests"
+  needs:
+    - eks|bigbang up
 
 eks|bigbang down:
   stage: bigbang down
   script:
     - echo "eks bigbang down"
+  needs:
+    - eks|e2e tests
 
 eks|cluster down:
   stage: cluster down
   script:
     - echo "eks cluster down"
+  needs:
+    - eks|bigbang down
