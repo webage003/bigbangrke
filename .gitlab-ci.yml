@@ -61,16 +61,16 @@ aws|network down:
 #    - eks|cluster down
 
 
-##
-## RKE2
-##
-#rke2|cluster up:
-#  extends: .mr
-#  stage: cluster up
-#  script:
-#    - echo "rke2 cluster up"
-#  needs:
-#    - aws|network up
+#
+# RKE2
+#
+rke2|cluster up:
+  extends: .mr
+  stage: cluster up
+  script:
+    - echo "rke2 cluster up"
+  needs:
+    - aws|network up
 #
 #rke2|bigbang up:
 #  extends: .mr
@@ -104,16 +104,16 @@ aws|network down:
 #  needs:
 #    - rke2|bigbang down
 #
-##
-## EKS
-##
-#eks|cluster up:
-#  extends: .mr
-#  stage: cluster up
-#  script:
-#    - echo "eks cluster up"
-#  needs:
-#    - aws|network up
+#
+# EKS
+#
+eks|cluster up:
+  extends: .mr
+  stage: cluster up
+  script:
+    - echo "eks cluster up"
+  needs:
+    - aws|network up
 #
 #eks|bigbang up:
 #  extends: .mr
