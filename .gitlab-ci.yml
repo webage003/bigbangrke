@@ -26,6 +26,13 @@ upgrade:
 # E2E Matrix
 .mr:
   only: [ merge_requests ]
+  except:
+    variables:
+      # Don't run on documentation branches
+      - $CI_COMMIT_REF_NAME =~ /^docs-/
+
+      # Don't run when 'wip' is in commit message
+      - $CI_COMMIT_MESSAGE =~ /^wip/
 
 #
 # Networking
