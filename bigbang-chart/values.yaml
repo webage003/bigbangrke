@@ -8,7 +8,7 @@ flux:
 # Umbrella helm chart
 umbrella:
   repo: https://repo1.dsop.io/platform-one/big-bang/umbrella.git
-  branch: toplevelhelm
+  branch: sopstesting
   chart: chart
 
 # SOPS Secrets

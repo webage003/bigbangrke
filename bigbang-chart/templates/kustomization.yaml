@@ -20,5 +20,5 @@ spec:
   prune: true
   decryption:
     provider: sops
-    secretRef:
-      name: sops-gpg
+#    secretRef:
+#      name: sops-gpg

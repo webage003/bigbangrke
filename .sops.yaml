@@ -1,0 +1,2 @@
+creation_rules:
+  - kms: 'arn:aws-us-gov:kms:us-gov-west-1:927962728993:key/f131e19c-a804-4185-b75f-69b995eb9e6a'
