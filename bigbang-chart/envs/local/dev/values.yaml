@@ -14,29 +14,8 @@ istio:
         auth:
           strategy: anonymous
 logging:
-  values:
-    elasticsearch:
-      data:
-        count: 1
-        persistence:
-          size: 512Mi
-        resources:
-          limits:
-            cpu: 1
-            memory: 512Mi
-      master:
-        count: 1
-        persistence:
-          size: 512Mi
-        resources:
-          limits:
-            cpu: 1
-            memory: 512Mi
+  enabled: false
 monitoring:
   enabled: false
 twistlock:
   enabled: false
-  values:
-    console:
-      persistence:
-        size: 1Gi
