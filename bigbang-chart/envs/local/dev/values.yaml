@@ -4,6 +4,8 @@ flux:
   interval: 1m
   rollback:
     cleanupOnFail: false
+clusterAuditor:
+  enabled: false
 gatekeeper:
   values:
     replicas: 1
