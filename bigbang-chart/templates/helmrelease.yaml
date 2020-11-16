@@ -29,4 +29,4 @@ spec:
       name: bigbang-secrets
       optional: true
   values:
-{{ .Files.Get (printf "envs/%s/%s/umbrella-values.yaml" .Values.tenant .Values.cluster) | indent 4 }}
+{{ .Files.Get (printf "envs/%s/%s/values.yaml" .Values.tenant .Values.cluster) | indent 4 }}
