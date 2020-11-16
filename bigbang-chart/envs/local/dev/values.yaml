@@ -17,6 +17,23 @@ istio:
           strategy: anonymous
 logging:
   enabled: false
+  elasticsearch:
+    master:
+      count: 1
+      persistence:
+        size: 5Gi
+      resources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+    data:
+      count: 1
+        persistence:
+          size: 5Gi
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
 monitoring:
   enabled: false
 twistlock:
