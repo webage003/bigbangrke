@@ -1,16 +1,13 @@
 hostname: bigbang.dev
-
 # Toggle sourcing from external repos
 # TODO: All this does right now is toggle GitRepositories, it is _not_ fully functional
 offline: false
-
 # Registry credentials to use from pulling images from private registry, will create an appropriate imagePullSecret in all relevant namespaces
 registryCredentials:
   registry: registry1.dsop.io
   username: ""
   password: ""
   email: ""
-
 # Flux reconciliation parameters
 flux:
   interval: 2m
@@ -21,57 +18,45 @@ flux:
   rollback:
     timeout: 5m
     cleanupOnFail: true
-
 istio:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/servicemesh.git
     branch: chart-release
-#    commit: ""
-#    tag: ""
+    commit: f40172dd278e4f3551e6a1e8d4c8625771fbf928
   values: {}
-
 clusterAuditor:
   enabled: true
-  git: 
+  git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/cluster-auditor.git
     branch: chart-release
-#    commit: ""
-#    tag: ""
+    commit: 4ca478df04063ec8cd91b3ae2d2472b77675495d
   values: {}
-
 gatekeeper:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
     branch: chart-release
-#    commit: ""
-#    tag: ""
+    commit: 714069053e9696f5e116deb2f677f1c2d213e9b6
   values: {}
-
 logging:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/logging.git
     branch: release-v0.2.x
-#    commit: ""
-#    tag: ""
+    commit: 02d6e9a073d196ecdf0951941c432beea642fc73
   values: {}
-
 monitoring:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
     branch: release-v0.2.x
-#    commit: ""
-#    tag: ""
+    commit: 014fb187b81eb976e76a4bb1a76bb4479aa2cea3
   values: {}
-
 twistlock:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/security-tools/twistlock.git
     branch: chart-release
-#    commit: ""
-#    tag: ""
+    commit: faf038197291915713e0f213a4e35991e72f73f6
   values: {}
