@@ -8,7 +8,7 @@ spec:
   targetNamespace: istio-operator
   chart:
     spec:
-      chart: chart/
+      chart: {{ .Values.istiooperator.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository

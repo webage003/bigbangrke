@@ -8,7 +8,7 @@ spec:
   targetNamespace: logging
   chart:
     spec:
-      chart: chart/
+      chart: {{ .Values.fluentbit.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
