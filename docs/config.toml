@@ -13,6 +13,7 @@ defaultContentLanguage = "en"
 # pygmentsCodeFencesGuessSyntax = true
 
 # disqusShortname = "yourdiscussshortname"
+SectionPagesMenu = "main"
 
 [params]
     author = "Big Bang Team"
