@@ -32,6 +32,11 @@ spec:
     cleanupOnFail: {{ .rollback.cleanupOnFail }}
   {{- end }}
 
+  valuesFrom:
+    - name: values
+      kind: Secret
+      valuesKey: "fluentbit.yaml"
+
   values:
     elasticsearch:
       host: "logging-ek-es-http"

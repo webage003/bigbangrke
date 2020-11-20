@@ -11,16 +11,16 @@ stringData:
 {{ toYaml .Values.addons.argocd.values | indent 4 }}
   istiooperator.yaml: |
 {{ toYaml .Values.istiooperator.values | indent 4  }}
-  istiocontrolplane.yaml: |
-{{ toYaml .Values.istiocontrolplane.values | indent 4  }}
+  istio.yaml: |
+{{ toYaml .Values.istio.values | indent 4  }}
   gatekeeper.yaml: |
 {{ toYaml .Values.gatekeeper.values | indent 4 }}
   fluentbit.yaml: |
 {{ toYaml .Values.fluentbit.values | indent 4 }}
   eckoperator.yaml: |
 {{ toYaml .Values.eckoperator.values | indent 4 }}
-  elasticsearchkibana.yaml: |
-{{ toYaml .Values.elasticsearchkibana.values | indent 4 }}
+  logging.yaml: |
+{{ toYaml .Values.logging.values | indent 4 }}
   monitoring.yaml: |
 {{ toYaml .Values.monitoring.values | indent 4 }}
   twistlock.yaml: |

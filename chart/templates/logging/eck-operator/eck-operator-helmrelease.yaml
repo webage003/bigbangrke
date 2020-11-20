@@ -32,6 +32,20 @@ spec:
     cleanupOnFail: {{ .rollback.cleanupOnFail }}
   {{- end }}
 
+  valuesFrom:
+    - name: values
+      kind: Secret
+      valuesKey: "eckoperator.yaml"
+
+  values:
+    podAnnotations:
+      sidecar.istio.io/inject: "true"
+      traffic.sidecar.istio.io/includeInboundPorts: "*"
+      traffic.sidecar.istio.io/excludeInboundPorts: "9443"
+
+    imagePullSecrets:
+      - name: private-registry
+
   {{- if .Values.gatekeeper.enabled }}
   dependsOn:
     - name: gatekeeper

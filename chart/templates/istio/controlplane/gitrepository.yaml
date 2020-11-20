@@ -6,8 +6,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.istiocontrolplane.git.repo }}
+  url: {{ .Values.istio.git.repo }}
   ref:
-    {{- include "validRef" .Values.istiocontrolplane.git | nindent 4 }}
+    {{- include "validRef" .Values.istio.git | nindent 4 }}
   {{ include "gitIgnore" . }}
 {{- end }}
