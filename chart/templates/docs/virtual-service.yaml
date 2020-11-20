@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: docs
+  namespace: {{ .Release.Namespace }}
+spec:
+  gateways:
+    - main.istio-system.svc.cluster.local
+  hosts:
+    - "docs.{{ .Values.hostname }}"
+  http:
+    - route:
+        - destination:
+            port:
+              number: 80
+            host: docs
