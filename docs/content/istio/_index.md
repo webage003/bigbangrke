@@ -1,4 +1,0 @@
----
-title: Istio
-menu: main
----
