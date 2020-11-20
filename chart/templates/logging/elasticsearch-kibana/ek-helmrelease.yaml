@@ -2,17 +2,17 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: eck-operator
+  name: ek
   namespace: {{ .Release.Namespace }}
 spec:
-  targetNamespace: eck-operator
+  targetNamespace: logging
   chart:
     spec:
-      chart: charts/eck-operator
+      chart: chart/
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: logging
+        name: elasticsearch-kibana
         namespace: {{ .Release.Namespace }}
 
   {{- with .Values.flux }}
@@ -32,9 +32,38 @@ spec:
     cleanupOnFail: {{ .rollback.cleanupOnFail }}
   {{- end }}
 
-  {{- if .Values.gatekeeper.enabled }}
+  valuesFrom:
+    - name: values
+      kind: Secret
+      valuesKey: "logging.yaml"
+
+  values:
+    hostname: {{ .Values.hostname }}
+
+    kibana:
+      version: 7.9.2
+
+      imagePullSecrets:
+        - name: private-registry
+
+    elasticsearch:
+      version: 7.9.2
+
+      imagePullSecrets:
+        - name: private-registry
+
+  {{/* ECK and Logging _always_ depend on .Values.logging being enabled, so can assume they exist here */}}
   dependsOn:
+    - name: eck-operator
+      namespace: {{ .Release.Namespace }}
+
+    {{- if  .Values.gatekeeper.enabled }}
     - name: gatekeeper
       namespace: {{ .Release.Namespace }}
-  {{- end }}
+    {{- end }}
+
+    {{- if .Values.istio.enabled }}
+    - name: istio
+      namespace: {{ .Release.Namespace }}
+    {{- end }}
 {{- end }}

@@ -8,11 +8,11 @@ spec:
   targetNamespace: istio-operator
   chart:
     spec:
-      chart: charts/operator
+      chart: chart/
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: istio
+        name: istio-operator
         namespace: {{ .Release.Namespace }}
 
   {{- with .Values.flux }}

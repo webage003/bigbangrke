@@ -22,42 +22,85 @@ flux:
     timeout: 5m
     cleanupOnFail: true
 
-istio:
-  enabled: true
-  git:
-    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/servicemesh.git
-    branch: chart-release
+#package:
+#  enabled: true
+#  git:
+#    repo: ""
+#    branch: ""
 #    commit: ""
 #    tag: ""
+#  values: {}
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Istio
+#
+# Helper for disabling istio-operator and istio-controlplane
+istio:
+  enabled: true
+
+istiooperator:
+  git:
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-operator.git
+    semver: ">=0.0.1 <1.0.0"
   values: {}
 
+istiocontrolplane:
+  git:
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-controlplane.git
+    semver: ">=0.0.1 <1.0.0"
+  values: {}
+# ----------------------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Cluster Auditor
+#
 clusterAuditor:
   enabled: true
   git: 
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/cluster-auditor.git
     branch: chart-release
-#    commit: ""
-#    tag: ""
   values: {}
+# ----------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------------------------------------------------
+# OPA Gatekeeper
+#
 gatekeeper:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
     branch: chart-release
-#    commit: ""
-#    tag: ""
   values: {}
+# ----------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Logging
+#
 logging:
-  enabled: true
+  enabled:  true
+
+eckoperator:
   git:
-    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/logging.git
-    branch: release-v0.2.x
-#    commit: ""
-#    tag: ""
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/eck-operator.git
+    semver: ">=0.0.1 <1.0.0"
   values: {}
 
+elasticsearchkibana:
+  git:
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/elasticsearch-kibana.git
+    semver: ">=0.0.1 <1.0.0"
+  values: {}
+
+fluentbit:
+  git:
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/fluentbit.git
+    semver: ">=0.0.1 <1.0.0"
+  values: {}
+# ----------------------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Monitoring
+#
 monitoring:
   enabled: true
   git:
@@ -66,7 +109,11 @@ monitoring:
 #    commit: ""
 #    tag: ""
   values: {}
+# ----------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Twistlock
+#
 twistlock:
   enabled: true
   git:
@@ -75,6 +122,7 @@ twistlock:
 #    commit: ""
 #    tag: ""
   values: {}
+# ----------------------------------------------------------------------------------------------------------------------
 
 addons:
   argocd:
