@@ -123,7 +123,7 @@ kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
 
 # Method 1 - go for it
 
-yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='egoode@oteemo.com' --set registryCredentials.password=rgo3cztycxaur5bsukegp4lgdfoml9ai -f -
+yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='<your user>' --set registryCredentials.password=<your cli key> -f -
 
 # Method 2 - Modify some values
 
