@@ -132,7 +132,7 @@ yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' > my-values.yam
 # Modify my-values.yaml
 # Install using your new values. You could also modify the values in place.
 
-helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='egoode@oteemo.com' --set registryCredentials.password=rgo3cztycxaur5bsukegp4lgdfoml9ai -f my-values.yaml
+helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='<your user>' --set registryCredentials.password=<your cli key> -f my-values.yaml
 ```
 
 + You can now modify your local /etc/hosts files (Or whatever the Windows people call it these days)
