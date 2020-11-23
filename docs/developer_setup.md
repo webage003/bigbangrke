@@ -35,27 +35,27 @@ Step 2: SSH into your new EC2 instance and configure it with the following:
 + Install Docker CE
 
 ```
-//Remove any old Docker items
+#Remove any old Docker items
 sudo apt remove docker docker-engine docker.io containerd runc
 
-//Install all pre-reqs for Docker
+#Install all pre-reqs for Docker
 sudo apt update
 sudo apt install apt-transport-https ca-certificates curl     gnupg-agent software-properties-common
 
-//Add the Docker repository, we are installing from Docker and not the 
-//Ubuntu APT repo.
+#Add the Docker repository, we are installing from Docker and not the 
+#Ubuntu APT repo.
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 sudo apt-key fingerprint 0EBFCD88
 
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-//Install Docker
+#Install Docker
 sudo apt update
 sudo apt install docker-ce docker-ce-cli containerd.io
 
-//Add your base user to the Docker group so that you do not need sudo
-//to run docker commands
+#Add your base user to the Docker group so that you do not need sudo
+#to run docker commands
 sudo usermod -aG docker $USER
 
 ** It is important at this point that you log out and back in to 
@@ -103,11 +103,11 @@ cat ~/.kube/config
 + Move to your workstation and install Big Bang Umbrella on the cluster
 
 ```
-//Test to see if you can connect to your cluster
+#Test to see if you can connect to your cluster
 
 kubectl get nodes
 
-//From the base of the project 
+#From the base of the project 
 
 cd examples/complete
 
@@ -119,18 +119,18 @@ kubectl create ns bigbang
 
 kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
 
-// We have found that you might need to increase Elastic's memory limits to 3 Gig. If you want to do that you can follow method 2
+# We have found that you might need to increase Elastic's memory limits to 3 Gig. If you want to do that you can follow method 2
 
-// Method 1 - go for it
+# Method 1 - go for it
 
 yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='egoode@oteemo.com' --set registryCredentials.password=rgo3cztycxaur5bsukegp4lgdfoml9ai -f -
 
-// Method 2 - Modify some values
+# Method 2 - Modify some values
 
 yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' > my-values.yaml
 
-// Modify my-values.yaml
-// Install using your new values. You could also modify the values in place.
+# Modify my-values.yaml
+# Install using your new values. You could also modify the values in place.
 
 helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='egoode@oteemo.com' --set registryCredentials.password=rgo3cztycxaur5bsukegp4lgdfoml9ai -f my-values.yaml
 ```
