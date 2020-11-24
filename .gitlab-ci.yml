@@ -44,9 +44,10 @@ stages:
 
   # Wait for components to be ready
   - kubectl get helmrelease -A
-  - for package in \
-    $(kubectl get helmrelease -n flux-system | awk '{print $1}' | grep -v NAME); \
-    do kubectl wait --for=condition=Ready --timeout 500s helmrelease -n flux-system $package; \
+  - for package in $(kubectl get helmrelease -n flux-system | \
+    awk '{print $1}' | \
+    grep -v NAME);
+    do kubectl wait --for=condition=Ready --timeout 500s helmrelease -n flux-system $package;
     done
   - kubectl wait --for=condition=Ready --timeout 30s kustomizations.kustomize.toolkit.fluxcd.io -n bigbang secrets
 
