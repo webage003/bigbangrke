@@ -39,14 +39,12 @@ istio:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    semver: "1.7.x-bb.0"
   values: {}
 
 istiooperator:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-operator.git
     path: "./chart"
-    semver: "1.7.x-bb.0"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -69,8 +67,7 @@ gatekeeper:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
-    path: "./charts/gatekeeper"
-    branch: chart-release
+    path: "./chart"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -78,25 +75,22 @@ gatekeeper:
 # Logging
 #
 logging:
-  enabled:  true
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
-    semver: "0.1.x-bb.0"
   values: {}
 
 eckoperator:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
-    semver: "1.3.x-bb.0"
   values: {}
 
 fluentbit:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
-    semver: "0.1.x-bb.0"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
