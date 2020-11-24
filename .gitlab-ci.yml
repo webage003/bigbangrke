@@ -43,8 +43,8 @@ stages:
   - cat examples/complete/envs/dev/source-secrets.yaml | sed 's|master|'$CI_COMMIT_REF_NAME'|g' | kubectl apply -f -
 
   # Wait for components to be ready
-  # NOTE: Wait for each package individually so they show up nicely in ci logs
-  - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang \
+  - kubectl get helmrelease -A
+  - kubectl wait --for=condition=Ready --timeout 500s helmrelease -n bigbang \
     $(kubectl get helmrelease -n bigbang | awk '{print $1}' | grep -v NAME)
   - kubectl wait --for=condition=Ready --timeout 30s kustomizations.kustomize.toolkit.fluxcd.io -n bigbang secrets
 
