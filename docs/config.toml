@@ -16,6 +16,7 @@ defaultContentLanguage = "en"
 SectionPagesMenu = "main"
 
 [params]
+    hostname = "bigbang.dev"
     author = "Big Bang Team"
     description = "Documentation for Using Big Bang"
     keywords = "blog,developer,personal"
