@@ -2,7 +2,7 @@ baseURL = "https://docs.bigbang.dev/"
 languageCode = "en-us"
 title = " Big Bang Docs"
 
-theme = "hyde"
+theme = "hugo-researcher"
 
 defaultContentLanguage = "en"
 
