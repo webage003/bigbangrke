@@ -76,20 +76,3 @@ SectionPagesMenu = "main"
 [languages]
     [languages.en]
         languageName = "English"
-
-        # [languages.en.menu]
-
-        #     [[languages.en.menu.main]]
-        #     name = "Keycloak"
-        #     weight = 1
-        #     url = "keycloak/"
-
-        #     [[languages.en.menu.main]]
-        #     name = "Monitoring"
-        #     weight = 2
-        #     url = "monitoring/"
-
-        #     [[languages.en.menu.main]]
-        #     name = "Logging"
-        #     weight = 3
-        #     url = "logging/"
