@@ -13,6 +13,7 @@ spec:
         name: docs
     spec:
       containers:
+{{- if .Values.addons.argocd.enabled }}
       - name: argo-sync
         image: k8s.gcr.io/git-sync:v3.1.3
         volumeMounts:
@@ -20,11 +21,13 @@ spec:
           mountPath: /tmp/git
         env:
         - name: GIT_SYNC_REPO
-          value: https://repo1.dsop.io/platform-one/big-bang/apps/core/argocd.git
+          value: {{ .Values.addons.argocd.git.repo}}
         - name: GIT_SYNC_DEST
           value: argocd
         - name: GIT_SYNC_BRANCH
-          value: docs
+          value: {{ .Values.addons.argocd.git.branch }}
+{{- end }}
+{{- if .Values.clusterAuditor.enabled }}
       - name: ca-sync
         image: k8s.gcr.io/git-sync:v3.1.3
         volumeMounts:
@@ -32,11 +35,12 @@ spec:
           mountPath: /tmp/git
         env:
         - name: GIT_SYNC_REPO
-          value: https://repo1.dsop.io/platform-one/big-bang/apps/core/cluster-auditor.git
+          value: {{ .Values.clusterAuditor.git.repo }}
         - name: GIT_SYNC_DEST
           value: cluster-auditor
         - name: GIT_SYNC_BRANCH
-          value: docs
+          value: {{ .Values.clusterAuditor.git.branch }}
+{{- end }}
       - name: git-sync
         image: k8s.gcr.io/git-sync:v3.1.3
         volumeMounts:
@@ -60,8 +64,16 @@ spec:
           mountPath: /cluster-auditor
         - name: argo
           mountPath: /argocd
-        command: ["/bin/sh"]
-        args: ["-c", "ln -s /cluster-auditor/cluster-auditor/docs/ /src/umbrella/docs/content/cluster-auditor && ln -fs /argocd/argocd/docs /src/umbrella/docs/content/argocd && hugo server --source=/src/umbrella/docs --appendPort=false --disableFastRender --bind=0.0.0.0 --baseURL=https://docs.bigbang.dev --destination=/dest"]
+        command: ["/bin/sh", "-c"]
+        args: 
+        - echo "hell";
+        {{- if .Values.clusterAuditor.enabled }}
+          ln -s /cluster-auditor/cluster-auditor/docs/ /src/umbrella/docs/content/cluster-auditor;
+        {{- end }}
+        {{- if .Values.addons.argocd.enabled }}
+          ln -fs /argocd/argocd/docs /src/umbrella/docs/content/argocd;
+        {{- end }}
+          hugo server --source=/src/umbrella/docs --appendPort=false --disableFastRender --bind=0.0.0.0 --baseURL=https://docs.{{ .Values.hostname }} --destination=/dest
         # command:
         # - sh -c ""
         # - hugo
@@ -81,11 +93,15 @@ spec:
           value: "true"
         - name: HUGO_BASE_URL
           value: docs.{{ .Values.hostname }}
+        - name: HUGO_PARAMS_HOSTNAME
+          value: {{ .Values.hostname }}
       - name: nginx
         image: nginx
         volumeMounts:
         - name: html
           mountPath: /usr/share/nginx/html
+        - name: tmp
+          mountPath: /tmp
       volumes:
       - name: markdown
         emptyDir: {}
@@ -94,4 +110,6 @@ spec:
       - name: ca
         emptyDir: {}
       - name: argo
+        emptyDir: {}
+      - name: tmp
         emptyDir: {}
