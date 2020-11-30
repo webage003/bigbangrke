@@ -1,3 +1,14 @@
 creation_rules:
-  - encrypted_regex: '^(data|stringData)$'
-    pgp: 41BFF8BAF2586039F6293D835A2E820C25FE527C
+  # Rules for `dev` only
+  - path_regex: .*/dev/.*
+    kms: 'arn:aws-us-gov:kms:us-gov-west-1:927962728993:key/f131e19c-a804-4185-b75f-69b995eb9e6a'
+  
+  # Rules for `staging` only
+  - path_regex: .*/staging/.*
+    kms: 'arn:aws-us-gov:kms:us-gov-west-1:927962728993:key/b85cc8d8-b27d-4bb6-bb51-02cc91cf3f0f'
+
+  # Rules for `prod` only
+  # TODO: Pre-generate secrets on prod using the provided KMS key
+  #       This is a fences-bootstrap IL2 specific use case
+  # - path_regex: .*/prod/.*
+  #   kms: 'arn:aws:kms:us-east-1:341556948878:key/b2ea062b-51ca-4a90-9bc4-9369fe871ef1'
