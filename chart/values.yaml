@@ -130,5 +130,5 @@ addons:
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/argocd.git
       path: "./chart"
-      branch: chart-release
+      tag: "2.9.5-bb.0"
     values: {}
