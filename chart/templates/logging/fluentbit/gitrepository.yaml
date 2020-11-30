@@ -8,6 +8,6 @@ spec:
   interval: {{ .Values.flux.interval }}
   url: {{ .Values.fluentbit.git.repo }}
   ref:
-    tag: "0.1.0-bb.0"
+    {{- include "validRef" .Values.fluentbit.git | nindent 4 }}
   {{ include "gitIgnore" . }}
 {{- end }}

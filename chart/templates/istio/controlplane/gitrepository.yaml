@@ -8,6 +8,6 @@ spec:
   interval: {{ .Values.flux.interval }}
   url: {{ .Values.istio.git.repo }}
   ref:
-    tag: "1.7.3-bb.0"
+    {{- include "validRef" .Values.istio.git | nindent 4 }}
   {{ include "gitIgnore" . }}
 {{- end }}

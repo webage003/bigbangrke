@@ -8,6 +8,6 @@ spec:
   interval: {{ .Values.flux.interval }}
   url: {{ .Values.gatekeeper.git.repo }}
   ref:
-    tag: "3.1.2-bb.0"
+    {{- include "validRef" .Values.gatekeeper.git | nindent 4 }}
   {{ include "gitIgnore" . }}
 {{- end }}

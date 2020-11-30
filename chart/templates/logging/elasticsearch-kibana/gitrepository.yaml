@@ -8,6 +8,6 @@ spec:
   interval: {{ .Values.flux.interval }}
   url: {{ .Values.logging.git.repo }}
   ref:
-    tag: "0.1.0-bb.1"
+    {{- include "validRef" .Values.logging.git | nindent 4 }}
   {{ include "gitIgnore" . }}
 {{- end }}
