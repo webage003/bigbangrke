@@ -120,9 +120,7 @@ twistlock:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
-    branch: chart-release
-#    commit: ""
-#    tag: ""
+    tag: "0.0.1-bb.0"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
