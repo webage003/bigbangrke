@@ -7,6 +7,8 @@ Included here is a setup that will allow you to checkout and begin development u
 + AWS access (with permissions to create an EC2 instance)
 + Flux CLI installed on your local machine
 + Access to the Umbrella Git Repo
++ kubectl installed on local machine
++ yq installed on local machine
 
 ### Manual Creation of a Development Environment
 
