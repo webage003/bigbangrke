@@ -54,7 +54,7 @@ istiooperator:
 # Cluster Auditor
 #
 clusterAuditor:
-  enabled: false
+  enabled: true
   git: 
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/cluster-auditor.git
     path: "./charts"
@@ -66,7 +66,7 @@ clusterAuditor:
 # OPA Gatekeeper
 #
 gatekeeper:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
@@ -78,7 +78,7 @@ gatekeeper:
 # Logging
 #
 logging:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
@@ -116,7 +116,7 @@ monitoring:
 # Twistlock
 #
 twistlock:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
