@@ -84,9 +84,9 @@ k3d cluster create -s 1 -a 3  --k3s-server-arg "--disable=traefik" --k3s-server-
 # create the directory for the k3s registry config.  
 mkdir ~/.k3d/
 
-# create the config file. Use your registry1 Harbor token that you copy from your Harbor profile.  
+# create the config file. Use your registry1 credentials. Copy your user name and token secret from your Harbor profile.  
 
-cat <<EOF > ~/.k3d/p1-registries.yaml
+cat << EOF > ~/.k3d/p1-registries.yaml
 configs:
   "registry1.dsop.io":
     auth:
