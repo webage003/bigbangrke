@@ -12,13 +12,15 @@ Included here is a setup that will allow you to checkout and begin development u
 
 This section will cover the creation of an environment manually. This is a good place to start because it creates an understanding of everything that the automated method does for you.
 
-Step 1: Create an Ubuntu 20.04 xlarge EC2 instance with the following attributes:
+Step 1: Create an Ubuntu 20.04 xlarge EC2 instance with the following attributes:  
+        (see addendum for using Amazon Linux2 - but it really does not matter)
 
 + 50 Gigs of disk space
 + A security group that allows all TCP traffic from your IP address.
 + The following in the User Data
 
-```MIME-Version: 1.0
+```
+MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="==MYBOUNDARY=="
 
 --==MYBOUNDARY==
@@ -73,7 +75,26 @@ k3d //to check the install
 + We can now spin up our dev cluster on the EC2 instance using K3D
 
 ```
-k3d cluster create -s 1 -a 3  --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=<your public ec2 ip>"  -p 80:80@loadbalancer -p 443:443@loadbalancer --api-port 0.0.0.0:38787
+k3d cluster create -s 1 -a 3  --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=<your public ec2 ip>"  -p 80:80@loadbalancer -p 443:443@loadbalancer
+```
+
++ Optionally you can set your image pull secret on the cluster so that you don't have to put your credentials in the code or in the command line in later steps
+
+```
+# create the directory for the k3s registry config.  
+mkdir ~/.k3d/
+
+# create the config file. Use your registry1 Harbor token that you copy from your Harbor profile.  
+
+cat <<EOF > ~/.k3d/p1-registries.yaml
+configs:
+  "registry1.dsop.io":
+    auth:
+      username: "user.name"
+      password: "place_token_secret_here"
+EOF
+
+k3d cluster create --servers 1 --agents 3 -v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=160.1.35.253"  -p 80:80@loadbalancer -p 443:443@loadbalancer
 ```
 
 Here is a break down of what we are doing with this command.
@@ -92,6 +113,8 @@ Here is a break down of what we are doing with this command.
 
 (-p 443:443@loadbalancer) Exposes the cluster on the host on port 443
 
+optional:  
+(-v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml) volume mount image pull secret config for k3d cluster  
 (--api-port 0.0.0.0:38787) Chooses a port for the API server instead of being assigned a random one. You can set this to any port number that you want.
 
 + Once your cluster is up, you can bring over the kubeconfig from the EC2 instance to your workstation.
@@ -119,9 +142,9 @@ kubectl create ns bigbang
 
 kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
 
-# We have found that you might need to increase Elastic's memory limits to 3 Gig. If you want to do that you can follow method 2
+# We have found that you need to increase Elastic's memory limits to 3 Gig. This will be fixed in the code soon. But until then you will need to do it. If you want to do that you can follow method 2
 
-# Method 1 - go for it
+# Method 1 - go for it. (Note: You don't need to set registryCredentials if you configured registry pull secret on the cluster in previous steps)  
 
 yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='<your user>' --set registryCredentials.password=<your cli key> -f -
 
@@ -130,7 +153,7 @@ yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade 
 yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' > my-values.yaml
 
 # Modify my-values.yaml
-# Install using your new values. You could also modify the values in place.
+# Install using your new values. You could also modify the values in place. (Note: You don't need to set registryCredentials if you configured registry pull secret on the cluster in previous steps)  
 
 helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='<your user>' --set registryCredentials.password=<your cli key> -f my-values.yaml
 ```
@@ -152,3 +175,21 @@ watch kubectl get po,gitrepository,kustomizations,helmreleases -A
 
 As of this time, Twistlock is the last thing to be installed. Once you see Twistlock sync and everything else is up and healty you are fully installed.
 
+### Addendum for Amazon Linux 2
+Here are the configuration steps if you want to use a Fedora based instance. All other steps are similar to Ubuntu.
+```
+# update system
+sudo yum update -y
+# install and start docker
+sudo yum install docker -y
+sudo usermod -aG docker $USER
+sudo systemctl enable docker.service 
+sudo systemctl start docker.service 
+# fix docker config for ulimit nofile.
+# this is a bug in the AMI that will eventually be fixed
+sudo sed -i 's/^OPTIONS=.*/OPTIONS=\"--default-ulimit nofile=65535:65535\"/' /etc/sysconfig/docker
+sudo systemctl restart docker.service
+# install k3d
+sudo wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
+# exit ssh and then reconnect so you can use docker as non-root
+```
