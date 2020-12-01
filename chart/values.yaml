@@ -137,5 +137,6 @@ addons:
     enabled: false
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/authservice.git
-      branch: master
+      path: "./chart"
+      tag: "0.1.1-bb.0"
     values: {}
