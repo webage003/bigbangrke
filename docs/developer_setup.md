@@ -75,7 +75,7 @@ k3d //to check the install
 + We can now spin up our dev cluster on the EC2 instance using K3D
 
 ```
-k3d cluster create -s 1 -a 3  --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=<your public ec2 ip>"  -p 80:80@loadbalancer -p 443:443@loadbalancer
+k3d cluster create -s 1 -a 3  --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=<your-public-ec2-ip>"  -p 80:80@loadbalancer -p 443:443@loadbalancer
 ```
 
 + Optionally you can set your image pull secret on the cluster so that you don't have to put your credentials in the code or in the command line in later steps
@@ -94,7 +94,7 @@ configs:
       password: "place_token_secret_here"
 EOF
 
-k3d cluster create --servers 1 --agents 3 -v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=160.1.35.253"  -p 80:80@loadbalancer -p 443:443@loadbalancer
+k3d cluster create --servers 1 --agents 3 -v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=<your-public-ec2-ip>"  -p 80:80@loadbalancer -p 443:443@loadbalancer
 ```
 
 Here is a break down of what we are doing with this command.
