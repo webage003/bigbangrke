@@ -42,8 +42,17 @@ spec:
     global:
       imagePullSecrets:
         - name: private-registry
-    hostname: {{ .Values.hostname }}
-    
+    grafana:
+      image:
+        pullSecrets:
+        - private-registry
+    prometheus-node-exporter:
+      serviceAccount:
+        imagePullSecrets:
+        - name: private-registry
+    kube-state-metrics:
+      imagePullSecrets:
+      - name: private-registry
   # TODO: DRY this up
   {{- if or .Values.gatekeeper.enabled .Values.istio.enabled }}
   dependsOn:
