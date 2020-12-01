@@ -16,6 +16,7 @@ Step 1: Create an Ubuntu 20.04 xlarge EC2 instance with the following attributes
         (see addendum for using Amazon Linux2 - but it really does not matter)
 
 + 50 Gigs of disk space
++ IAM Role: InstanceOpsRole  (this will add support for sops encryption with KMS)
 + A security group that allows all TCP traffic from your IP address.
 + The following in the User Data
 
