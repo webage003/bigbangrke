@@ -11,6 +11,8 @@ stringData:
 {{ toYaml .Values.addons.argocd.values | indent 4 }}
   istiooperator.yaml: |
 {{ toYaml .Values.istiooperator.values | indent 4  }}
+  authservice.yaml: |
+{{ toYaml .Values.addons.authservice.values | indent 4 }}
   istio.yaml: |
 {{ toYaml .Values.istio.values | indent 4  }}
   gatekeeper.yaml: |
