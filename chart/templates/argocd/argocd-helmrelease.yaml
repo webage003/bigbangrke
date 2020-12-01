@@ -41,6 +41,25 @@ spec:
     imagePullSecrets:
       - name: private-registry
   {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
+    istio:
+      enabled: {{ .Values.istio.enabled }}
+    argo:
+      controller:
+        serviceMonitor:
+          enabled: {{ .Values.monitoring.enabled }}
+        metrics:
+          enabled: {{ .Values.monitoring.enabled }}
+      server:
+        metrics:
+          enabled: {{ .Values.monitoring.enabled }}
+          serviceMonitor:
+            enabled: {{ .Values.monitoring.enabled }}
+      repoServer:
+        metrics:
+          enabled: {{ .Values.monitoring.enabled }}
+          serviceMonitor:
+            enabled: {{ .Values.monitoring.enabled }}
+
   dependsOn:
   {{- if .Values.istio.enabled }}
   - name: istio
