@@ -76,6 +76,12 @@ twistlock:
 #    tag: ""
   values: {}
 
+documentation:
+  enabled: true
+  git:
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/documentation.git
+    branch: master
+
 addons:
   argocd:
     enabled: false
