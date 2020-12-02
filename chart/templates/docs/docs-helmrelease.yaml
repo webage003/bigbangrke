@@ -35,7 +35,7 @@ spec:
   valuesFrom:
     - name: values
       kind: Secret
-      valuesKey: "gatekeeper.yaml"
+      valuesKey: "documentation.yaml"
 
   values:
     packages:
