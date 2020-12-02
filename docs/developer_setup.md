@@ -129,15 +129,11 @@ cat ~/.kube/config
 + Move to your workstation and install Big Bang Umbrella on the cluster
 
 ```
-#Test to see if you can connect to your cluster
+# Test to see if you can connect to your cluster
 
 kubectl get nodes
 
-#From the base of the project 
-
-cd examples/complete
-
-gpg --import examples/complete/bigbang-dev.asc
+# From the base of the project 
 
 flux install
 
@@ -145,7 +141,7 @@ kubectl create ns bigbang
 
 kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
 
-# We have found that you need to increase Elastic's memory limits to 3 Gig. This will be fixed in the code soon. But until then you will need to do it. If you want to do that you can follow method 2
+# Helm install BigBang umbrella
 
 # Method 1 - go for it. (Note: You don't need to set registryCredentials if you configured registry pull secret on the cluster in previous steps)  
 
