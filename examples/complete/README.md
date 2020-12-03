@@ -41,13 +41,18 @@ To set up your local development environment, follow the steps below:
 # Create a local k3d cluster with the appropriate port forwards
 k3d cluster create --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" -p 80:80@loadbalancer -p 443:443@loadbalancer
 
+# set registry env credentials
+export REG_USERNAME="<username>"
+export REG_EMAIL="<email>"
+export PASSWORD="<password>"
+
 # Deploy the latest fluxv2 with iron bank images
-flux install --registry registry.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2 --timeout 3m0s
+kubectl apply -f https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/-/raw/master/flux-system.yaml
 
 # Apply a local version of the umbrella chart
 # NOTE: This is the alternative to deploying a HelmRelease and having flux manage it, we use a local copy to avoid having to commit every change
 # NOTE: Use yq to parse the kustomize values patch and pipe it to the helm values
-yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade -i bigbang chart -n bigbang --create-namespace -f -
+yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username="${REG_USERNAME}" --set registryCredentials.password="${REG_PASSWORD}" --set registryCredentials.email="${REG_EMAIL}" -f -
 
 # Apply the necessary dev secrets
 # NOTE: You should do this immediately after the previous helm command in case there are any secrets that the helm charts require to boot
@@ -55,7 +60,7 @@ yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade 
 kubectl apply -f examples/complete/envs/dev/source-secrets.yaml
 
 # After making changes to the umbrella chart or values, you can update the chart idempotently
-yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade -i bigbang chart -n bigbang --create-namespace -f -
+yq r examples/complete/envs/dev/patch-bigbang.yaml 'spec.values' | helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username="${REG_USERNAME}" --set registryCredentials.password="${REG_PASSWORD}" --set registryCredentials.email="${REG_EMAIL}" -f -
 
 # A convenience development script is provided to force fluxv2 to reconcile all helmreleases within the cluster
 hack/sync.sh
