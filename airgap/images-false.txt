@@ -1,2 +1,0 @@
-rancher/coredns-coredns:1.6.9
-rancher/local-path-provisioner:v0.0.14
