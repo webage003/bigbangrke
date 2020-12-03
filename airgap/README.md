@@ -33,5 +33,5 @@ Use this folder as your top-level working directory.
 6. Obtain image tarball:
 
     ```
-    ./bundle-images.sh --images tarballs/images.tar.gz
+    ./bundle-images.sh --image-list lists/images.txt --images tarballs/images.tar.gz
     ```
