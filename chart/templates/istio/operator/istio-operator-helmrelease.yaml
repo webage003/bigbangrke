@@ -8,11 +8,11 @@ spec:
   targetNamespace: istio-operator
   chart:
     spec:
-      chart: charts/operator
+      chart: {{ .Values.istiooperator.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: istio
+        name: istio-operator
         namespace: {{ .Release.Namespace }}
 
   {{- with .Values.flux }}
@@ -31,6 +31,11 @@ spec:
     timeout: {{ .rollback.timeout }}
     cleanupOnFail: {{ .rollback.cleanupOnFail }}
   {{- end }}
+
+  valuesFrom:
+    - name: values
+      kind: Secret
+      valuesKey: "istiooperator.yaml"
 
   values:
     hub: registry1.dsop.io/ironbank/opensource/istio
