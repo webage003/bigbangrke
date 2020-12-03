@@ -49,6 +49,9 @@ export PASSWORD="<password>"
 # Deploy the latest fluxv2 with iron bank images
 kubectl apply -f https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/-/raw/master/flux-system.yaml
 
+# check flux
+flux check
+
 # Apply a local version of the umbrella chart
 # NOTE: This is the alternative to deploying a HelmRelease and having flux manage it, we use a local copy to avoid having to commit every change
 # NOTE: Use yq to parse the kustomize values patch and pipe it to the helm values
