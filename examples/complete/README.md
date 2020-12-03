@@ -44,7 +44,7 @@ k3d cluster create --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disa
 # set registry env credentials
 export REG_USERNAME="<username>"
 export REG_EMAIL="<email>"
-export PASSWORD="<password>"
+export REG_PASSWORD="<password>"
 
 # Deploy the latest fluxv2 with iron bank images
 kubectl apply -f https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/-/raw/master/flux-system.yaml
