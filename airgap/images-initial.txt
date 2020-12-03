@@ -1,10 +1,5 @@
 argoproj/argocd:v1.7.6
 docker.elastic.co/eck/eck-operator:1.3.0
-docker.io/argoproj/argocd:v1.7.6
-docker.io/library/redis:5.0.8
-docker.io/rancher/coredns-coredns:1.6.9
-docker.io/rancher/klipper-lb:v0.1.2
-docker.io/rancher/local-path-provisioner:v0.0.14
 docker.io/runyonsolutions/cluster-auditor:0.3
 quay.io/dexidp/dex:v2.22.0
 rancher/coredns-coredns:1.6.9
