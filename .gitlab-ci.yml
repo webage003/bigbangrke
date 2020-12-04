@@ -43,67 +43,16 @@ stages:
   - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD} --set addons.argocd.enabled=true --set addons.authservice.enabled=true
 
   # Apply secrets kustomization pointing to current branch
-  - echo "Deploying secrets from the ${CI_COMMIT_REF_NAME} branch"
+  - echo "Deploying secrets from branch ${CI_COMMIT_REF_NAME}"
   - cat examples/complete/envs/dev/source-secrets.yaml | sed 's|master|'$CI_COMMIT_REF_NAME'|g' | kubectl apply -f -
 
-  # Wait for components to be ready
-  # NOTE: Wait for each package individually so they show up nicely in ci logs
-  - kubectl wait --for=condition=Ready --timeout 120s helmrelease -n bigbang gatekeeper
-  - kubectl wait --for=condition=Ready --timeout 120s helmrelease -n bigbang istio-operator
-  - kubectl wait --for=condition=Ready --timeout 240s helmrelease -n bigbang istio
-  - kubectl wait --for=condition=Ready --timeout 500s helmrelease -n bigbang monitoring
-  - kubectl wait --for=condition=Ready --timeout 120s helmrelease -n bigbang eck-operator
-  - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang ek
-  - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang fluent-bit
-  - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang twistlock
-  - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang cluster-auditor
-  - kubectl wait --for=condition=Ready --timeout 30s kustomizations.kustomize.toolkit.fluxcd.io -n bigbang secrets
-
-  # Wait for addons (only if they exist since they might not yet for upgrades)
-  # TODO: This is kinda messy
-  - kubectl get helmrelease -n bigbang argocd && kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang argocd
-  - kubectl get helmrelease -n bigbang authservice && kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang authservice
+  # wait for components to be ready
+  - kubectl wait --timeout=10m --for=condition=Ready -n bigbang $(kubectl get hr -n bigbang -o name)
 
   # Quick check for non iron bank images
-  - echo "Showing images not from ironbank:"
+  - echo "Showing non ironbank images:"
   # Ignore rancher images since those are from k3d
   - ./airgap/list-images.sh | grep -v "registry1" | grep -v "rancher"
-
-  # Basic smoke test BigBang
-#  - echo "Package tests go here"
-#  - bash ./tests/virtualservices.sh
-#  - kubectl get helmrelease -A
-
-clean install:
-  stage: smoke tests
-  extends:
-    - .k3d
-  rules:
-    # Skip on merge requests (it is ran as part of the non MR pipeline)
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: never
-    - when: never
-  variables:
-    CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
-  script:
-    - *deploy_bigbang
-
-upgrade:
-  stage: smoke tests
-  extends:
-    - .k3d
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  variables:
-    CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
-  script:
-    - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
-    - git fetch && git checkout ${CI_DEFAULT_BRANCH}
-    - *deploy_bigbang
-
-    - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
-    - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-    - *deploy_bigbang
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -260,8 +209,47 @@ aws/rke2/cluster down:
     - job: aws/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
 
+#
+# Smoke tests
+#
+
+clean install:
+  stage: smoke tests
+  extends:
+    - .k3d
+  rules:
+    # Skip on merge requests (it is ran as part of the non MR pipeline)
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
+    - when: never
+  variables:
+    CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
+  script:
+    - *deploy_bigbang
+
+upgrade:
+  stage: smoke tests
+  extends:
+    - .k3d
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  variables:
+    CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
+  script:
+    - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
+    - git fetch && git checkout ${CI_DEFAULT_BRANCH}
+    - *deploy_bigbang
+
+    - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
+    - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+    - *deploy_bigbang
+
+#
+# Release logic
+#
+
 # vendor repos
-release:repos:
+release:prepare:repos:
   stage: release:prepare
   image: registry1.dsop.io/ironbank/opensource/python/python38
   artifacts:
@@ -292,7 +280,7 @@ release:repos:
   - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
 
 # generate images
-release:images:
+release:prepare:images:
   stage: release:prepare
   extends:
     - .k3d
@@ -332,8 +320,8 @@ release:images:
 release:upload:
   stage: release:upload
   dependencies:
-    - release:repos
-    - release:images
+    - release:prepare:repos
+    - release:prepare:images
   script:
   - ls -lah airgap/tarballs
 
