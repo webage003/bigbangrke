@@ -263,8 +263,17 @@ release-repos:
   - CI_COMMIT_TAG=TEST-1.2.3
   - echo "CI Commit Tag - ${CI_COMMIT_TAG}"
 
-  # TODO - vendor umbrella repository
+  # vendor umbrella repository
   - echo "TODO - Vendor umbrella repository"
+  - UMBRELLA_URL=$(git config --get remote.origin.url)
+  - UMBRELLA_HEAD=$(git rev-parse HEAD)
+  - rm -rf airgap/repos/umbrella
+  - git clone $UMBRELLA_URL airgap/repos/umbrella
+  - cd airgap/repos/umbrella
+  - git checkout $UMBRELLA_HEAD
+  - git reset --hard
+  - rm -rf .git
+  - cd -
 
   # vendor repositories from chart/values.yaml
   - pip install $(./airgap/vendor_repos.py pip)
