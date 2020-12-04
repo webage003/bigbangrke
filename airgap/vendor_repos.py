@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-import yaml
-import argparse
-import shutil
-from git import Repo
+# standard library imports
+import os, sys, shutil, argparse
+
+# non standard imports
+# don't require these as
+# we provide an installation
+# method
+try:
+    import yaml
+    from git import Repo
+except ModuleNotFoundError: pass
 
 class Vendor_Repos:
 
@@ -92,7 +97,7 @@ class Vendor_Repos:
         # pip command
         if self.args.command == 'pip':
             # print pip requirements
-            print('argparse PyYAML gitpython')
+            print('PyYAML gitpython')
         # vendor command
         elif self.args.command == 'vendor':
             # set top level and addon repositories
