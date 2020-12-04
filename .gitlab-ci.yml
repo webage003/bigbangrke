@@ -256,52 +256,50 @@ aws/rke2/cluster down:
     - job: aws/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
 
+release-repos:
+  stage: release
+  image: docker.io/python:3
+  script:
+  - CI_COMMIT_TAG=TEST-1.2.3
+  - echo "CI Commit Tag - ${CI_COMMIT_TAG}"
 
-release:
-  image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
+  # TODO - vendor umbrella repository
+  - echo "TODO - Vendor umbrella repository"
+
+  # vendor repositories from chart/values.yaml
+  - pip install argparse PyYAML
+  - ./airgap/vendor_repos.py chart/values.yaml airgap/repos/packages
+  - ls -lah airgap/repos/packages
+
+release-images:
+  stage: release
+  extends:
+    - .k3d
   services:
     - docker:dind
-  tags:
-    - bigbang
-    - privileged
-    - public
   variables:
     DOCKER_HOST: tcp://localhost:2375/
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
     CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
-  stage: release
-  # only:
-  # - tags
-  extends:
-    - .k3d
   script:
   - CI_COMMIT_TAG=TEST-1.2.3
   - echo "CI Commit Tag - ${CI_COMMIT_TAG}"
   - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
 
-  # # obtain false images from blank cluster state
-  # - ./airgap/list-images.sh > airgap/lists/images-false.txt
+  # obtain false images from blank cluster state
+  - ./airgap/list-images.sh > airgap/lists/images-false.txt
 
-  # # deploy bigbang
-  # - *deploy_bigbang
+  # deploy bigbang
+  - *deploy_bigbang
 
-  # # obtain initial images from full cluster state
-  # - ./airgap/list-images.sh > airgap/lists/images-initial.txt
+  # obtain initial images from full cluster state
+  - ./airgap/list-images.sh > airgap/lists/images-initial.txt
 
-  # # obtain true images from both lists
-  # - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
-  # - cat airgap/lists/images.txt
+  # obtain true images from both lists
+  - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
+  - cat airgap/lists/images.txt
 
-  # # bundle image list into tagged tarball
-  # - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images-${CI_COMMIT_TAG}.tar.gz
-  # - ls -lah airgap/tarballs/
-
-  # TODO - vendor umbrella repository
-  # - 
-
-  # vendor repositories from chart/values.yaml
-  - which pip
-  - which python
-  - ./airgap/vendor_repos.py chart/values.yaml airgap/repos/packages
-  - ls -lah airgap/repos/packages
+  # bundle image list into tagged tarball
+  - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images-${CI_COMMIT_TAG}.tar.gz
+  - ls -lah airgap/tarballs/
