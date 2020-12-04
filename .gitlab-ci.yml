@@ -267,7 +267,7 @@ release-repos:
   - echo "TODO - Vendor umbrella repository"
 
   # vendor repositories from chart/values.yaml
-  - pip install argparse PyYAML
+  - pip install argparse PyYAML gitpython
   - ./airgap/vendor_repos.py chart/values.yaml airgap/repos/packages
   - ls -lah airgap/repos/packages
 
