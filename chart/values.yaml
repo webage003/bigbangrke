@@ -35,7 +35,7 @@ clusterAuditor:
   enabled: true
   git: 
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/cluster-auditor.git
-    branch: chart-release
+    branch: docs
 #    commit: ""
 #    tag: ""
   values: {}
@@ -87,5 +87,5 @@ addons:
     enabled: false
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/argocd.git
-      branch: chart-release
+      branch: docs
     values: {}

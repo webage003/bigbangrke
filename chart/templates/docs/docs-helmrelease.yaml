@@ -54,13 +54,13 @@ spec:
      {{- if or .Values.logging.enabled .Values.clusterAuditor.enabled }}
     - name: elastic-kibana
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/elasticsearch-kibana.git
-      branch: add-doc-test
+      branch: main
       path: docs
     {{- end }}
     {{- if .Values.gatekeeper.enabled }}
     - name: opa-gatekeeper
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
-      branch: docs-policy
+      branch: main
       path: docs
     {{- end }}
     imagePullSecrets:
