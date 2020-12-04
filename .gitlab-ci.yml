@@ -22,12 +22,10 @@ stages:
   - bigbang down
   - cluster down
   - network down
-  - release:prepare
-  - release:upload
+  - release prepare
+  - release upload
   - release
-#-----------------------------------------------------------------------------------------------------------------------
-# Smoke Tests
-#
+
 .bigbang:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
 
@@ -47,7 +45,7 @@ stages:
   - cat examples/complete/envs/dev/source-secrets.yaml | sed 's|master|'$CI_COMMIT_REF_NAME'|g' | kubectl apply -f -
 
   # wait for components to be ready
-  - kubectl wait --timeout=10m --for=condition=Ready -n bigbang $(kubectl get hr -n bigbang -o name)
+  - kubectl wait --timeout=15m --for=condition=Ready -n bigbang $(kubectl get hr -n bigbang -o name)
 
   # Quick check for non iron bank images
   - echo "Showing non ironbank images:"
@@ -59,6 +57,7 @@ stages:
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Management Jobs
 #
+
 # .pre job for pulling pipeline contents from umbrella-templates project
 # TODO: Currently all jobs connected via "needs" must explicitly need this job, should evaluate turning this into a global cache
 fetch umbrella templates:
@@ -100,11 +99,13 @@ fetch umbrella templates:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       allow_failure: true
       when: always
+      
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Networking
 #
+
 aws/network up:
   extends:
     - .infra fork
@@ -121,11 +122,13 @@ aws/network down:
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     action: stop
+
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: RKE2
 #
+
 # Create RKE2 cluster on AWS
 aws/rke2/cluster up:
   stage: cluster up
@@ -207,10 +210,11 @@ aws/rke2/cluster down:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/rke2/bigbang down
+    
 #-----------------------------------------------------------------------------------------------------------------------
 
-#
-# Smoke tests
+#-----------------------------------------------------------------------------------------------------------------------
+# Smoke Tests
 #
 
 clean install:
@@ -244,13 +248,15 @@ upgrade:
     - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
     - *deploy_bigbang
 
-#
-# Release logic
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Release Logic
 #
 
 # vendor repos
-release:prepare:repos:
-  stage: release:prepare
+release prepare repos:
+  stage: release prepare
   image: registry1.dsop.io/ironbank/opensource/python/python38
   artifacts:
     paths:
@@ -280,8 +286,8 @@ release:prepare:repos:
   - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
 
 # generate images
-release:prepare:images:
-  stage: release:prepare
+release prepare images:
+  stage: release prepare
   extends:
     - .k3d
   services:
@@ -300,12 +306,14 @@ release:prepare:images:
 
   # obtain false images from blank cluster state
   - ./airgap/list-images.sh > airgap/lists/images-false.txt
+  - cat airgap/lists/images-false.txt
 
   # deploy bigbang
   - *deploy_bigbang
 
   # obtain initial images from full cluster state
   - ./airgap/list-images.sh > airgap/lists/images-initial.txt
+  - cat airgap/lists/images-initial.txt
 
   # obtain true images from both lists
   - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
@@ -317,11 +325,11 @@ release:prepare:images:
   - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
 
 # upload artifacts
-release:upload:
-  stage: release:upload
+release upload:
+  stage: release upload
   dependencies:
-    - release:prepare:repos
-    - release:prepare:images
+    - release prepare repos
+    - release prepare images
   script:
   - ls -lah airgap/tarballs
 
@@ -330,3 +338,5 @@ release:
   stage: release
   script:
   - echo "I'm a relase pipeline, I'm special"
+
+#-----------------------------------------------------------------------------------------------------------------------
