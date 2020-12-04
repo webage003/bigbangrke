@@ -280,11 +280,25 @@ release:
   - echo "CI Commit Tag - ${CI_COMMIT_TAG}"
   - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
 
-  - ./airgap/list-images.sh > airgap/lists/images-false.txt
-  - *deploy_bigbang
-  - ./airgap/list-images.sh > airgap/lists/images-initial.txt
-  - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
-  - cat airgap/lists/images.txt
-  
-  - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images-${CI_COMMIT_TAG}.tar.gz
-  - ls -lah airgap/tarballs/
+  # # obtain false images from blank cluster state
+  # - ./airgap/list-images.sh > airgap/lists/images-false.txt
+
+  # # deploy bigbang
+  # - *deploy_bigbang
+
+  # # obtain initial images from full cluster state
+  # - ./airgap/list-images.sh > airgap/lists/images-initial.txt
+
+  # # obtain true images from both lists
+  # - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
+  # - cat airgap/lists/images.txt
+
+  # # bundle image list into tagged tarball
+  # - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images-${CI_COMMIT_TAG}.tar.gz
+  # - ls -lah airgap/tarballs/
+
+  # TODO - vendor umbrella repository
+  - 
+
+  # vendor repositories from chart/values.yaml
+  - ./airgap/vendor_repos.py chart/values.yaml airgap/repos/packages
