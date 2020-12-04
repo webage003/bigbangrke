@@ -301,4 +301,7 @@ release:
   # - 
 
   # vendor repositories from chart/values.yaml
+  - which pip
+  - which python
   - ./airgap/vendor_repos.py chart/values.yaml airgap/repos/packages
+  - ls -lah airgap/repos/packages
