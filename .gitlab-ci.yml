@@ -24,6 +24,7 @@ stages:
   - network down
   - release:prepare
   - release:upload
+  - release
 #-----------------------------------------------------------------------------------------------------------------------
 # Smoke Tests
 #
@@ -37,7 +38,6 @@ stages:
   # Deploy flux and wait for it to be ready
   - kubectl apply -f https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/-/raw/master/flux-system.yaml
   - flux check
-  - kubectl get ns,po,gitrepositories,hr -A
 
   # Deploy BigBang
   - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD} --set addons.argocd.enabled=true --set addons.authservice.enabled=true
@@ -260,6 +260,7 @@ aws/rke2/cluster down:
     - job: aws/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
 
+# vendor repos
 release:repos:
   stage: release:prepare
   image: registry1.dsop.io/ironbank/opensource/python/python38
@@ -290,6 +291,7 @@ release:repos:
   # create repos tarball
   - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
 
+# generate images
 release:images:
   stage: release:prepare
   extends:
@@ -326,6 +328,7 @@ release:images:
   # create images tarball
   - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
 
+# upload artifacts
 release:upload:
   stage: release:upload
   dependencies:
@@ -333,3 +336,9 @@ release:upload:
     - release:images
   script:
   - ls -lah airgap/tarballs
+
+# release git / tag
+release:
+  stage: release
+  script:
+  - echo "I'm a relase pipeline, I'm special"

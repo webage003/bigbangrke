@@ -5,9 +5,3 @@ certs/
 *.tar.gz
 
 .vscode
-
-airgap/lists/images-*
-airgap/repos/*
-airgap/repos/packages/*
-airgap/tarballs/*
-!airgap/**/.gitkeep
