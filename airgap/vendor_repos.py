@@ -45,7 +45,9 @@ class Vendor_Repos:
                 print(f'Repo Branch: {repo_branch}')
 
                 # clean repo path
-                if os.path.exists(repo_dir): shutil.rmtree(repo_dir)
+                if os.path.exists(repo_dir):
+                    print(f'Cleaning existing path {repo_dir}')
+                    shutil.rmtree(repo_dir)
                 os.mkdir(repo_dir)
 
                 # clone repo
@@ -60,6 +62,18 @@ class Vendor_Repos:
                 else:
                     print(f'Checking out tag {repo_tag}')
                     repo.git.reset('--hard', repo_tag)
+
+                # delete .git content
+                print(f'Deleting {repo_dir}/.git')
+                shutil.rmtree(f'{repo_dir}/.git')
+
+                # tar these up, upload to s3 after josh is done with that
+
+                # no need to template out release process for umbrella
+                # every tagged commit in main / master (default) runs release job
+                # repos-x.y.z.tar.gz
+
+                # Chart.yaml verison and git commit tag should always line up
 
                 # print separator
                 print('--')
