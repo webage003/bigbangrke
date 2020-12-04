@@ -8,3 +8,4 @@ certs/
 
 airgap/lists/images-*
 airgap/repos/packages/*
+!airgap/repos/packages/.gitkeep
