@@ -298,7 +298,7 @@ release:
   # - ls -lah airgap/tarballs/
 
   # TODO - vendor umbrella repository
-  - 
+  # - 
 
   # vendor repositories from chart/values.yaml
   - ./airgap/vendor_repos.py chart/values.yaml airgap/repos/packages
