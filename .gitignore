@@ -5,3 +5,6 @@ certs/
 *.tar.gz
 
 .vscode
+
+airgap/lists/images-*
+airgap/repos/packages/*
