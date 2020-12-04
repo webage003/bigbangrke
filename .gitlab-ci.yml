@@ -264,7 +264,7 @@ release-repos:
   - echo "CI Commit Tag - ${CI_COMMIT_TAG}"
 
   # TODO - vendor umbrella repository
-  - echo "TODO - Vendor umbrella repo"
+  - echo "TODO - Vendor umbrella repository"
 
   # vendor repositories from chart/values.yaml
   - pip install argparse PyYAML gitpython
