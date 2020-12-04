@@ -23,6 +23,7 @@ stages:
   - cluster down
   - network down
   - release
+  - release-upload
 #-----------------------------------------------------------------------------------------------------------------------
 # Smoke Tests
 #
@@ -256,9 +257,12 @@ aws/rke2/cluster down:
     - job: aws/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
 
-release-repos:
+release:repos:
   stage: release
   image: docker.io/python:3
+  artifacts:
+    paths:
+      - airgap/tarballs/repos.tar.gz
   script:
   - CI_COMMIT_TAG=TEST-1.2.3
   - echo "CI Commit Tag - ${CI_COMMIT_TAG}"
@@ -278,9 +282,15 @@ release-repos:
   # vendor repositories from chart/values.yaml
   - pip install $(./airgap/vendor_repos.py pip)
   - ./airgap/vendor_repos.py vendor chart/values.yaml airgap/repos/packages
+
+  # debug statements
+  - ls -lah airgap/repos
   - ls -lah airgap/repos/packages
 
-release-images:
+  # create repos tarball
+  - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos
+
+release:images:
   stage: release
   extends:
     - .k3d
@@ -291,6 +301,9 @@ release-images:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
     CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
+  artifacts:
+    paths:
+      - airgap/tarballs/images.tar.gz
   script:
   - CI_COMMIT_TAG=TEST-1.2.3
   - echo "CI Commit Tag - ${CI_COMMIT_TAG}"
@@ -309,6 +322,13 @@ release-images:
   - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
   - cat airgap/lists/images.txt
 
-  # bundle image list into tagged tarball
-  - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images-${CI_COMMIT_TAG}.tar.gz
-  - ls -lah airgap/tarballs/
+  # create images tarball
+  - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
+
+release:upload:
+  stage: release-upload
+  dependencies:
+    - release:repos
+    - release:images
+  script:
+  - echo foo
