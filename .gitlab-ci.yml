@@ -276,18 +276,15 @@ release:
   extends:
     - .k3d
   script:
-  - echo "Hello!  I'm in ${CI_COMMIT_TAG}"
-  # - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
-  # obtain false images
-  # - ./airgap/list-images.sh > airgap/lists/images-false.txt
-  # deploy big bang
-  # - *deploy_bigbang
-  # obtain initial images
-  # - ./airgap/list-images.sh > airgap/lists/images-initial.txt
-  # obtain true images
-  # - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-TEST.txt
-  # bundle images into tarball
-  # - ./airgap/bundle-images.sh --image-list airgap/lists/images-TEST.txt --images airgap/tarballs/images-${CI_COMMIT_TAG}.tar.gz
-  # verify
-  # - cat airgap/lists/images-TEST.txt
-  # - ls -lah airgap/tarballs/
+  - CI_COMMIT_TAG=TEST-1.2.3
+  - echo "CI Commit Tag - ${CI_COMMIT_TAG}"
+  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
+
+  - ./airgap/list-images.sh > airgap/lists/images-false.txt
+  - *deploy_bigbang
+  - ./airgap/list-images.sh > airgap/lists/images-initial.txt
+  - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
+  - cat airgap/lists/images.txt
+  
+  - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images-${CI_COMMIT_TAG}.tar.gz
+  - ls -lah airgap/tarballs/
