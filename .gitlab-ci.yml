@@ -305,8 +305,7 @@ release prepare images:
   script:
   # wait for initial cluster state
   # TODO - put this in upstream k3d init gitlab ci logic
-  - kubectl wait --for=condition=Ready $(kubectl get no -o name)
-  - kubectl wait --for=condition=Ready -n kube-system $(kubectl get po -n kube-system -o name)
+  - for i in {1..10}; do kubectl wait --for=condition=Ready -n kube-system $(kubectl get po -n kube-system -o name) && break || sleep 1; done
 
   # obtain false images from blank cluster state
   - ./airgap/list-images.sh > airgap/lists/images-false.txt
