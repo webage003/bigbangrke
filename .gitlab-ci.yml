@@ -24,8 +24,8 @@ stages:
   - network down
   - release prepare
   - release airgap
-  - release upload
   - release
+  - release upload
 
 .bigbang:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
@@ -254,6 +254,8 @@ upgrade:
 # Release Logic
 #
 
+# TODO - Run this on manual pipelines and not on commits
+
 # vendor repos
 release prepare repos:
   stage: release prepare
@@ -288,6 +290,7 @@ release prepare repos:
   - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
 
 # generate images
+# TODO - we need to bump the gitlab artifact max size / generally tidy up gitlab runners
 release prepare images:
   stage: release prepare
   extends:
@@ -302,6 +305,7 @@ release prepare images:
   artifacts:
     paths:
       - airgap/tarballs/images.tar.gz
+      - airgap/lists/images.txt
   script:
   # wait for initial cluster state
   # TODO - put this in upstream k3d init gitlab ci logic
@@ -349,6 +353,13 @@ release airgap:
   # deploy bigbang
   - *deploy_bigbang
 
+# release git / tag
+release:
+  stage: release
+  script:
+  # TODO - Do release git and tagging magic
+  - echo "I'm a relase pipeline, I'm special"
+
 # upload artifacts
 release upload:
   stage: release upload
@@ -358,12 +369,5 @@ release upload:
   script:
   # TODO - Upload tarballs to s3
   - ls -lah airgap/tarballs
-
-# release git / tag
-release:
-  stage: release
-  script:
-  # TODO - Do release git and tagging magic
-  - echo "I'm a relase pipeline, I'm special"
 
 #-----------------------------------------------------------------------------------------------------------------------
