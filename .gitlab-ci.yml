@@ -154,7 +154,6 @@ aws/rke2/bigbang up:
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
-
     # Deploy a default storage class for aws
     - kubectl apply -f ${CI_PROJECT_DIR}/umbrella-templates/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
   script:
@@ -304,7 +303,13 @@ release prepare images:
       - airgap/tarballs/images.tar.gz
   script:
   # wait for initial cluster state
-  - kubectl wait --for=condition=ready -n kube-system $(kubectl get po -n kube-system -o name)
+  - docker ps
+  - kubectl get no
+  - kubectl get po -A
+  - sleep 10
+  - kubectl get no
+  - kubectl get po -A
+  - kubectl wait --for=condition=Ready -n kube-system $(kubectl get po -n kube-system -o name)
 
   # obtain false images from blank cluster state
   - ./airgap/list-images.sh > airgap/lists/images-false.txt
