@@ -24,6 +24,7 @@ stages:
   - network down
   - release prepare
   - release airgap
+  - release upload
   - release
 
 .bigbang:
@@ -247,8 +248,6 @@ upgrade:
 # Release Logic
 #
 
-# TODO - Run this on manual pipelines and not on commits
-
 # vendor repos
 release prepare repos:
   stage: release prepare
@@ -285,64 +284,93 @@ release prepare images:
   artifacts:
     paths:
       - airgap/lists/images.txt
-      - airgap/tarballs/images.tar.gz
+      # - airgap/tarballs/images.tar.gz
+      - airgap/tarballs/images-TEST.tar.gz
   script:
   # wait for initial cluster state
   # TODO - put this in upstream k3d init gitlab ci logic
   - for i in {1..10}; do kubectl wait --for=condition=Ready -n kube-system $(kubectl get po -n kube-system -o name) 2>/dev/null && break || sleep 1; done
-
   # obtain false images from blank cluster state
   - ./airgap/list-images.sh > airgap/lists/images-false.txt
   - cat airgap/lists/images-false.txt
-
   # deploy bigbang
   - *deploy_bigbang
-
   # obtain initial images from full cluster state
   - ./airgap/list-images.sh > airgap/lists/images-initial.txt
   - cat airgap/lists/images-initial.txt
-
   # obtain true images from both lists
   - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
   - cat airgap/lists/images.txt
-
   # TODO - Either git source the final images list in CI, or verify it against the existing list
-
   # create images tarball
+  # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
   - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
+  # TODO - Test
+  - touch airgap/tarballs/images-TEST.tar.gz
 
 # test airgap
 release airgap:
   stage: release airgap
+  extends:
+    - .k3d
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://localhost:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
   dependencies:
     - release prepare images
   script:
+  - ls -lah airgap/tarballs
+  - ls -lah airgap/lists
+  - echo "Airgap test"
+  # # TODO - Find a way to disallow container pulling, but allow cloning of repo1 git repos
+  # # disable dns to test airgap
+  # - echo "" > /etc/resolv.conf
+  # - ping google.com || true
+  # - which nslookup || true
+  # - nslookup google.com || true
+  # # import images tarball into k3d cluster
+  # - k3d image import airgap/tarballs/images.tar.gz
+  # # deploy bigbang
+  # - *deploy_bigbang
 
-  # TODO - Find a way to disallow container pulling, but allow cloning of repo1 git repos
+release upload:
+  stage: release upload
+  dependencies:
+    - release prepare repos
+    - release prepare images
+  script:
+  # TODO - Upload tarball artifacts here
+  - ls -lah airgap/repos
+  - ls -lah airgap/tarballs
+  - ls -lah airgap/lists
+  - echo "Upload"
 
-  # disable dns to test airgap
-  - echo "" > /etc/resolv.conf
-  - ping google.com || true
-  - which nslookup || true
-  - nslookup google.com || true
-
-  # import images tarball into k3d cluster
-  - k3d image import airgap/tarballs/images.tar.gz
-
-  # deploy bigbang
-  - *deploy_bigbang
+release variables:
+  artifacts:
+    reports:
+      dotenv: variables.env
+  script:
+  # obtain release tag name
+  - echo "TAG=v$(cat chart/Chart.yaml | yq r - version)" >> variables.env
 
 # release git / tag
 # https://docs.gitlab.com/ee/ci/yaml/#release
 release:
   stage: release
+  needs:
+    - job: release variables
+      artifacts: true
+  # release:
+  #   name: "$TAG"
+  #   description: "Umbrella release $TAG, created via GitLab CI releases"
+  #   tag_name: "$TAG"
+  #   ref: "$CI_COMMIT_SHA"
   script:
-  # TODO - Do release git and tagging magic
-  - echo "I'm a relase pipeline, I'm special"
-  - exit 1 # TODO - Don't remove this until production
-  # TODO - Upload tarball artifacts here
-
   # Ideas - use gitlab releases because it's really nice
   # Compare master chart version with working chart version to determine if we need to upgrade
   # IE - Dev introduces breaking change + updates working Chart.yaml version to breaking change version in same MR
@@ -350,9 +378,11 @@ release:
   # -- working Chart.yaml version is compared against master to determine if we need to test upgrades going forward
   # No need to store next versions, breaking change placeholders, or anything else - just plain git "history" comparisons
   # We can use conventional commits, but this wouldn't really leverage them in CI, they would just "be a thing"?
-
-  # release:
-  #   tag_name: v1.0.0-ios
-  #   description: 'iOS release v1.0.0'
+  - echo $TAG
+  - exit 1 # TODO - Don't remove this until production
+  # rules:
+  #   - if: $CI_COMMIT_TAG
+  #     when: never                                  # Do not run this job when a tag is created manually
+  #   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  # Run this job when commits are pushed or merged to the default branch
 
 #-----------------------------------------------------------------------------------------------------------------------
