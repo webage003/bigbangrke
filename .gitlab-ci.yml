@@ -351,12 +351,14 @@ release upload:
   - echo "Upload"
 
 release variables:
+  stage: release
   artifacts:
     reports:
       dotenv: variables.env
   script:
   # obtain release tag name
   - echo "TAG=v$(cat chart/Chart.yaml | yq r - version)" >> variables.env
+  - cat variables.env
 
 # release git / tag
 # https://docs.gitlab.com/ee/ci/yaml/#release
