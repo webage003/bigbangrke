@@ -262,8 +262,6 @@ release prepare repos:
   artifacts:
     paths:
       - airgap/tarballs/repos.tar.gz
-  before_script:
-    - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   script:
   # vendor umbrella repository
   - echo "TODO - Vendor umbrella repository"
@@ -303,9 +301,8 @@ release prepare images:
   artifacts:
     paths:
       - airgap/tarballs/images.tar.gz
-  before_script:
-    - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   script:
+  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   # obtain false images from blank cluster state
   - ./airgap/list-images.sh > airgap/lists/images-false.txt
   - cat airgap/lists/images-false.txt
