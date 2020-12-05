@@ -25,6 +25,7 @@ stages:
   - release prepare
   - release airgap
   - release upload
+  - release variables
   - release
 
 .bigbang:
@@ -351,7 +352,7 @@ release upload:
   - echo "Upload"
 
 release variables:
-  stage: release
+  stage: release variables
   artifacts:
     reports:
       dotenv: variables.env
