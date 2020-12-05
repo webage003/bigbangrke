@@ -12,7 +12,7 @@ workflow:
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
     file: '/global.gitlab-ci.yml'
-
+    
 stages:
   - smoke tests
   - network up
@@ -25,29 +25,22 @@ stages:
   - release prepare
   - release airgap
   - release
-  - release upload
 
 .bigbang:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
 
 .deploy_bigbang: &deploy_bigbang
-
   # TODO - Clean this up
-
   # Deploy flux and wait for it to be ready
   - kubectl apply -f https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/-/raw/master/flux-system.yaml
   - flux check
-
   # Deploy BigBang
   - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD} --set addons.argocd.enabled=true --set addons.authservice.enabled=true
-
   # Apply secrets kustomization pointing to current branch
   - echo "Deploying secrets from branch ${CI_COMMIT_REF_NAME}"
   - cat examples/complete/envs/dev/source-secrets.yaml | sed 's|master|'$CI_COMMIT_REF_NAME'|g' | kubectl apply -f -
-
   # wait for components to be ready
   - kubectl wait --timeout=15m --for=condition=Ready -n bigbang $(kubectl get hr -n bigbang -o name)
-
   # Quick check for non iron bank images
   - echo "Showing non ironbank images:"
   # Ignore rancher images since those are from k3d
@@ -266,26 +259,13 @@ release prepare repos:
       - airgap/tarballs/repos.tar.gz
   script:
   # vendor umbrella repository
-  # TODO - possibly put this in a script
-  - echo "TODO - Vendor umbrella repository"
-  - UMBRELLA_URL=$(git config --get remote.origin.url)
-  - UMBRELLA_HEAD=$(git rev-parse HEAD)
-  - rm -rf airgap/repos/umbrella
-  - git clone $UMBRELLA_URL airgap/repos/umbrella
-  - cd airgap/repos/umbrella
-  - git checkout $UMBRELLA_HEAD
-  - git reset --hard
-  - rm -rf .git
-  - cd -
-
+  - ./airgap/vendor_umbrella.sh airgap/repos/umbrella
   # vendor repositories from chart/values.yaml
   - pip install $(./airgap/vendor_repos.py pip)
   - ./airgap/vendor_repos.py vendor chart/values.yaml airgap/repos/packages
-
   # debug statements
   - ls -lah airgap/repos
   - ls -lah airgap/repos/packages
-
   # create repos tarball
   - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
 
@@ -304,8 +284,8 @@ release prepare images:
     CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
   artifacts:
     paths:
-      - airgap/tarballs/images.tar.gz
       - airgap/lists/images.txt
+      - airgap/tarballs/images.tar.gz
   script:
   # wait for initial cluster state
   # TODO - put this in upstream k3d init gitlab ci logic
@@ -354,20 +334,25 @@ release airgap:
   - *deploy_bigbang
 
 # release git / tag
+# https://docs.gitlab.com/ee/ci/yaml/#release
 release:
   stage: release
   script:
   # TODO - Do release git and tagging magic
   - echo "I'm a relase pipeline, I'm special"
+  - exit 1 # TODO - Don't remove this until production
+  # TODO - Upload tarball artifacts here
 
-# upload artifacts
-release upload:
-  stage: release upload
-  dependencies:
-    - release prepare repos
-    - release prepare images
-  script:
-  # TODO - Upload tarballs to s3
-  - ls -lah airgap/tarballs
+  # Ideas - use gitlab releases because it's really nice
+  # Compare master chart version with working chart version to determine if we need to upgrade
+  # IE - Dev introduces breaking change + updates working Chart.yaml version to breaking change version in same MR
+  # Merge request event happens when MR is merged in, not on all MR pipelines, this way we can update Chart.yaml version
+  # -- working Chart.yaml version is compared against master to determine if we need to test upgrades going forward
+  # No need to store next versions, breaking change placeholders, or anything else - just plain git "history" comparisons
+  # We can use conventional commits, but this wouldn't really leverage them in CI, they would just "be a thing"?
+
+  # release:
+  #   tag_name: v1.0.0-ios
+  #   description: 'iOS release v1.0.0'
 
 #-----------------------------------------------------------------------------------------------------------------------
