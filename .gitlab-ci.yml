@@ -264,6 +264,7 @@ release prepare repos:
       - airgap/tarballs/repos.tar.gz
   script:
   # vendor umbrella repository
+  # TODO - possibly put this in a script
   - echo "TODO - Vendor umbrella repository"
   - UMBRELLA_URL=$(git config --get remote.origin.url)
   - UMBRELLA_HEAD=$(git rev-parse HEAD)
@@ -302,7 +303,9 @@ release prepare images:
     paths:
       - airgap/tarballs/images.tar.gz
   script:
-  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
+  # wait for initial cluster state
+  - kubectl wait --for=condition=ready -n kube-system $(kubectl get po -n kube-system -o name)
+
   # obtain false images from blank cluster state
   - ./airgap/list-images.sh > airgap/lists/images-false.txt
   - cat airgap/lists/images-false.txt
@@ -321,6 +324,7 @@ release prepare images:
   # TODO - Either git source the final images list in CI, or verify it against the existing list
 
   # create images tarball
+  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
 
 # upload artifacts
@@ -330,12 +334,14 @@ release upload:
     - release prepare repos
     - release prepare images
   script:
+  # TODO - Upload tarballs to s3
   - ls -lah airgap/tarballs
 
 # release git / tag
 release:
   stage: release
   script:
+  # TODO - Do release git and tagging magic
   - echo "I'm a relase pipeline, I'm special"
 
 #-----------------------------------------------------------------------------------------------------------------------
