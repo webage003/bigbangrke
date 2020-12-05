@@ -23,6 +23,7 @@ stages:
   - cluster down
   - network down
   - release prepare
+  - release airgap
   - release upload
   - release
 
@@ -303,12 +304,8 @@ release prepare images:
       - airgap/tarballs/images.tar.gz
   script:
   # wait for initial cluster state
-  - docker ps
-  - kubectl get no
-  - kubectl get po -A
-  - sleep 10
-  - kubectl get no
-  - kubectl get po -A
+  # TODO - put this in upstream k3d init gitlab ci logic
+  - kubectl wait --for=condition=Ready $(kubectl get no -o name)
   - kubectl wait --for=condition=Ready -n kube-system $(kubectl get po -n kube-system -o name)
 
   # obtain false images from blank cluster state
@@ -331,6 +328,27 @@ release prepare images:
   # create images tarball
   - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
+
+# test airgap
+release airgap:
+  stage: release airgap
+  dependencies:
+    - release prepare images
+  script:
+
+  # TODO - Find a way to disallow container pulling, but allow cloning of repo1 git repos
+
+  # disable dns to test airgap
+  - echo "" > /etc/resolv.conf
+  - ping google.com || true
+  - which nslookup || true
+  - nslookup google.com || true
+
+  # import images tarball into k3d cluster
+  - k3d image import airgap/tarballs/images.tar.gz
+
+  # deploy bigbang
+  - *deploy_bigbang
 
 # upload artifacts
 release upload:
