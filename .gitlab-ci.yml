@@ -257,7 +257,8 @@ upgrade:
 # vendor repos
 release prepare repos:
   stage: release prepare
-  image: registry1.dsop.io/ironbank/opensource/python/python38
+  # TODO - Change this to registry1
+  image: docker.io/python:3
   artifacts:
     paths:
       - airgap/tarballs/repos.tar.gz
