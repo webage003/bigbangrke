@@ -329,15 +329,13 @@ release airgap:
   - rm -rf airgap/tarballs/images.tar.gz
   # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
   - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
-  - cat airgap/lists/images.txt
   - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
+  - k3d image import -c ${CLUSTER_NAME} airgap/tarballs/images.tar.gz
   # TODO - Workaround
   - docker stop $(docker ps | grep go-dnsmasq | awk '{ print $1 }')
   # - docker stop go-dnsmasq
   - docker run -d -p 53:53/udp -p 53:53 -v $(pwd)/airgap/dnsmasq.conf:/etc/dnsmasq.conf --name dnsmasq jpillora/dnsmasq
   - echo "nameserver 127.0.0.1" > /etc/resolv.conf
-  - nslookup registry1.dsop.io || true
-  - k3d image import -c ${CLUSTER_NAME} airgap/tarballs/images.tar.gz
   - *deploy_bigbang
 
 release upload:
