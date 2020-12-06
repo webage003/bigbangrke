@@ -301,7 +301,7 @@ release prepare images:
   - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-ci.txt
   - cat airgap/lists/images-ci.txt
   # fail if the ci image list differs from the source image list
-  - diff airgap/lists/images.txt airgap/lists/images-ci.txt &>/dev/null || { echo "Source container image list differs from CI"; exit 1; }
+  - diff airgap/lists/images.txt airgap/lists/images-ci.txt
   # create images tarball
   # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
   - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
@@ -336,7 +336,8 @@ release airgap:
   # - docker stop go-dnsmasq
   - docker run -d -p 53:53/udp -p 53:53 -v $(pwd)/airgap/dnsmasq.conf:/etc/dnsmasq.conf --name dnsmasq jpillora/dnsmasq
   - echo "nameserver 127.0.0.1" > /etc/resolv.conf
-  - k3d image import airgap/tarballs/images.tar.gz
+  - nslookup registry1.dsop.io || true
+  - k3d image import -c ${CLUSTER_NAME} airgap/tarballs/images.tar.gz
   - *deploy_bigbang
 
 release upload:
