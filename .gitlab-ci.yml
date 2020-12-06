@@ -326,6 +326,8 @@ release airgap:
   script:
   # TODO - Reload images due to artifact size limitations
   - rm -rf airgap/tarballs/images.tar.gz
+  # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
+  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
   # TODO - Workaround
   - docker stop $(docker ps | grep go-dnsmasq | awk '{ print $1 }')
