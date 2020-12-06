@@ -263,9 +263,6 @@ release prepare repos:
   # vendor repositories from chart/values.yaml
   - pip install $(./airgap/vendor_repos.py pip)
   - ./airgap/vendor_repos.py vendor chart/values.yaml airgap/repos/packages
-  # debug statements
-  - ls -lah airgap/repos
-  - ls -lah airgap/repos/packages
   # create repos tarball
   - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
 
@@ -284,10 +281,10 @@ release prepare images:
     CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
   artifacts:
     paths:
-      - airgap/lists/images.txt
-      # - airgap/tarballs/images.tar.gz
-      - airgap/tarballs/images-TEST.tar.gz
+      - airgap/tarballs/images.tar.gz
   script:
+  # TODO - test
+  - exit 0
   # wait for initial cluster state
   # TODO - put this in upstream k3d init gitlab ci logic
   - for i in {1..10}; do kubectl wait --for=condition=Ready -n kube-system $(kubectl get po -n kube-system -o name) 2>/dev/null && break || sleep 1; done
@@ -300,15 +297,17 @@ release prepare images:
   - ./airgap/list-images.sh > airgap/lists/images-initial.txt
   - cat airgap/lists/images-initial.txt
   # obtain true images from both lists
-  - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
-  - cat airgap/lists/images.txt
-  # TODO - Either git source the final images list in CI, or verify it against the existing list
+  - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-ci.txt
+  - cat airgap/lists/images-ci.txt
+  # fail if the ci image list differs from the source image list
+  - diff airgap/lists/images.txt airgap/lists/images-ci.txt &>/dev/null || { echo "Source container image list differs from CI"; exit 1; }
   # create images tarball
   # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
   - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
   # TODO - Test
-  - touch airgap/tarballs/images-TEST.tar.gz
+  - rm -rf airgap/tarballs/images.tar.gz
+  - touch airgap/tarballs/images.tar.gz
 
 # test airgap
 release airgap:
@@ -325,19 +324,16 @@ release airgap:
   dependencies:
     - release prepare images
   script:
-  - ls -lah airgap/tarballs
-  - ls -lah airgap/lists
-  - echo "Airgap test"
-  # # TODO - Find a way to disallow container pulling, but allow cloning of repo1 git repos
-  # # disable dns to test airgap
-  # - echo "" > /etc/resolv.conf
-  # - ping google.com || true
-  # - which nslookup || true
-  # - nslookup google.com || true
-  # # import images tarball into k3d cluster
-  # - k3d image import airgap/tarballs/images.tar.gz
-  # # deploy bigbang
-  # - *deploy_bigbang
+  # TODO - Reload images due to artifact size limitations
+  - rm -rf airgap/tarballs/images.tar.gz
+  - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
+  # TODO - Workaround
+  - docker stop $(docker ps | grep go-dnsmasq | awk '{ print $1 }')
+  # - docker stop go-dnsmasq
+  - docker run -p 53:53/udp -p 53:53 -v $(pwd)/airgap/dnsmasq.conf:/etc/dnsmasq.conf --name dnsmasq jpillora/dnsmasq
+  - echo "nameserver 127.0.0.1" > /etc/resolv.conf
+  - k3d image import airgap/tarballs/images.tar.gz
+  - *deploy_bigbang
 
 release upload:
   stage: release upload
@@ -358,7 +354,9 @@ release variables:
       dotenv: variables.env
   script:
   # obtain release tag name
-  - echo "TAG=v$(cat chart/Chart.yaml | yq r - version)" >> variables.env
+  # TODO - Add yq to upstream and use that instead
+  # - echo "TAG=$(cat chart/Chart.yaml | yq r - version)" >> variables.env
+  - echo "TAG=$(sed -n -e 's/^version. //p' chart/Chart.yaml)" >> variables.env
   - cat variables.env
 
 # release git / tag
@@ -368,6 +366,9 @@ release:
   needs:
     - job: release variables
       artifacts: true
+  dependencies:
+    - release prepare repos
+    - release prepare images
   # release:
   #   name: "$TAG"
   #   description: "Umbrella release $TAG, created via GitLab CI releases"
@@ -381,6 +382,9 @@ release:
   # -- working Chart.yaml version is compared against master to determine if we need to test upgrades going forward
   # No need to store next versions, breaking change placeholders, or anything else - just plain git "history" comparisons
   # We can use conventional commits, but this wouldn't really leverage them in CI, they would just "be a thing"?
+  - ls -lah airgap/repos
+  - ls -lah airgap/tarballs
+  - ls -lah airgap/lists
   - echo $TAG
   - exit 1 # TODO - Don't remove this until production
   # rules:
