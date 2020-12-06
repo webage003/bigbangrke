@@ -284,6 +284,7 @@ release prepare images:
       - airgap/tarballs/images.tar.gz
   script:
   # TODO - test
+  - touch airgap/tarballs/images.tar.gz
   - exit 0
   # wait for initial cluster state
   # TODO - put this in upstream k3d init gitlab ci logic

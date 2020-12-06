@@ -50,6 +50,7 @@ while IFS= read -r i; do
             pulled="${pulled} ${i}"
         else
             echo "Image pull failed: ${i}"
+            exit 1
         fi
     fi
 done < "${list}"
