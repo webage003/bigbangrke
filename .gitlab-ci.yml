@@ -366,9 +366,10 @@ release:
   needs:
     - job: release variables
       artifacts: true
-  dependencies:
-    - release prepare repos
-    - release prepare images
+    - job: release prepare repos
+      artifacts: true
+    - job: release prepare images
+      artifacts: true
   # release:
   #   name: "$TAG"
   #   description: "Umbrella release $TAG, created via GitLab CI releases"
