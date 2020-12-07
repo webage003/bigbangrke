@@ -245,9 +245,8 @@ smoke test upgrade:
   extends:
     - .k3d
   rules:
-    - if: '$BREAKING_CHANGE'
+    - if: '$BREAKING_CHANGE == false'
       when: never
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
