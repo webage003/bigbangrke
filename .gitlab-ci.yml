@@ -235,8 +235,6 @@ smoke test install:
     - smoke test variables
   extends:
     - .k3d
-  services:
-    - registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/docker:dind
   script:
     - *deploy_bigbang
 
@@ -246,9 +244,8 @@ smoke test upgrade:
     - smoke test variables
   extends:
     - .k3d
-  before_script:
-    - if $CHART_BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
   script:
+    - if $CHART_BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
     - *deploy_bigbang
