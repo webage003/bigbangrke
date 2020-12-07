@@ -210,21 +210,21 @@ smoke test variables:
       dotenv: variables.env
   script:
   # obtain MR and master versions
-  - git clone $CI_REPOSITORY_URL --branch $CI_DEFAULT_BRANCH --single-branch
-  - MR_VERSION=$(sed -n -e 's/^version. //p' chart/Chart.yaml)
-  - MASTER_VERSION=$(sed -n -e 's/^version. //p' umbrella/chart/Chart.yaml)
-  - echo "MR_VERSION=$MR_VERSION" >> variables.env
-  - echo "MASTER_VERSION=$MASTER_VERSION" >> variables.env
+  - CHART_MR_VERSION=$(sed -n -e 's/^version. //p' chart/Chart.yaml)
+  - git fetch && git checkout ${CI_DEFAULT_BRANCH}
+  - CHART_MA_VERSION=$(sed -n -e 's/^version. //p' chart/Chart.yaml)
+  - echo "CHART_MR_VERSION=$CHART_MR_VERSION" >> variables.env
+  - echo "CHART_MA_VERSION=$CHART_MA_VERSION" >> variables.env
   # obtain semver differences (subtract master version from mr verison)
-  - VERSION_DIFF=$(./hack/semver_diff.sh $MR_VERSION $MASTER_VERSION)
-  - IFS=. DIFF_ARR=(${VERSION_DIFF##*-})
-  - echo "VERSION_DIFF=$VERSION_DIFF" >> variables.env
+  - CHART_VERSION_DIFF=$(./hack/semver_diff.sh $CHART_MR_VERSION $CHART_MA_VERSION)
+  - IFS=. DIFF_ARR=(${CHART_VERSION_DIFF##*-})
+  - echo "CHART_VERSION_DIFF=$CHART_VERSION_DIFF" >> variables.env
   # detect breaking change (first two version sections in semver diff)
-  - BREAKING_CHANGE=false
-  - if (( ${DIFF_ARR[0]} > 0 )); then BREAKING_CHANGE=true; fi
-  - if (( ${DIFF_ARR[1]} > 0 )); then BREAKING_CHANGE=true; fi
+  - CHART_BREAKING_CHANGE=false
+  - if (( ${DIFF_ARR[0]} > 0 )); then CHART_BREAKING_CHANGE=true; fi
+  - if (( ${DIFF_ARR[1]} > 0 )); then CHART_BREAKING_CHANGE=true; fi
   # store variables
-  - echo "BREAKING_CHANGE=$BREAKING_CHANGE" >> variables.env
+  - echo "CHART_BREAKING_CHANGE=$CHART_BREAKING_CHANGE" >> variables.env
   - cat variables.env
 
 smoke test install:
@@ -243,7 +243,7 @@ smoke test upgrade:
   extends:
     - .k3d
   script:
-    - if $BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
+    - if $CHART_BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
     - *deploy_bigbang
