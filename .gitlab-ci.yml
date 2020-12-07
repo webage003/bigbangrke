@@ -231,8 +231,9 @@ smoke test variables:
 
 smoke test install:
   stage: smoke test
-  dependencies:
-    - smoke test variables
+  needs:
+    - job: smoke test variables
+      artifacts: true
   extends:
     - .k3d
   script:
@@ -240,8 +241,9 @@ smoke test install:
 
 smoke test upgrade:
   stage: smoke test
-  dependencies:
-    - smoke test variables
+  needs:
+    - job: smoke test variables
+      artifacts: true
   extends:
     - .k3d
   rules:
