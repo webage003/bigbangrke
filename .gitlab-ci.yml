@@ -358,7 +358,7 @@ release:
   dependencies:
     - release prepare repos
     - release prepare images
-    - release prepare variables
+    - release variables
   # release:
   #   name: "$TAG"
   #   description: "Umbrella release $TAG, created via GitLab CI releases"
