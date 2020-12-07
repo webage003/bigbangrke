@@ -12,26 +12,26 @@ try:
     from git import Repo
 except ModuleNotFoundError: pass
 
-class Vendor_Repos:
+class bundle_Repos:
 
     def __init__(self):
         # main parser
-        parser = argparse.ArgumentParser(description='Repository vendor tool for Umbrella.')
+        parser = argparse.ArgumentParser(description='Repository bundle tool for Umbrella.')
         subparsers = parser.add_subparsers(dest='command', required=True, help='Command to run.')
 
         # pip requirement parser
         pip_parser = subparsers.add_parser('pip', description='Print a list of pip requirements.')
 
-        # vendor repos parser
-        vendor_parser = subparsers.add_parser('vendor', description='Perform repository vendor functionality.')
-        vendor_parser.add_argument('values', type=argparse.FileType('r'), help='Values yaml file (Ex: chart/values.yaml).')
+        # bundle repos parser
+        bundle_parser = subparsers.add_parser('bundle', description='Perform repository bundle functionality.')
+        bundle_parser.add_argument('values', type=argparse.FileType('r'), help='Values yaml file (Ex: chart/values.yaml).')
         # TODO - Verify that this is a directory and it is writable
-        vendor_parser.add_argument('repos', type=str, help='Repository artifact directory (Ex: airgap/repos/packages).')
+        bundle_parser.add_argument('repos', type=str, help='Repository artifact directory (Ex: airgap/repos/packages).')
 
         # store parsed args
         self.args = parser.parse_args()
 
-    def vendor_repos(self, values):
+    def bundle_repos(self, values):
         # loop over provided values
         for key, value in values.items():
             # make sure they specify a repo
@@ -98,15 +98,15 @@ class Vendor_Repos:
         if self.args.command == 'pip':
             # print pip requirements
             print('PyYAML gitpython')
-        # vendor command
-        elif self.args.command == 'vendor':
+        # bundle command
+        elif self.args.command == 'bundle':
             # set top level and addon repositories
             top_level = yaml.load(self.args.values, Loader=yaml.FullLoader)
             addons = top_level['addons']
-            # vendor repositories
-            self.vendor_repos(top_level)
-            self.vendor_repos(addons)    
+            # bundle repositories
+            self.bundle_repos(top_level)
+            self.bundle_repos(addons)    
 
 # main invocation
 if __name__ == '__main__':
-    Vendor_Repos().run()
+    bundle_Repos().run()

@@ -3,6 +3,7 @@ workflow:
   rules:
     # only run MR pipelines by default
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - when: never
 
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
@@ -259,7 +260,7 @@ smoke test upgrade:
 # Release Logic
 #
 
-# vendor repos
+# bundle repos
 release prepare repos:
   # TODO - Change this to registry1
   image: docker.io/python:3
@@ -268,11 +269,11 @@ release prepare repos:
     paths:
       - airgap/tarballs/repos.tar.gz
   script:
-  # vendor umbrella repository
-  - ./airgap/vendor_umbrella.sh airgap/repos/umbrella
-  # vendor repositories from chart/values.yaml
-  - pip install $(./airgap/vendor_repos.py pip)
-  - ./airgap/vendor_repos.py vendor chart/values.yaml airgap/repos/packages
+  # bundle umbrella repository
+  - ./airgap/bundle_umbrella.sh airgap/repos/umbrella
+  # bundle repositories from chart/values.yaml
+  - pip install $(./airgap/bundle_repos.py pip)
+  - ./airgap/bundle.py bundle chart/values.yaml airgap/repos/packages
   # create repos tarball
   - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
 
