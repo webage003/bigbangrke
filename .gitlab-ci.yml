@@ -10,8 +10,8 @@ include:
     file: '/global.gitlab-ci.yml'
     
 stages:
-  - smoke tests variables
-  - smoke tests
+  - smoke test variables
+  - smoke test
   # - network up
   # - cluster up
   # - bigbang up
@@ -205,7 +205,7 @@ default:
 #
 
 smoke test variables:
-  stage: smoke tests variables
+  stage: smoke test variables
   artifacts:
     reports:
       dotenv: variables.env
@@ -230,7 +230,7 @@ smoke test variables:
   - cat variables.env
 
 smoke test install:
-  stage: smoke tests
+  stage: smoke test
   dependencies:
     - smoke test variables
   extends:
@@ -239,7 +239,7 @@ smoke test install:
     - *deploy_bigbang
 
 smoke test upgrade:
-  stage: smoke tests
+  stage: smoke test
   dependencies:
     - smoke test variables
   extends:
@@ -263,11 +263,13 @@ smoke test upgrade:
 # bundle repos
 release prepare repos:
   # TODO - Change this to registry1
-  image: docker.io/python:3
+  image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/python:3
   stage: release prepare
   artifacts:
     paths:
       - airgap/tarballs/repos.tar.gz
+  services:
+    - registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/docker:dind
   script:
   # bundle umbrella repository
   - ./airgap/bundle_umbrella.sh airgap/repos/umbrella
@@ -318,7 +320,7 @@ release airgap:
   script:
   - k3d image import -c ${CLUSTER_NAME} airgap/tarballs/images.tar.gz
   - docker stop $(docker ps | grep go-dnsmasq | awk '{ print $1 }')
-  - docker run -d -p 53:53/udp -p 53:53 -v $(pwd)/airgap/dnsmasq.conf:/etc/dnsmasq.conf --name dnsmasq jpillora/dnsmasq
+  - docker run -d -p 53:53/udp -p 53:53 -v $(pwd)/airgap/dnsmasq.conf:/etc/dnsmasq.conf --name dnsmasq registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/dnsmasq
   - echo "nameserver 127.0.0.1" > /etc/resolv.conf
   - *deploy_bigbang
 
