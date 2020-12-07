@@ -214,8 +214,8 @@ smoke test variables:
   artifacts:
     reports:
       dotenv: variables.env
-  # rules:
-  #   - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
   # obtain MR and master versions
   - git clone $CI_REPOSITORY_URL --branch $CI_DEFAULT_BRANCH --single-branch
@@ -241,8 +241,8 @@ smoke test install:
     - smoke test variables
   extends:
     - .k3d
-  # rules:
-  #   - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
     - *deploy_bigbang
 
@@ -255,7 +255,7 @@ smoke test upgrade:
   rules:
     - if: '$BREAKING_CHANGE == "false"'
       when: never
-    # - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
