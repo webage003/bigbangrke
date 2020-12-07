@@ -1,13 +1,10 @@
 # Define global rules for when pipelines run
 workflow:
   rules:
-    # Skip pipeline when commit message starts with "wip"
-    - if: '$CI_COMMIT_MESSAGE =~ /^wip/'
-      when: never
-    # Skip pipeline for branches that start with "docs"
-    - if: '$CI_COMMIT_BRANCH =~ /^docs/'
-      when: never
-    - when: always
+    # only run MR pipelines by default
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    # never run anything else by default
+    - when: never
 
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
@@ -25,7 +22,6 @@ stages:
   # - network down
   - release prepare
   - release airgap
-  - release upload
   - release variables
   - release
 
@@ -214,8 +210,6 @@ smoke test variables:
   artifacts:
     reports:
       dotenv: variables.env
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
   # obtain MR and master versions
   - git clone $CI_REPOSITORY_URL --branch $CI_DEFAULT_BRANCH --single-branch
@@ -241,8 +235,6 @@ smoke test install:
     - smoke test variables
   extends:
     - .k3d
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
     - *deploy_bigbang
 
@@ -253,7 +245,7 @@ smoke test upgrade:
   extends:
     - .k3d
   rules:
-    - if: '$BREAKING_CHANGE == "false"'
+    - if: '$BREAKING_CHANGE'
       when: never
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
@@ -272,9 +264,9 @@ smoke test upgrade:
 
 # vendor repos
 release prepare repos:
-  stage: release prepare
   # TODO - Change this to registry1
   image: docker.io/python:3
+  stage: release prepare
   artifacts:
     paths:
       - airgap/tarballs/repos.tar.gz
@@ -332,18 +324,6 @@ release airgap:
   - echo "nameserver 127.0.0.1" > /etc/resolv.conf
   - *deploy_bigbang
 
-release upload:
-  stage: release upload
-  dependencies:
-    - release prepare repos
-    - release prepare images
-  script:
-  # TODO - Upload tarball artifacts here
-  - ls -lah airgap/repos
-  - ls -lah airgap/tarballs
-  - ls -lah airgap/lists
-  - echo "Upload"
-
 release variables:
   stage: release variables
   artifacts:
@@ -362,6 +342,12 @@ release:
     - release prepare repos
     - release prepare images
     - release variables
+  rules:
+    # Do not run this job when a tag is created manually
+    - if: $CI_COMMIT_TAG
+      when: never
+    # Run this job when commits are pushed or merged to the default branch                           
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   # release:
   #   name: "$TAG"
   #   description: "Umbrella release $TAG, created via GitLab CI releases"
@@ -378,11 +364,8 @@ release:
   - ls -lah airgap/repos
   - ls -lah airgap/tarballs
   - ls -lah airgap/lists
+  - echo "Upload here"
   - echo $TAG
   - exit 1 # TODO - Don't remove this until production
-  # rules:
-  #   - if: $CI_COMMIT_TAG
-  #     when: never                                  # Do not run this job when a tag is created manually
-  #   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  # Run this job when commits are pushed or merged to the default branch
 
 #-----------------------------------------------------------------------------------------------------------------------
