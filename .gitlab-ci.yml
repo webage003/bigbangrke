@@ -243,8 +243,9 @@ smoke test upgrade:
     - smoke test variables
   extends:
     - .k3d
-  script:
+  before_script:
     - if $CHART_BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
+  script:
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
     - *deploy_bigbang
