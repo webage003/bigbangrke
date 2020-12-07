@@ -221,11 +221,12 @@ smoke test variables:
   - git clone $CI_REPOSITORY_URL --branch $CI_DEFAULT_BRANCH --single-branch
   - MR_VERSION=$(sed -n -e 's/^version. //p' chart/Chart.yaml)
   - MASTER_VERSION=$(sed -n -e 's/^version. //p' umbrella/chart/Chart.yaml)
-  - echo "MR Version - $MR_VERSION"; echo "Master Version - $MASTER_VERSION"
+  - echo "MR_VERSION=$MR_VERSION" >> variables.env
+  - echo "MASTER_VERSION=$MASTER_VERSION" >> variables.env
   # obtain semver differences (subtract master version from mr verison)
   - VERSION_DIFF=$(./hack/semver_diff.sh $MR_VERSION $MASTER_VERSION)
-  - echo "Version Difference - $VERSION_DIFF"
   - IFS=. DIFF_ARR=(${VERSION_DIFF##*-})
+  - echo "VERSION_DIFF=$VERSION_DIFF" >> variables.env
   # detect breaking change (first two version sections in semver diff)
   - BREAKING_CHANGE=false
   - if (( ${DIFF_ARR[0]} > 0 )); then BREAKING_CHANGE=true; fi
