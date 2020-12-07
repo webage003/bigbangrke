@@ -279,7 +279,7 @@ release prepare repos:
   - ./airgap/bundle_umbrella.sh airgap/repos/umbrella
   # bundle repositories from chart/values.yaml
   - pip install $(./airgap/bundle_repos.py pip)
-  - ./airgap/bundle.py bundle chart/values.yaml airgap/repos/packages
+  - ./airgap/bundle_repos.py bundle chart/values.yaml airgap/repos/packages
   # create repos tarball
   - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
 
@@ -309,7 +309,7 @@ release prepare images:
   # create images tarball
   # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
   - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
-  - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
+  - ./airgap/bundle_images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
 
 # test airgap
 release airgap:

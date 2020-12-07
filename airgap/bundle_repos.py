@@ -46,9 +46,14 @@ class bundle_Repos:
 
                 # determine tag vs branch
                 repo_refspec = None
-                if repo_tag is not None: repo_refspec = 'tag'
-                elif repo_branch is not None: repo_refspec = 'branch'
-                if repo_refspec is None:
+                repo_refspec_type = None
+                if repo_tag is not None:
+                    repo_refspec = repo_tag
+                    repo_refspec_type = 'tag'
+                elif repo_branch is not None:
+                    repo_refspec = repo_branch
+                    repo_refspec_type = 'branch'
+                if repo_refspec is None or repo_refspec_type is None:
                     print('Error: Unable to determine repository refspec type')
                     sys.exit(1)
 
@@ -65,31 +70,21 @@ class bundle_Repos:
                     shutil.rmtree(repo_dir)
                 os.mkdir(repo_dir)
 
-                # clone repo
+                # clone repo and cd (store old working directory)
+                print(f'Cloning {repo_url} to {repo_dir}')
                 repo = Repo.clone_from(repo_url, repo_dir)
+                owd = os.getcwd()
+                os.chdir(repo_dir)
 
-                # handle provided branch
-                if repo_refspec == 'branch':
-                    print(f'Checking out branch {repo_branch}')
-                    repo.git.checkout(repo_branch)
-                    repo.git.reset('--hard')
-                # handle provided tag
-                else:
-                    print(f'Checking out tag {repo_tag}')
-                    repo.git.reset('--hard', repo_tag)
+                # create bundle
+                print(f'Bundling repository for {repo_refspec_type} {repo_refspec}')
+                os.system(f'git bundle create ../{repo_name}.bundle {repo_refspec}')
 
-                # delete .git content
-                print(f'Deleting {repo_dir}/.git')
-                shutil.rmtree(f'{repo_dir}/.git')
-
-                # tar these up, upload to s3 after josh is done with that
-
-                # no need to template out release process for umbrella
-                # every tagged commit in main / master (default) runs release job
-                # repos-x.y.z.tar.gz
-
-                # Chart.yaml verison and git commit tag should always line up
-
+                # move back and delete repo
+                print(f'Deleting repository {repo_dir}')
+                os.chdir(owd)
+                shutil.rmtree(repo_dir)
+               
                 # print separator
                 print('--')
 
