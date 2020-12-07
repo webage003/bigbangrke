@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 # repo path argument
 repo_path=$1
 repo_name=$(basename $repo_path)
