@@ -244,8 +244,8 @@ smoke test upgrade:
     - smoke test variables
   extends:
     - .k3d
-  # rules:
-  #   - if: '$BREAKING_CHANGE == "false"'
+  rules:
+    - if: '$BREAKING_CHANGE == false'
   script:
     - echo $BREAKING_CHANGE
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
