@@ -220,9 +220,9 @@ smoke test variables:
   - IFS=. DIFF_ARR=(${VERSION_DIFF##*-})
   - echo "VERSION_DIFF=$VERSION_DIFF" >> variables.env
   # detect breaking change (first two version sections in semver diff)
-  - BREAKING_CHANGE="false"
-  - if (( ${DIFF_ARR[0]} > 0 )); then BREAKING_CHANGE="true"; fi
-  - if (( ${DIFF_ARR[1]} > 0 )); then BREAKING_CHANGE="true"; fi
+  - BREAKING_CHANGE=false
+  - if (( ${DIFF_ARR[0]} > 0 )); then BREAKING_CHANGE=true; fi
+  - if (( ${DIFF_ARR[1]} > 0 )); then BREAKING_CHANGE=true; fi
   # store variables
   - echo "BREAKING_CHANGE=$BREAKING_CHANGE" >> variables.env
   - cat variables.env
@@ -242,10 +242,8 @@ smoke test upgrade:
     - smoke test variables
   extends:
     - .k3d
-  rules:
-    - if: '$BREAKING_CHANGE == "false"'
   script:
-    - echo $BREAKING_CHANGE
+    - if $BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
     - *deploy_bigbang
