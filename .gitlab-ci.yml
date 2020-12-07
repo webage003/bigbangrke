@@ -235,6 +235,8 @@ smoke test install:
     - smoke test variables
   extends:
     - .k3d
+  services:
+    - registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/docker:dind
   script:
     - *deploy_bigbang
 
@@ -268,8 +270,6 @@ release prepare repos:
   artifacts:
     paths:
       - airgap/tarballs/repos.tar.gz
-  services:
-    - registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/docker:dind
   script:
   # bundle umbrella repository
   - ./airgap/bundle_umbrella.sh airgap/repos/umbrella
