@@ -14,6 +14,7 @@ include:
     file: '/global.gitlab-ci.yml'
     
 stages:
+  - smoke tests variables
   - smoke tests
   # - network up
   # - cluster up
@@ -209,7 +210,7 @@ default:
 #
 
 smoke test variables:
-  stage: release variables
+  stage: smoke tests variables
   artifacts:
     reports:
       dotenv: variables.env
