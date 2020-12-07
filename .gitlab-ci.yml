@@ -244,8 +244,13 @@ smoke test upgrade:
     - smoke test variables
   extends:
     - .k3d
-  script:
-    - if $CHART_BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
+  rules:
+    - if: '$CHART_BREAKING_CHANGE == "true"'
+      when: never
+  # before_script:
+  #   - if $CHART_BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
+  #   - *k3d_before_script
+  script:    
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
     - *deploy_bigbang
@@ -313,7 +318,7 @@ release airgap:
     - release prepare images
   script:
   - k3d image import -c ${CLUSTER_NAME} airgap/tarballs/images.tar.gz
-  - docker stop $(docker ps | grep go-dnsmasq | awk '{ print $1 }')
+  - docker stop go-dnsmasq
   - docker run -d -p 53:53/udp -p 53:53 -v $(pwd)/airgap/dnsmasq.conf:/etc/dnsmasq.conf --name dnsmasq registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/dnsmasq
   - echo "nameserver 127.0.0.1" > /etc/resolv.conf
   - *deploy_bigbang
