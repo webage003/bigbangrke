@@ -213,6 +213,7 @@ smoke test variables:
   - CHART_MR_VERSION=$(sed -n -e 's/^version. //p' chart/Chart.yaml)
   - git fetch && git checkout ${CI_DEFAULT_BRANCH}
   - CHART_MA_VERSION=$(sed -n -e 's/^version. //p' chart/Chart.yaml)
+  - git fetch && git checkout ${CI_COMMIT_REF_NAME}
   - echo "CHART_MR_VERSION=$CHART_MR_VERSION" >> variables.env
   - echo "CHART_MA_VERSION=$CHART_MA_VERSION" >> variables.env
   # obtain semver differences (subtract master version from mr verison)
