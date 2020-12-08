@@ -31,10 +31,10 @@ default:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
 
 .deploy_bigbang: &deploy_bigbang
-  - run-parts ./scripts/deploy/
+  - for script in ./scripts/deploy/*.sh; do bash $script; done
 
 .test_bigbang: &test_bigbang
-  - run-parts ./tests/bash/
+  - for test in ./tests/bash/*.sh; do bash $test; done 
 
 clean install:
   stage: smoke tests
