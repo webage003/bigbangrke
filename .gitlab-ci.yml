@@ -238,9 +238,6 @@ smoke test upgrade:
       artifacts: true
   extends:
     - .k3d
-  rules:
-    - if: '$CHART_BREAKING_CHANGE == "true"'
-      when: never
   script:
     - if $CHART_BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
