@@ -117,8 +117,6 @@ bundle images:
   # fail if the ci image list differs from the source image list
   - diff airgap/lists/images.txt airgap/lists/images-ci.txt
   # create images tarball
-  # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
-  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   - ./scripts/bundle_images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
 
 #-----------------------------------------------------------------------------------------------------------------------
