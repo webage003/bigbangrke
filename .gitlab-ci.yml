@@ -305,7 +305,7 @@ airgap:
   extends:
     - .k3d
   dependencies:
-    - airgap
+    - airgap images
   script:
   - k3d image import -c ${CLUSTER_NAME} airgap/tarballs/images.tar.gz
   - docker stop go-dnsmasq
