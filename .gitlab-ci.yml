@@ -78,7 +78,7 @@ bundle repos:
       - airgap/tarballs/repos.tar.gz
   script:
   # bundle umbrella repository
-  - ./scripts/bundle_umbrella.sh airgap/repos
+  - ./scripts/bundle_umbrella.sh airgap/repos/umbrella
   # bundle repositories from chart/values.yaml
   - pip install $(./scripts/bundle_repos.py pip)
   - ./scripts/bundle_repos.py bundle chart/values.yaml airgap/repos/packages
