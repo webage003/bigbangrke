@@ -43,6 +43,7 @@ class bundle_Repos:
                 repo_dir = f'{self.args.repos}/{repo_name}'
                 repo_tag = value['git']['tag'] if 'tag' in value['git'] else None
                 repo_branch = value['git']['branch'] if 'branch' in value['git'] else None
+                bundle_path = f'{self.args.repos}/{repo_name}.bundle'
 
                 # determine tag vs branch
                 repo_refspec = None
@@ -59,10 +60,13 @@ class bundle_Repos:
                 print(f'Repo Tag: {repo_tag}')
                 print(f'Repo Branch: {repo_branch}')
 
-                # clean repo path
+                # clean repo path and bundle
                 if os.path.exists(repo_dir):
                     print(f'Cleaning existing path {repo_dir}')
                     shutil.rmtree(repo_dir)
+                if os.path.exists(f'{bundle_path}'):
+                    print(f'Cleaning existing bundle {bundle_path}')
+                    shutil.rmtree(bundle_path)
                 os.mkdir(repo_dir)
 
                 # clone repo
@@ -83,7 +87,12 @@ class bundle_Repos:
                 print(f'Bundling repository for at HEAD')
                 owd = os.getcwd()
                 os.chdir(repo_dir)
-                os.system(f'git bundle create ../{repo_name}.bundle HEAD')
+                os.system(f'git bundle create {bundle_path} HEAD')
+
+                # verify bundle
+                if not os.path.exists(f'{bundle_path}'):
+                    print(f'Error: {bundle_path} does not exist')
+                    sys.exit(1)
 
                 # move back and delete repo
                 print(f'Deleting repository {repo_dir}')
