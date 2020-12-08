@@ -1,13 +1,12 @@
 # Define global rules for when pipelines run
 workflow:
   rules:
-    # Skip pipeline when commit message starts with "wip"
-    - if: '$CI_COMMIT_MESSAGE =~ /^wip/'
+    # always skip for hotfixes and patches
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
       when: never
-    # Skip pipeline for branches that start with "docs"
-    - if: '$CI_COMMIT_REF_NAME =~ /^docs/'
-      when: never
-    - when: always
+    # run pipelines for merge request events
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
 
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
@@ -22,15 +21,13 @@ stages:
   - bigbang down
   - cluster down
   - network down
+  - bundle
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Smoke Tests
 #
-.bigbang:
+default:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
-  after_script:
-    - kubectl get all -A
-    - kubectl get helmrelease -A
 
 .deploy_bigbang: &deploy_bigbang
   - for script in ./scripts/deploy/*.sh; do chmod +x $script && $script; done
@@ -43,25 +40,22 @@ clean install:
   extends:
     - .k3d
   rules:
-    # Skip on merge requests (it is ran as part of the non MR pipeline)
+    # Skip on merge request events
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: never
-    - when: always
+    # Run for branch pipelines
+    - if: $CI_COMMIT_BRANCH
+      when: always
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
   script:
     - *deploy_bigbang
     - *test_bigbang
-  after_script:
-    - kubectl get all -A
-    - kubectl get helmrelease -A
 
 upgrade:
   stage: smoke tests
   extends:
     - .k3d
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
   script:
@@ -69,7 +63,6 @@ upgrade:
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
     - *deploy_bigbang
     - *test_bigbang
-
     - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
     - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
     - *deploy_bigbang
@@ -94,9 +87,6 @@ fetch umbrella templates:
   needs:
     - fetch umbrella templates
   rules:
-    # Skip when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
     # Only run on merge requests when manually activated
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: manual
@@ -104,23 +94,13 @@ fetch umbrella templates:
 
 # Abstract for jobs responsible for creating infrastructure
 .infra create:
-  rules:
-    # Skip when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
-    # Only run on merge requests
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 # Abstract for jobs responsible for cleaning up infrastructure
 .infra cleanup:
   rules:
-    # Skip when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
-    # Always run on merge requests
+    # Always run on merge requests, but allow failure
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       allow_failure: true
-      when: always
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -163,7 +143,6 @@ aws/rke2/bigbang up:
   stage: bigbang up
   extends:
     - .infra create
-    - .bigbang
   needs:
     - job: fetch umbrella templates
       artifacts: true
@@ -183,7 +162,6 @@ aws/rke2/bigbang test:
   stage: test
   extends:
     - .infra create
-    - .bigbang
   needs:
     - job: fetch umbrella templates
       artifacts: true
@@ -205,7 +183,6 @@ aws/rke2/bigbang down:
   stage: bigbang down
   extends:
     - .infra cleanup
-    - .bigbang
   needs:
     - job: fetch umbrella templates
       artifacts: true
@@ -231,3 +208,47 @@ aws/rke2/cluster down:
       artifacts: true
     - job: aws/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
+
+# bundle repos
+bundle repos:
+  image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/python:3
+  stage: bundle
+  artifacts:
+    paths:
+      - airgap/tarballs/repos.tar.gz
+  script:
+  # bundle umbrella repository
+  - ./scripts/bundle_umbrella.sh airgap/repos/umbrella
+  # bundle repositories from chart/values.yaml
+  - pip install $(./scripts/bundle_repos.py pip)
+  - ./scripts/bundle_repos.py bundle chart/values.yaml airgap/repos/packages
+  # create repos tarball
+  - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
+
+# generate images
+# TODO - we need to bump the gitlab artifact max size / generally tidy up gitlab runners
+bundle images:
+  stage: bundle
+  extends:
+    - .k3d
+  artifacts:
+    paths:
+      - airgap/tarballs/images.tar.gz
+  script:
+  # obtain false images from blank cluster state
+  - ./scripts/list-images.sh > airgap/lists/images-false.txt
+  - cat airgap/lists/images-false.txt
+  # deploy bigbang
+  - *deploy_bigbang
+  # obtain initial images from full cluster state
+  - ./scripts/list-images.sh > airgap/lists/images-initial.txt
+  - cat airgap/lists/images-initial.txt
+  # obtain true images from both lists
+  - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-ci.txt
+  - cat airgap/lists/images-ci.txt
+  # fail if the ci image list differs from the source image list
+  - diff airgap/lists/images.txt airgap/lists/images-ci.txt
+  # create images tarball
+  # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
+  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
+  - ./scripts/bundle_images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
