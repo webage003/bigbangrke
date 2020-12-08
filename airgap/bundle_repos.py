@@ -46,14 +46,9 @@ class bundle_Repos:
 
                 # determine tag vs branch
                 repo_refspec = None
-                repo_refspec_type = None
-                if repo_tag is not None:
-                    repo_refspec = repo_tag
-                    repo_refspec_type = 'tag'
-                elif repo_branch is not None:
-                    repo_refspec = repo_branch
-                    repo_refspec_type = 'branch'
-                if repo_refspec is None or repo_refspec_type is None:
+                if repo_tag is not None: repo_refspec = 'tag'
+                elif repo_branch is not None: repo_refspec = 'branch'
+                if repo_refspec is None:
                     print('Error: Unable to determine repository refspec type')
                     sys.exit(1)
 
@@ -70,15 +65,25 @@ class bundle_Repos:
                     shutil.rmtree(repo_dir)
                 os.mkdir(repo_dir)
 
-                # clone repo and cd (store old working directory)
+                # clone repo
                 print(f'Cloning {repo_url} to {repo_dir}')
                 repo = Repo.clone_from(repo_url, repo_dir)
-                owd = os.getcwd()
-                os.chdir(repo_dir)
+
+                # handle provided branch
+                if repo_refspec == 'branch':
+                    print(f'Checking out branch {repo_branch}')
+                    repo.git.checkout(repo_branch)
+                    repo.git.reset('--hard')
+                # handle provided tag
+                else:
+                    print(f'Checking out tag {repo_tag}')
+                    repo.git.reset('--hard', repo_tag)
 
                 # create bundle
-                print(f'Bundling repository for {repo_refspec_type} {repo_refspec}')
-                os.system(f'git bundle create ../{repo_name}.bundle {repo_refspec}')
+                print(f'Bundling repository for at HEAD')
+                owd = os.getcwd()
+                os.chdir(repo_dir)
+                os.system(f'git bundle create ../{repo_name}.bundle HEAD')
 
                 # move back and delete repo
                 print(f'Deleting repository {repo_dir}')

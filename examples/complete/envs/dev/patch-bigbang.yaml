@@ -29,7 +29,7 @@ spec:
             resources:
               limits:
                 cpu: 1
-                memory: 3Gi
+                memory: 2Gi
           data:
             count: 1
             persistence:
@@ -37,7 +37,7 @@ spec:
             resources:
               limits:
                 cpu: 1
-                memory: 3Gi
+                memory: 2Gi
 
     istio:
       # Directly modify chart values for dev workloads
@@ -45,7 +45,7 @@ spec:
         kiali:
           dashboard:
             auth:
-              strategy: "anonymous"     # Turn off authentication for kiali dashboard
+              strategy: "anonymous"   
 
     gatekeeper:
       # Directly modify chart values for dev workloads

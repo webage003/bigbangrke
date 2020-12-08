@@ -28,20 +28,10 @@ default:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
 
 .deploy_bigbang: &deploy_bigbang
-  # Deploy flux and wait for it to be ready
-  - kubectl apply -f https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/-/raw/master/flux-system.yaml
-  - flux check
-  # Deploy BigBang
-  - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD} --set addons.argocd.enabled=true --set addons.authservice.enabled=true
-  # Apply secrets kustomization pointing to current branch
-  - echo "Deploying secrets from branch ${CI_COMMIT_REF_NAME}"
-  - cat examples/complete/envs/dev/source-secrets.yaml | sed 's|master|'$CI_COMMIT_REF_NAME'|g' | kubectl apply -f -
-  # wait for components to be ready
-  - kubectl wait --timeout=15m --for=condition=Ready -n bigbang $(kubectl get hr -n bigbang -o name)
-  # Quick check for non iron bank images
-  - echo "Showing non ironbank images:"
-  # Ignore rancher images since those are from k3d
-  - ./airgap/list-images.sh | grep -v "registry1" | grep -v "rancher"
+  - for script in ./scripts/deploy/*.sh; do chmod +x $script && $script; done
+
+.test_bigbang: &test_bigbang
+  - for test in ./tests/bash/*.sh; do chmod +x $test && $test; done 
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -238,6 +228,8 @@ smoke test install:
     - .k3d
   script:
     - *deploy_bigbang
+    - *test_bigbang
+
 
 smoke test upgrade:
   stage: smoke test
@@ -254,9 +246,11 @@ smoke test upgrade:
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
     - *deploy_bigbang
+    - *test_bigbang
     - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
     - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
     - *deploy_bigbang
+    - *test_bigbang
 
 #-----------------------------------------------------------------------------------------------------------------------
 
