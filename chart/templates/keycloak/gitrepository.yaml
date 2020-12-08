@@ -9,7 +9,6 @@ spec:
     # exclude file extensions
     /**/*.md
     /**/*.txt
-    /**/*.sh
   interval: {{ .Values.flux.interval }}
   url: {{ .Values.addons.keycloak.git.repo }}
   ref:
