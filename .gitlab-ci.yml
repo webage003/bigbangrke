@@ -96,12 +96,12 @@ bundle images:
       - airgap/tarballs/images.tar.gz
   script:
   # obtain false images from blank cluster state
-  - ./scripts/list-images.sh > airgap/lists/images-false.txt
+  - ./scripts/list_images.sh > airgap/lists/images-false.txt
   - cat airgap/lists/images-false.txt
   # deploy bigbang
   - *deploy_bigbang
   # obtain initial images from full cluster state
-  - ./scripts/list-images.sh > airgap/lists/images-initial.txt
+  - ./scripts/list_images.sh > airgap/lists/images-initial.txt
   - cat airgap/lists/images-initial.txt
   # obtain true images from both lists
   - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-ci.txt

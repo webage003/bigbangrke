@@ -87,7 +87,8 @@ class bundle_Repos:
                 print(f'Bundling repository for at HEAD')
                 owd = os.getcwd()
                 os.chdir(repo_dir)
-                os.system(f'git bundle create {bundle_path} HEAD')
+                os.system(f'git bundle create ../{repo_name}.bundle HEAD')
+                os.chdir(owd)
 
                 # verify bundle
                 if not os.path.exists(f'{bundle_path}'):
@@ -96,7 +97,6 @@ class bundle_Repos:
 
                 # move back and delete repo
                 print(f'Deleting repository {repo_dir}')
-                os.chdir(owd)
                 shutil.rmtree(repo_dir)
                
                 # print separator
