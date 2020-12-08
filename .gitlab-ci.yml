@@ -84,7 +84,8 @@ bundle repos:
   - ./scripts/bundle_repos.py bundle chart/values.yaml airgap/repos/packages
   - find airgap/repos -type f -name '*.bundle'
   # create repos tarball
-  - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
+  - cd airgap/repos
+  - tar -zcvf airgap/tarballs/repos.tar.gz . >/dev/null
 
 # generate images
 # TODO - we need to bump the gitlab artifact max size / generally tidy up gitlab runners

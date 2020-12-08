@@ -84,11 +84,13 @@ class bundle_Repos:
                     repo.git.reset('--hard', repo_tag)
 
                 # create bundle
-                print(f'Bundling repository for at HEAD')
+                print(f'Bundling repository at HEAD')
                 owd = os.getcwd()
                 os.chdir(repo_dir)
                 os.system(f'git bundle create ../{repo_name}.bundle HEAD')
                 os.chdir(owd)
+
+                # TODO - If someone wants to clean this up (To not use ..) Please feel free :)
 
                 # verify bundle
                 print('Verifying that bundle exists')

@@ -23,6 +23,8 @@ rm -rf $bundle_path
 echo "Cloning $repo_url to $repo_path"
 git clone $repo_url $repo_path
 
+# TODO - If someone wants to clean this up (To not use ..) Please feel free :)
+
 echo "Bundling repository at HEAD"
 cd $repo_path
 git bundle create ../$repo_name.bundle HEAD
