@@ -19,8 +19,8 @@ stages:
   # - bigbang down
   # - cluster down
   # - network down
-  - release prepare
-  - release airgap
+  - bundle
+  - airgap
   - release variables
   - release
 
@@ -230,7 +230,6 @@ smoke test install:
     - *deploy_bigbang
     - *test_bigbang
 
-
 smoke test upgrade:
   stage: smoke test
   needs:
@@ -256,10 +255,10 @@ smoke test upgrade:
 #
 
 # bundle repos
-release prepare repos:
+bundle repos:
   # TODO - Change this to registry1
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/python:3
-  stage: release prepare
+  stage: bundle
   artifacts:
     paths:
       - airgap/tarballs/repos.tar.gz
@@ -274,7 +273,7 @@ release prepare repos:
 
 # generate images
 # TODO - we need to bump the gitlab artifact max size / generally tidy up gitlab runners
-release prepare images:
+bundle images:
   stage: release prepare
   extends:
     - .k3d
@@ -301,8 +300,8 @@ release prepare images:
   - ./airgap/bundle_images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
 
 # test airgap
-release airgap:
-  stage: release airgap
+airgap:
+  stage: airgap
   extends:
     - .k3d
   dependencies:
@@ -335,8 +334,8 @@ release variables:
 release:
   stage: release
   dependencies:
-    - release prepare repos
-    - release prepare images
+    - bundle repos
+    - bundle images
     - release variables
   rules:
     # Do not run this job when a tag is created manually
@@ -344,22 +343,12 @@ release:
       when: never
     # Run this job when commits are pushed or merged to the default branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-  # release:
-  #   name: "$TAG"
-  #   description: "Umbrella release $TAG, created via GitLab CI releases"
-  #   tag_name: "$TAG"
-  #   ref: "$CI_COMMIT_SHA"
+  release:
+    name: "$TAG"
+    description: "Umbrella release $TAG, created via GitLab CI releases"
+    tag_name: "$TAG"
+    ref: "$CI_COMMIT_SHA"
   script:
-  # Ideas - use gitlab releases because it's really nice
-  # Compare master chart version with working chart version to determine if we need to upgrade
-  # IE - Dev introduces breaking change + updates working Chart.yaml version to breaking change version in same MR
-  # Merge request event happens when MR is merged in, not on all MR pipelines, this way we can update Chart.yaml version
-  # -- working Chart.yaml version is compared against master to determine if we need to test upgrades going forward
-  # No need to store next versions, breaking change placeholders, or anything else - just plain git "history" comparisons
-  # We can use conventional commits, but this wouldn't really leverage them in CI, they would just "be a thing"?
-  - ls -lah airgap/repos
-  - ls -lah airgap/tarballs
-  - ls -lah airgap/lists
   - echo "Upload here"
   - echo $TAG
   - exit 1 # TODO - Don't remove this until production
