@@ -1,4 +1,9 @@
 lists/images-*
-repos/*
+
 tarballs/*
+
+repos/*
+repos/packages/*
+
+!repos/packages
 !**/.gitkeep

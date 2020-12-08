@@ -28,6 +28,7 @@ cd $repo_path
 git bundle create ../$repo_name.bundle HEAD
 cd -
 
+echo "Verifying that bundle exists"
 test -f $bundle_path || { echo "Error: $bundle_path does not exist"; exit 1; }
 
 echo "Deleting repository $repo_path"

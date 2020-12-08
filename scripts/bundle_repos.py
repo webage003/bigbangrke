@@ -91,6 +91,7 @@ class bundle_Repos:
                 os.chdir(owd)
 
                 # verify bundle
+                print('Verifying that bundle exists')
                 if not os.path.exists(f'{bundle_path}'):
                     print(f'Error: {bundle_path} does not exist')
                     sys.exit(1)
