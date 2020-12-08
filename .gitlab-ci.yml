@@ -1,307 +1,367 @@
 # Define global rules for when pipelines run
 workflow:
   rules:
-    # Skip pipeline when commit message starts with "wip"
-    - if: '$CI_COMMIT_MESSAGE =~ /^wip/'
-      when: never
-    # Skip pipeline for branches that start with "docs"
-    - if: '$CI_COMMIT_BRANCH =~ /^docs/'
-      when: never
-    - when: always
+    # only run MR pipelines by default
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - when: never
 
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
     file: '/global.gitlab-ci.yml'
-
+    
 stages:
-  - smoke tests
-  - network up
-  - cluster up
-  - bigbang up
-  - test
-  - bigbang down
-  - cluster down
-  - network down
+  - smoke test variables
+  - smoke test
+  # - network up
+  # - cluster up
+  # - bigbang up
+  # - test
+  # - bigbang down
+  # - cluster down
+  # - network down
+  - release prepare
+  - release airgap
+  - release variables
   - release
-#-----------------------------------------------------------------------------------------------------------------------
-# Smoke Tests
-#
-.bigbang:
+
+default:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
 
 .deploy_bigbang: &deploy_bigbang
-  # Deploy flux and wait for it to be ready
-  - flux --version
-  - flux install
-  - kubectl get namespaces,pods,gitrepositories,helmrelease -A
+  - for script in ./scripts/deploy/*.sh; do chmod +x $script && $script; done
 
-  # Deploy BigBang
-  - helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD} --set addons.argocd.enabled=true --set addons.authservice.enabled=true
-
-  # Apply secrets kustomization pointing to current branch
-  - echo "Deploying secrets from the ${CI_COMMIT_REF_NAME} branch"
-  - cat examples/complete/envs/dev/source-secrets.yaml | sed 's|master|'$CI_COMMIT_REF_NAME'|g' | kubectl apply -f -
-
-  # Wait for components to be ready
-  # NOTE: Wait for each package individually so they show up nicely in ci logs
-  - kubectl wait --for=condition=Ready --timeout 120s helmrelease -n bigbang gatekeeper
-  - kubectl wait --for=condition=Ready --timeout 120s helmrelease -n bigbang istio-operator
-  - kubectl wait --for=condition=Ready --timeout 240s helmrelease -n bigbang istio
-  - kubectl wait --for=condition=Ready --timeout 500s helmrelease -n bigbang monitoring
-  - kubectl wait --for=condition=Ready --timeout 120s helmrelease -n bigbang eck-operator
-  - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang ek
-  - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang fluent-bit
-  - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang twistlock
-  - kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang cluster-auditor
-  - kubectl wait --for=condition=Ready --timeout 30s kustomizations.kustomize.toolkit.fluxcd.io -n bigbang secrets
-
-  # Wait for addons (only if they exist since they might not yet for upgrades)
-  # TODO: This is kinda messy
-  - kubectl get helmrelease -n bigbang argocd && kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang argocd
-  - kubectl get helmrelease -n bigbang authservice && kubectl wait --for=condition=Ready --timeout 300s helmrelease -n bigbang authservice
-
-  # Quick check for non iron bank images
-  - echo "Showing images not from ironbank:"
-  # Ignore rancher images since those are from k3d
-  - kubectl get pods -A -o jsonpath="{..image}" | tr -s '[[:space:]]' '\n' | sort | uniq -c | grep -v "registry1" | grep -v "rancher"
-
-  # Basic smoke test BigBang
-#  - echo "Package tests go here"
-#  - bash ./tests/virtualservices.sh
-#  - kubectl get helmrelease -A
-
-clean install:
-  stage: smoke tests
-  extends:
-    - .k3d
-  rules:
-    # Skip on merge requests (it is ran as part of the non MR pipeline)
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: never
-    - when: never
-  variables:
-    CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
-  script:
-    - *deploy_bigbang
-
-upgrade:
-  stage: smoke tests
-  extends:
-    - .k3d
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  variables:
-    CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
-  script:
-    - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
-    - git fetch && git checkout ${CI_DEFAULT_BRANCH}
-    - *deploy_bigbang
-
-    - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
-    - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-    - *deploy_bigbang
+.test_bigbang: &test_bigbang
+  - for test in ./tests/bash/*.sh; do chmod +x $test && $test; done 
 
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Management Jobs
 #
-# .pre job for pulling pipeline contents from umbrella-templates project
-# TODO: Currently all jobs connected via "needs" must explicitly need this job, should evaluate turning this into a global cache
-fetch umbrella templates:
-  extends:
-    - .fetch
-    - .infra create
-  stage: .pre
 
-# Abstract for job manually triggering infrastructure builds
-.infra fork:
-  stage: network up
-  needs:
-    - fetch umbrella templates
-  rules:
-    # Skip when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
-    # Only run on merge requests when manually activated
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
-      allow_failure: false
+# # .pre job for pulling pipeline contents from umbrella-templates project
+# # TODO: Currently all jobs connected via "needs" must explicitly need this job, should evaluate turning this into a global cache
+# fetch umbrella templates:
+#   extends:
+#     - .fetch
+#     - .infra create
+#   stage: .pre
 
-# Abstract for jobs responsible for creating infrastructure
-.infra create:
-  rules:
-    # Skip when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
-    # Only run on merge requests
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+# # Abstract for job manually triggering infrastructure builds
+# .infra fork:
+#   stage: network up
+#   needs:
+#     - fetch umbrella templates
+#   rules:
+#     # Skip when branch name starts with "hotfix" or "patch"
+#     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
+#       when: never
+#     # Only run on merge requests when manually activated
+#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+#       when: manual
+#       allow_failure: false
 
-# Abstract for jobs responsible for cleaning up infrastructure
-.infra cleanup:
-  rules:
-    # Skip when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
-    # Always run on merge requests
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      allow_failure: true
-      when: always
+# # Abstract for jobs responsible for creating infrastructure
+# .infra create:
+#   rules:
+#     # Skip when branch name starts with "hotfix" or "patch"
+#     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
+#       when: never
+#     # Only run on merge requests
+#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+# # Abstract for jobs responsible for cleaning up infrastructure
+# .infra cleanup:
+#   rules:
+#     # Skip when branch name starts with "hotfix" or "patch"
+#     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
+#       when: never
+#     # Always run on merge requests
+#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+#       allow_failure: true
+#       when: always
+      
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Networking
 #
-aws/network up:
-  extends:
-    - .infra fork
-    - .network up
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
-    auto_stop_in: 1 hour
 
-aws/network down:
-  extends:
-    - .infra cleanup
-    - .network down
-  stage: network down
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
-    action: stop
+# aws/network up:
+#   extends:
+#     - .infra fork
+#     - .network up
+#   environment:
+#     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+#     auto_stop_in: 1 hour
+
+# aws/network down:
+#   extends:
+#     - .infra cleanup
+#     - .network down
+#   stage: network down
+#   environment:
+#     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+#     action: stop
+
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: RKE2
 #
-# Create RKE2 cluster on AWS
-aws/rke2/cluster up:
-  stage: cluster up
-  extends:
-    - .infra create
-    - .rke2 up
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/network up
 
-# Install BigBang on RKE2 cluster on AWS
-aws/rke2/bigbang up:
-  stage: bigbang up
-  extends:
-    - .infra create
-    - .bigbang
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/rke2/cluster up
-      artifacts: true
-  before_script:
-    - mkdir -p ~/.kube
-    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+# # Create RKE2 cluster on AWS
+# aws/rke2/cluster up:
+#   stage: cluster up
+#   extends:
+#     - .infra create
+#     - .rke2 up
+#   needs:
+#     - job: fetch umbrella templates
+#       artifacts: true
+#     - job: aws/network up
 
-    # Deploy a default storage class for aws
-    - kubectl apply -f ${CI_PROJECT_DIR}/umbrella-templates/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
-  script:
-    - *deploy_bigbang
-  after_script:
-    - kubectl get all -A
+# # Install BigBang on RKE2 cluster on AWS
+# aws/rke2/bigbang up:
+#   stage: bigbang up
+#   extends:
+#     - .infra create
+#   needs:
+#     - job: fetch umbrella templates
+#       artifacts: true
+#     - job: aws/rke2/cluster up
+#       artifacts: true
+#   before_script:
+#     - mkdir -p ~/.kube
+#     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+#     # Deploy a default storage class for aws
+#     - kubectl apply -f ${CI_PROJECT_DIR}/umbrella-templates/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
+#   script:
+#     - *deploy_bigbang
+#   after_script:
+#     - kubectl get all -A
 
-# Run tests on BigBang on RKE2 cluster on AWS
-aws/rke2/bigbang test:
-  stage: test
-  extends:
-    - .infra create
-    - .bigbang
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/rke2/cluster up
-      artifacts: true
-    - job: aws/rke2/bigbang up
-  script:
-    - echo "tests go here"
+# # Run tests on BigBang on RKE2 cluster on AWS
+# aws/rke2/bigbang test:
+#   stage: test
+#   extends:
+#     - .infra create
+#   needs:
+#     - job: fetch umbrella templates
+#       artifacts: true
+#     - job: aws/rke2/cluster up
+#       artifacts: true
+#     - job: aws/rke2/bigbang up
+#   script:
+#     - echo "tests go here"
 
-# Uninstall BigBang on RKE2 cluster on AWS
-aws/rke2/bigbang down:
-  stage: bigbang down
-  extends:
-    - .infra cleanup
-    - .bigbang
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/rke2/cluster up
-      artifacts: true
-    - job: aws/rke2/bigbang test
-  before_script:
-    - mkdir -p ~/.kube
-    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
-  script:
-    - helm un -n bigbang bigbang
+# # Uninstall BigBang on RKE2 cluster on AWS
+# aws/rke2/bigbang down:
+#   stage: bigbang down
+#   extends:
+#     - .infra cleanup
+#   needs:
+#     - job: fetch umbrella templates
+#       artifacts: true
+#     - job: aws/rke2/cluster up
+#       artifacts: true
+#     - job: aws/rke2/bigbang test
+#   before_script:
+#     - mkdir -p ~/.kube
+#     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+#   script:
+#     - helm un -n bigbang bigbang
 
-    # TODO: Smarter wait
-    - sleep 180
-  after_script:
-    - kubectl get all -A
+#     # TODO: Smarter wait
+#     - sleep 180
+#   after_script:
+#     - kubectl get all -A
 
-# Destroy RKE2 cluster on AWS
-aws/rke2/cluster down:
-  stage: cluster down
-  extends:
-    - .infra cleanup
-    - .rke2 down
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/rke2/bigbang down
+# # Destroy RKE2 cluster on AWS
+# aws/rke2/cluster down:
+#   stage: cluster down
+  # extends:
+  #   - .infra cleanup
+  #   - .rke2 down
+  # needs:
+  #   - job: fetch umbrella templates
+  #     artifacts: true
+  #   - job: aws/rke2/bigbang down
+    
 #-----------------------------------------------------------------------------------------------------------------------
 
+#-----------------------------------------------------------------------------------------------------------------------
+# Smoke Tests
+#
 
-release:
-  image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
-  services:
-    - docker:dind
-  tags:
-    - bigbang
-    - privileged
-    - public
-  variables:
-    DOCKER_HOST: tcp://localhost:2375/
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-    CLUSTER_NAME: "clean-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
-  stage: release
-  # only:
-  # - tags
+smoke test variables:
+  stage: smoke test variables
+  artifacts:
+    reports:
+      dotenv: variables.env
+  script:
+  # obtain MR and master versions
+  - CHART_MR_VERSION=$(sed -n -e 's/^version. //p' chart/Chart.yaml)
+  - git fetch && git checkout ${CI_DEFAULT_BRANCH}
+  - CHART_MA_VERSION=$(sed -n -e 's/^version. //p' chart/Chart.yaml)
+  - git fetch && git checkout ${CI_COMMIT_REF_NAME}
+  - echo "CHART_MR_VERSION=$CHART_MR_VERSION" >> variables.env
+  - echo "CHART_MA_VERSION=$CHART_MA_VERSION" >> variables.env
+  # obtain semver differences (subtract master version from mr verison)
+  - CHART_VERSION_DIFF=$(./hack/semver_diff.sh $CHART_MR_VERSION $CHART_MA_VERSION)
+  - IFS=. DIFF_ARR=(${CHART_VERSION_DIFF##*-})
+  - echo "CHART_VERSION_DIFF=$CHART_VERSION_DIFF" >> variables.env
+  # detect breaking change (first two version sections in semver diff)
+  - CHART_BREAKING_CHANGE=false
+  - if (( ${DIFF_ARR[0]} > 0 )); then CHART_BREAKING_CHANGE=true; fi
+  - if (( ${DIFF_ARR[1]} > 0 )); then CHART_BREAKING_CHANGE=true; fi
+  # store variables
+  - echo "CHART_BREAKING_CHANGE=$CHART_BREAKING_CHANGE" >> variables.env
+  - cat variables.env
+
+smoke test install:
+  stage: smoke test
+  needs:
+    - job: smoke test variables
+      artifacts: true
   extends:
     - .k3d
   script:
-  - CI_COMMIT_TAG=TEST-1.2.3
-  - echo "CI Commit Tag - ${CI_COMMIT_TAG}"
+    - *deploy_bigbang
+    - *test_bigbang
+
+
+smoke test upgrade:
+  stage: smoke test
+  needs:
+    - job: smoke test variables
+      artifacts: true
+  extends:
+    - .k3d
+  script:
+    - if $CHART_BREAKING_CHANGE; then echo "Skipping due to breaking changes"; exit 0; fi
+    - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
+    - git fetch && git checkout ${CI_DEFAULT_BRANCH}
+    - *deploy_bigbang
+    - *test_bigbang
+    - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
+    - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+    - *deploy_bigbang
+    - *test_bigbang
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Release Logic
+#
+
+# bundle repos
+release prepare repos:
+  # TODO - Change this to registry1
+  image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/python:3
+  stage: release prepare
+  artifacts:
+    paths:
+      - airgap/tarballs/repos.tar.gz
+  script:
+  # bundle umbrella repository
+  - ./airgap/bundle_umbrella.sh airgap/repos/umbrella
+  # bundle repositories from chart/values.yaml
+  - pip install $(./airgap/bundle_repos.py pip)
+  - ./airgap/bundle_repos.py bundle chart/values.yaml airgap/repos/packages
+  # create repos tarball
+  - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
+
+# generate images
+# TODO - we need to bump the gitlab artifact max size / generally tidy up gitlab runners
+release prepare images:
+  stage: release prepare
+  extends:
+    - .k3d
+  artifacts:
+    paths:
+      - airgap/tarballs/images.tar.gz
+  script:
+  # obtain false images from blank cluster state
+  - ./airgap/list-images.sh > airgap/lists/images-false.txt
+  - cat airgap/lists/images-false.txt
+  # deploy bigbang
+  - *deploy_bigbang
+  # obtain initial images from full cluster state
+  - ./airgap/list-images.sh > airgap/lists/images-initial.txt
+  - cat airgap/lists/images-initial.txt
+  # obtain true images from both lists
+  - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-ci.txt
+  - cat airgap/lists/images-ci.txt
+  # fail if the ci image list differs from the source image list
+  - diff airgap/lists/images.txt airgap/lists/images-ci.txt
+  # create images tarball
+  # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
   - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
+  - ./airgap/bundle_images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
 
-  # # obtain false images from blank cluster state
-  # - ./airgap/list-images.sh > airgap/lists/images-false.txt
+# test airgap
+release airgap:
+  stage: release airgap
+  extends:
+    - .k3d
+  dependencies:
+    - release prepare images
+  script:
+  - k3d image import -c ${CLUSTER_NAME} airgap/tarballs/images.tar.gz
+  - docker stop go-dnsmasq
+  - docker run -d -p 53:53/udp -p 53:53 -v $(pwd)/airgap/dnsmasq.conf:/etc/dnsmasq.conf --name dnsmasq registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/dnsmasq
+  - echo "nameserver 127.0.0.1" > /etc/resolv.conf
+  - *deploy_bigbang
 
-  # # deploy bigbang
-  # - *deploy_bigbang
+release variables:
+  stage: release variables
+  artifacts:
+    reports:
+      dotenv: variables.env
+  rules:
+    # Do not run this job when a tag is created manually
+    - if: $CI_COMMIT_TAG
+      when: never
+    # Run this job when commits are pushed or merged to the default branch
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+  # obtain release tag name
+  - echo "TAG=$(sed -n -e 's/^version. //p' chart/Chart.yaml)" >> variables.env
+  - cat variables.env
 
-  # # obtain initial images from full cluster state
-  # - ./airgap/list-images.sh > airgap/lists/images-initial.txt
+# release git / tag
+# https://docs.gitlab.com/ee/ci/yaml/#release
+release:
+  stage: release
+  dependencies:
+    - release prepare repos
+    - release prepare images
+    - release variables
+  rules:
+    # Do not run this job when a tag is created manually
+    - if: $CI_COMMIT_TAG
+      when: never
+    # Run this job when commits are pushed or merged to the default branch
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  # release:
+  #   name: "$TAG"
+  #   description: "Umbrella release $TAG, created via GitLab CI releases"
+  #   tag_name: "$TAG"
+  #   ref: "$CI_COMMIT_SHA"
+  script:
+  # Ideas - use gitlab releases because it's really nice
+  # Compare master chart version with working chart version to determine if we need to upgrade
+  # IE - Dev introduces breaking change + updates working Chart.yaml version to breaking change version in same MR
+  # Merge request event happens when MR is merged in, not on all MR pipelines, this way we can update Chart.yaml version
+  # -- working Chart.yaml version is compared against master to determine if we need to test upgrades going forward
+  # No need to store next versions, breaking change placeholders, or anything else - just plain git "history" comparisons
+  # We can use conventional commits, but this wouldn't really leverage them in CI, they would just "be a thing"?
+  - ls -lah airgap/repos
+  - ls -lah airgap/tarballs
+  - ls -lah airgap/lists
+  - echo "Upload here"
+  - echo $TAG
+  - exit 1 # TODO - Don't remove this until production
 
-  # # obtain true images from both lists
-  # - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images.txt
-  # - cat airgap/lists/images.txt
-
-  # # bundle image list into tagged tarball
-  # - ./airgap/bundle-images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images-${CI_COMMIT_TAG}.tar.gz
-  # - ls -lah airgap/tarballs/
-
-  # TODO - vendor umbrella repository
-  # - 
-
-  # vendor repositories from chart/values.yaml
-  - which pip
-  - which python
-  - ./airgap/vendor_repos.py chart/values.yaml airgap/repos/packages
-  - ls -lah airgap/repos/packages
+#-----------------------------------------------------------------------------------------------------------------------
