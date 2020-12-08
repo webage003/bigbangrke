@@ -4,6 +4,7 @@ kind: Namespace
 metadata:
   labels:
     app: {{ .Release.Name }}-keycloak
+    istio-injection: disabled-because-keycloak-hates-istio
   name: keycloak
 
 ---
