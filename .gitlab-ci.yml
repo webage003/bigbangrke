@@ -31,10 +31,10 @@ default:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
 
 .deploy_bigbang: &deploy_bigbang
-  - for script in ./scripts/deploy/*.sh; do ./$script; done
+  - run-parts ./scripts/deploy/
 
 .test_bigbang: &test_bigbang
-  - for test in ./tests/bash/*.sh; do ./$test; done 
+  - run-parts ./tests/bash/
 
 clean install:
   stage: smoke tests
@@ -68,6 +68,50 @@ upgrade:
     - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
     - *deploy_bigbang
     - *test_bigbang
+
+# bundle repos
+bundle repos:
+  image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/python:3
+  stage: bundle
+  artifacts:
+    paths:
+      - airgap/tarballs/repos.tar.gz
+  script:
+  # bundle umbrella repository
+  - ./scripts/bundle_umbrella.sh airgap/repos/umbrella
+  # bundle repositories from chart/values.yaml
+  - pip install $(./scripts/bundle_repos.py pip)
+  - ./scripts/bundle_repos.py bundle chart/values.yaml airgap/repos/packages
+  # create repos tarball
+  - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
+
+# generate images
+# TODO - we need to bump the gitlab artifact max size / generally tidy up gitlab runners
+bundle images:
+  stage: bundle
+  extends:
+    - .k3d
+  artifacts:
+    paths:
+      - airgap/tarballs/images.tar.gz
+  script:
+  # obtain false images from blank cluster state
+  - ./scripts/list-images.sh > airgap/lists/images-false.txt
+  - cat airgap/lists/images-false.txt
+  # deploy bigbang
+  - *deploy_bigbang
+  # obtain initial images from full cluster state
+  - ./scripts/list-images.sh > airgap/lists/images-initial.txt
+  - cat airgap/lists/images-initial.txt
+  # obtain true images from both lists
+  - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-ci.txt
+  - cat airgap/lists/images-ci.txt
+  # fail if the ci image list differs from the source image list
+  - diff airgap/lists/images.txt airgap/lists/images-ci.txt
+  # create images tarball
+  # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
+  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
+  - ./scripts/bundle_images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -204,47 +248,3 @@ aws/rke2/cluster down:
     - job: aws/rke2/bigbang down
 
 #-----------------------------------------------------------------------------------------------------------------------
-
-# bundle repos
-bundle repos:
-  image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/python:3
-  stage: bundle
-  artifacts:
-    paths:
-      - airgap/tarballs/repos.tar.gz
-  script:
-  # bundle umbrella repository
-  - ./scripts/bundle_umbrella.sh airgap/repos/umbrella
-  # bundle repositories from chart/values.yaml
-  - pip install $(./scripts/bundle_repos.py pip)
-  - ./scripts/bundle_repos.py bundle chart/values.yaml airgap/repos/packages
-  # create repos tarball
-  - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
-
-# generate images
-# TODO - we need to bump the gitlab artifact max size / generally tidy up gitlab runners
-bundle images:
-  stage: bundle
-  extends:
-    - .k3d
-  artifacts:
-    paths:
-      - airgap/tarballs/images.tar.gz
-  script:
-  # obtain false images from blank cluster state
-  - ./scripts/list-images.sh > airgap/lists/images-false.txt
-  - cat airgap/lists/images-false.txt
-  # deploy bigbang
-  - *deploy_bigbang
-  # obtain initial images from full cluster state
-  - ./scripts/list-images.sh > airgap/lists/images-initial.txt
-  - cat airgap/lists/images-initial.txt
-  # obtain true images from both lists
-  - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-ci.txt
-  - cat airgap/lists/images-ci.txt
-  # fail if the ci image list differs from the source image list
-  - diff airgap/lists/images.txt airgap/lists/images-ci.txt
-  # create images tarball
-  # TODO - Change this to DOCKER_AUTH_CONFIG (Someone with admin needs to do this)
-  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
-  - ./scripts/bundle_images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
