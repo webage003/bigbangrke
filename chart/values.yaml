@@ -57,8 +57,8 @@ clusterAuditor:
   enabled: true
   git: 
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/cluster-auditor.git
-    path: "./charts"
-    branch: chart-release
+    path: "./chart"
+    tag: "0.1.6-bb.0"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -70,7 +70,7 @@ gatekeeper:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
-    tag: "3.1.2-bb.0"
+    tag: "3.1.2-bb.1"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -126,7 +126,7 @@ twistlock:
 
 addons:
   argocd:
-    enabled: true
+    enabled: false
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/argocd.git
       path: "./chart"
@@ -134,7 +134,7 @@ addons:
     values: {}
 
   authservice:
-    enabled: true
+    enabled: false
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/authservice.git
       path: "./chart"
