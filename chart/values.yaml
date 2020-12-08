@@ -92,7 +92,7 @@ addons:
     values: {}
 
   keycloak:
-    enabled: true
+    enabled: false
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/security-tools/keycloak.git
       branch: chart-release
