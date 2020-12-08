@@ -82,6 +82,7 @@ bundle repos:
   # bundle repositories from chart/values.yaml
   - pip install $(./scripts/bundle_repos.py pip)
   - ./scripts/bundle_repos.py bundle chart/values.yaml airgap/repos/packages
+  - find airgap/repos -type f -name '*.bundle'
   # create repos tarball
   - tar -zcvf airgap/tarballs/repos.tar.gz airgap/repos >/dev/null
 
