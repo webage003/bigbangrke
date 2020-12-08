@@ -13,7 +13,7 @@ include:
     file: '/global.gitlab-ci.yml'
 
 stages:
-  # - smoke tests
+  - smoke tests
   - bundle
   - network up
   - cluster up
@@ -36,38 +36,44 @@ default:
 .test_bigbang: &test_bigbang
   - for test in ./tests/bash/*.sh; do bash $test; done 
 
-# clean install:
-#   stage: smoke tests
-#   extends:
-#     - .k3d
-#   rules:
-#     # Skip on merge request events
-#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-#       when: never
-#     # Run for branch pipelines
-#     - if: '$CI_COMMIT_BRANCH'
-#       when: always
-#   variables:
-#     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
-#   script:
-#     - *deploy_bigbang
-#     - *test_bigbang
+clean install:
+  stage: smoke tests
+  extends:
+    - .k3d
+  rules:
+    # Skip on merge request events
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
+    # Run for branch pipelines
+    - if: '$CI_COMMIT_BRANCH'
+      when: always
+  variables:
+    CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
+  script:
+    - *deploy_bigbang
+    - *test_bigbang
 
-# upgrade:
-#   stage: smoke tests
-#   extends:
-#     - .k3d
-#   variables:
-#     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
-#   script:
-#     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
-#     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
-#     - *deploy_bigbang
-#     - *test_bigbang
-#     - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
-#     - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-#     - *deploy_bigbang
-#     - *test_bigbang
+upgrade:
+  stage: smoke tests
+  extends:
+    - .k3d
+  variables:
+    CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
+  script:
+    - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
+    - git fetch && git checkout ${CI_DEFAULT_BRANCH}
+    - *deploy_bigbang
+    - *test_bigbang
+    - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
+    - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+    - *deploy_bigbang
+    - *test_bigbang
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Bundling
+#
 
 # bundle repos
 bundle repos:
