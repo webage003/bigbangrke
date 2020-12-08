@@ -274,7 +274,7 @@ bundle repos:
 # generate images
 # TODO - we need to bump the gitlab artifact max size / generally tidy up gitlab runners
 bundle images:
-  stage: release prepare
+  stage: bundle
   extends:
     - .k3d
   artifacts:
@@ -305,7 +305,7 @@ airgap:
   extends:
     - .k3d
   dependencies:
-    - release prepare images
+    - airgap
   script:
   - k3d image import -c ${CLUSTER_NAME} airgap/tarballs/images.tar.gz
   - docker stop go-dnsmasq
