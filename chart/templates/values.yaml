@@ -28,5 +28,5 @@ stringData:
   twistlock.yaml: |
 {{ toYaml .Values.twistlock.values | indent 4 }} 
   clusterauditor.yaml: |
-{{ toYaml .Values.twistlock.values | indent 4 }}
+{{ toYaml .Values.clusterAuditor.values | indent 4 }}
 data:

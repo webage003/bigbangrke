@@ -57,8 +57,8 @@ clusterAuditor:
   enabled: true
   git: 
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/cluster-auditor.git
-    path: "./chart"
-    tag: "0.1.7-bb.0"
+    path: "./charts"
+    branch: chart-release
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -70,7 +70,7 @@ gatekeeper:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
-    tag: "3.1.2-bb.1"
+    tag: "3.1.2-bb.0"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -90,7 +90,11 @@ eckoperator:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
     tag: "1.3.0-bb.0"
-  values: {}
+  values:
+    image:
+      # repository: registry1.dsop.io/ironbank/elastic/eck-operator/eck-operator
+
+      tag: 1.3.0
 
 fluentbit:
   git:
@@ -126,15 +130,35 @@ twistlock:
 
 addons:
   argocd:
-    enabled: false
+    enabled: true
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/argocd.git
       path: "./chart"
       tag: "2.9.5-bb.0"
-    values: {}
+    values: 
+      controller:
+        image:
+          repository: registry.dsop.io/platform-one/big-bang/apps/core/argocd/argocd
+          tag: v1.7.6-bb
+      dex:
+        image:
+          repository: registry1.dsop.io/ironbank/opensource/dexidp/dex
+          tag: v2.26.0
+      redis:
+        image:
+          repository: registry1.dsop.io/ironbank/opensource/redis/redis5
+          tag: 5.0.9
+      server:
+        image:
+          repository: registry.dsop.io/platform-one/big-bang/apps/core/argocd/argocd
+          tag: v1.7.6-bb
+      repoServer:
+        image:
+          repository: registry.dsop.io/platform-one/big-bang/apps/core/argocd/argocd
+          tag: v1.7.6-bb
 
   authservice:
-    enabled: false
+    enabled: true
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/authservice.git
       path: "./chart"
