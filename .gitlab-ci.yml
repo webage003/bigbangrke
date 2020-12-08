@@ -85,7 +85,7 @@ bundle repos:
   # create repos tarball
   - cd airgap/repos
   - find . -type f -name '*.bundle'
-  - tar -zcvf airgap/tarballs/repos.tar.gz . >/dev/null
+  - tar -zcvf $CI_PROJECT_DIR/airgap/tarballs/repos.tar.gz . >/dev/null
 
 # generate images
 # TODO - we need to bump the gitlab artifact max size / generally tidy up gitlab runners
