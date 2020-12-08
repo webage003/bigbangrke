@@ -652,6 +652,14 @@ addons:
 
     # -- Values to passthrough to the Mattermost chart: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost/-/blob/main/chart/values.yaml
     values: {}
+
+  keycloak:
+    enabled: true
+    git:
+      repo: https://repo1.dsop.io/platform-one/big-bang/apps/security-tools/keycloak.git
+      branch: chart-release
+#      secret: git-ssh-key
+    values: {}
   #
   # ----------------------------------------------------------------------------------------------------------------------
 
