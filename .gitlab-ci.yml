@@ -78,7 +78,6 @@ upgrade:
 fetch umbrella templates:
   extends:
     - .fetch
-    - .infra create
   stage: .pre
 
 # Abstract for job manually triggering infrastructure builds
@@ -91,9 +90,6 @@ fetch umbrella templates:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: manual
       allow_failure: false
-
-# Abstract for jobs responsible for creating infrastructure
-.infra create:
 
 # Abstract for jobs responsible for cleaning up infrastructure
 .infra cleanup:
@@ -131,7 +127,6 @@ aws/network down:
 aws/rke2/cluster up:
   stage: cluster up
   extends:
-    - .infra create
     - .rke2 up
   needs:
     - job: fetch umbrella templates
@@ -141,8 +136,6 @@ aws/rke2/cluster up:
 # Install BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang up:
   stage: bigbang up
-  extends:
-    - .infra create
   needs:
     - job: fetch umbrella templates
       artifacts: true
@@ -160,8 +153,6 @@ aws/rke2/bigbang up:
 # Run tests on BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang test:
   stage: test
-  extends:
-    - .infra create
   needs:
     - job: fetch umbrella templates
       artifacts: true
