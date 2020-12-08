@@ -26,6 +26,7 @@ stages:
 #-----------------------------------------------------------------------------------------------------------------------
 # Smoke Tests
 #
+
 default:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
 
@@ -75,6 +76,7 @@ upgrade:
 #
 # .pre job for pulling pipeline contents from umbrella-templates project
 # TODO: Currently all jobs connected via "needs" must explicitly need this job, should evaluate turning this into a global cache
+
 fetch umbrella templates:
   extends:
     - .fetch
@@ -97,11 +99,13 @@ fetch umbrella templates:
     # Always run on merge requests, but allow failure
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       allow_failure: true
+
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Networking
 #
+
 aws/network up:
   extends:
     - .infra fork
@@ -198,6 +202,7 @@ aws/rke2/cluster down:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/rke2/bigbang down
+    
 #-----------------------------------------------------------------------------------------------------------------------
 
 # bundle repos
