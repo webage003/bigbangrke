@@ -31,10 +31,10 @@ default:
   image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:0.0.1
 
 .deploy_bigbang: &deploy_bigbang
-  - for script in ./scripts/deploy/*.sh; do chmod +x $script && $script; done
+  - for script in ./scripts/deploy/*.sh; do ./$script; done
 
 .test_bigbang: &test_bigbang
-  - for test in ./tests/bash/*.sh; do chmod +x $test && $test; done 
+  - for test in ./tests/bash/*.sh; do ./$test; done 
 
 clean install:
   stage: smoke tests
@@ -170,7 +170,7 @@ aws/rke2/bigbang test:
     ## Move this yum install to the dockerfile for the builder
     ## putting it here now for a quick way to install dig
     - yum install bind-utils -y
-    - chmod +x scripts/hosts.sh && ./scripts/hosts.sh
+    - ./scripts/hosts.sh
     - *test_bigbang
 
 # Uninstall BigBang on RKE2 cluster on AWS
