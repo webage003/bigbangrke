@@ -2,12 +2,14 @@
 
 # repo path argument
 repo_path=$1
+repo_parent=$(dirname $repo_path)
 repo_name=$(basename $repo_path)
 repo_url=$(git config --get remote.origin.url)
-bundle_path=$repo_path/$repo_name.bundle
+bundle_path=$repo_parent/$repo_name.bundle
 
 # vendor the umbrella repository
 echo "Repo Path: $repo_path"
+echo "Bundle Path: $bundle_path"
 echo "Repo Name: $repo_name"
 echo "Repository URL: $repo_url"
 echo "Commit Ref Name: $CI_COMMIT_REF_NAME"
