@@ -60,7 +60,6 @@ upgrade:
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
   script:
-    - docker pull registry1.dsop.io/ironbank/opensource/istio/operator:1.7.3
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
     - *deploy_bigbang
@@ -118,6 +117,8 @@ bundle images:
   # fail if the ci image list differs from the source image list
   - diff airgap/lists/images.txt airgap/lists/images-ci.txt
   # create images tarball
+  # TODO - Change this to DOCKER_AUTH_CONFIG (possibly this, maybe something else) (Someone with admin needs to do this)
+  - docker login registry1.dsop.io -u 'robot$bigbang' -p ${REGISTRY1_PASSWORD}
   - ./scripts/bundle_images.sh --image-list airgap/lists/images.txt --images airgap/tarballs/images.tar.gz
 
 #-----------------------------------------------------------------------------------------------------------------------
