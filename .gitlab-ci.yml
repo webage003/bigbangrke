@@ -13,7 +13,7 @@ include:
     file: '/global.gitlab-ci.yml'
 
 stages:
-  - smoke tests
+  # - smoke tests
   - bundle
   - network up
   - cluster up
