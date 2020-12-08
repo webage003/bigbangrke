@@ -60,6 +60,7 @@ upgrade:
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
   script:
+    - docker pull registry1.dsop.io/ironbank/opensource/istio/operator:1.7.3
     - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
     - git fetch && git checkout ${CI_DEFAULT_BRANCH}
     - *deploy_bigbang
