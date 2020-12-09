@@ -6,6 +6,7 @@ k3d:
   image: registry.access.redhat.com/ubi8/ubi:8.3
   variables:
     CLUSTER_NAME: tester
+    DOCKER_TLS_CERTDIR: "/certs"
   tags:
     - bigbang
     - machine
