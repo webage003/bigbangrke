@@ -1,9 +1,0 @@
-lists/images-*
-
-tarballs/*
-
-repos/*
-repos/packages/*
-
-!repos/packages
-!**/.gitkeep
