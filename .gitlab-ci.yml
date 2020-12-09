@@ -16,7 +16,7 @@ k3d:
     - chmod +x ./kubectl && mv kubectl /usr/local/bin/kubectl
     - curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
   script:
-    - k3d cluster create ${CLUSTER_NAME}  --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" -p 80:80@loadbalancer -p 443:443@loadbalancer --wait --agents $N_AGENTS --servers $N_SERVERS
+    - k3d cluster create ${CLUSTER_NAME}  --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" -p 80:80@loadbalancer -p 443:443@loadbalancer --wait
     - while ! (kubectl get node | grep "server" > /dev/null); do sleep 3; done
     - kubectl get nodes
     - k3d node list
