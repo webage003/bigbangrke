@@ -54,7 +54,10 @@ clean install:
   script:
     - *deploy_bigbang
     - *test_bigbang
-    - docker ps
+    - docker exec -it k3d-${CLUSTER_NAME}-server-0 crictl images -o json | tail -n +2 | jq -r '.images[].repoTags[0] | select(. != null)' > tee image-list.txt
+  artifacts:
+    paths:
+      - image-list.txt
 
 #upgrade:
 #  stage: smoke tests
