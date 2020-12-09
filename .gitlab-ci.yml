@@ -7,6 +7,7 @@ workflow:
     # run pipelines for merge request events
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
+    - when: always
 
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
@@ -53,6 +54,7 @@ clean install:
   script:
     - *deploy_bigbang
     - *test_bigbang
+    - docker ps
 
 #upgrade:
 #  stage: smoke tests
