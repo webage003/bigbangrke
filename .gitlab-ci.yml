@@ -6,12 +6,9 @@ k3d:
   image: registry.access.redhat.com/ubi8/ubi:8.3
   variables:
     CLUSTER_NAME: tester
-    DOCKER_TLS_CERTDIR: "/certs"
   tags:
     - bigbang
     - machine
-  services:
-    - docker:19.03.12-dind
   before_script:
     - curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
     - chmod +x ./kubectl && mv kubectl /usr/local/bin/kubectl
