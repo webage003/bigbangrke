@@ -93,7 +93,7 @@ upgrade:
   extends:
     - .k3d
   rules:
-    - if: $CI_MERGE_REQUEST_TITLE =~ /^Breaking Change/
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TITLE =~ /^Breaking Change/'
       when: never
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
