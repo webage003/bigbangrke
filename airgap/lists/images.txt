@@ -1,12 +1,12 @@
 docker.elastic.co/eck/eck-operator:1.2.1
 docker.io/runyonsolutions/cluster-auditor:0.3
+ghcr.io/fluxcd/helm-controller:v0.4.2
+ghcr.io/fluxcd/kustomize-controller:v0.4.0
+ghcr.io/fluxcd/notification-controller:v0.4.0
+ghcr.io/fluxcd/source-controller:v0.4.1
 kiwigrid/k8s-sidecar:1.1.0
 rancher/klipper-lb:v0.1.2
 registry.dsop.io/platform-one/big-bang/apps/sandbox/authservice:redis-beta2
-registry.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/helm-controller:v0.2.0
-registry.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/kustomize-controller:v0.2.1
-registry.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/notification-controller:v0.2.1
-registry.dsop.io/platform-one/big-bang/apps/sandbox/fluxv2/source-controller:v0.2.1
 registry.dsop.io/platform-one/big-bang/apps/security-tools/twistlock/console:20.04.163
 registry1.dsop.io/ironbank/elastic/elasticsearch/elasticsearch:7.9.2
 registry1.dsop.io/ironbank/elastic/kibana/kibana:7.9.2
