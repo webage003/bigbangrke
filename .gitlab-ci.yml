@@ -2,12 +2,13 @@
 workflow:
   rules:
     # TODO Add docs back in as an exclusion
+    - if: '$CI_MERGE_REQUEST_TITLE =~ /^Docs/'
+      when: never
     # always skip for hotfixes and patches
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
       when: never
     # run pipelines for merge request events
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
 
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
@@ -80,7 +81,6 @@ clean install:
       when: never
     # Run for branch pipelines
     - if: '$CI_COMMIT_BRANCH'
-      when: always
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
   script:
@@ -95,7 +95,7 @@ upgrade:
   extends:
     - .k3d
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TITLE =~ /^Breaking Change/'
+    - if: '$CI_MERGE_REQUEST_TITLE =~ /^Breaking Change/'
       when: never
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
