@@ -1,6 +1,7 @@
 # Define global rules for when pipelines run
 workflow:
   rules:
+    # TODO Add docs back in as an exclusion
     # always skip for hotfixes and patches
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
       when: never
