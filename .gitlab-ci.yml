@@ -152,8 +152,7 @@ bundle images:
       - airgap/tarballs/images.tar.gz
   script:
   # wait for core pods to come up
-  - for i in {1..10}; do; kubectl wait --for=condition=Ready -n kube-system $(kubectl get po -A -o name) &>/dev/null && break || sleep 5; done
-  - kubectl wait --for=condition=Ready -n kube-system $(kubectl get po -A -o name)
+  - ./scripts/wait_core_pods.sh
   # obtain false images from blank cluster state
   - ./scripts/list_images.sh > airgap/lists/images-false.txt
   - cat airgap/lists/images-false.txt
