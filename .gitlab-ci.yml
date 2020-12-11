@@ -97,7 +97,7 @@ upgrade:
   extends:
     - .k3d
   rules:
-    # don't run pipelines for breaking changes 
+    # don't run pipelines for breaking changes
     - if: '$CI_MERGE_REQUEST_TITLE =~ /^Breaking Change/'
       when: never
     # run pipelines for merge request events
