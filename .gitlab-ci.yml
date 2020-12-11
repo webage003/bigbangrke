@@ -164,9 +164,6 @@ bundle images:
   # obtain true images from both lists
   - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-ci.txt
   - cat airgap/lists/images-ci.txt
-  # fallback remove k3d core images from ci list
-  - sed -i "/\b\(cat\|rat\)\b/d" filename
-  - sed -i "/\b\(cat\|rat\)\b/d" filename
   # fail if the ci image list differs from the source image list
   - diff airgap/lists/images.txt airgap/lists/images-ci.txt
   # create images tarball
