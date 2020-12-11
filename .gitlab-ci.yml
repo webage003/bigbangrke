@@ -151,6 +151,8 @@ bundle images:
     paths:
       - airgap/tarballs/images.tar.gz
   script:
+  # wait for core pods to come up
+  - for i in {1..10}; do; if kubectl wait --for=condition=Ready -n kube-system $(kubectl get po -A -o name) 2>/dev/null; then; break; else; sleep 5; fi; done
   # obtain false images from blank cluster state
   - ./scripts/list_images.sh > airgap/lists/images-false.txt
   - cat airgap/lists/images-false.txt
@@ -162,6 +164,9 @@ bundle images:
   # obtain true images from both lists
   - grep -v -x -f airgap/lists/images-false.txt airgap/lists/images-initial.txt > airgap/lists/images-ci.txt
   - cat airgap/lists/images-ci.txt
+  # fallback remove k3d core images from ci list
+  - sed -i "/\b\(cat\|rat\)\b/d" filename
+  - sed -i "/\b\(cat\|rat\)\b/d" filename
   # fail if the ci image list differs from the source image list
   - diff airgap/lists/images.txt airgap/lists/images-ci.txt
   # create images tarball
