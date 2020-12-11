@@ -157,7 +157,7 @@ release:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   variables:
-    RELEASE_ENDPOINT: https://${RELEASE_BUCKET}.s3-${AWS_DEFAULT_REGION}-1.amazonaws.com/umbrella/${VERSION}
+    RELEASE_ENDPOINT: https://${RELEASE_BUCKET}.s3-${AWS_DEFAULT_REGION}.amazonaws.com/umbrella/0.0.2
   script:
     - |
       release-cli create --name "Release Test S3" --tag-name 0.0.2 \
