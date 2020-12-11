@@ -97,8 +97,12 @@ upgrade:
   extends:
     - .k3d
   rules:
+    # don't run pipelines for breaking changes
     - if: '$CI_MERGE_REQUEST_TITLE =~ /^Breaking Change/'
       when: never
+    # run pipelines for merge request events
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
   script:
