@@ -12,15 +12,18 @@ workflow:
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
     file: '/global.gitlab-ci.yml'
+    ref: BB-1003
 
 stages:
   - smoke tests
   - network up
+  - airgap up
   - cluster up
   - bigbang up
   - test
   - bigbang down
   - cluster down
+  - airgap down
   - network down
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -178,6 +181,42 @@ aws/network down:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     action: stop
 #-----------------------------------------------------------------------------------------------------------------------
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure: Utility
+#
+# Create Utility Instance on AWS
+aws/utility/instance up:
+  stage: airgap up
+  extends:
+    - .infra create
+    - .utility up
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: aws/network up
+  rules:
+    # Only run manually
+    - when: manual
+      allow_failure: false
+
+# Destroy Utility Instance on AWS
+aws/utility/instance down:
+  stage: airgap down
+  extends:
+    - .infra cleanup
+    - .utility down
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: aws/network up
+  rules:
+    # Only run manually
+    - when: manual
+      allow_failure: false
+#-----------------------------------------------------------------------------------------------------------------------
+
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: RKE2
