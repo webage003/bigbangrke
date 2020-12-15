@@ -187,7 +187,7 @@ aws/network down:
 # Infrastructure: Utility
 #
 # Create Utility Instance on AWS
-aws/utility/instance up:
+aws/utility up:
   stage: airgap up
   extends:
     - .infra create
@@ -202,7 +202,7 @@ aws/utility/instance up:
       allow_failure: false
 
 # Destroy Utility Instance on AWS
-aws/utility/instance down:
+aws/utility down:
   stage: airgap down
   extends:
     - .infra cleanup
