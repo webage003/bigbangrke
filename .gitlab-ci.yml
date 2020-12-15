@@ -192,10 +192,10 @@ aws/utility up:
   extends:
     - .infra create
     - .utility up
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/network up
+  # needs:
+  #   - job: fetch umbrella templates
+  #     artifacts: true
+  #   - job: aws/network up
   rules:
     # Only run manually
     - when: manual
@@ -207,10 +207,10 @@ aws/utility down:
   extends:
     - .infra cleanup
     - .utility down
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/network up
+  # needs:
+  #   - job: fetch umbrella templates
+  #     artifacts: true
+  #   - job: aws/network up
   rules:
     # Only run manually
     - when: manual
