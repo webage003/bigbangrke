@@ -16,3 +16,4 @@ options:
 
 source:
   authFile: /root/.docker/config.json
+  images:

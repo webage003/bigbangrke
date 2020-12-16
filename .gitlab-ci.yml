@@ -170,9 +170,9 @@ package:
     # Prep release
     - mkdir -p release
     - mv $IMAGE_LIST $IMAGE_PKG $REPOS_PKG release/
-#
-#    # Publish packages to s3 release
-#    - aws s3 sync --quiet release/ s3://umbrella-bigbang-releases/umbrella/${CI_COMMIT_TAG}
+
+    # Publish packages to s3 release
+    - aws s3 sync --quiet --dryrun release/ s3://umbrella-bigbang-releases/umbrella/${CI_COMMIT_TAG}
   after_script: []
 
 release:
