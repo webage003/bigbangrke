@@ -125,21 +125,43 @@ upgrade:
 
 package:
   stage: package
-  image: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/packager:0.0.2
-  extends: .k3d
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-    - if: '$CI_COMMIT_TAG'
-    - when: never
-  services:
-    - registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/docker:dind
+  image: registry.dsop.io/platform-one/big-bang/umbrella/synker:pre
+  variables:
+    REGISTRY_DATADIR: "/var/lib/registry"
+  before_script:
+    - mkdir -p /root/.docker
+    - echo $DOCKER_AUTH_CONFIG > /root/.docker/config.json
+  script:
+    - ./scripts/package/synker.sh
+    - synker pull -b=1
+    - tar -czvf images.tar.gz /var/lib/registry
+
+package:
+  stage: package
+  image: registry.dsop.io/platform-one/big-bang/umbrella/synker:pre
+#  rules:
+#    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+#    - if: '$CI_COMMIT_TAG'
+#    - when: never
   dependencies:
     - clean install
-  before_script: []
+  before_script:
+    # Set up auth
+    - mkdir -p /root/.docker
+    - echo $DOCKER_AUTH_CONFIG > /root/.docker/config.json
   script:
-    # Package images
-    - docker login registry1.dsop.io -u 'robot$bigbang' -p "${REGISTRY1_PASSWORD}"
-    - ./scripts/package/images.sh --image-list $IMAGE_LIST --images $IMAGE_PKG
+    - cp ./scripts/package/synker.yaml ./synker.yaml
+
+    # Populate images list in synker config
+    # NOTE: This is stupid and hacky, use yq or something better to do this
+    - cat images.txt | sed -e 's/^/    - /' >> synker.yaml
+
+    - synker pull -b=1
+
+    # Tar up synker as well?
+    - cp /usr/local/bin/synker /var/lib/registry/synker
+    - tar -C /var/lib/registry -czvf $IMAGE_PKG .
+    - tar -czvf $IMAGE_PKG /var/lib/registry
 
     # Package dependent repos
     - ./scripts/package/gits.sh
@@ -148,9 +170,9 @@ package:
     # Prep release
     - mkdir -p release
     - mv $IMAGE_LIST $IMAGE_PKG $REPOS_PKG release/
-
-    # Publish packages to s3 release
-    - aws s3 sync --quiet release/ s3://umbrella-bigbang-releases/umbrella/${CI_COMMIT_TAG}
+#
+#    # Publish packages to s3 release
+#    - aws s3 sync --quiet release/ s3://umbrella-bigbang-releases/umbrella/${CI_COMMIT_TAG}
   after_script: []
 
 release:
