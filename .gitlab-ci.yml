@@ -25,7 +25,6 @@ package:
     - synker pull -b=1
     - tar -czvf images.tar.gz /var/lib/registry
 
-
 #include:
 #  - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
 #    file: '/global.gitlab-ci.yml'
