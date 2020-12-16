@@ -16,6 +16,7 @@ options:
   debug: info
 
 source:
+  authFile: /root/.docker/config.json
   images:
     - registry.dsop.io/platform-one/big-bang/apps/core/monitoring/kiwigrid/k8s-sidecar:1.1.0
     - registry.dsop.io/platform-one/big-bang/apps/sandbox/authservice:redis-beta2
