@@ -12,7 +12,7 @@ workflow:
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
     file: '/global.gitlab-ci.yml'
-    ref: BB-1003
+    ref: BB-1003 #for testing
 
 stages:
   - smoke tests
@@ -121,6 +121,9 @@ upgrade:
 # .pre job for pulling pipeline contents from umbrella-templates project
 # TODO: Currently all jobs connected via "needs" must explicitly need this job, should evaluate turning this into a global cache
 fetch umbrella templates:
+  #Temp: for testing branch BB-1003 only
+  script:
+    - git clone --branch BB-1003  https://repo1.dsop.io/platform-one/big-bang/pipeline-templates/umbrella-templates.git
   extends:
     - .fetch
     - .infra create
@@ -185,17 +188,13 @@ aws/network down:
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Utility
-#
+
 # Create Utility Instance on AWS
 aws/utility up:
   stage: airgap up
   extends:
     - .infra create
     - .utility up
-  # needs:
-  #   - job: fetch umbrella templates
-  #     artifacts: true
-  #   - job: aws/network up
   rules:
     # Only run manually
     - when: manual
@@ -207,10 +206,6 @@ aws/utility down:
   extends:
     - .infra cleanup
     - .utility down
-  # needs:
-  #   - job: fetch umbrella templates
-  #     artifacts: true
-  #   - job: aws/network up
   rules:
     # Only run manually
     - when: manual
