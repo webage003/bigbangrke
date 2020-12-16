@@ -78,7 +78,11 @@ pre vars:
   - for script in ./scripts/deploy/*.sh; do chmod +x $script && $script; done
 
 .test_bigbang: &test_bigbang
-  - for test in ./tests/bash/*.sh; do chmod +x $test && $test; done 
+  - for test in ./tests/bash/*.sh; do chmod +x $test && $test; done
+
+.list_images: &list_images
+  - docker exec -i k3d-${CLUSTER_NAME}-server-0 crictl images -o json | jq -r '.images[].repoTags[0] | select(. != null)' > images.txt
+  - cat images.txt
 
 clean install:
   stage: smoke tests
@@ -94,7 +98,7 @@ clean install:
   script:
     - *deploy_bigbang
     - *test_bigbang
-    - docker exec -i k3d-${CLUSTER_NAME}-server-0 crictl images -o json | jq -r '.images[].repoTags[0] | select(. != null)' > images.txt
+    - *list_images
   artifacts:
     paths:
       - images.txt
@@ -127,7 +131,7 @@ package:
   stage: package
   image: registry.dsop.io/platform-one/big-bang/umbrella/synker:0.0.1
   rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_TAG'
     - when: never
   dependencies:
     - clean install
@@ -165,7 +169,7 @@ release:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_TAG'
     - when: never
   variables:
     RELEASE_ENDPOINT: https://${RELEASE_BUCKET}.s3-${AWS_DEFAULT_REGION}.amazonaws.com/umbrella/${CI_COMMIT_TAG}
