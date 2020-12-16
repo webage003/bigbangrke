@@ -194,6 +194,7 @@ aws/utility up:
   extends:
     - .infra fork
     - .utility up
+  stage: airgap up
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
