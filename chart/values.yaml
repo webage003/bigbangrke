@@ -161,6 +161,4 @@ addons:
       repo: "https://repo1.dsop.io/platform-one/big-bang/apps/developer-tools/gitlab-runner.git"
       path: "./chart"
       tag: "0.19.2-bb.1"
-    values: 
-      gitlabUrl: https://repo1.dsop.io
-      runnerRegistrationToken: "-zKKmamcwexkDuqgB_rg"
+    values: {}
