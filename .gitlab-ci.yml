@@ -138,7 +138,7 @@ package:
 
 package:
   stage: package
-  image: registry.dsop.io/platform-one/big-bang/umbrella/synker:pre
+  image: registry.dsop.io/platform-one/big-bang/umbrella/synker:0.0.1
 #  rules:
 #    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 #    - if: '$CI_COMMIT_TAG'
