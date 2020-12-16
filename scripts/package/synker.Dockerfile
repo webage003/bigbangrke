@@ -30,4 +30,3 @@ RUN curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/aw
 
 RUN yum clean all && \
     rm -r /var/cache/dnf
-

@@ -127,8 +127,7 @@ package:
   stage: package
   image: registry.dsop.io/platform-one/big-bang/umbrella/synker:0.0.1
   rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG'
     - when: never
   dependencies:
     - clean install
@@ -159,15 +158,14 @@ package:
     - mv $IMAGE_LIST $IMAGE_PKG $REPOS_PKG release/
 
     # Publish packages to s3 release
-    - aws s3 sync --quiet --dryrun release/ s3://umbrella-bigbang-releases/umbrella/${CI_COMMIT_TAG}
+    - aws s3 sync --quiet release/ s3://umbrella-bigbang-releases/umbrella/${CI_COMMIT_TAG}
   after_script: []
 
 release:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG'
     - when: never
   variables:
     RELEASE_ENDPOINT: https://${RELEASE_BUCKET}.s3-${AWS_DEFAULT_REGION}.amazonaws.com/umbrella/${CI_COMMIT_TAG}
