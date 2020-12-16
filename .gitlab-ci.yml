@@ -15,14 +15,16 @@ stages:
 package:
   stage: package
   image: registry.dsop.io/platform-one/big-bang/umbrella/synker:pre
-#  before_script:
-#    - mkdir -p /root/.docker
-#    - echo "$DOCKER_AUTH_CONFIG" > /root/.docker/config.json
+  variables:
+    REGISTRY_DATADIR: "/var/lib/registry"
+  before_script:
+    - mkdir -p /root/.docker
+    - echo $DOCKER_AUTH_CONFIG > /root/.docker/config.json
   script:
     - ./scripts/package/synker.sh
     - synker pull -b=1
+    - tar -czvf images.tar.gz /var/lib/registry
 
-    #
 
 #include:
 #  - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
