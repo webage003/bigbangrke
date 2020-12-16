@@ -1,0 +1,14 @@
+{{- if and (not .Values.offline) .Values.addons.gitlabRunners.enabled }}
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: gitlab-runners
+  namespace: {{ .Release.Namespace }}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.addons.gitlabRunners.git.repo }}
+  ref:
+    {{- include "validRef" .Values.addons.gitlabRunners.git | nindent 4 }}
+  {{ include "gitIgnore" . }}
+  {{- include "gitCreds" .Values.git | nindent 2 }}
+{{- end }}
