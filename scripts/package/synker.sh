@@ -16,7 +16,6 @@ options:
   debug: info
 
 source:
-  authFile: /root/.docker/config.json
   images:
     - alpine:latest
     - nginx:latest
