@@ -191,25 +191,22 @@ aws/network down:
 
 # Create Utility Instance on AWS
 aws/utility up:
-  stage: airgap up
   extends:
-    - .infra create
+    - .infra fork
     - .utility up
-  rules:
-    # Only run manually
-    - when: manual
-      allow_failure: false
+  environment:
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+    auto_stop_in: 1 hour
 
 # Destroy Utility Instance on AWS
 aws/utility down:
-  stage: airgap down
   extends:
     - .infra cleanup
     - .utility down
-  rules:
-    # Only run manually
-    - when: manual
-      allow_failure: false
+  stage: airgap down
+  environment:
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+    action: stop
 #-----------------------------------------------------------------------------------------------------------------------
 
 
