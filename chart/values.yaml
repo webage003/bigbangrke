@@ -30,8 +30,14 @@ istio:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    branch: "bb-844-haproxy-addition"
-  values: {}
+    tag: "1.7.3-bb.0"
+  values:
+    sso:
+      enabled: false
+      namespace: istio-addons-sso
+      selector:
+        key: protect
+        value: keycloak
 
 istiooperator:
   git:
@@ -99,8 +105,14 @@ monitoring:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
-    branch: "bb-844-haproxy-addition"
-  values: {}
+    tag: "11.0.0-bb.3"
+  values:
+    sso:
+      enabled: false
+      namespace: monitoring-sso
+      selector:
+        key: protect
+        value: keycloak
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -111,7 +123,7 @@ twistlock:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
-    tag: "0.0.1-bb.0"
+    tag: "0.0.2-bb.0"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -129,5 +141,5 @@ addons:
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/authservice.git
       path: "./chart"
-      tag: "0.1.1-bb.0"
+      tag: "0.1.4-bb.0"
     values: {}
