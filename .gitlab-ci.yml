@@ -12,7 +12,9 @@ workflow:
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
     file: '/global.gitlab-ci.yml'
-    ref: BB-1003 #for testing
+    ## Note ref block cannot contain variable but if you're working on a specific branch in umberlla-templates set this as well. 
+    #ref: ${GIT_BRANCH}
+    ref: BB-1003
 
 stages:
   - smoke tests
