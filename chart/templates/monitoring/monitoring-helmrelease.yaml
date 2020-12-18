@@ -48,6 +48,25 @@ spec:
       image:
         pullSecrets:
         - private-registry
+      envFromSecret: oathinfo
+      grafana.ini:
+        server:
+          # The root URL must be set with the proper url to enable oauth login
+          root_url: {{ .Values.hostname }}
+        auth:
+          # URL to redirect the user to after sign out
+          signout_redirect_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/logout
+        auth.generic_oauth:
+          enabled: true
+          client_id: ${CLIENT_ID}
+          client_secret:
+          scopes: Grafana
+          auth_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/auth
+          token_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/token
+          api_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/userinfo
+          allow_sign_up: true
+          role_attribute_path: Viewer
+
     prometheus-node-exporter:
       serviceAccount:
         imagePullSecrets:
