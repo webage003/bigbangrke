@@ -36,13 +36,14 @@ spec:
     - name: values
       kind: Secret
       valuesKey: "istio.yaml"
-  
   values:
     hostname: {{ .Values.hostname }}
-    sso:
-      enabled: {{ .Values.sso.enabled }}
-      namespace: {{ .Values.sso.namespace }}
-      selector: {{- with .Values.sso.selector }}
+
+#    sso:
+#      enabled: {{ .Values.istio.sso.enabled }}
+#      namespace: {{ .Values.istio.sso.namespace }}
+#      selector: {{- with .Values.istio.sso.selector }}
+
     imagePullSecrets:
       - private-registry
 
