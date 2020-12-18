@@ -50,28 +50,28 @@ spec:
           pullSecrets:
           - private-registry
         {{- if .Values.monitoring.sso.enabled }}
-        envFromSecret: oathinfo
+        envFromSecret: {{ .Values.monitoring.sso.idc_client_secret }}
         grafana.ini:
           server:
             # The root URL must be set with the proper url to enable oauth login
             root_url: https://grafana.{{ .Values.hostname }}
           auth:
             # URL to redirect the user to after sign out
-            signout_redirect_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/logout
+            signout_redirect_url: {{ .Values.monitoring.sso.idc_client_secret }}
           auth.generic_oauth:
             enabled: true
             client_id: ${CLIENT_ID}
             # Some IDC configuration do not require a client secret.  If required, uncomment below and add the
             # secret to the encrypted secrets file which is load in the "envFromSecret" paramter above
-            #client_secret: ${CLIENT_SECRET}
-            client_secret:
+            #client_secret:
+            client_secret: ${CLIENT_SECRET}
             # Some IDCs have different scope values.   Common ones are commented below but login.dsp.io uses a
             # grafana scope
             # scopes: openid profile email
             scopes: Grafana
-            auth_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/auth
-            token_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/token
-            api_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/userinfo
+            auth_url: {{ .Values.monitoring.sso.auth_url }}
+            token_url: {{ .Values.monitoring.sso.token_url }}
+            api_url: {{ .Values.monitoring.sso.api_url }}
             allow_sign_up: true
             role_attribute_path: Viewer
         {{- end }}
