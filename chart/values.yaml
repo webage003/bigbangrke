@@ -100,43 +100,7 @@ monitoring:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
     branch: "bb-843"
-  #  values: {}
     values: {}
-#      grafana:
-#        enabled: true
-#      image:
-#        repository: registry1.dsop.io/ironbank/opensource/grafana/grafana
-#        tag: 7.1.3-1
-#      envFromSecret: oathinfo
-#      grafana.ini:
-#        paths:
-#          data: /var/lib/grafana/data
-#          logs: /var/log/grafana
-#          plugins: /var/lib/grafana/plugins
-#          provisioning: /etc/grafana/provisioning
-#        analytics:
-#          check_for_updates: true
-#        log:
-#          mode: console
-#        grafana_net:
-#        server:
-#          # The root URL must be set with the proper url to enable oauth login
-#          root_url: https://grafana.bigbang.dev/
-#        auth:
-#          # URL to redirect the user to after sign out
-#          signout_redirect_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/logout
-#        auth.generic_oauth:
-#          enabled: true
-#          client_id: ${CLIENT_ID}
-#          #client_secret: ${CLIENT_SECRET}
-#          client_secret:
-#          #scopes: openid profile email
-#          scopes: Grafana
-#          auth_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/auth
-#          token_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/token
-#          api_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/userinfo
-#          allow_sign_up: true
-#          role_attribute_path: Viewer
 
 # ----------------------------------------------------------------------------------------------------------------------
 
