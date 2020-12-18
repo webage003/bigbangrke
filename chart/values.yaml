@@ -31,7 +31,10 @@ istio:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
     tag: "1.7.3-bb.0"
-  values: {}
+  values:
+    sso:
+      enabled: false
+      namespace: istio-addons-sso
 
 istiooperator:
   git:
@@ -100,7 +103,10 @@ monitoring:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
     tag: "11.0.0-bb.3"
-  values: {}
+  values:
+    sso:
+      enabled: false
+      namespace: monitoring-sso
 
 # ----------------------------------------------------------------------------------------------------------------------
 
