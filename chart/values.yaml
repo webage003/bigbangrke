@@ -96,11 +96,15 @@ fluentbit:
 #
 monitoring:
   enabled: true
+  sso:
+    enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
     branch: "bb-843"
-    values: {}
+  values:
+    sso:
+      enabled: false
 
 # ----------------------------------------------------------------------------------------------------------------------
 
