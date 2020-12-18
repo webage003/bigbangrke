@@ -44,11 +44,11 @@ spec:
     global:
       imagePullSecrets:
         - name: private-registry
->    sso:
->      enabled: {{ .Values.sso.enabled }}}}
->      namespace: {{ .Values.sso.namespace }}
->      selector: {{- with .Values.sso.selector }}
-    monitoring:
+#    sso:
+#      enabled: {{ .Values.sso.enabled }}}}
+#      namespace: {{ .Values.sso.namespace }}
+#      selector: {{- with .Values.sso.selector }}
+    kubePrometheusStack:
       grafana:
         image:
           pullSecrets:
