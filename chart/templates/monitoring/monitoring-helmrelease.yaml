@@ -61,7 +61,13 @@ spec:
           auth.generic_oauth:
             enabled: true
             client_id: ${CLIENT_ID}
+            # Some IDC configuration do not require a client secret.  If required, uncomment below and add the
+            # secret to the encrypted secrets file which is load in the "envFromSecret" paramter above
+            #client_secret: ${CLIENT_SECRET}
             client_secret:
+            # Some IDCs have different scope values.   Common ones are commented below but login.dsp.io uses a
+            # grafana scope
+            # scopes: openid profile email
             scopes: Grafana
             auth_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/auth
             token_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/token
