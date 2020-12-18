@@ -57,7 +57,7 @@ spec:
             root_url: https://grafana.{{ .Values.hostname }}
           auth:
             # URL to redirect the user to after sign out
-            signout_redirect_url: {{ .Values.monitoring.sso.idc_client_secret }}
+            # signout_redirect_url: {{ .Values.monitoring.sso.idc_client_secret }}
           auth.generic_oauth:
             enabled: true
             client_id: ${CLIENT_ID}
