@@ -39,11 +39,6 @@ spec:
   values:
     hostname: {{ .Values.hostname }}
 
-#    sso:
-#      enabled: {{ .Values.istio.sso.enabled }}
-#      namespace: {{ .Values.istio.sso.namespace }}
-#      selector: {{- with .Values.istio.sso.selector }}
-
     imagePullSecrets:
       - private-registry
 
