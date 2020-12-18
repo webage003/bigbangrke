@@ -97,7 +97,7 @@ fluentbit:
 monitoring:
   enabled: true
   sso:
-    enabled: true
+    enabled: false
     idc_client_secret: oathinfo
     signout_redirect_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/logout
     auth_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/auth
