@@ -36,6 +36,7 @@ spec:
     - name: values
       kind: Secret
       valuesKey: "authservice.yaml"
+  
   values:
     global:
       imagePullSecrets:
