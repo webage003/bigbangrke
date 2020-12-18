@@ -39,7 +39,7 @@ spec:
   values:
     hostname: {{ .Values.hostname }}
     sso:
-      enabled: {{ .Values.sso.enabled }}}}
+      enabled: {{ .Values.sso.enabled }}
       namespace: {{ .Values.sso.namespace }}
       selector: {{- with .Values.sso.selector }}
     imagePullSecrets:
