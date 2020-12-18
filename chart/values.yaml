@@ -31,13 +31,13 @@ istio:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
     tag: "1.7.3-bb.0"
-  values:
-    sso:
-      enabled: false
-      namespace: istio-addons-sso
-      selector:
-        key: protect
-        value: keycloak
+  values: {}
+#    sso:
+#      enabled: false
+#      namespace: istio-addons-sso
+#      selector:
+#        key: protect
+#        value: keycloak
 
 istiooperator:
   git:
@@ -106,13 +106,13 @@ monitoring:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
     tag: "11.0.0-bb.3"
-  values:
-    sso:
-      enabled: false
-      namespace: monitoring-sso
-      selector:
-        key: protect
-        value: keycloak
+  values: {}
+#    sso:
+#      enabled: false
+#      namespace: monitoring-sso
+#      selector:
+#        key: protect
+#        value: keycloak
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------
