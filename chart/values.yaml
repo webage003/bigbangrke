@@ -96,17 +96,19 @@ fluentbit:
 #
 monitoring:
   enabled: true
-  sso:
-    enabled: false
-    idc_client_secret: oathinfo
-    signout_redirect_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/logout
-    auth_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/auth
-    token_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/token
-    api_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/userinfo
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
     branch: "bb-843"
+  sso:
+    # If enabled, the following values enable SSO integration wiht an IDC.  Keycloak is the reference implementation
+    # specified with the defaults.   The secret named in the "idc_clinet_secret" value must be created in the
+    # monitoring namespace with keyvalues "CLIENT_ID" and "CLIENT_SECRET".
+    enabled: true
+    idc_client_secret: oathinfo
+    auth_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/auth
+    token_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/token
+    api_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/userinfo
   values: {}
 
 # ----------------------------------------------------------------------------------------------------------------------
