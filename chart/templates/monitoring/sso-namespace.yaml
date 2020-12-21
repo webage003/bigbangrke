@@ -1,8 +1,8 @@
-{{- if .Values.monitoring.values.sso.enabled }}
+{{- if .Values.monitoring.sso.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .Values.monitoring.values.sso.namespace }}
+  name: {{ .Values.monitoring.sso.namespace }}
   labels:
     istio-injection: enabled
 
@@ -12,7 +12,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: private-registry
-  namespace: {{ .Values.monitoring.values.sso.namespace }}
+  namespace: {{ .Values.monitoring.sso.namespace }}
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
