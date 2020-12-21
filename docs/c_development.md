@@ -8,8 +8,8 @@ Included here is a setup that will allow you to checkout and begin development u
 
 #### Access
 + [AWS GovCloud (US) EC2](https://console.amazonaws-us-gov.com/ec2)
-+ [Umbrella repository](https://repo1.dsop.io/platform-one/big-bang/umbrella)
-+ [Iron Bank registry](https://registry1.dsop.io/)
++ [Umbrella repository](https://repo1.dso.mil/platform-one/big-bang/umbrella)
++ [Iron Bank registry](https://registry1.dso.mil/)
 
 #### Utilities
 + kubectl installed on local machine. This will also need to be installed on the remote if you wish to verify the K3D cluster using `kubectl cluster-info`
@@ -97,7 +97,7 @@ k3d version
 ```
 
 + We can now spin up our dev cluster on the EC2 instance using K3D. Set your image pull secret on the cluster so that you don't have to put your credentials in the code or in the command line in later steps.
-Username and CLI Secret *must* be copied from your [Registry1 (Harbor)](https://registry1.dsop.io/harbor/projects) user profile.
+Username and CLI Secret *must* be copied from your [Registry1 (Harbor)](https://registry1.dso.mil/harbor/projects) user profile.
 ```bash
 # Create the directory for the k3s registry config.
 mkdir ~/.k3d/
@@ -110,7 +110,7 @@ YOURPUBLICEC2IP=$( curl https://ipinfo.io/ip )
 # Create the config file using your registry1 credentials.
 cat << EOF > ~/.k3d/p1-registries.yaml
 configs:
-  "registry1.dsop.io":
+  "registry1.dso.mil":
     auth:
       username: $YOURUSERNAME
       password: $YOURCLISECRET
@@ -167,7 +167,7 @@ kubectl get nodes
 # Create Project base
 mkdir -pv ~/repos/
 cd ~/repos
-git clone https://repo1.dsop.io/platform-one/big-bang/umbrella.git
+git clone https://repo1.dso.mil/platform-one/big-bang/umbrella.git
 cd ~/repos/umbrella
 ```
 From the base of the project
@@ -183,7 +183,7 @@ kubectl create ns bigbang
 
 ```bash
 # You will be overriding values in `chart/values.yaml` for development
-# You can use the [Big Bang template's dev ConfigMap](https://repo1.dsop.io/platform-one/big-bang/customers/bigbang/-/blob/template/bigbang/dev/configmap.yaml) to start.  This will minimize the resources for deploying BigBang.
+# You can use the [Big Bang template's dev ConfigMap](https://repo1.dso.mil/platform-one/big-bang/customers/bigbang/-/blob/template/bigbang/dev/configmap.yaml) to start.  This will minimize the resources for deploying BigBang.
 # For convenience, it is also copied here
 
 cat << EOF > my-values.yaml
