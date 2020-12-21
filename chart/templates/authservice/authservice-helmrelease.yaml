@@ -38,9 +38,6 @@ spec:
       valuesKey: "authservice.yaml"
   
   values:
-    global:
-      imagePullSecrets:
-        - name: private-registry
     imagePullSecrets:
       - name: private-registry
 
