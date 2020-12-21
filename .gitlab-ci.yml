@@ -192,7 +192,7 @@ aws/network down:
 # Infrastructure: Utility
 
 # Create Utility Instance on AWS
-aws/utility up:
+aws/airgap/utility up:
   extends:
     - .infra fork
     - .utility up
@@ -200,9 +200,10 @@ aws/utility up:
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
+  allow_failure: true
 
 # Destroy Utility Instance on AWS
-aws/utility down:
+aws/airgap/utility down:
   extends:
     - .infra cleanup
     - .utility down
@@ -222,6 +223,19 @@ aws/rke2/cluster up:
   extends:
     - .infra create
     - .rke2 up
+  allow_failure: true
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: aws/network up
+
+# Create Airgap RKE2 cluster on AWS
+aws/rke2/airgap-cluster up:
+  stage: cluster up
+  extends:
+    - .infra create
+    - .rke2 up
+  allow_failure: true
   needs:
     - job: fetch umbrella templates
       artifacts: true
@@ -238,6 +252,8 @@ aws/rke2/bigbang up:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/rke2/cluster up
+      artifacts: true
+    - job: aws/rke2/airgap-cluster up
       artifacts: true
   before_script:
     - mkdir -p ~/.kube
@@ -258,6 +274,8 @@ aws/rke2/bigbang test:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/rke2/cluster up
+      artifacts: true
+    - job: aws/rke2/airgap-cluster up
       artifacts: true
     - job: aws/rke2/bigbang up
   before_script:
@@ -280,6 +298,8 @@ aws/rke2/bigbang down:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/rke2/cluster up
+      artifacts: true
+    - job: aws/rke2/airgap-cluster up
       artifacts: true
     - job: aws/rke2/bigbang test
   before_script:
