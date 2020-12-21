@@ -44,9 +44,6 @@ spec:
     sso:
        enabled: {{ .Values.monitoring.sso.enabled }}
        namespace: {{ .Values.monitoring.sso.namespace }}
-       selector:
-         key: {{ .Values.monitoring.sso.selector.key }}
-         value: {{ .Values.monitoring.sso.selector.value }}
     global:
       imagePullSecrets:
         - name: private-registry
