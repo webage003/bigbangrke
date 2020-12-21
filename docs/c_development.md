@@ -130,8 +130,8 @@ Here is a explaination of what we are doing with this command:
 + `-p 443:443@loadbalancer` Exposes the cluster on the host on port 443
 
 optional:
-`-v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml` volume mount image pull secret config for k3d cluster
-`--api-port 0.0.0.0:38787` Chooses a port for the API server instead of being assigned a random one. You can set this to any port number that you want.
++ `-v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml` volume mount image pull secret config for k3d cluster
++ `--api-port 0.0.0.0:38787` Chooses a port for the API server instead of being assigned a random one. You can set this to any port number that you want.
 
 + Once your cluster is up, copy the kubeconfig from the EC2 instance to your workstation and update the IP Address. If you do not have an existing configuration to preserve on your local workstation, you can delete and recreate the configuration file.
 
@@ -181,11 +181,8 @@ kubectl create ns bigbang
 
 + Customize your Helm values
 
+You will be overriding values in `chart/values.yaml` for development. You can use the [Big Bang template's dev ConfigMap](https://repo1.dso.mil/platform-one/big-bang/customers/template/-/blob/main/dev/configmap.yaml) to start. This will minimize the resources for deploying BigBang. For convenience, it is also copied here
 ```bash
-# You will be overriding values in `chart/values.yaml` for development
-# You can use the [Big Bang template's dev ConfigMap](https://repo1.dso.mil/platform-one/big-bang/customers/bigbang/-/blob/template/bigbang/dev/configmap.yaml) to start.  This will minimize the resources for deploying BigBang.
-# For convenience, it is also copied here
-
 cat << EOF > my-values.yaml
 hostname: bigbang.dev
 flux:
