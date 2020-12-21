@@ -35,6 +35,9 @@ istio:
     sso:
       enabled: false
       namespace: istio-addons-sso
+      selector:
+        key: protect
+        value: keycloak
 
 istiooperator:
   git:
@@ -107,6 +110,9 @@ monitoring:
     sso:
       enabled: false
       namespace: monitoring-sso
+      selector:
+        key: protect
+        value: keycloak
 
 # ----------------------------------------------------------------------------------------------------------------------
 

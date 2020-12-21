@@ -38,7 +38,12 @@ spec:
       valuesKey: "istio.yaml"
   values:
     hostname: {{ .Values.hostname }}
-
+    sso:
+       enabled: {{ .Values.istio.sso.enabled }}
+       namespace: {{ .Values.istio.sso.namespace }}
+       selector:
+         key: {{ .Values.istio.sso.selector.key }}
+         value: {{ .Values.istio.sso.selector.value }}
     imagePullSecrets:
       - private-registry
 
