@@ -148,7 +148,7 @@ Update the configuration file on your local workstation.
 rm ~/.kube/config
 
 # Create empty configuration
-touch ~/kube/config
+touch ~/.kube/config
 
 # Update permissions
 # (Prevents Helm warnings)
