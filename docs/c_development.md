@@ -242,10 +242,14 @@ EOF
 ```bash
 # These are all OPTIONAL.  Deploy them if you need them
 
-# Deploy the bigbang-dev.asc SOPS key into the bigbang namespace
+# Deploy the bigbang-dev.asc SOPS key into the bigbang namespace.
+# Requires realpath, part of coreutils package on macOS
+# `brew install coreutils`
 ./hack/sops-create.sh
 
 # Deploy the authservice configuration
+# Requires installation of sops - https://github.com/mozilla/sops/releases
+# `brew install sops`
 sops -d ./hack/secrets/authservice-config.yaml | kubectl apply -f -
 
 # Deploy the ingress certificates
