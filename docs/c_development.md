@@ -247,9 +247,11 @@ EOF
 ./hack/sops-create.sh
 
 # Deploy the authservice configuration
-# Requires installation of sops - https://github.com/mozilla/sops/releases
+# Requires installation of sops and gpg.
 # `brew install sops`
-sops -d ./hack/secrets/authservice-config.yaml | kubectl apply -f -
+# `brew install gpg`
+gpg --import ./hack/bigbang-dev.asc
+sops -d ./hack/secrets/authservice.yaml | kubectl apply -f -
 
 # Deploy the ingress certificates
 sops -d ./hack/secrets/ingress-cert.yaml | kubectl apply -f -
