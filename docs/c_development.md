@@ -184,6 +184,9 @@ kubectl create ns bigbang
 
 You will be overriding values in `chart/values.yaml` for development. You can use the [Big Bang template's dev ConfigMap](https://repo1.dso.mil/platform-one/big-bang/customers/template/-/blob/main/dev/configmap.yaml) to start. This will minimize the resources for deploying BigBang. For convenience, it is also copied here
 ```bash
+# Add any additional development values to this file as needed.
+# You can add registry1 pull credentials here for development.
+# Examples included enabling add-ons, disabling unneeded features, etc.
 cat << EOF > my-values.yaml
 hostname: bigbang.dev
 flux:
@@ -231,10 +234,6 @@ twistlock:
       persistence:
         size: 5Gi
 EOF
-
-# Add any additional development values to this file as needed
-# You can add registry1 pull credentials here for development
-# Examples included enabling add-ons, disabling unneeded features, etc.
 ```
 
 + Deploy secrets
