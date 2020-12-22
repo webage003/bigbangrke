@@ -137,6 +137,7 @@ optional:
 
 Copy the contents of the remote configuration file.
 ```bash
+$echo $YOURPUBLICEC2IP
 cat ~/.kube/config
 ```
 
