@@ -12,7 +12,9 @@ workflow:
 include:
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
     file: '/global.gitlab-ci.yml'
-    ref: 0.0.1
+    ## Note ref block cannot contain variable but if you're working on a specific branch in umbrella-templates set this as well. 
+    #ref: ${GIT_BRANCH}
+    ref: BB-1003
 
 stages:
   - smoke tests
@@ -190,6 +192,8 @@ fetch umbrella templates:
     - .fetch
     - .infra create
   stage: .pre
+  variables:
+    GIT_BRANCH: "BB-1003"
 
 # Abstract for job manually triggering infrastructure builds
 .infra fork:
