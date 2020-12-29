@@ -10,6 +10,7 @@ workflow:
     - when: always
 
 include:
+  - local: '/airgap.gitlab-ci.yml'
   - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
     file: '/global.gitlab-ci.yml'
     ref: BB-1003
@@ -23,6 +24,13 @@ stages:
   - bigbang down
   - cluster down
   - network down
+  - airgap network up
+  - airgap cluster up
+  - airgap bigbang up
+  - airgap test
+  - airgap bigbang down
+  - airgap cluster down
+  - airgap network down
   - package
   - release
 
