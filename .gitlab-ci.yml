@@ -283,9 +283,9 @@ aws/network down:
 # Create Utility Instance on AWS
 aws/airgap/utility up:
   extends:
-    - .check_if_airgap
     - .infra create
     - .utility up
+    - .check_if_airgap
   stage: airgap up
   # environment:
   #   name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
