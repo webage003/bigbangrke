@@ -40,6 +40,32 @@ airgap/network down:
     action: stop
 #-----------------------------------------------------------------------------------------------------------------------
 
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure: Utility
+
+# Create Utility Instance on AWS
+aws/airgap/utility up:
+  extends:
+    - .infra create
+    - .utility up
+    - .terraformer_airgap
+  stage: airgap up
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: airgap/network up
+
+# Destroy Utility Instance on AWS
+aws/airgap/utility down:
+  extends:
+    - .infra cleanup
+    - .utility down
+    - .terraformer_airgap
+  stage: airgap down
+#-----------------------------------------------------------------------------------------------------------------------
+
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: RKE2
 #

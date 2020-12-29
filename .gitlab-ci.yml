@@ -18,11 +18,13 @@ include:
 stages:
   - smoke tests
   - network up
+  - airgap up
   - cluster up
   - bigbang up
   - test
   - bigbang down
   - cluster down
+  - airgap down
   - network down
   - package
   - release
