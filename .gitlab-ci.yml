@@ -85,19 +85,32 @@ pre vars:
 .test_bigbang: &test_bigbang
   - for test in ./tests/bash/*.sh; do chmod +x $test && $test; done 
 
-.check_if_airgap:
+.run_only_airgap:
   before_script:
     - |
       if [ ! -f testairgap ]; then
         exit 1
       fi
+    - export TF_VAR_env=$(echo "${CI_COMMIT_REF_SLUG}"| cut -c 1-7)-$(echo "${CI_COMMIT_SHA}" | cut -c 1-7)
+    - cd ${TF_ROOT}
+    - terraform version
+    - terraform init -input=false
+    - terraform workspace select $TF_VAR_env || terraform workspace new $TF_VAR_env
+    - terraform validate
 
-.check_not_airgap:
+
+.run_if_not_airgap:
   before_script:
     - |
       if [ -f testairgap ]; then
         exit 1
       fi
+    - export TF_VAR_env=$(echo "${CI_COMMIT_REF_SLUG}"| cut -c 1-7)-$(echo "${CI_COMMIT_SHA}" | cut -c 1-7)
+    - cd ${TF_ROOT}
+    - terraform version
+    - terraform init -input=false
+    - terraform workspace select $TF_VAR_env || terraform workspace new $TF_VAR_env
+    - terraform validate
 
 clean install:
   stage: smoke tests
@@ -258,14 +271,14 @@ aws/network up:
     auto_stop_in: 1 hour
 
 aws/airgap test:
-  stage: network up
+  extends:
+    - .infra fork
   script:
     - touch $CI_PROJECT_DIR/testairgap
   artifacts:
     paths:
       - testairgap
     expire_in: 7 days
-  when: manual
 
 aws/network down:
   extends:
@@ -285,17 +298,21 @@ aws/airgap/utility up:
   extends:
     - .infra create
     - .utility up
-    - .check_if_airgap
+    - .run_only_airgap
   stage: airgap up
   # environment:
   #   name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
   #   auto_stop_in: 1 hour
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/airgap test
-      artifacts: true
-    - job: aws/network up
+  dependencies: 
+    - fetch umbrella templates
+    - aws/network up
+    - aws/airgap test
+  # needs:
+  #   - job: fetch umbrella templates
+  #     artifacts: true
+  #   # - job: aws/airgap test
+  #   #   artifacts: true
+  #   - job: aws/network up
   allow_failure: true
 
 # Destroy Utility Instance on AWS
@@ -317,32 +334,41 @@ aws/airgap/utility down:
 aws/rke2/cluster up:
   stage: cluster up
   extends:
-    - .check_not_airgap
     - .infra create
     - .rke2 up
+    - .run_if_not_airgap
   allow_failure: true
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/network up
-    - job: aws/airgap test
-      artifacts: true
+  dependencies: 
+    - fetch umbrella templates
+    - aws/airgap test
+    - aws/network up
+  # needs:
+  #   - job: fetch umbrella templates
+  #     artifacts: true
+  #   - job: aws/network up
+  #   # - job: aws/airgap test
+  #   #   artifacts: true
 
 # Create Airgap RKE2 cluster on AWS
 aws/rke2/airgap-cluster up:
   stage: cluster up
   extends:
-    - .check_if_airgap
     - .infra create
-    - .rke2 up
+    - .rke2 airgap up
+    - .run_only_airgap
   allow_failure: true
-  needs:
-    - job: fetch umbrella templates
-      artifacts: true
-    - job: aws/network up
-    - job: aws/airgap/utility up
-    - job: aws/airgap test
-      artifacts: true
+  dependencies: 
+    - fetch umbrella templates
+    - aws/network up
+    - aws/airgap/utility up
+    - aws/airgap test
+  # needs:
+  #   - job: fetch umbrella templates
+  #     artifacts: true
+  #   - job: aws/network up
+  #   - job: aws/airgap/utility up
+  #   # - job: aws/airgap test
+  #   #   artifacts: true
 
 # Install BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang up:
@@ -412,6 +438,16 @@ aws/rke2/cluster down:
   extends:
     - .infra cleanup
     - .rke2 down
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: aws/rke2/bigbang down
+
+aws/rke2/cluster airgap down:
+  stage: cluster down
+  extends:
+    - .infra cleanup
+    - .rke2 airgap down
   needs:
     - job: fetch umbrella templates
       artifacts: true
