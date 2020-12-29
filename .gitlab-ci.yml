@@ -112,16 +112,17 @@ upgrade:
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
   script:
-    - if $CHART_BREAKING_CHANGE; then echo "Breaking change detected by chart version difference, skipping job"; exit 0; fi
-    - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
-    - git fetch && git checkout ${CI_DEFAULT_BRANCH}
-    - *deploy_bigbang
-    - *test_bigbang
-    - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
-    - git reset --hard && git clean -fd
-    - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-    - *deploy_bigbang
-    - *test_bigbang
+    # - if $CHART_BREAKING_CHANGE; then echo "Breaking change detected by chart version difference, skipping job"; exit 0; fi
+    # - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
+    # - git fetch && git checkout ${CI_DEFAULT_BRANCH}
+    # - *deploy_bigbang
+    # - *test_bigbang
+    # - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
+    # - git reset --hard && git clean -fd
+    # - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+    # - *deploy_bigbang
+    # - *test_bigbang
+    - echo "foo"
 
 package:
   stage: package
@@ -228,6 +229,14 @@ aws/network up:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
 
+test/network up:
+  extends:
+    - .infra fork
+    - .network up
+  environment:
+    name: test/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+    auto_stop_in: 1 hour
+
 aws/network down:
   extends:
     - .infra cleanup
@@ -235,6 +244,15 @@ aws/network down:
   stage: network down
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+    action: stop
+
+test/network down:
+  extends:
+    - .infra cleanup
+    - .network down
+  stage: network down
+  environment:
+    name: test/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     action: stop
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -251,6 +269,15 @@ aws/rke2/cluster up:
   needs:
     - job: aws/network up
 
+# Create RKE2 cluster on AWS
+test/rke2/cluster up:
+  stage: cluster up
+  extends:
+    - .infra create
+    - .rke2 up
+  needs:
+    - job: test/network up
+
 # Install BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang up:
   stage: bigbang up
@@ -266,7 +293,26 @@ aws/rke2/bigbang up:
     # Deploy a default storage class for aws
     - kubectl apply -f ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
   script:
-    - *deploy_bigbang
+    # - *deploy_bigbang
+    - echo "foo"
+
+# Install BigBang on RKE2 cluster on AWS
+test/rke2/bigbang up:
+  stage: bigbang up
+  extends:
+    - .infra create
+    - .bigbang
+  needs:
+    - job: test/rke2/cluster up
+      artifacts: true
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+    # Deploy a default storage class for aws
+    - kubectl apply -f ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
+  script:
+    # - *deploy_bigbang
+    - echo "foo"
 
 # Run tests on BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang test:
@@ -282,11 +328,33 @@ aws/rke2/bigbang test:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
   script:
-    ## Move this yum install to the dockerfile for the builder
-    ## putting it here now for a quick way to install dig
-    - yum install bind-utils -y
-    - chmod +x scripts/hosts.sh && ./scripts/hosts.sh
-    - *test_bigbang
+    # ## Move this yum install to the dockerfile for the builder
+    # ## putting it here now for a quick way to install dig
+    # - yum install bind-utils -y
+    # - chmod +x scripts/hosts.sh && ./scripts/hosts.sh
+    # - *test_bigbang
+    - echo "foo"
+
+# Run tests on BigBang on RKE2 cluster on AWS
+test/rke2/bigbang test:
+  stage: test
+  extends:
+    - .infra create
+    - .bigbang
+  needs:
+    - job: test/rke2/cluster up
+      artifacts: true
+    - job: test/rke2/bigbang up
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+  script:
+    # ## Move this yum install to the dockerfile for the builder
+    # ## putting it here now for a quick way to install dig
+    # - yum install bind-utils -y
+    # - chmod +x scripts/hosts.sh && ./scripts/hosts.sh
+    # - *test_bigbang
+    - echo "foo"
 
 # Uninstall BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang down:
@@ -302,9 +370,29 @@ aws/rke2/bigbang down:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
   script:
-    - helm un -n bigbang bigbang
-    # TODO: Smarter wait
-    - sleep 180
+    # - helm un -n bigbang bigbang
+    # # TODO: Smarter wait
+    # - sleep 180
+    - echo "foo"
+
+# Uninstall BigBang on RKE2 cluster on AWS
+test/rke2/bigbang down:
+  stage: bigbang down
+  extends:
+    - .infra cleanup
+    - .bigbang
+  needs:
+    - job: test/rke2/cluster up
+      artifacts: true
+    - job: test/rke2/bigbang test
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+  script:
+    # - helm un -n bigbang bigbang
+    # # TODO: Smarter wait
+    # - sleep 180
+    - echo "foo"
 
 # Destroy RKE2 cluster on AWS
 aws/rke2/cluster down:
@@ -314,4 +402,13 @@ aws/rke2/cluster down:
     - .rke2 down
   needs:
     - job: aws/rke2/bigbang down
+
+# Destroy RKE2 cluster on AWS
+test/rke2/cluster down:
+  stage: cluster down
+  extends:
+    - .infra cleanup
+    - .rke2 down
+  needs:
+    - job: test/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
