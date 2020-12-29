@@ -19,10 +19,12 @@ include:
 stages:
   - smoke tests
   - network up
+  - airgap up
   - cluster up
   - bigbang up
   - test
   - bigbang down
+  - airgap down
   - cluster down
   - network down
   - package
@@ -259,7 +261,7 @@ aws/airgap/utility up:
   extends:
     - .infra fork
     - .utility up
-  stage: cluster up
+  stage: airgap up
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
@@ -270,7 +272,7 @@ aws/airgap/utility down:
   extends:
     - .infra cleanup
     - .utility down
-  stage: cluster down
+  stage: airgap down
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     action: stop
