@@ -11,7 +11,7 @@ airgap/network up:
   extends:
     - .infra fork
     - .network up
-  stage: airgap network up
+  stage: network up
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
@@ -20,7 +20,7 @@ airgap/network down:
   extends:
     - .infra cleanup
     - .network down
-  stage: airgap network down
+  stage: network down
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     action: stop
@@ -31,7 +31,7 @@ airgap/network down:
 #
 # Create RKE2 cluster on AWS
 airgap/rke2/cluster up:
-  stage: airgap cluster up
+  stage: cluster up
   extends:
     - .infra create
     - .rke2 airgap up
@@ -42,7 +42,7 @@ airgap/rke2/cluster up:
 
 # Install BigBang on RKE2 cluster on AWS
 airgap/rke2/bigbang up:
-  stage: airgap bigbang up
+  stage: bigbang up
   extends:
     - .infra create
     - .bigbang
@@ -63,7 +63,7 @@ airgap/rke2/bigbang up:
 # Run tests on BigBang on RKE2 cluster on AWS
 
 airgap/rke2/bigbang test:
-  stage: airgap test
+  stage: test
   extends:
     - .infra create
     - .bigbang
@@ -85,7 +85,7 @@ airgap/rke2/bigbang test:
 
 # Uninstall BigBang on RKE2 cluster on AWS
 airgap/rke2/bigbang down:
-  stage: airgap bigbang down
+  stage: bigbang down
   extends:
     - .infra cleanup
     - .bigbang
@@ -105,7 +105,7 @@ airgap/rke2/bigbang down:
 
 # Destroy RKE2 cluster on AWS
 airgap/rke2/cluster down:
-  stage: airgap cluster down
+  stage: cluster down
   extends:
     - .infra cleanup
     - .rke2 airgap down

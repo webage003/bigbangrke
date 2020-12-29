@@ -24,13 +24,6 @@ stages:
   - bigbang down
   - cluster down
   - network down
-  - airgap network up
-  - airgap cluster up
-  - airgap bigbang up
-  - airgap test
-  - airgap bigbang down
-  - airgap cluster down
-  - airgap network down
   - package
   - release
 
