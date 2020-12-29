@@ -243,6 +243,16 @@ aws/network up:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
 
+test airgap:
+  stage: network up
+  script:
+    - touch $CI_PROJECT_DIR/testairgap
+  artifacts:
+    paths:
+      - testairgap
+    expire_in: 7 days
+  when: manual
+
 aws/network down:
   extends:
     - .infra cleanup
@@ -258,13 +268,22 @@ aws/network down:
 
 # Create Utility Instance on AWS
 aws/airgap/utility up:
+  before_script:
+    - |
+      if [ ! -f testairgap ]; then
+        exit 1
+      fi
   extends:
-    - .infra fork
+    - .infra create
     - .utility up
   stage: airgap up
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
-    auto_stop_in: 1 hour
+  # environment:
+  #   name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+  #   auto_stop_in: 1 hour
+  needs:
+    - job: test airgap
+      artifacts: true
+    - job: aws/network up
   allow_failure: true
 
 # Destroy Utility Instance on AWS
@@ -273,9 +292,9 @@ aws/airgap/utility down:
     - .infra cleanup
     - .utility down
   stage: airgap down
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
-    action: stop
+  # environment:
+  #   name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+  #   action: stop
 #-----------------------------------------------------------------------------------------------------------------------
 
 
