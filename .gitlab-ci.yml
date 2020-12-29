@@ -252,18 +252,58 @@ aws/network down:
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure: Utility
+
+# Create Utility Instance on AWS
+aws/airgap/utility up:
+  extends:
+    - .infra fork
+    - .utility up
+  stage: cluster up
+  environment:
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+    auto_stop_in: 1 hour
+  allow_failure: true
+
+# Destroy Utility Instance on AWS
+aws/airgap/utility down:
+  extends:
+    - .infra cleanup
+    - .utility down
+  stage: cluster down
+  environment:
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+    action: stop
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+#-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: RKE2
 #
 # Create RKE2 cluster on AWS
 aws/rke2/cluster up:
   stage: cluster up
   extends:
-    - .infra create
+    - .infra fork
     - .rke2 up
+  allow_failure: true
   needs:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/network up
+
+# Create Airgap RKE2 cluster on AWS
+aws/rke2/airgap-cluster up:
+  stage: cluster up
+  extends:
+    - .infra create
+    - .rke2 up
+  allow_failure: true
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: aws/network up
+    - job: aws/airgap/utility up
 
 # Install BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang up:
