@@ -3,7 +3,7 @@
 
 .test_bigbang: &test_bigbang
   - for test in ./tests/bash/*.sh; do chmod +x $test && $test; done 
-  
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Networking
 #
@@ -11,7 +11,7 @@ airgap/network up:
   extends:
     - .infra fork
     - .network up
-  stage: airgap network down
+  stage: airgap network up
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
