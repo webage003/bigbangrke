@@ -237,9 +237,10 @@ aws/network up:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
 
-test/test network up:
+test/network up:
   extends:
     - .infra fork
+    - .network up
   environment:
     name: test/${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
@@ -251,6 +252,15 @@ aws/network down:
   stage: network down
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+    action: stop
+
+test/network down:
+  extends:
+    - .infra cleanup
+    - .network down
+  stage: network down
+  environment:
+    name: test/${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     action: stop
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -268,12 +278,15 @@ aws/rke2/cluster up:
       artifacts: true
     - job: aws/network up
 
-test/test cluster up:
+test/cluster up:
   stage: cluster up
+  extends:
+    - .infra create
+    - .rke2 up
   needs:
-    - job: test/test network up
-  script:
-    echo "This is a test"
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: test/network up
 
 # Install BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang up:
@@ -285,6 +298,25 @@ aws/rke2/bigbang up:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/rke2/cluster up
+      artifacts: true
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+
+    # Deploy a default storage class for aws
+    - kubectl apply -f ${CI_PROJECT_DIR}/umbrella-templates/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
+  script:
+    - *deploy_bigbang
+
+test/bigbang up:
+  stage: bigbang up
+  extends:
+    - .infra create
+    - .bigbang
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: test/cluster up
       artifacts: true
   before_script:
     - mkdir -p ~/.kube
@@ -317,6 +349,27 @@ aws/rke2/bigbang test:
     - chmod +x scripts/hosts.sh && ./scripts/hosts.sh
     - *test_bigbang
 
+test/bigbang test:
+  stage: test
+  extends:
+    - .infra create
+    - .bigbang
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: test/cluster up
+      artifacts: true
+    - job: test/bigbang up
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+  script:
+    ## Move this yum install to the dockerfile for the builder
+    ## putting it here now for a quick way to install dig
+    - yum install bind-utils -y
+    - chmod +x scripts/hosts.sh && ./scripts/hosts.sh
+    - *test_bigbang
+
 # Uninstall BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang down:
   stage: bigbang down
@@ -337,6 +390,25 @@ aws/rke2/bigbang down:
     # TODO: Smarter wait
     - sleep 180
 
+test/bigbang down:
+  stage: bigbang down
+  extends:
+    - .infra cleanup
+    - .bigbang
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: test/cluster up
+      artifacts: true
+    - job: test/bigbang test
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+  script:
+    - helm un -n bigbang bigbang
+    # TODO: Smarter wait
+    - sleep 180
+
 # Destroy RKE2 cluster on AWS
 aws/rke2/cluster down:
   stage: cluster down
@@ -347,4 +419,14 @@ aws/rke2/cluster down:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/rke2/bigbang down
+
+test/cluster down:
+  stage: cluster down
+  extends:
+    - .infra cleanup
+    - .rke2 down
+  needs:
+    - job: fetch umbrella templates
+      artifacts: true
+    - job: test/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
