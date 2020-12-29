@@ -89,6 +89,8 @@ airgap/rke2/bigbang up:
     - .infra create
     - .bigbang
     - .terraformer_airgap
+  #Temp: Until the utility server is functional. 
+  allow_failure: true 
   needs:
     - job: fetch umbrella templates
       artifacts: true
@@ -111,6 +113,8 @@ airgap/rke2/bigbang test:
     - .infra create
     - .bigbang
     - .terraformer_airgap
+  #Temp: Until the utility server is functional. 
+  allow_failure: true 
   needs:
     - job: fetch umbrella templates
       artifacts: true
@@ -134,6 +138,8 @@ airgap/rke2/bigbang down:
     - .infra cleanup
     - .bigbang
     - .terraformer_airgap
+  #Temp: Until the utility server is functional. 
+  allow_failure: true 
   needs:
     - job: fetch umbrella templates
       artifacts: true
