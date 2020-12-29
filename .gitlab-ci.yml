@@ -237,6 +237,14 @@ aws/network up:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
 
+test/test network up:
+  stage: network up
+  environment:
+    name: test
+    auto_stop_in: 1 hour
+  script:
+    echo "This is a test"
+
 aws/network down:
   extends:
     - .infra cleanup
@@ -260,6 +268,13 @@ aws/rke2/cluster up:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/network up
+
+test/test cluster up:
+  stage: cluster up
+  needs:
+    - job: test/test network up
+  script:
+    echo "This is a test"
 
 # Install BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang up:
