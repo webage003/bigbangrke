@@ -346,6 +346,7 @@ aws/rke2/cluster up:
     - job: fetch umbrella templates
       artifacts: true
     - job: aws/network up
+    - job: aws/airgap/utility up
     - job: aws/airgap test
       artifacts: true
 
