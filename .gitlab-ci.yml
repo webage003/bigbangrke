@@ -238,21 +238,11 @@ aws/network up:
     auto_stop_in: 1 hour
 
 test/test network up:
-  stage: network up
+  extends:
+    - .infra fork
   environment:
-    name: test
+    name: test/${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
-  script:
-    echo "This is a test"
-  rules:
-    # Skip when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
-    # Only run on merge requests when manually activated
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
-      allow_failure: false
-
 
 aws/network down:
   extends:
