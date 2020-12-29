@@ -80,6 +80,7 @@ airgap/rke2/cluster up:
     - job: fetch umbrella templates
       artifacts: true
     - job: airgap/network up
+    - job: aws/airgap/utility up
 
 # Install BigBang on RKE2 cluster on AWS
 airgap/rke2/bigbang up:
