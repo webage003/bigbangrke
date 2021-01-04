@@ -5,7 +5,7 @@ This job spins up a VPC, and private,public and intra subnets inside an AWS acco
 ## Gitlab-ci
 
 We run a quick python script `get-vpc.py` to calculate the unique cidr range for the VPC.
-We then run a terraform apply from the `umbrella-templates/jobs/networking/aws/dependencies/terraform/env/ci` dir.
+We then run a terraform apply from the `.gitlab-ci/jobs/networking/aws/dependencies/terraform/env/ci` dir.
 
 Other jobs can consume the `tf-outputs` via `data "terraform_remote_state"`.
 
@@ -22,7 +22,7 @@ Other jobs can consume the `tf-outputs` via `data "terraform_remote_state"`.
 * Run the tf to instantiate the vpc and other networking:
 
 ```bash
-cd umbrella-templates/jobs/networking/aws/dependencies/terraform/env/dev
+cd .gitlab-ci/jobs/networking/aws/dependencies/terraform/env/dev
 tf init
 tf plan
 tf apply

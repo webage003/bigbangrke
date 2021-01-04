@@ -10,7 +10,7 @@ Note that this job also publishes a state containing a registry username and pas
 
 ## Gitlab-ci
 
-We run a terraform apply from the `umbrella-templates/jobs/utility/dependencies/terraform/env/ci` dir.
+We run a terraform apply from the `.gitlab-ci/jobs/utility/dependencies/terraform/env/ci` dir.
 
 Output is the ip of the utility instance. This does not need to be consumed given that pre-defined Route 53 records are created:
 
@@ -65,7 +65,7 @@ export utility_password=`terraform output utility_password`
 * Run the tf to instantiate the EC2 Instance:
 
 ```bash
-cd umbrella-templates/jobs/utility/dependencies/terraform/env/dev
+cd .gitlab-ci/jobs/utility/dependencies/terraform/env/dev
 tf init
 tf plan
 tf apply --auto-approve
@@ -76,6 +76,6 @@ tf apply --auto-approve
 * Once finished:
 
 ```bash
-cd umbrella-templates/jobs/utility/dependencies/terraform/env/dev
+cd .gitlab-ci/jobs/utility/dependencies/terraform/env/dev
 tf destroy --auto-approve
 ```

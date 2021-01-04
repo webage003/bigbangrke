@@ -1,7 +1,7 @@
 .rke2 tf:
   extends: .terraformer
   variables:
-    TF_ROOT: "umbrella-templates/jobs/rke2/dependencies/terraform/env/ci"
+    TF_ROOT: ".gitlab-ci/jobs/rke2/dependencies/terraform/env/ci"
 
 .rke2 up:
   extends: .rke2 tf
@@ -11,10 +11,10 @@
 
     - terraform apply -input=false -auto-approve
     - VPC_CIDR=`terraform output vpc_cidr`
-    - sed -i "s#VPC_CIDR#$VPC_CIDR#g" ${CI_PROJECT_DIR}/umbrella-templates/jobs/rke2/dependencies/k8s-resources/default-proxy-env.yaml
+    - sed -i "s#VPC_CIDR#$VPC_CIDR#g" ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/default-proxy-env.yaml
     - UTILITY_IP=`terraform output utility_ip`
-    - sed -i "s/PROXY_IP/$UTILITY_IP/g" ${CI_PROJECT_DIR}/umbrella-templates/jobs/rke2/dependencies/k8s-resources/default-proxy-istio.yaml
-    - mv ${CI_PROJECT_DIR}/umbrella-templates/jobs/rke2/dependencies/k8s-resources/default-proxy-* ${CI_PROJECT_DIR}
+    - sed -i "s/PROXY_IP/$UTILITY_IP/g" ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/default-proxy-istio.yaml
+    - mv ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/default-proxy-* ${CI_PROJECT_DIR}
     - mv rke2.yaml ${CI_PROJECT_DIR}/rke2.yaml
   artifacts:
     paths:
@@ -25,7 +25,7 @@
 .rke2 airgap up:
   extends: .rke2 up
   variables:
-    TF_ROOT: "umbrella-templates/jobs/rke2/dependencies/terraform/env/ci-airgap"
+    TF_ROOT: ".gitlab-ci/jobs/rke2/dependencies/terraform/env/ci-airgap"
 
 .rke2 down:
   extends:
@@ -37,4 +37,4 @@
 .rke2 airgap down:
   extends: .rke2 down
   variables:
-    TF_ROOT: "umbrella-templates/jobs/rke2/dependencies/terraform/env/ci-airgap"
+    TF_ROOT: ".gitlab-ci/jobs/rke2/dependencies/terraform/env/ci-airgap"

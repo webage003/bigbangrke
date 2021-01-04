@@ -8,9 +8,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "us-gov-west-1"
-}
 
 data "terraform_remote_state" "networking" {
   backend = "s3"

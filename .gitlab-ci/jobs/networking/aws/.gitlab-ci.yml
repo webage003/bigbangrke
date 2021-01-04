@@ -9,7 +9,7 @@
 .network:
   extends: .terraformer
   variables:
-    TF_ROOT: "umbrella-templates/jobs/networking/aws/dependencies/terraform/env/ci"
+    TF_ROOT: ".gitlab-ci/jobs/networking/aws/dependencies/terraform/env/ci"
 
 .network up:
   extends: .network
