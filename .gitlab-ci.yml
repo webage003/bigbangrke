@@ -185,13 +185,6 @@ release:
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Management Jobs
 #
-# .pre job for pulling pipeline contents from umbrella-templates project
-# TODO: Currently all jobs connected via "needs" must explicitly need this job, should evaluate turning this into a global cache
-fetch umbrella templates:
-  extends:
-    - .fetch
-    - .infra create
-  stage: .pre
 
 # Abstract for job manually triggering infrastructure builds
 .infra fork:
