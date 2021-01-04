@@ -52,8 +52,6 @@ aws/airgap/utility up:
     - .terraformer_airgap
   stage: airgap up
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: airgap/network up
 
 # Destroy Utility Instance on AWS
@@ -77,8 +75,6 @@ airgap/rke2/cluster up:
     - .rke2 airgap up
     - .terraformer_airgap
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: airgap/network up
     - job: aws/airgap/utility up
 
@@ -92,8 +88,6 @@ airgap/rke2/bigbang up:
   #Temp: Until the utility server is functional. 
   allow_failure: true 
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: airgap/rke2/cluster up
       artifacts: true
   before_script:
@@ -116,8 +110,6 @@ airgap/rke2/bigbang test:
   #Temp: Until the utility server is functional. 
   allow_failure: true 
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: airgap/rke2/cluster up
       artifacts: true
     - job: airgap/rke2/bigbang up
@@ -139,8 +131,6 @@ airgap/rke2/bigbang down:
     - .bigbang
     - .terraformer_airgap
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: airgap/rke2/cluster up
       artifacts: true
     - job: airgap/rke2/bigbang test
@@ -160,7 +150,5 @@ airgap/rke2/cluster down:
     - .rke2 airgap down
     - .terraformer_airgap
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: airgap/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
