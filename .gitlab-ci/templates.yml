@@ -29,6 +29,21 @@ include:
     - terraform init -input=false
     - terraform workspace select $TF_VAR_env || terraform workspace new $TF_VAR_env
     - terraform validate
+  
+.terraformer_airgap:
+  extends:
+    - .terraformer
+  variables: 
+    TF_IN_AUTOMATION: "1"
+    TF_VAR_env: ${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
+  before_script:
+    ## Shorten the env name down to 15 characters
+    - export TF_VAR_env=$(echo "${CI_COMMIT_REF_SLUG}"| cut -c 1-7)-$(echo "${CI_COMMIT_SHA}" | cut -c 1-7)-airgap
+    - cd ${TF_ROOT}
+    - terraform version
+    - terraform init -input=false
+    - terraform workspace select $TF_VAR_env || terraform workspace new $TF_VAR_env
+    - terraform validate
 
 .terraform destroy workspace:
   after_script:

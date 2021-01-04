@@ -11,7 +11,6 @@ workflow:
 
 # include templates
 include:
-  - local: '/.gitlab-ci/airgap.gitlab-ci.yml'
   - local: '/.gitlab-ci/templates.yml'
 
 stages:
@@ -241,6 +240,55 @@ aws/network down:
     action: stop
 #-----------------------------------------------------------------------------------------------------------------------
 
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure: Airgap Networking
+#
+airgap/network up:
+  extends:
+    - .infra fork
+    - .network up
+    - .terraformer_airgap
+  stage: network up
+  environment:
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
+    auto_stop_in: 1 hour
+
+airgap/network down:
+  extends:
+    - .infra cleanup
+    - .network down
+    - .terraformer_airgap
+  stage: network down
+  environment:
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
+    action: stop
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure: Airgap Utility
+
+# Create Utility Instance on AWS
+aws/airgap/utility up:
+  extends:
+    - .infra create
+    - .utility up
+    - .terraformer_airgap
+  stage: airgap up
+  needs:
+    - job: airgap/network up
+
+# Destroy Utility Instance on AWS
+aws/airgap/utility down:
+  extends:
+    - .infra cleanup
+    - .utility down
+    - .terraformer_airgap
+  stage: airgap down
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: RKE2
 #
@@ -317,4 +365,93 @@ aws/rke2/cluster down:
     - .rke2 down
   needs:
     - job: aws/rke2/bigbang down
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure:Airgap  RKE2
+#
+# Create RKE2 cluster on AWS
+airgap/rke2/cluster up:
+  stage: cluster up
+  extends:
+    - .infra create
+    - .rke2 airgap up
+    - .terraformer_airgap
+  needs:
+    - job: airgap/network up
+    - job: aws/airgap/utility up
+
+# Install BigBang on RKE2 cluster on AWS
+airgap/rke2/bigbang up:
+  stage: bigbang up
+  extends:
+    - .infra create
+    - .bigbang
+    - .terraformer_airgap
+  #Temp: Until the utility server is functional. 
+  allow_failure: true 
+  needs:
+    - job: airgap/rke2/cluster up
+      artifacts: true
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+
+    # Deploy a default storage class for aws
+    - kubectl apply -f ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
+  script:
+    - *deploy_bigbang
+
+# Run tests on BigBang on RKE2 cluster on AWS
+
+airgap/rke2/bigbang test:
+  stage: test
+  extends:
+    - .infra create
+    - .bigbang
+    - .terraformer_airgap
+  #Temp: Until the utility server is functional. 
+  allow_failure: true 
+  needs:
+    - job: airgap/rke2/cluster up
+      artifacts: true
+    - job: airgap/rke2/bigbang up
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+  script:
+    ## Move this yum install to the dockerfile for the builder
+    ## putting it here now for a quick way to install dig
+    - yum install bind-utils -y
+    - chmod +x scripts/hosts.sh && ./scripts/hosts.sh
+    - *test_bigbang
+
+# Uninstall BigBang on RKE2 cluster on AWS
+airgap/rke2/bigbang down:
+  stage: bigbang down
+  extends:
+    - .infra cleanup
+    - .bigbang
+    - .terraformer_airgap
+  needs:
+    - job: airgap/rke2/cluster up
+      artifacts: true
+    - job: airgap/rke2/bigbang test
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+  script:
+    - helm un -n bigbang bigbang
+    # TODO: Smarter wait
+    - sleep 180
+
+# Destroy RKE2 cluster on AWS
+airgap/rke2/cluster down:
+  stage: cluster down
+  extends:
+    - .infra cleanup
+    - .rke2 airgap down
+    - .terraformer_airgap
+  needs:
+    - job: airgap/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
