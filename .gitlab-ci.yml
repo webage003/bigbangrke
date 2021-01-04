@@ -9,11 +9,10 @@ workflow:
       when: never
     - when: always
 
+# include templates
 include:
-  - local: '/airgap.gitlab-ci.yml'
-  - project: 'platform-one/big-bang/pipeline-templates/umbrella-templates'
-    file: '/global.gitlab-ci.yml'
-    ref: BB-1003
+  - local: '/.gitlab-ci/airgap.gitlab-ci.yml'
+  - local: '/.gitlab-ci/templates.yml'
 
 stages:
   - smoke tests
@@ -193,14 +192,10 @@ fetch umbrella templates:
     - .fetch
     - .infra create
   stage: .pre
-  variables:
-    GIT_BRANCH: "BB-1003"
 
 # Abstract for job manually triggering infrastructure builds
 .infra fork:
   stage: network up
-  needs:
-    - fetch umbrella templates
   rules:
     # Skip when branch name starts with "hotfix" or "patch"
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
@@ -234,6 +229,7 @@ fetch umbrella templates:
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Networking
 #
+
 aws/network up:
   extends:
     - .infra fork
@@ -255,6 +251,7 @@ aws/network down:
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: RKE2
 #
+
 # Create RKE2 cluster on AWS
 aws/rke2/cluster up:
   stage: cluster up
@@ -262,8 +259,6 @@ aws/rke2/cluster up:
     - .infra create
     - .rke2 up
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: aws/network up
 
 # Install BigBang on RKE2 cluster on AWS
@@ -273,16 +268,13 @@ aws/rke2/bigbang up:
     - .infra create
     - .bigbang
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: aws/rke2/cluster up
       artifacts: true
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
-
     # Deploy a default storage class for aws
-    - kubectl apply -f ${CI_PROJECT_DIR}/umbrella-templates/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
+    - kubectl apply -f ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
   script:
     - *deploy_bigbang
 
@@ -293,8 +285,6 @@ aws/rke2/bigbang test:
     - .infra create
     - .bigbang
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: aws/rke2/cluster up
       artifacts: true
     - job: aws/rke2/bigbang up
@@ -315,8 +305,6 @@ aws/rke2/bigbang down:
     - .infra cleanup
     - .bigbang
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: aws/rke2/cluster up
       artifacts: true
     - job: aws/rke2/bigbang test
@@ -335,7 +323,5 @@ aws/rke2/cluster down:
     - .infra cleanup
     - .rke2 down
   needs:
-    - job: fetch umbrella templates
-      artifacts: true
     - job: aws/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,16 @@
+.utility tf:
+  extends: .terraformer
+  variables:
+    TF_ROOT: "umbrella-templates/jobs/utility/dependencies/terraform/env/ci"
+
+.utility up:
+  extends: .utility tf
+  script:
+    - terraform apply -input=false -auto-approve
+
+.utility down:
+  extends:
+    - .utility tf
+    - .terraform destroy workspace
+  script:
+    - terraform destroy -input=false -auto-approve

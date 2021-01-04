@@ -1,4 +1,9 @@
 .idea/
 certs/
+# Local .terraform directories
+**/.terraform/*
 
+# .tfstate files
+*.tfstate
+*.tfstate.*
 .DS_Store
