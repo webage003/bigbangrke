@@ -3,6 +3,11 @@
   variables:
     TF_ROOT: ".gitlab-ci/jobs/rke2/dependencies/terraform/env/ci"
 
+.rke2 tf airgap:
+  extends: .rke2 tf
+  variables:
+    TF_ROOT: ".gitlab-ci/jobs/rke2/dependencies/terraform/env/ci-airgap"
+
 .rke2 up:
   extends: .rke2 tf
   script:
@@ -23,9 +28,9 @@
       - ${CI_PROJECT_DIR}/default-proxy-istio.yaml
 
 .rke2 airgap up:
-  extends: .rke2 up
-  variables:
-    TF_ROOT: ".gitlab-ci/jobs/rke2/dependencies/terraform/env/ci-airgap"
+  extends: 
+    - .rke2 up
+    - .rke2 tf airgap
 
 .rke2 down:
   extends:
@@ -35,6 +40,6 @@
     - terraform destroy -input=false -auto-approve
 
 .rke2 airgap down:
-  extends: .rke2 down
-  variables:
-    TF_ROOT: ".gitlab-ci/jobs/rke2/dependencies/terraform/env/ci-airgap"
+  extends: 
+    - .rke2 down
+    - .rke2 tf airgap
