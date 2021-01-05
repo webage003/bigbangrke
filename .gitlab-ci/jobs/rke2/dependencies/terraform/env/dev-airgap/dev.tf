@@ -31,7 +31,7 @@ resource "local_file" "pem" {
 module "dev" {
   source = "../../main"
 
-  env                 = "dev"
+  env      = "ismail-dev"
   vpc_id              = data.terraform_remote_state.networking.outputs.vpc_id
   deploy_subnets      = data.terraform_remote_state.networking.outputs.intra_subnets
   public_subnets      = data.terraform_remote_state.networking.outputs.public_subnets
@@ -43,4 +43,5 @@ module "dev" {
 
   registry_username = data.terraform_remote_state.utility.outputs.utility_username
   registry_password = data.terraform_remote_state.utility.outputs.utility_password
+  airgap            = var.airgap
 }

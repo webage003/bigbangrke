@@ -52,4 +52,5 @@ module "ci" {
   deploy_subnets    = data.terraform_remote_state.networking.outputs.private_subnets
   public_subnets    = data.terraform_remote_state.networking.outputs.public_subnets
   pre_userdata      = data.template_file.pre_userdata.rendered
+  airgap            = var.airgap
 }

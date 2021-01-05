@@ -3,3 +3,7 @@ variable "aws_region" {
 }
 
 variable "env" {}
+
+variable "airgap" {
+  default = true
+}

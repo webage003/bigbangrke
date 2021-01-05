@@ -11,7 +11,7 @@ data "terraform_remote_state" "networking" {
 
 module "dev" {
   source = "../../main"
-  env       = "dev"
+  env      = "ismail-dev"
   vpc_id    = data.terraform_remote_state.networking.outputs.vpc_id
   subnet_id = data.terraform_remote_state.networking.outputs.private_subnets[0]
 }

@@ -90,3 +90,7 @@ variable "agent_asg" {
 variable "agent_spot" {
   default = false
 }
+
+variable "airgap" {
+  default = false
+}

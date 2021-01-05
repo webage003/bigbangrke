@@ -7,3 +7,7 @@ certs/
 *.tfstate
 *.tfstate.*
 .DS_Store
+
+# RKE2 terraform specific files to ignore
+*.pem
+*rke2.yaml

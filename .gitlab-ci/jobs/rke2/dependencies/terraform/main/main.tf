@@ -36,7 +36,45 @@ module "rke2" {
 EOF
 
   # TODO: These need to be set in pre-baked ami's
-  pre_userdata = var.pre_userdata
+  pre_userdata = var.airgap == false ? var.pre_userdata : <<-EOF
+# Temporarily disable selinux enforcing due to missing policies in containerd
+# The change is currently being upstreamed and can be tracked here: https://github.com/rancher/k3s/issues/2240
+setenforce 0
+
+# Tune vm sysctl for elasticsearch
+sysctl -w vm.max_map_count=262144
+
+# Configure nodes to use proxy in most contexts
+cat << EOP | tee -a /etc/environment /etc/profile /etc/sysconfig/rke2-* > /dev/null
+
+http_proxy=http://proxy.dsop.io:8888
+https_proxy=http://proxy.dsop.io:8888
+HTTP_PROXY=http://proxy.dsop.io:8888
+HTTPS_PROXY=http://proxy.dsop.io:8888
+no_proxy=${data.aws_vpc.selected.cidr_block},10.42.0.0/16,10.43.0.0/16,localhost,127.0.0.1,169.254.169.254,.internal
+NO_PROXY=${data.aws_vpc.selected.cidr_block},10.42.0.0/16,10.43.0.0/16,localhost,127.0.0.1,169.254.169.254,.internal
+EOP
+
+# Configure RKE2 with the repo1 registry
+cat << EOR > /etc/rancher/rke2/registries.yaml
+mirrors:
+  registry.dsop.io:
+    endpoint:
+      - "http://registry.dsop.io:5000"
+  registry1.dsop.io:
+    endpoint:
+      - "http://registry.dsop.io:5000"
+configs:
+  "registry.dsop.io":
+    auth:
+      username: ${var.registry_username}
+      password: ${var.registry_password}
+  "registry1.dsop.io":
+    auth:
+      username: ${var.registry_username}
+      password: ${var.registry_password}
+EOR
+EOF
 
   tags = merge({}, local.tags, var.tags)
 }
@@ -65,7 +103,45 @@ module "generic_agents" {
 EOF
 
   # TODO: These need to be set in pre-baked ami's
-  pre_userdata = var.pre_userdata
+  pre_userdata = var.airgap == false ? var.pre_userdata : <<-EOF
+# Temporarily disable selinux enforcing due to missing policies in containerd
+# The change is currently being upstreamed and can be tracked here: https://github.com/rancher/k3s/issues/2240
+setenforce 0
+
+# Tune vm sysct for elasticsearch
+sysctl -w vm.max_map_count=262144
+
+# Configure nodes to use proxy in most contexts
+cat << EOP | tee -a /etc/environment /etc/profile /etc/sysconfig/rke2-* > /dev/null
+
+http_proxy=http://proxy.dsop.io:8888
+https_proxy=http://proxy.dsop.io:8888
+HTTP_PROXY=http://proxy.dsop.io:8888
+HTTPS_PROXY=http://proxy.dsop.io:8888
+no_proxy=${data.aws_vpc.selected.cidr_block},10.42.0.0/16,10.43.0.0/16,localhost,127.0.0.1,169.254.169.254,.internal
+NO_PROXY=${data.aws_vpc.selected.cidr_block},10.42.0.0/16,10.43.0.0/16,localhost,127.0.0.1,169.254.169.254,.internal
+EOP
+
+# Configure RKE2 with the repo1 registry
+cat << EOR > /etc/rancher/rke2/registries.yaml
+mirrors:
+  registry.dsop.io:
+    endpoint:
+      - "http://registry.dsop.io:5000"
+  registry1.dsop.io:
+    endpoint:
+      - "http://registry.dsop.io:5000"
+configs:
+  "registry.dsop.io":
+    auth:
+      username: ${var.registry_username}
+      password: ${var.registry_password}
+  "registry1.dsop.io":
+    auth:
+      username: ${var.registry_username}
+      password: ${var.registry_password}
+EOR
+EOF
 
   # Required data for identifying cluster to join
   cluster_data = module.rke2.cluster_data
