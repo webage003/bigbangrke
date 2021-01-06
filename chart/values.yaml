@@ -129,7 +129,7 @@ monitoring:
     # specified with the defaults.   The secret named in the "idc_clinet_secret" value must be created in the
     # monitoring namespace with keyvalues "CLIENT_ID" and "CLIENT_SECRET".
     enabled: true
-    idc_client_secret: oathinfo
+    idc_client_secret: ssosecrets
     auth_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/auth
     token_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/token
     api_url: https://login.dsop.io/auth/realms/baby-yoda/protocol/openid-connect/userinfo
