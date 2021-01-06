@@ -15,4 +15,17 @@ type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
 {{- end }}
+
+{{- if and (ne .Values.monitoring.sso.enabled }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ssosecrets
+  namespace: monitoring
+type: Opaque
+data:
+  CLIENT_ID: {{ .Values.monitoring.sso.clientid }}
+  CLIENT_SECRET: {{ .Values.monitoring.sso.clientsecret }}
+  {{- end }}
 {{- end }}
