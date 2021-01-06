@@ -25,9 +25,7 @@ metadata:
   namespace: monitoring
 type: Opaque
 data:
-  CLIENT_ID: abc
-  CLIENT_SECRET: cdf
-#  CLIENT_ID: { .Values.monitoring.sso.clientid }}
-#  CLIENT_SECRET: {{ .Values.monitoring.sso.clientsecret }}
+  CLIENT_ID: { .Values.monitoring.sso.clientid }}
+  CLIENT_SECRET: {{ .Values.monitoring.sso.clientsecret }}
   {{- end }}
 {{- end }}
