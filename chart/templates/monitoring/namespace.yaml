@@ -25,7 +25,7 @@ metadata:
   namespace: monitoring
 type: Opaque
 data:
-  CLIENT_ID: { .Values.monitoring.sso.clientid }}
+  CLIENT_ID: {{ .Values.monitoring.sso.clientid }}
   CLIENT_SECRET: {{ .Values.monitoring.sso.clientsecret }}
 {{- end }}
 {{- end }}
