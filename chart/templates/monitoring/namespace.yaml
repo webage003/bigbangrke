@@ -16,7 +16,7 @@ data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
 {{- end }}
 
-{{- if and (ne .Values.monitoring.sso.enabled }}
+{{- if .Values.monitoring.sso.enabled }}
 ---
 apiVersion: v1
 kind: Secret
