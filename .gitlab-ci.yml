@@ -74,10 +74,10 @@ pre vars:
     - kubectl get helmrelease -A
 
 .deploy_bigbang: &deploy_bigbang
-  - find ./scripts/deploy -type f -name '*.sh' | sort | xargs -r -I {} sh -c 'echo {} && sh {}'
+  - find ./scripts/deploy -type f -name '*.sh' | sort | xargs -r -I {} sh -c 'echo {} && {}'
 
 .test_bigbang: &test_bigbang
-  - find ./tests -type f -name '*.sh' | sort | xargs -r -I {} sh -c 'echo {} && sh {}'
+  - find ./tests -type f -name '*.sh' | sort | xargs -r -I {} sh -c 'echo {} && {}'
 
 clean install:
   stage: smoke tests
