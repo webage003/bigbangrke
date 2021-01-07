@@ -386,8 +386,8 @@ airgap/rke2/bigbang up:
   stage: bigbang up
   extends:
     - .infra create
-    - .bigbang
     - .terraformer_airgap
+    - .bigbang
   #Temp: Until the utility server is functional. 
   allow_failure: true 
   needs:
@@ -408,8 +408,8 @@ airgap/rke2/bigbang test:
   stage: test
   extends:
     - .infra create
-    - .bigbang
     - .terraformer_airgap
+    - .bigbang
   #Temp: Until the utility server is functional. 
   allow_failure: true 
   needs:
@@ -431,8 +431,8 @@ airgap/rke2/bigbang down:
   stage: bigbang down
   extends:
     - .infra cleanup
-    - .bigbang
     - .terraformer_airgap
+    - .bigbang
   needs:
     - job: airgap/rke2/cluster up
       artifacts: true
