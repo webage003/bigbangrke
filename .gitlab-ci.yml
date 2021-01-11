@@ -84,6 +84,10 @@ clean install:
   stage: smoke tests
   extends:
     - .k3d
+  tags:
+    - bigbang
+    - dogfood
+    - privileged
   rules:
     # Skip on merge requests (it is ran as part of the non MR pipeline)
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
