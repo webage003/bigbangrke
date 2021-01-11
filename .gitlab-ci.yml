@@ -125,7 +125,6 @@ clean install:
   script:
     - *deploy_bigbang
     - *test_bigbang
-    - docker exec -i k3d-${CLUSTER_NAME}-server-0 crictl images -o json | jq -r '.images[].repoTags[0] | select(. != null)' > images.txt
   artifacts:
     paths:
       - images.txt
@@ -153,6 +152,10 @@ upgrade:
     - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
     - *deploy_bigbang
     - *test_bigbang
+  artifacts:
+    paths:
+      - images.txt
+    expire_in: 7 days
 
 package:
   stage: package
@@ -221,6 +224,18 @@ release:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       allow_failure: true
       when: always
+
+
+# Abstract for jobs responsible for cleaning up infrastructure
+.airgap:
+  rules:
+    # Skip when branch name starts with "hotfix" or "patch"
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(airgap)/'
+      when: always
+    # Always run on merge requests
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      allow_failure: true
+      when: always
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -251,6 +266,7 @@ aws/network down:
 #
 airgap/network up:
   extends:
+    - .airgap
     - .infra fork
     - .network up
     - .terraformer_airgap
@@ -261,6 +277,7 @@ airgap/network up:
 
 airgap/network down:
   extends:
+    - .airgap
     - .infra cleanup
     - .network down
     - .terraformer_airgap
@@ -277,6 +294,7 @@ airgap/network down:
 aws/airgap/package:
   extends:
     - .package
+    - .airgap
   variables:
     PKG_S3_BUCKET: umbrella-bigbang-airgap
     PKG_PATH: '$CI_COMMIT_SHORT_SHA'
@@ -288,6 +306,7 @@ aws/airgap/utility up:
     - .infra create
     - .utility up
     - .terraformer_airgap
+    - .airgap
   stage: airgap up
   needs:
     - job: airgap/network up
@@ -299,6 +318,7 @@ aws/airgap/utility down:
     - .infra cleanup
     - .utility down
     - .terraformer_airgap
+    - .airgap
   stage: airgap down
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -392,6 +412,7 @@ airgap/rke2/cluster up:
     - .infra create
     - .rke2 airgap up
     - .terraformer_airgap
+    - .airgap
   needs:
     - job: airgap/network up
     - job: aws/airgap/utility up
@@ -403,6 +424,7 @@ airgap/rke2/bigbang up:
     - .infra create
     - .bigbang
     - .terraformer_airgap
+    - .airgap
   #Temp: Until the utility server is functional. 
   allow_failure: true 
   needs:
@@ -425,6 +447,7 @@ airgap/rke2/bigbang test:
     - .infra create
     - .bigbang
     - .terraformer_airgap
+    - .airgap
   #Temp: Until the utility server is functional. 
   allow_failure: true 
   needs:
@@ -448,6 +471,7 @@ airgap/rke2/bigbang down:
     - .infra cleanup
     - .bigbang
     - .terraformer_airgap
+    - .airgap
   needs:
     - job: airgap/rke2/cluster up
       artifacts: true
@@ -467,6 +491,7 @@ airgap/rke2/cluster down:
     - .infra cleanup
     - .rke2 airgap down
     - .terraformer_airgap
+    - .airgap
   needs:
     - job: airgap/rke2/bigbang down
 #-----------------------------------------------------------------------------------------------------------------------
