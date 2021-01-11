@@ -280,7 +280,7 @@ aws/airgap/package:
   variables:
     PKG_S3_BUCKET: umbrella-bigbang-airgap
     PKG_PATH: '$CI_COMMIT_SHORT_SHA'
-  stage: airgap up
+  stage: network up
 
 # Create Utility Instance on AWS
 aws/airgap/utility up:
