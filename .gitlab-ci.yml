@@ -266,10 +266,10 @@ aws/network down:
 #
 airgap/network up:
   extends:
-    - .airgap
     - .infra fork
     - .network up
     - .terraformer_airgap
+    - .airgap
   stage: network up
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
@@ -277,10 +277,10 @@ airgap/network up:
 
 airgap/network down:
   extends:
-    - .airgap
     - .infra cleanup
     - .network down
     - .terraformer_airgap
+    - .airgap
   stage: network down
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
