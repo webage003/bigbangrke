@@ -81,7 +81,36 @@ pre vars:
 
 .test_bigbang: &test_bigbang
   - for test in ./tests/bash/*.sh; do chmod +x $test && $test; done 
+.package:
+  image: registry.dsop.io/platform-one/big-bang/umbrella/synker:0.0.1
+  before_script:
+    # Set up auth
+    - mkdir -p /root/.docker
+    - echo $DOCKER_AUTH_CONFIG > /root/.docker/config.json
+  script:
+    - cp ./scripts/package/synker.yaml ./synker.yaml
 
+    # Populate images list in synker config
+    # NOTE: This is stupid and hacky, use yq or something better to do this
+    - cat images.txt | sed -e 's/^/    - /' >> synker.yaml
+
+    - synker pull -b=1
+
+    # Tar up synker as well?
+    - cp /usr/local/bin/synker synker.yaml /var/lib/registry/
+    - tar -C /var/lib/registry -czvf $IMAGE_PKG .
+    - tar -czvf $IMAGE_PKG /var/lib/registry
+
+    # Package dependent repos
+    - ./scripts/package/gits.sh
+    - tar -czf $REPOS_PKG repos/
+
+    # Prep release
+    - mkdir -p release
+    - mv $IMAGE_LIST $IMAGE_PKG $REPOS_PKG release/
+
+    # Publish packages to s3 release
+    - aws s3 sync --quiet release/ s3://${PKG_S3_BUCKET}/umbrella/${PKG_PATH}
 clean install:
   stage: smoke tests
   extends:
@@ -127,40 +156,16 @@ upgrade:
 
 package:
   stage: package
-  image: registry.dsop.io/platform-one/big-bang/umbrella/synker:0.0.1
+  extends:
+    - .package
+  variables:
+    PKG_S3_BUCKET: umbrella-bigbang-releases
+    PKG_PATH: '$CI_COMMIT_TAG'
   rules:
     - if: '$CI_COMMIT_TAG'
     - when: never
   dependencies:
     - clean install
-  before_script:
-    # Set up auth
-    - mkdir -p /root/.docker
-    - echo $DOCKER_AUTH_CONFIG > /root/.docker/config.json
-  script:
-    - cp ./scripts/package/synker.yaml ./synker.yaml
-
-    # Populate images list in synker config
-    # NOTE: This is stupid and hacky, use yq or something better to do this
-    - cat images.txt | sed -e 's/^/    - /' >> synker.yaml
-
-    - synker pull -b=1
-
-    # Tar up synker as well?
-    - cp /usr/local/bin/synker synker.yaml /var/lib/registry/
-    - tar -C /var/lib/registry -czvf $IMAGE_PKG .
-    - tar -czvf $IMAGE_PKG /var/lib/registry
-
-    # Package dependent repos
-    - ./scripts/package/gits.sh
-    - tar -czf $REPOS_PKG repos/
-
-    # Prep release
-    - mkdir -p release
-    - mv $IMAGE_LIST $IMAGE_PKG $REPOS_PKG release/
-
-    # Publish packages to s3 release
-    - aws s3 sync --quiet release/ s3://umbrella-bigbang-releases/umbrella/${CI_COMMIT_TAG}
   after_script: []
 
 release:
@@ -268,6 +273,15 @@ airgap/network down:
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Airgap Utility
 
+# Create Utility Pkgs
+aws/airgap/package:
+  extends:
+    - .package
+  variables:
+    PKG_S3_BUCKET: umbrella-bigbang-airgap
+    PKG_PATH: '$CI_COMMIT_SHORT_SHA'
+  stage: airgap up
+
 # Create Utility Instance on AWS
 aws/airgap/utility up:
   extends:
@@ -277,6 +291,7 @@ aws/airgap/utility up:
   stage: airgap up
   needs:
     - job: airgap/network up
+    - job: aws/airgap/package
 
 # Destroy Utility Instance on AWS
 aws/airgap/utility down:
