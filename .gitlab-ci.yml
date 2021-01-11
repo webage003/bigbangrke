@@ -95,6 +95,13 @@ clean install:
     - when: always
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
+  services:
+    - name: registry.gitlab.com/gitlab-org/cluster-integration/test-utils/k3s-gitlab-ci/releases/v1.19.3-k3s1:latest
+      alias: k3s
+  before_script:
+    - curl -f k3s:8081?service=k3s > ~/.kube/config
+    - kubectl version
+    - kubectl cluster-info
   script:
     - *deploy_bigbang
     - *test_bigbang
