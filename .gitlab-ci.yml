@@ -293,6 +293,7 @@ airgap/network down:
 # Create Utility Pkgs
 aws/airgap/package:
   extends:
+    - .infra fork
     - .package
     - .airgap
   variables:
