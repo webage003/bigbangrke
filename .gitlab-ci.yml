@@ -276,6 +276,7 @@ airgap/network down:
 # Create Utility Pkgs
 aws/airgap/package:
   extends:
+    - .infra fork
     - .package
   variables:
     PKG_S3_BUCKET: umbrella-bigbang-airgap
