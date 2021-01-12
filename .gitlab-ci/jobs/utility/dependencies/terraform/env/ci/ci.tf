@@ -25,4 +25,6 @@ module "ci" {
   env       = "ci"
   vpc_id    = data.terraform_remote_state.networking.outputs.vpc_id
   subnet_id = data.terraform_remote_state.networking.outputs.private_subnets[0]
+  pkg_s3_bucket = var.pkg_s3_bucket
+  pkg_path = var.pkg_path
 }

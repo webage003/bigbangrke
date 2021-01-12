@@ -1,24 +1,12 @@
 #!/bin/bash
-sudo apt install -y apache2-utils
+sudo apt-get update
+sudo apt install -y apache2-utils awscli
 mkdir -p data/registry data/repository/git/umbrella.git data/proxy auth
 
 #Hash registry credentials
 htpasswd -Bbn ${utility_username} ${utility_password} > $(pwd)/auth/htpasswd 
 chmod 644 $(pwd)/auth/htpasswd
 
-# Run docker registry
-
-docker run -d \
-    -p 5000:5000 \
-    --restart=always \
-    --name registry \
-    -v "$(pwd)"/auth:/auth \
-    -v "$(pwd)"/data/registry:/data \
-    -e "REGISTRY_AUTH=htpasswd" \
-    -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
-    -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd \
-    -e REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/data \
-    registry:2
 
 cat << 'EOF' > "$(pwd)"/data/repository/default.conf
 server {
@@ -37,8 +25,6 @@ server {
 
     location ~ (/.*) {
         client_max_body_size 0;
-        auth_basic "Git Login";
-        auth_basic_user_file "/auth/htpasswd";
         include /etc/nginx/fastcgi_params;
         fastcgi_param SCRIPT_FILENAME /usr/libexec/git-core/git-http-backend;
         fastcgi_param GIT_HTTP_EXPORT_ALL "";
@@ -73,13 +59,6 @@ docker run \
     simplegit:latest \
     -- sh -c "cd /data/umbrella.git && chown -R nginx:nginx . && chmod -R 755 . && git init . && git update-server-info"
 
-docker run -d \
-    -p 5005:80 \
-    --restart always \
-    --name repository \
-    -v "$(pwd)"/auth:/auth \
-    -v "$(pwd)"/data/repository/git:/data \
-    simplegit:latest
 
 cat << 'EOF' > "$(pwd)"/data/proxy/tinyproxy.conf
 User root
@@ -123,3 +102,56 @@ docker run -d \
     --restart always \
     --name simpleproxy \
     simpleproxy:latest
+
+
+# Load Registry and  Git
+
+sudo su
+export AWS_DEFAULT_REGION=${aws_region}
+
+#configure docker registry
+aws s3 cp s3://${pkg_s3_bucket}/${pkg_path}/images.tar.gz . --quiet
+mkdir -p images
+tar -xf images.tar.gz -C images/
+chmod +x images/var/lib/registry
+mkdir -p /data/registry/docker/
+mv images/var/lib/registry/docker/registry/  /data/registry/docker/
+
+# Run docker registry
+
+docker run -d \
+    -p 5000:5000 \
+    --restart=always \
+    --name registry \
+    -v "$(pwd)"/auth:/auth \
+    -v "$(pwd)"/data/registry:/data \
+    -e "REGISTRY_AUTH=htpasswd" \
+    -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
+    -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd \
+    -e REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/data \
+    registry:2
+
+
+#configure Git Server
+aws s3 cp s3://${pkg_s3_bucket}/${pkg_path}/umbrella.tar.gz .
+aws s3 cp s3://${pkg_s3_bucket}/${pkg_path}/repositories.tar.gz . --quiet
+tar -xf repositories.tar.gz
+tar -xf umbrella.tar.gz
+rm -rf /data/repository/git/
+mv umbrella repos/
+for dir in repos/*    
+do
+    cd $dir
+    REPO_URL=$(echo $(git remote get-url origin --push))
+    REPO_PATH=$(echo $REPO_URL | cut -d/ -f2- | cut -d/ -f3-)
+    mkdir -p /data/repository/git/$REPO_PATH
+    cp -r .git /data/repository/git/$REPO_PATH/
+    cd ../../
+done
+
+docker run -d \
+    -p 80:80 \
+    --restart always \
+    --name repository \
+    -v "$(pwd)"/data/repository/git:/data \
+    simplegit:latest

@@ -2,6 +2,9 @@
   extends: .terraformer
   variables:
     TF_ROOT: ".gitlab-ci/jobs/utility/dependencies/terraform/env/ci"
+    TF_VAR_pkg_s3_bucket: "umbrella-bigbang-airgap"
+    TF_VAR_pkg_path: "umbrella/$CI_COMMIT_SHORT_SHA"
+    
 
 .utility up:
   extends: .utility tf

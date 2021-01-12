@@ -11,7 +11,9 @@ data "terraform_remote_state" "networking" {
 
 module "dev" {
   source = "../../main"
-  env      = "ismail-dev"
+  env      = "tunde-dev"
   vpc_id    = data.terraform_remote_state.networking.outputs.vpc_id
   subnet_id = data.terraform_remote_state.networking.outputs.private_subnets[0]
+  pkg_s3_bucket = "umbrella-bigbang-airgap"
+  pkg_path = "umbrella/BB-1073"
 }

@@ -35,9 +35,25 @@ resource "aws_route53_record" "registry" {
   records = [aws_instance.utility.private_ip]
 }
 
+resource "aws_route53_record" "registry1" {
+  zone_id = aws_route53_zone.dsop.zone_id
+  name    = "registry1.dsop.io"
+  type    = "A"
+  ttl     = "300"
+  records = [aws_instance.utility.private_ip]
+}
+
 resource "aws_route53_record" "repository" {
   zone_id = aws_route53_zone.dsop.zone_id
   name    = "repository.dsop.io"
+  type    = "A"
+  ttl     = "300"
+  records = [aws_instance.utility.private_ip]
+}
+
+resource "aws_route53_record" "repo1" {
+  zone_id = aws_route53_zone.dsop.zone_id
+  name    = "repo1.dsop.io"
   type    = "A"
   ttl     = "300"
   records = [aws_instance.utility.private_ip]
@@ -67,6 +83,9 @@ data "template_file" "init" {
   vars = {
     utility_username = local.utility_username
     utility_password = local.utility_password
+    pkg_s3_bucket    = var.pkg_s3_bucket
+    pkg_path         = var.pkg_path
+    aws_region       = var.aws_region
   }
 }
 
@@ -164,6 +183,7 @@ resource "aws_instance" "utility" {
   subnet_id       = var.subnet_id
   vpc_security_group_ids = [aws_security_group.allow_utility.id, aws_security_group.allow_repository.id, aws_security_group.allow_proxy.id]
   user_data       = data.template_file.init.rendered
+  iam_instance_profile = aws_iam_instance_profile.utility.name
   tags = {
     Name  = local.name,
     Owner = basename(data.aws_caller_identity.current.arn),
