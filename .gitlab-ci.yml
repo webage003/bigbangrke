@@ -191,10 +191,10 @@ aws/rke2/cluster up:
   extends:
     - .infra create
     - .rke2 up
-  dependencies:
-    - clean install
-    - upgrade
-    - aws/network up
+  needs:
+    - job: clean install
+    - job: upgrade
+    - job: aws/network up
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
@@ -204,11 +204,12 @@ aws/rke2/bigbang up:
   extends:
     - .infra create
     - .bigbang
-  dependencies:
-    - clean install
-    - upgrade
-    - aws/network up
-    - aws/rke2/cluster up
+  needs:
+    - job: clean install
+    - job: upgrade
+    - job: aws/network up
+    - job: aws/rke2/cluster up
+      artifacts: true
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
@@ -225,12 +226,13 @@ aws/rke2/bigbang test:
   extends:
     - .infra create
     - .bigbang
-  dependencies:
-    - clean install
-    - upgrade
-    - aws/network up
-    - aws/rke2/cluster up
-    - aws/rke2/bigbang up
+  needs:
+    - job: clean install
+    - job: upgrade
+    - job: aws/network up
+    - job: aws/rke2/cluster up
+      artifacts: true
+    - job: aws/rke2/bigbang up
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
@@ -249,11 +251,13 @@ aws/rke2/bigbang down:
   extends:
     - .infra cleanup
     - .bigbang
-  dependencies:
-    - aws/network up
-    - aws/rke2/cluster up
-    - aws/rke2/bigbang up
-    - aws/rke2/bigbang test
+  needs:
+    - job: clean install
+    - job: upgrade
+    - job: aws/rke2/network up
+    - job: aws/rke2/cluster up
+      artifacts: true
+    - job: aws/rke2/bigbang up
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
@@ -270,12 +274,12 @@ aws/rke2/cluster down:
   extends:
     - .infra cleanup
     - .rke2 down
-  dependencies:
-    - aws/network up
-    - aws/rke2/cluster up
-    - aws/rke2/bigbang up
-    - aws/rke2/bigbang test
-    - aws/rke2/bigbang down
+  needs:
+    - job: clean install
+    - job: upgrade
+    - job: aws/rke2/network up
+    - job: aws/rke2/cluster up
+      artifacts: true
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
