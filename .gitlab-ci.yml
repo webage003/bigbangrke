@@ -10,6 +10,9 @@ workflow:
     # skip pipeline for branches that start with "docs"
     - if: '$CI_COMMIT_REF_NAME =~ /^docs/'
       when: never
+    # skip job when branch name starts with "hotfix" or "patch"
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
+      when: never
 
 # include templates
 include:
@@ -134,9 +137,6 @@ upgrade:
 .infra fork:
   stage: network up
   rules:
-    # skip job when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
     # run job on merge requests when manually activated
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: manual
@@ -144,18 +144,13 @@ upgrade:
 # Abstract for jobs responsible for creating infrastructure
 .infra create:
   rules:
-    # skip job when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
     # run pipeline on commits to default branch
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     
 # Abstract for jobs responsible for cleaning up infrastructure
 .infra cleanup:
+  needs: ['clean install', 'upgrade']
   rules:
-    # skip job when branch name starts with "hotfix" or "patch"
-    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
-      when: never
     # run job on merge requests regardless of failure
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
@@ -170,9 +165,6 @@ aws/network up:
   extends:
     - .infra fork
     - .network up
-  dependencies:
-    - clean install
-    - upgrade
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     auto_stop_in: 1 hour
@@ -182,9 +174,6 @@ aws/network down:
   extends:
     - .infra cleanup
     - .network down
-  dependencies:
-    - clean install
-    - upgrade
   stage: network down
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
@@ -261,8 +250,6 @@ aws/rke2/bigbang down:
     - .infra cleanup
     - .bigbang
   dependencies:
-    - clean install
-    - upgrade
     - aws/network up
     - aws/rke2/cluster up
     - aws/rke2/bigbang up
@@ -284,8 +271,6 @@ aws/rke2/cluster down:
     - .infra cleanup
     - .rke2 down
   dependencies:
-    - clean install
-    - upgrade
     - aws/network up
     - aws/rke2/cluster up
     - aws/rke2/bigbang up
