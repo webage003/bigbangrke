@@ -133,7 +133,6 @@ upgrade:
 # Abstract for job manually triggering infrastructure builds
 .infra fork:
   stage: network up
-  allow_failure: false
   rules:
     # skip job when branch name starts with "hotfix" or "patch"
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
@@ -198,8 +197,8 @@ aws/rke2/cluster up:
   extends:
     - .infra create
     - .rke2 up
-  needs:
-    - job: aws/network up
+  dependencies:
+    - aws/network up
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
@@ -209,9 +208,9 @@ aws/rke2/bigbang up:
   extends:
     - .infra create
     - .bigbang
-  needs:
-    - job: aws/rke2/cluster up
-      artifacts: true
+  dependencies:
+    - aws/network up
+    - aws/rke2/cluster up
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
@@ -228,10 +227,10 @@ aws/rke2/bigbang test:
   extends:
     - .infra create
     - .bigbang
-  needs:
-    - job: aws/rke2/cluster up
-      artifacts: true
-    - job: aws/rke2/bigbang up
+  dependencies:
+    - aws/network up
+    - aws/rke2/cluster up
+    - aws/rke2/bigbang up
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
@@ -250,10 +249,11 @@ aws/rke2/bigbang down:
   extends:
     - .infra cleanup
     - .bigbang
-  needs:
-    - job: aws/rke2/cluster up
-      artifacts: true
-    - job: aws/rke2/bigbang test
+  dependencies:
+    - aws/network up
+    - aws/rke2/cluster up
+    - aws/rke2/bigbang up
+    - aws/rke2/bigbang test
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
@@ -270,8 +270,12 @@ aws/rke2/cluster down:
   extends:
     - .infra cleanup
     - .rke2 down
-  needs:
-    - job: aws/rke2/bigbang down
+  dependencies:
+    - aws/network up
+    - aws/rke2/cluster up
+    - aws/rke2/bigbang up
+    - aws/rke2/bigbang test
+    - aws/rke2/bigbang down
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
