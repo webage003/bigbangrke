@@ -133,6 +133,7 @@ upgrade:
 # Abstract for job manually triggering infrastructure builds
 .infra fork:
   stage: network up
+  allow_failure: false
   rules:
     # skip job when branch name starts with "hotfix" or "patch"
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
