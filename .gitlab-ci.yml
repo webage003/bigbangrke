@@ -149,7 +149,6 @@ upgrade:
     
 # Abstract for jobs responsible for cleaning up infrastructure
 .infra cleanup:
-  needs: ['clean install', 'upgrade']
   rules:
     # run job on merge requests regardless of failure
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -192,8 +191,6 @@ aws/rke2/cluster up:
     - .infra create
     - .rke2 up
   needs:
-    - job: clean install
-    - job: upgrade
     - job: aws/network up
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
@@ -205,9 +202,6 @@ aws/rke2/bigbang up:
     - .infra create
     - .bigbang
   needs:
-    - job: clean install
-    - job: upgrade
-    - job: aws/network up
     - job: aws/rke2/cluster up
       artifacts: true
   before_script:
@@ -227,12 +221,8 @@ aws/rke2/bigbang test:
     - .infra create
     - .bigbang
   needs:
-    - job: clean install
-    - job: upgrade
-    - job: aws/network up
     - job: aws/rke2/cluster up
       artifacts: true
-    - job: aws/rke2/bigbang up
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
@@ -252,12 +242,8 @@ aws/rke2/bigbang down:
     - .infra cleanup
     - .bigbang
   needs:
-    - job: clean install
-    - job: upgrade
-    - job: aws/rke2/network up
     - job: aws/rke2/cluster up
       artifacts: true
-    - job: aws/rke2/bigbang up
   before_script:
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
@@ -275,9 +261,6 @@ aws/rke2/cluster down:
     - .infra cleanup
     - .rke2 down
   needs:
-    - job: clean install
-    - job: upgrade
-    - job: aws/rke2/network up
     - job: aws/rke2/cluster up
       artifacts: true
   environment:
