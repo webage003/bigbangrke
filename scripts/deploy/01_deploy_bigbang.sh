@@ -10,7 +10,7 @@ flux check --pre
 kubectl create ns flux-system || true
 
 kubectl create secret docker-registry ironbank -n flux-system \
-   --docker-server=registry1.dsop.io \
+   --docker-server=registry1.dso.mil \
    --docker-username='robot$bigbang' \
    --docker-password=${REGISTRY1_PASSWORD} \
    --docker-email=bigbang@bigbang.dev || true
