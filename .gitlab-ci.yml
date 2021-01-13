@@ -140,7 +140,6 @@ upgrade:
       when: never
     # run job on merge requests when manually activated
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      allow_failure: false
       when: manual
 
 # Abstract for jobs responsible for creating infrastructure
@@ -160,7 +159,6 @@ upgrade:
       when: never
     # run job on merge requests regardless of failure
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      allow_failure: true
       when: always
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -184,6 +182,9 @@ aws/network down:
   extends:
     - .infra cleanup
     - .network down
+  dependencies:
+    - clean install
+    - upgrade
   stage: network down
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
@@ -202,6 +203,8 @@ aws/rke2/cluster up:
     - .infra create
     - .rke2 up
   dependencies:
+    - clean install
+    - upgrade
     - aws/network up
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
@@ -213,6 +216,8 @@ aws/rke2/bigbang up:
     - .infra create
     - .bigbang
   dependencies:
+    - clean install
+    - upgrade
     - aws/network up
     - aws/rke2/cluster up
   before_script:
@@ -232,6 +237,8 @@ aws/rke2/bigbang test:
     - .infra create
     - .bigbang
   dependencies:
+    - clean install
+    - upgrade
     - aws/network up
     - aws/rke2/cluster up
     - aws/rke2/bigbang up
@@ -254,6 +261,8 @@ aws/rke2/bigbang down:
     - .infra cleanup
     - .bigbang
   dependencies:
+    - clean install
+    - upgrade
     - aws/network up
     - aws/rke2/cluster up
     - aws/rke2/bigbang up
@@ -275,6 +284,8 @@ aws/rke2/cluster down:
     - .infra cleanup
     - .rke2 down
   dependencies:
+    - clean install
+    - upgrade
     - aws/network up
     - aws/rke2/cluster up
     - aws/rke2/bigbang up
