@@ -122,7 +122,8 @@ monitoring:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
-    tag: "11.0.0-bb.3"
+#    tag: "11.0.0-bb.3"
+    branch: "jaic"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
