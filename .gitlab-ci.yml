@@ -133,73 +133,32 @@ upgrade:
 # Infrastructure: Management Jobs
 #
 
-# Abstract for job manually triggering infrastructure builds
-.infra fork:
-  stage: network up
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure
+#
+
+aws/network up:
+  extends:
+    - .network up
   rules:
     # run job on merge requests when manually activated
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: manual
 
-# Abstract for jobs responsible for creating infrastructure
-.infra create:
-  rules:
-    # run pipeline on commits to default branch
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    
-# Abstract for jobs responsible for cleaning up infrastructure
-.infra cleanup:
-  rules:
-    # run job on merge requests regardless of failure
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Infrastructure: Networking
-#
-
-aws/network up:
-  extends:
-    - .infra fork
-    - .network up
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
-    auto_stop_in: 1 hour
-  allow_failure: false
-
-aws/network down:
-  extends:
-    - .infra cleanup
-    - .network down
-  stage: network down
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
-    action: stop
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Infrastructure: RKE2
-#
-
 # Create RKE2 cluster on AWS
 aws/rke2/cluster up:
   stage: cluster up
   extends:
-    - .infra create
     - .rke2 up
   needs:
     - job: aws/network up
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
 # Install BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang up:
   stage: bigbang up
   extends:
-    - .infra create
     - .bigbang
   needs:
     - job: aws/rke2/cluster up
@@ -211,14 +170,11 @@ aws/rke2/bigbang up:
     - kubectl apply -f ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
   script:
     - *deploy_bigbang
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
 # Run tests on BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang test:
   stage: test
   extends:
-    - .infra create
     - .bigbang
   needs:
     - job: aws/rke2/cluster up
@@ -232,15 +188,16 @@ aws/rke2/bigbang test:
     - yum install bind-utils -y
     - ./scripts/hosts.sh
     - *test_bigbang
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
 # Uninstall BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang down:
   stage: bigbang down
   extends:
-    - .infra cleanup
     - .bigbang
+  rules:
+    # run job on merge requests regardless of failure
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
   needs:
     - job: aws/rke2/cluster up
       artifacts: true
@@ -251,20 +208,31 @@ aws/rke2/bigbang down:
     - helm un -n bigbang bigbang
     # TODO: Smarter wait
     - sleep 180
-  environment:
-    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
 
 # Destroy RKE2 cluster on AWS
 aws/rke2/cluster down:
   stage: cluster down
   extends:
-    - .infra cleanup
     - .rke2 down
+  rules:
+    # run job on merge requests regardless of failure
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
   needs:
     - job: aws/rke2/cluster up
       artifacts: true
+
+aws/network down:
+  stage: network down
+  extends:
+    - .network down
+  rules:
+    # run job on merge requests regardless of failure
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
+    action: stop
 
 #-----------------------------------------------------------------------------------------------------------------------
 
