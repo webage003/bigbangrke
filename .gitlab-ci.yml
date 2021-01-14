@@ -140,6 +140,7 @@ upgrade:
 #
 
 aws/network up:
+  stage: network up
   extends:
     - .network up
   rules:
