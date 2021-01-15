@@ -11,8 +11,8 @@ kubectl create ns flux-system || true
 
 kubectl create secret docker-registry ironbank -n flux-system \
    --docker-server=registry1.dso.mil \
-   --docker-username='robot$bigbang' \
-   --docker-password=${REGISTRY1_PASSWORD} \
+   --docker-username=${ROBOT_ACCOUNT} \
+   --docker-password=${ROBOT_TOKEN} \
    --docker-email=bigbang@bigbang.dev || true
 kubectl apply -f ./scripts/deploy/flux.yaml
 
@@ -24,7 +24,7 @@ flux check
 # Deploy BigBang using dev sized scaling
 echo "Installing BigBang"
 helm upgrade -i bigbang chart -n bigbang --create-namespace \
-  --set registryCredentials.username='robot$bigbang' --set registryCredentials.password=${REGISTRY1_PASSWORD} \
+  --set registryCredentials.username=${ROBOT_ACCOUNT} --set registryCredentials.password=${ROBOT_TOKEN} \
   -f tests/ci/k3d/values.yaml
 
 ## Apply secrets kustomization pointing to current branch
