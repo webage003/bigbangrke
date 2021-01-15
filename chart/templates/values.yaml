@@ -11,6 +11,8 @@ stringData:
 {{ toYaml .Values.addons.argocd.values | indent 4 }}
   istiooperator.yaml: |
 {{ toYaml .Values.istiooperator.values | indent 4  }}
+  istiocni.yaml: |
+{{ toYaml .Values.istiocni.values | indent 4  }}
   authservice.yaml: |
 {{ toYaml .Values.addons.authservice.values | indent 4 }}
   istio.yaml: |
@@ -26,7 +28,7 @@ stringData:
   monitoring.yaml: |
 {{ toYaml .Values.monitoring.values | indent 4 }}
   twistlock.yaml: |
-{{ toYaml .Values.twistlock.values | indent 4 }} 
+{{ toYaml .Values.twistlock.values | indent 4 }}
   clusterauditor.yaml: |
 {{ toYaml .Values.twistlock.values | indent 4 }}
 data:

@@ -6,7 +6,7 @@ offline: false
 
 # Registry credentials to use from pulling images from private registry, will create an appropriate imagePullSecret in all relevant namespaces
 registryCredentials:
-  registry: registry1.dso.mil
+  registry: registry1.dsop.io
   username: ""
   password: ""
   email: ""
@@ -50,7 +50,7 @@ istio:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    tag: "1.7.3-bb.4"
+    tag: "ocp"
   values: {}
 
 istiooperator:
@@ -60,6 +60,15 @@ istiooperator:
     path: "./chart"
     tag: "1.7.0-bb.0"
   values: {}
+
+istiocni:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/servicemesh.git
+    path: "./charts/istio-cni"
+    branch: "openshift"
+  values: {}
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -67,7 +76,7 @@ istiooperator:
 #
 clusterAuditor:
   enabled: true
-  git: 
+  git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
     path: "./chart"
     tag: "0.1.7-bb.0"
@@ -122,7 +131,7 @@ monitoring:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
-    tag: "11.0.0-bb.4"
+    branch: "ocp"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
