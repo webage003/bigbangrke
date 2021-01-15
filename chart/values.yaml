@@ -50,7 +50,7 @@ istio:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    tag: "ocp"
+    branch: "ocp"
   values: {}
 
 istiooperator:
