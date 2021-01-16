@@ -38,8 +38,7 @@ spec:
       valuesKey: "istiocni.yaml"
 
   values:
-    hub: registry1.dsop.io/ironbank/opensource/istio-1.7
-    image: install-cni-1.7
+    hub: registry1.dso.mil/ironbank/opensource/istio-1.7/install-cni-1.7
     tag: 1.7.3
     createNamespace: false
 
