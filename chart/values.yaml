@@ -50,7 +50,7 @@ istio:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    branch: "ocp"
+    branch: "jaic"
   values: {}
 
 istiooperator:
@@ -66,7 +66,7 @@ istiocni:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/servicemesh.git
     path: "./charts/istio-cni"
-    branch: "openshift"
+    branch: "jaic"
   values: {}
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ monitoring:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
-    branch: "ocp"
+    branch: "jaic"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
