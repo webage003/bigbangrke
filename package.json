@@ -1,18 +1,25 @@
 {
-  "name": "umbrella",
-  "description": "Big Bang is a declarative, continuous delivery tool for core DoD hardened and approved [packages](#packages) into a Kubernetes cluster.  Big Bang follows a [GitOps](#gitops) approach to configuration management, using [Flux v2](#flux-v2) to reconcile Git with the cluster.  Environments (e.g. dev, prod) and packages (e.g. istio) can be fully configured to suit the deployment needs.",
-  "repository": {
-    "type": "git",
-    "url": "https://repo1.dso.mil/platform-one/big-bang/umbrella.git"
-  },
+  "version": "1.0.2",
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "husky": "^3.0.0"
+    "cz-conventional-changelog": "^3.2.0",
+    "husky": "^4.3.8",
+    "standard-version": "^9.1.0",
+    "standard-version-updater-yaml": "^1.0.2"
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "husky": {
+      "hooks": {
+        "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+        "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+      }
     }
+  },
+  "scripts": {
+    "release": "standard-version"
   }
 }
