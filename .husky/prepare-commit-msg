@@ -1,5 +1,0 @@
-if [ $SKIP_HOOK_PREPARE_COMMIT_MSG ]; then
-  echo "Detected SKIP_HOOK_PREPARE_COMMIT_MSG, skipping prepare-commit-msg hook"
-  exit 0
-fi
-exec < /dev/tty && npx cz --hook || true
