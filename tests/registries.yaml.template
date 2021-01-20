@@ -1,0 +1,6 @@
+configs:
+  "registry1.dsop.io":
+    auth:
+      username: robot${DOLLAR}bigbang
+      password: ${REGISTRY1_PASSWORD}
+
