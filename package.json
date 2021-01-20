@@ -3,7 +3,7 @@
   "scripts": {
     "postinstall": "husky install",
     "release": "standard-version --commit-all --no-verify",
-    "commit": "npx cz"
+    "commit": "cz"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
