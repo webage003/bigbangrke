@@ -1,8 +1,9 @@
 {
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "postinstall": "husky install",
-    "release": "npx standard-version"
+    "release": "standard-version --commit-all"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
@@ -15,6 +16,11 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "standard-version": {
+    "skip": {
+      "tag": true
     }
   }
 }
