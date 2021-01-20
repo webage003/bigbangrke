@@ -8,7 +8,7 @@ module.exports = {
     },
     {
       filename: "package.json",
-      updater: "json"
+      type: "json"
     },
   ]
 };
