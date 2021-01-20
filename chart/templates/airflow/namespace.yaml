@@ -5,17 +5,6 @@ metadata:
   labels:
     app: {{ .Release.Name }}-airflow
   name: airflow
-#---
-## For gitRepository
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  name: appsrepo
-#  namespace: bigbang
-#type: opaque
-#data:
-#  password: {{ .credentials.password | b64enc }}
-#  username: {{ .credentials.username | b64enc }}
 
 # For il2-registry deploy token
 ---
