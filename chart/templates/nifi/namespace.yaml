@@ -1,0 +1,30 @@
+{{- if .Values.nifi.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: {{ .Release.Name }}-nifi
+  name: nifi
+---
+# For gitRepository
+apiVersion: v1
+kind: Secret
+metadata:
+  name: datarepo
+  namespace: bigbang
+type: opaque
+data:
+  password: <TBD:PASSWORD>
+  username: <TBD:USERNAME>
+
+# For il2-registry deploy token
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: il2-registry
+  namespace: nifi
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: <TBD:DEPLOYMENT_KEY>
+{{- end }}

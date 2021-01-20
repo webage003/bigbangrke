@@ -7,6 +7,8 @@ type: generic
 stringData:
   values.yaml: |
 {{ toYaml .Values | indent 4}}
+  airflow.yaml: |
+{{ toYaml .Values.airflow.values | indent 4 }}
   argocd.yaml: |
 {{ toYaml .Values.addons.argocd.values | indent 4 }}
   istiooperator.yaml: |
@@ -27,6 +29,8 @@ stringData:
 {{ toYaml .Values.logging.values | indent 4 }}
   monitoring.yaml: |
 {{ toYaml .Values.monitoring.values | indent 4 }}
+  nifi.yaml: |
+{{ toYaml .Values.nifi.values | indent 4  }}
   twistlock.yaml: |
 {{ toYaml .Values.twistlock.values | indent 4 }}
   clusterauditor.yaml: |
