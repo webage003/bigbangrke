@@ -86,6 +86,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 * foo ([ef8200a](https://repo1.dso.mil///commit/ef8200a7e00c881d6bbc8e2d51af643eabca922c))
 
+## 1.1.0 (2021-01-20)
+
+
+### Features
+
+* foo ([ef8200a](https://repo1.dso.mil///commit/ef8200a7e00c881d6bbc8e2d51af643eabca922c))
+
 ## [0.0.4] - 2020-12-16
 
 ### Changed
