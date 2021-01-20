@@ -4,10 +4,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-## [Unreleased]
+## [1.0.3]
+
+* Authservice to [0.1.5-bb.0](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice/-/tags/0.1.5-bb.0) - to change syntax for providing keys
+
+## [1.0.1]
+
 
 ### Changed
 
+* Updated Istio Control plane to support Node Ports for ingressGateway
+* Update Istio Control plane to support SSO for Kiali and Jaeger
+* Update Authservice to refact definitions of filter chains
 * Updated documentation
 
 ---
