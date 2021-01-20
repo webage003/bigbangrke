@@ -190,7 +190,7 @@ addons:
       tag: "0.1.6-bb.0"
     # Dont put chain configuraitons in this section
     values: {}
-      # put additional chain configuration in this section
+    # Put additional chain configuration in this section
     chains: {}
 
   haproxy:
