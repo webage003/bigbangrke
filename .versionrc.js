@@ -5,6 +5,10 @@ module.exports = {
     {
       filename: "chart/Chart.yaml",
       updater: standardVersionUpdaterYaml
-    }
+    },
+    {
+      filename: "package.json",
+      updater: "json"
+    },
   ]
 };
