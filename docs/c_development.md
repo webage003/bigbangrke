@@ -348,7 +348,14 @@ EOF
 # Examples included enabling add-ons, disabling unneeded features, etc.
 ```
 
-- Deploy secrets
+
++ Install BigBang using Iron Bank (Harbor) credentials.
+```bash
+# Helm install BigBang
+helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='<your user>' --set registryCredentials.password=<your cli key> -f my-values.yaml
+```
+
++ Deploy secrets
 
 ```bash
 # These are all OPTIONAL.  Deploy them if you need them
@@ -357,7 +364,7 @@ EOF
 ./hack/sops-create.sh
 
 # Deploy the authservice configuration
-sops -d ./hack/secrets/authservice-config.yaml | kubectl apply -f -
+sops -d ./hack/secrets/authservice.yaml | kubectl apply -f -
 
 # Deploy the ingress certificates
 sops -d ./hack/secrets/ingress-cert.yaml | kubectl apply -f -
@@ -366,14 +373,7 @@ sops -d ./hack/secrets/ingress-cert.yaml | kubectl apply -f -
 kubectl apply -f tests/ci/shared-secrets.yaml
 ```
 
-- Install BigBang using Iron Bank (Harbor) credentials.
-
-```bash
-# Helm install BigBang
-helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='<your user>' --set registryCredentials.password=<your cli key> -f my-values.yaml -f chart/ingress-certs.yaml
-```
-
-- You can now modify your local `/etc/hosts` file to allow for local name resolution. On Windows, this file is located at `$env:windir\System32\drivers\etc\hosts`. Add additional hostnames as you enable different UIs, replacing <X.X.X.X> with your Amazon EC2 instance IP (all host entries will point to the same IP and Istio will route based on the hostname).
++ You can now modify your local `/etc/hosts` file to allow for local name resolution. On Windows, this file is located at `$env:windir\System32\drivers\etc\hosts`
 
 ```HOSTS
 <X.X.X.X>     kibana.bigbang.dev
