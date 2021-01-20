@@ -18,7 +18,6 @@ metadata:
 #  username: {{ .credentials.username | b64enc }}
 
 # For il2-registry deploy token
-{{- if and (ne .Values.git.credentials.username "") (ne .Values.git.credentials.password "") }}
 ---
 apiVersion: v1
 kind: Secret
@@ -28,5 +27,4 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret2" . }}
-{{- end }}
 {{- end }}
