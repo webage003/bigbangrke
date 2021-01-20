@@ -1,4 +1,9 @@
 {
+  "private": true,
+  "scripts": {
+    "postinstall": "husky install",
+    "release": "npx standard-version"
+  },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
@@ -11,14 +16,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
-    }
-  },
-  "scripts": {
-    "release": "standard-version"
   }
 }
