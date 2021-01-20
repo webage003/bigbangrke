@@ -1,0 +1,32 @@
+{{- if .Values.airflow.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: {{ .Release.Name }}-airflow
+  name: airflow
+#---
+## For gitRepository
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: appsrepo
+#  namespace: bigbang
+#type: opaque
+#data:
+#  password: {{ .credentials.password | b64enc }}
+#  username: {{ .credentials.username | b64enc }}
+
+# For il2-registry deploy token
+{{- if and (ne .Values.registryCredentials2.username "") (ne .Values.registryCredentials2.password "") }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: il2-registry
+  namespace: airflow
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret2" . }}
+{{- end }}
+{{- end }}

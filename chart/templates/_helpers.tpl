@@ -4,6 +4,12 @@
 {{- end }}
 {{- end }}
 
+{{- define "imagePullSecret2" }}
+{{- with .Values.registryCredentials2 }}
+{{- printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"email\":\"%s\",\"auth\":\"%s\"}}}" .registry .username .password .email (printf "%s:%s" .username .password | b64enc) | b64enc }}
+{{- end }}
+{{- end }}
+
 {{/*
 Build the appropriate spec.ref.{} given git branch, commit values
 */}}

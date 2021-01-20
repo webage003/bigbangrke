@@ -1,0 +1,42 @@
+{{- if .Values.airflow.enabled }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: airflow
+  namespace: {{ .Release.Namespace }}
+spec:
+  targetNamespace: airflow
+  chart:
+    spec:
+      chart: {{ .Values.airflow.git.path }}
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: airflow
+        namespace: {{ .Release.Namespace }}
+
+  {{- with .Values.flux }}
+  interval: {{ .interval }}
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: {{ .install.retries }}
+  upgrade:
+    remediation:
+      retries: {{ .upgrade.retries }}
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: {{ .rollback.timeout }}
+    cleanupOnFail: {{ .rollback.cleanupOnFail }}
+  {{- end }}
+
+  valuesFrom:
+    - name: values
+      kind: Secret
+      valuesKey: "airflow.yaml"
+
+  values:
+    createNamespace: false
+{{- end }}
