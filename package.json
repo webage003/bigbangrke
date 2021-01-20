@@ -2,7 +2,7 @@
   "version": "1.0.2",
   "scripts": {
     "postinstall": "husky install",
-    "release": "HUSKY_SKIP_HOOKS=1 standard-version --commit-all"
+    "release": "SKIP_PREPARE_COMMIT_MSG=1 standard-version --commit-all"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
