@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.4.0 (2021-01-20)
+
+
+### Features
+
+* foo ([ef8200a](https://repo1.dso.mil///commit/ef8200a7e00c881d6bbc8e2d51af643eabca922c))
+
 ## 1.3.0 (2021-01-20)
 
 
