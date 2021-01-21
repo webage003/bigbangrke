@@ -7,13 +7,6 @@ workflow:
     # Skip pipeline for branches that start with "docs"
     - if: '$CI_COMMIT_REF_NAME =~ /^docs/'
       when: never
-    # Temporary ... Skip pipeline for JCF and jaic branchs
-    - if: '$CI_COMMIT_BRANCH =~ /^jcf-.+/  || $CI_COMMIT_BRANCH =~ /^jaic/'
-      when: never
-    - when: always
-    # Temporary ... Skip pipeline for JCF and jaic branchs
-    - if: '$CI_COMMIT_BRANCH =~ /^jcf-.+/  || $CI_COMMIT_BRANCH =~ /^jaic/ '
-      when: never
     - when: always
 
 # include templates
@@ -274,6 +267,7 @@ aws/rke2/bigbang up:
     - kubectl apply -f ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
   script:
     - *deploy_bigbang
+  allow_failure: true
 
 # Run tests on BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang test:
@@ -294,6 +288,7 @@ aws/rke2/bigbang test:
     - yum install bind-utils -y
     - chmod +x scripts/hosts.sh && ./scripts/hosts.sh
     - *test_bigbang
+  allow_failure: true
 
 # Uninstall BigBang on RKE2 cluster on AWS
 aws/rke2/bigbang down:
@@ -312,7 +307,7 @@ aws/rke2/bigbang down:
     - helm un -n bigbang bigbang
     # TODO: Smarter wait
     - sleep 180
-
+  allow_failure: true
 # Destroy RKE2 cluster on AWS
 aws/rke2/cluster down:
   stage: cluster down
@@ -321,4 +316,5 @@ aws/rke2/cluster down:
     - .rke2 down
   needs:
     - job: aws/rke2/bigbang down
+  allow_failure: true
 #-----------------------------------------------------------------------------------------------------------------------
