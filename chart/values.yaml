@@ -150,7 +150,7 @@ nifi:
   git:
     repo: https://code.il2.dso.mil/jaic-devsecops/data-pipelines.git
     path: "./apps/nifi/helm"
-    branch: "jcf-209-cr"
+    branch: "master"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
