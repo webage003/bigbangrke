@@ -6,7 +6,17 @@ metadata:
     app: {{ .Release.Name }}-airflow
   name: airflow
 
-# For il2-registry deploy token
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: appsrepo
+  namespace: bigbang
+type: opaque
+data:
+  password: {{ jaic.credentials.password | b64enc }}
+  username: {{ jaic.credentials.username | b64enc }}
+
 ---
 apiVersion: v1
 kind: Secret

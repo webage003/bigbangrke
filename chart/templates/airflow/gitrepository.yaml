@@ -11,6 +11,6 @@ spec:
   {{- include "validRef" .Values.airflow.git | nindent 4 }}
   {{ include "gitIgnore" . }}
   {{- include "gitCreds" .Values.git | nindent 2 }}
-#  secretRef:
-#    name: appsrepo
+  secretRef:
+    name: appsrepo
 {{- end }}
