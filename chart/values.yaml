@@ -166,6 +166,14 @@ twistlock:
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
+airflow:
+  enabled: false
+  git:
+    repo: https://code.il2.dso.mil/jaic-devsecops/apps.git
+    path: "./airflow/helm"
+    branch: "jcf-208"
+  values: {}
+
 addons:
   argocd:
     enabled: false
