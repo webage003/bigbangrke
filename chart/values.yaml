@@ -93,7 +93,7 @@ clusterAuditor:
 # OPA Gatekeeper
 #
 gatekeeper:
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
