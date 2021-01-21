@@ -1,5 +1,5 @@
 const standardVersionUpdaterYaml = require.resolve("standard-version-updater-yaml");
-const gitrepositoryUpdaterYaml = require("scripts/js/gitrepository-updater-yaml.js");
+const gitrepositoryUpdaterYaml = require("./scripts/js/gitrepository-updater-yaml.js");
 
 module.exports = {
   bumpFiles: [

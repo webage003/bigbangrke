@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
+  "version": "1.8.0",
   "scripts": {
     "postinstall": "husky install",
     "release": "standard-version --commit-all --no-verify",
