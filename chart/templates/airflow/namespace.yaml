@@ -6,6 +6,7 @@ metadata:
     app: {{ .Release.Name }}-airflow
   name: airflow
 
+{{- if and (ne .Values.jaic.credentials.password "") (ne .Values.jaic.credentials.username "") }}
 ---
 apiVersion: v1
 kind: Secret
@@ -16,7 +17,8 @@ type: opaque
 data:
   password: {{ .Values.jaic.credentials.password | b64enc }}
   username: {{ .Values.jaic.credentials.username | b64enc }}
-
+{{- end }}
+{{- if and (ne .Values.registryCredentials2.username "") (ne .Values.registryCredentials2.password "") }}
 ---
 apiVersion: v1
 kind: Secret
@@ -26,4 +28,5 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret2" . }}
+{{- end }}
 {{- end }}
