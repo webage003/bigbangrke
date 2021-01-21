@@ -1,0 +1,16 @@
+{{- if .Values.airflow.enabled }}
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: airflow
+  namespace: {{ .Release.Namespace }}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.airflow.git.repo }}
+  ref:
+  {{- include "validRef" .Values.airflow.git | nindent 4 }}
+  {{ include "gitIgnore" . }}
+  {{- include "gitCreds" .Values.git | nindent 2 }}
+  secretRef:
+    name: appsrepo
+{{- end }}

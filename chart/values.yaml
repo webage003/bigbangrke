@@ -11,6 +11,13 @@ registryCredentials:
   password: ""
   email: ""
 
+# For secondary registry...
+registryCredentials2:
+  registry: registry.il2.dso.mil
+  username: ""
+  password: ""
+  email: ""
+
 # Global git values
 # Order of precedence is:
 #   1. existingSecret
@@ -158,14 +165,6 @@ twistlock:
     tag: "0.0.2-bb.0"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
-
-airflow:
-  enabled: true
-  git:
-    repo: https://code.il2.dso.mil/jaic-devsecops/apps.git
-    path: "./airflow/helm"
-    branch: "jcf-208"
-  values: {}
 
 addons:
   argocd:
