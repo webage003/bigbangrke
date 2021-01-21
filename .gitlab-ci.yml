@@ -11,10 +11,6 @@ workflow:
     - if: '$CI_COMMIT_BRANCH =~ /^jcf-.+/  || $CI_COMMIT_BRANCH =~ /^jaic/'
       when: never
     - when: always
-    # Temporary ... Skip pipeline for JCF and jaic branchs
-    - if: '$CI_COMMIT_BRANCH =~ /^jcf-.+/  || $CI_COMMIT_BRANCH =~ /^jaic/ '
-      when: never
-    - when: always
 
 # include templates
 include:
