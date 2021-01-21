@@ -11,7 +11,7 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: appsrepo
+  name: datarepo
   namespace: bigbang
 type: opaque
 data:
