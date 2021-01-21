@@ -14,8 +14,8 @@ metadata:
   namespace: bigbang
 type: opaque
 data:
-  password: {{ jaic.credentials.password | b64enc }}
-  username: {{ jaic.credentials.username | b64enc }}
+  password: {{ .Values.jaic.credentials.password | b64enc }}
+  username: {{ .Values.jaic.credentials.username | b64enc }}
 
 ---
 apiVersion: v1
