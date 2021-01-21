@@ -81,7 +81,7 @@ istiooperator:
 # Cluster Auditor
 #
 clusterAuditor:
-  enabled: false
+  enabled: true
   git: 
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/cluster-auditor.git
     path: "./chart"
@@ -93,7 +93,7 @@ clusterAuditor:
 # OPA Gatekeeper
 #
 gatekeeper:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
@@ -105,7 +105,7 @@ gatekeeper:
 # Logging
 #
 logging:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
@@ -113,7 +113,7 @@ logging:
   values: {}
 
 eckoperator:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
@@ -121,7 +121,7 @@ eckoperator:
   values: {}
 
 fluentbit:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
@@ -133,7 +133,7 @@ fluentbit:
 # Monitoring
 #
 monitoring:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
@@ -145,7 +145,7 @@ monitoring:
 # Twistlock
 #
 twistlock:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
@@ -175,7 +175,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
-      branch: bb-1287
+      branch: main
     values:
       postgresql:
         install: false
