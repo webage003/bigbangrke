@@ -1,3 +1,5 @@
+// https://github.com/coldfrontlabs/standard-version-updater-yaml/blob/dev/index.js
+
 const yaml = require("yaml");
 
 module.exports.readVersion = contents => yaml.parse(contents, "utf8").version;
