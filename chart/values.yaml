@@ -167,19 +167,15 @@ addons:
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/authservice.git
       path: "./chart"
-<<<<<<< HEAD
-      tag: "0.1.4-bb.0"
+      tag: "0.1.6-bb.0"
     values: {}
-  
+ 
   gitlabRunner:
     enabled: false
     git:
       repo: "https://repo1.dsop.io/platform-one/big-bang/apps/developer-tools/gitlab-runner.git"
       path: "./chart"
       tag: "0.19.2-bb.1"
-    values: {}
-=======
-      tag: "0.1.6-bb.0"
     values: {}
 
   gitlab:
@@ -188,4 +184,3 @@ addons:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
       tag: "4.2.0-bb.1"
->>>>>>> origin/master

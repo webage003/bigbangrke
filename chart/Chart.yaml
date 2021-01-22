@@ -1,7 +1,4 @@
 apiVersion: v2
 name: bigbang
-version: 1.0.3
-<<<<<<< HEAD
+version: 1.0.5
 
-=======
->>>>>>> origin/master
