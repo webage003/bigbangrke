@@ -176,6 +176,9 @@ addons:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
       branch: bb-1287
+    sso:
+      enabled: false
+      secret: {}
     values:
       postgresql:
         install: false

@@ -100,13 +100,18 @@ spec:
       - name: private-registry
     {{- end }}
     global:
+      appConfig:
+        {{- if .Values.addons.gitlab.sso.enable }}
+        omniauth:
+          enabled: true
+        {{- end }}
       hosts:
         domain: code.{{ .Values.hostname }}
         gitlab:
           name: code.{{ .Values.hostname }}
         registry:
           name: registry.{{ .Values.hostname }}
-{{- if ( include "imagePullSecret" . ) }}
+      {{- if ( include "imagePullSecret" . ) }}
       ## values for image pull secrets
       certificates:
         image:
