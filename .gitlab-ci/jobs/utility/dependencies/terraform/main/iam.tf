@@ -3,11 +3,13 @@ data "aws_iam_policy_document" "utility" {
     sid = "1"
 
     actions = [
-      "s3:*",
+      "s3:ListBucket",
+      "s3:GetObject"
     ]
 
     resources = [
-      "arn:aws-us-gov:s3:::*",
+      "arn:aws-us-gov:s3:::${var.pkg_s3_bucket}",
+      "arn:aws-us-gov:s3:::${var.pkg_s3_bucket}/*"
     ]
   }
 
