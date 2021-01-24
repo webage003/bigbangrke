@@ -4,7 +4,7 @@ variable "aws_region" {
 }
 variable "vpc_id" {}
 
-variable "private_subnets" {
+variable "deploy_subnets" {
   type = list(string)
 }
 
@@ -44,6 +44,16 @@ variable "download" {
   description = "Toggle dependency downloading"
 }
 
+variable "registry_username" {
+  type    = string
+  default = ""
+}
+
+variable "registry_password" {
+  type    = string
+  default = ""
+}
+
 #
 # Server variables
 #
@@ -73,6 +83,10 @@ variable "agent_asg" {
   default = { min : 2, max : 10, desired : 2 }
 }
 variable "agent_spot" {
+  default = false
+}
+
+variable "airgap" {
   default = false
 }
 

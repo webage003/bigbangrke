@@ -9,3 +9,7 @@ output "public_subnets" {
 output "private_subnets" {
   value = module.ci.private_subnet_ids
 }
+
+output "intra_subnets" {
+  value = module.ci.intra_subnet_ids
+}

@@ -8,6 +8,9 @@ include:
   # RKE2 Gitlab CI jobs
   - local: '/.gitlab-ci/jobs/rke2/.gitlab-ci.yml'
 
+  # Utility Gitlab CI jobs
+  - local: '/.gitlab-ci/jobs/utility/.gitlab-ci.yml'
+
 .terraformer:
   image:
     name: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/terraform:0.13.5
@@ -18,13 +21,32 @@ include:
   variables:
     TF_IN_AUTOMATION: "1"
     TF_VAR_ci_pipeline_url: $CI_PIPELINE_URL
+    TF_VAR_env: ${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
   before_script:
+    - export TF_VAR_env=$(echo "${CI_COMMIT_REF_SLUG}"| cut -c 1-7)-$(echo "${CI_COMMIT_SHA}" | cut -c 1-7)
+    - echo "$TF_VAR_env"
+    # VPC CIDR race-condition between airgap and non-airgap network up
+    - sleep 10
+    - cd ${CI_PROJECT_DIR}/${TF_ROOT}
+    - terraform version
+    - terraform init -input=false
+    - terraform workspace select $TF_VAR_env || terraform workspace new $TF_VAR_env
+    - terraform validate
+  
+.terraformer_airgap:
+  variables: 
+    TF_VAR_env: ${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
+  extends:
+    - .terraformer
+  before_script:
+    - export TF_VAR_env=$(echo "${CI_COMMIT_REF_SLUG}"| cut -c 1-7)-$(echo "${CI_COMMIT_SHA}" | cut -c 1-7)-airgap
     - echo "$TF_VAR_env"
     - cd ${CI_PROJECT_DIR}/${TF_ROOT}
     - terraform version
     - terraform init -input=false
     - terraform workspace select $TF_VAR_env || terraform workspace new $TF_VAR_env
     - terraform validate
+
 
 .terraform destroy workspace:
   after_script:

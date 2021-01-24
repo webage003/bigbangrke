@@ -4,9 +4,10 @@ terraform {
     key                  = "terraform.tfstate"
     region               = "us-gov-west-1"
     dynamodb_table       = "umbrella-tf-states-lock"
-    workspace_key_prefix = "rke2"
+    workspace_key_prefix = "utility"
   }
 }
+
 
 data "terraform_remote_state" "networking" {
   backend = "s3"
@@ -21,13 +22,12 @@ data "terraform_remote_state" "networking" {
 
 module "ci" {
   source = "../../main"
-
-  env             = var.env
+  env       = var.env
   ci_pipeline_url = var.ci_pipeline_url
-  vpc_id          = data.terraform_remote_state.networking.outputs.vpc_id
-  subnets         = data.terraform_remote_state.networking.outputs.intra_subnets
-
-  download   = false
-  server_ami = "ami-00aab2121681e4a31"
-  agent_ami  = "ami-00aab2121681e4a31"
+  vpc_id    = data.terraform_remote_state.networking.outputs.vpc_id
+  subnet_id = data.terraform_remote_state.networking.outputs.private_subnets[0]
+  pkg_s3_bucket = var.pkg_s3_bucket
+  pkg_path = var.pkg_path
+  utility_username = "pxwtLfRD"
+  utility_password = "Gy1jnb6WoNRjUwwh"
 }

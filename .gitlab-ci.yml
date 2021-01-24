@@ -18,17 +18,20 @@ include:
 stages:
   - smoke tests
   - network up
+  - airgap up
   - cluster up
   - bigbang up
   - test
   - bigbang down
   - cluster down
+  - airgap down
   - network down
   - package
   - release
 
 variables:
   RELEASE_BUCKET: umbrella-bigbang-releases
+  CI_PKG_BUCKET: umbrella-bigbang-airgap
   IMAGE_LIST: images.txt
   IMAGE_PKG: images.tar.gz
   REPOS_PKG: repositories.tar.gz
@@ -112,8 +115,6 @@ pre vars:
   - if (( ${DIFF_ARR[1]} > 0 )); then CHART_BREAKING_CHANGE="true"; fi
   # store variables
   - echo "CHART_BREAKING_CHANGE=$CHART_BREAKING_CHANGE" >> variables.env
-  # Create the TF_VAR_env variable
-  - echo "TF_VAR_env=$(echo $CI_COMMIT_REF_SLUG | cut -c 1-7)-$(echo $CI_COMMIT_SHA | cut -c 1-7)" >> variables.env
   - cat variables.env
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -127,6 +128,42 @@ pre vars:
 
 .test_bigbang: &test_bigbang
   - find ./tests -type f -name '*.sh' | sort | xargs -r -I {} sh -c 'echo {} && sh {}'
+
+.package_script: &package_script
+    - cp ./scripts/package/synker.yaml ./synker.yaml
+
+    # Populate images list in synker config
+    # NOTE: This is stupid and hacky, use yq or something better to do this
+    - cat images.txt | sed -e 's/^/    - /' >> synker.yaml
+    - cat images.txt
+    - synker pull -b=1
+
+    # Tar up synker as well?
+    - cp /usr/local/bin/synker synker.yaml /var/lib/registry/
+    - tar -C /var/lib/registry -czvf $IMAGE_PKG .
+    - tar -czvf $IMAGE_PKG /var/lib/registry
+
+    # Package dependent repos
+    - ./scripts/package/gits.sh
+    - tar -czf $REPOS_PKG repos/
+
+    # Prep release
+    - mkdir -p release
+    - mv $IMAGE_LIST $IMAGE_PKG $REPOS_PKG release/
+   
+    # Publish packages to s3 release
+    - aws s3 sync --quiet release/ s3://${PKG_S3_BUCKET}/umbrella/${PKG_PATH}
+  
+.package:
+  image: registry.dsop.io/platform-one/big-bang/umbrella/synker:0.0.1
+  before_script:
+    # Set up auth
+    - mkdir -p /root/.docker
+    - echo $DOCKER_AUTH_CONFIG > /root/.docker/config.json
+  script:
+    - *package_script
+
+
 
 clean install:
   stage: smoke tests
@@ -144,6 +181,7 @@ clean install:
     paths:
       - images.txt
     expire_in: 7 days
+
 
 upgrade:
   stage: smoke tests
@@ -170,8 +208,6 @@ upgrade:
     - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
     - *deploy_bigbang
     - *test_bigbang
-
-#-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: Management Jobs
@@ -233,8 +269,92 @@ aws/network down:
   environment:
     name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
     action: stop
+#-----------------------------------------------------------------------------------------------------------------------
+
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure: Airgap Networking
+#
+airgap/network up:
+  extends:
+    - .bigbang-dogfood
+    - .infra fork
+    - .network up
+    - .terraformer_airgap
+  stage: network up
+  environment:
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
+    auto_stop_in: 1 hour
+
+airgap/network down:
+  extends:
+    - .bigbang-dogfood
+    - .infra cleanup
+    - .network down
+    - .terraformer_airgap
+  stage: network down
+  environment:
+    name: review/aws-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
+    action: stop
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure: Airgap Utility
+
+# Create Utility Pkgs
+aws/airgap/package:
+  extends:
+    - .bigbang-dogfood
+    - .infra fork
+    - .package
+  variables:
+    PKG_S3_BUCKET: '$CI_PKG_BUCKET'
+    PKG_PATH: '$CI_COMMIT_SHORT_SHA'
+  stage: network up
+  dependencies:
+    - clean install
+  script:
+    - git clone --branch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME} --no-checkout https://repo1.dso.mil/platform-one/big-bang/umbrella.git
+    - tar -czf umbrella.tar.gz umbrella/
+    - mkdir -p release
+    - mv umbrella.tar.gz release/
+    - *package_script
+
+#Delete Generated Packages
+aws/airgap/package delete:
+  stage: airgap down
+  extends:
+    - .bigbang-dogfood
+    - .package
+  variables:
+    PKG_S3_BUCKET: '$CI_PKG_BUCKET'
+    PKG_PATH: '$CI_COMMIT_SHORT_SHA'
+  script:
+    - aws s3 rm --recursive s3://${PKG_S3_BUCKET}/umbrella/${PKG_PATH}
+
+# Create Utility Instance on AWS
+aws/airgap/utility up:
+  extends:
+    - .bigbang-dogfood
+    - .infra create
+    - .utility up
+    - .terraformer_airgap
+  stage: airgap up
+  needs:
+    - job: airgap/network up
+    - job: aws/airgap/package
+
+# Destroy Utility Instance on AWS
+aws/airgap/utility down:
+  extends:
+    - .bigbang-dogfood
+    - .infra cleanup
+    - .utility down
+    - .terraformer_airgap
+  stage: airgap down
+#-----------------------------------------------------------------------------------------------------------------------
+
+
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Infrastructure: RKE2
@@ -335,42 +455,120 @@ aws/rke2/cluster down:
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Infrastructure:Airgap  RKE2
+#
+# Create RKE2 cluster on AWS
+airgap/rke2/cluster up:
+  stage: cluster up
+  extends:
+    - .bigbang-dogfood
+    - .infra create
+    - .rke2 airgap up
+    - .terraformer_airgap
+  needs:
+    - job: airgap/network up
+    - job: aws/airgap/utility up
+
+# Install BigBang on RKE2 cluster on AWS
+airgap/rke2/bigbang up:
+  stage: bigbang up
+  extends:
+    - .bigbang-dogfood
+    - .infra create
+    - .bigbang
+  variables:
+    AIRGAP: "true"
+  needs:
+    - job: airgap/rke2/cluster up
+      artifacts: true
+  before_script:
+    # Replace https with http for git server
+    - sed -i 's/https:\/\/repo1.dsop.io/http:\/\/repo1.dsop.io/g' chart/values.yaml  tests/ci/shared-secrets.yaml
+    - sed -i 's/https:\/\/repo1.dso.mil/http:\/\/repo1.dsop.io/g' chart/values.yaml  tests/ci/shared-secrets.yaml
+
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+
+    # Deploy a default storage class for aws
+    - kubectl apply -f ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
+  allow_failure: true
+  script:
+    - *deploy_bigbang
+
+# Run tests on BigBang on RKE2 cluster on AWS
+
+airgap/rke2/bigbang test:
+  stage: test
+  extends:
+    - .bigbang-dogfood
+    - .infra create
+    - .bigbang
+  allow_failure: true
+  needs:
+    - job: airgap/rke2/cluster up
+      artifacts: true
+    - job: airgap/rke2/bigbang up
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+  script:
+    ## Move this yum install to the dockerfile for the builder
+    ## putting it here now for a quick way to install dig
+    - yum install bind-utils -y
+    - chmod +x scripts/hosts.sh && ./scripts/hosts.sh
+    - *test_bigbang
+
+# Uninstall BigBang on RKE2 cluster on AWS
+airgap/rke2/bigbang down:
+  stage: bigbang down
+  extends:
+    - .bigbang-dogfood
+    - .infra cleanup
+    - .bigbang
+  needs:
+    - job: airgap/rke2/cluster up
+      artifacts: true
+    - job: airgap/rke2/bigbang test
+  before_script:
+    - mkdir -p ~/.kube
+    - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
+  script:
+    - helm un -n bigbang bigbang
+    # TODO: Smarter wait
+    - sleep 180
+
+# Destroy RKE2 cluster on AWS
+airgap/rke2/cluster down:
+  stage: cluster down
+  extends:
+    - .bigbang-dogfood
+    - .infra cleanup
+    - .rke2 airgap down
+    - .terraformer_airgap
+  needs:
+    - job: airgap/rke2/bigbang down
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
 # Release Jobs
 #
-
 package:
   stage: package
   image: registry.dsop.io/platform-one/big-bang/umbrella/synker:0.0.1
   extends:
     - .bigbang-dogfood
+    - .package
+  variables:
+    PKG_S3_BUCKET: '$RELEASE_BUCKET'
+    PKG_PATH: '$CI_COMMIT_TAG'
   rules:
     # run job for manual tag events
     - if: $CI_COMMIT_TAG
     #   when: never
     # # run job on commits to default branch
     # - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-  before_script:
-    # Set up auth
-    - mkdir -p /root/.docker
-    - echo $DOCKER_AUTH_CONFIG > /root/.docker/config.json
-  script:
-    - cp ./scripts/package/synker.yaml ./synker.yaml
-    # Populate images list in synker config
-    # NOTE: This is stupid and hacky, use yq or something better to do this
-    - cat images.txt | sed -e 's/^/    - /' >> synker.yaml
-    - synker pull -b=1
-    # Tar up synker as well?
-    - cp /usr/local/bin/synker synker.yaml /var/lib/registry/
-    - tar -C /var/lib/registry -czvf $IMAGE_PKG .
-    - tar -czvf $IMAGE_PKG /var/lib/registry
-    # Package dependent repos
-    - ./scripts/package/gits.sh
-    - tar -czf $REPOS_PKG repos/
-    # Prep release
-    - mkdir -p release
-    - mv $IMAGE_LIST $IMAGE_PKG $REPOS_PKG release/
-    # Publish packages to s3 release
-    - aws s3 sync --quiet release/ s3://umbrella-bigbang-releases/umbrella/${CI_COMMIT_TAG}
+  dependencies:
+    - clean install
   after_script: []
 
 release:
@@ -393,5 +591,6 @@ release:
         --assets-link "{\"name\":\"${IMAGE_LIST}\",\"url\":\"${RELEASE_ENDPOINT}/${IMAGE_LIST}\"}" \
         --assets-link "{\"name\":\"${IMAGE_PKG}\",\"url\":\"${RELEASE_ENDPOINT}/${IMAGE_PKG}\"}" \
         --assets-link "{\"name\":\"${REPOS_PKG}\",\"url\":\"${RELEASE_ENDPOINT}/${REPOS_PKG}\"}"
+
 
 #-----------------------------------------------------------------------------------------------------------------------

@@ -9,12 +9,30 @@ locals {
   }
 }
 
+data "aws_vpc" "selected" {
+  id = var.vpc_id
+}
+
+data "template_file" "airgap_userdata" {
+  template = file("${path.module}/templates/airgap_userdata.tpl")
+  vars = {
+     registry_username = var.registry_username
+     registry_password = var.registry_password
+     cidr_block   = data.aws_vpc.selected.cidr_block
+  }
+}
+
+data "template_file" "nonairgap_userdata" {
+  template = file("${path.module}/templates/nonairgap_userdata.tpl")
+}
+
+
 module "rke2" {
   source = "git::https://github.com/rancherfederal/rke2-aws-tf.git"
 
   cluster_name          = local.name
-  vpc_id                = var.vpc_id
-  subnets               = var.private_subnets
+  vpc_id                = data.aws_vpc.selected.id
+  subnets               = var.deploy_subnets
   ami                   = var.server_ami
   servers               = var.servers
   instance_type         = var.server_instance_type
@@ -25,15 +43,14 @@ module "rke2" {
   enable_ccm = var.enable_ccm
   download   = var.download
 
-  # TODO: These need to be set in pre-baked ami's
-  pre_userdata = <<-EOF
-# Temporarily disable selinux enforcing due to missing policies in containerd
-# The change is currently being upstreamed and can be tracked here: https://github.com/rancher/k3s/issues/2240
-setenforce 0
-
-# Tune vm sysctl for elasticsearch
-sysctl -w vm.max_map_count=262144
+  rke2_config = <<-EOF
+# kube-apiserver-arg:
+# - "--runtime-config=settings.k8s.io/v1alpha1=true"
+# - "--enable-admission-plugins=PodPreset"
 EOF
+
+  # TODO: These need to be set in pre-baked ami's
+  pre_userdata = var.airgap == false ? data.template_file.nonairgap_userdata.rendered : data.template_file.airgap_userdata.rendered
 
   tags = merge({}, local.tags, var.tags)
 }
@@ -42,8 +59,8 @@ module "generic_agents" {
   source = "git::https://github.com/rancherfederal/rke2-aws-tf.git//modules/agent-nodepool"
 
   name                = "generic-agent"
-  vpc_id              = var.vpc_id
-  subnets             = var.private_subnets
+  vpc_id              = data.aws_vpc.selected.id
+  subnets             = var.deploy_subnets
   ami                 = var.agent_ami
   asg                 = var.agent_asg
   spot                = var.agent_spot
@@ -55,15 +72,14 @@ module "generic_agents" {
   enable_autoscaler = var.enable_autoscaler
   download          = var.download
 
-  # TODO: These need to be set in pre-baked ami's
-  pre_userdata = <<-EOF
-# Temporarily disable selinux enforcing due to missing policies in containerd
-# The change is currently being upstreamed and can be tracked here: https://github.com/rancher/k3s/issues/2240
-setenforce 0
-
-# Tune vm sysct for elasticsearch
-sysctl -w vm.max_map_count=262144
+  rke2_config = <<-EOF
+# kube-apiserver-arg:
+# - "--runtime-config=settings.k8s.io/v1alpha1=true"
+# - "--enable-admission-plugins=PodPreset"
 EOF
+
+  # TODO: These need to be set in pre-baked ami's
+  pre_userdata = var.airgap == false ? data.template_file.nonairgap_userdata.rendered : data.template_file.airgap_userdata.rendered
 
   # Required data for identifying cluster to join
   cluster_data = module.rke2.cluster_data
@@ -83,7 +99,7 @@ resource "null_resource" "kubeconfig" {
 
 ## Adding tags on VPC and Subnets to match uniquely created cluster name
 resource "aws_ec2_tag" "vpc_tags" {
-  resource_id = var.vpc_id
+  resource_id = data.aws_vpc.selected.id
   key         = "kubernetes.io/cluster/${module.rke2.cluster_name}"
   value       = "shared"
 }
@@ -95,9 +111,9 @@ resource "aws_ec2_tag" "public_subnets_tags" {
   value       = "shared"
 }
 
-resource "aws_ec2_tag" "private_subnets_tags" {
-  count       = length(var.private_subnets)
-  resource_id = var.private_subnets[count.index]
+resource "aws_ec2_tag" "deploy_subnets_tags" {
+  count       = length(var.deploy_subnets)
+  resource_id = var.deploy_subnets[count.index]
   key         = "kubernetes.io/cluster/${module.rke2.cluster_name}"
   value       = "shared"
 }

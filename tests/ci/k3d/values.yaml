@@ -62,7 +62,7 @@ addons:
       minimal:
         callback_uri: "https://minimal.bigbang.dev"
   gitlab:
-    enabled: true
+    enabled: false
     values:
       postgresql:
         install: true
