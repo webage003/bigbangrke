@@ -182,6 +182,38 @@ clean install:
       - images.txt
     expire_in: 7 days
 
+<<<<<<< HEAD
+=======
+upgrade:
+  stage: smoke tests
+  dependencies:
+    - pre vars
+  extends:
+    - .k3d
+  rules:
+    # skip job when MR title starts with 'Breaking Change'
+    - if: '$CI_MERGE_REQUEST_TITLE =~ /^Breaking Change/'
+      when: never
+    # run pipeline on merge request events
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
+  script:
+    - if $CHART_BREAKING_CHANGE; then echo "Breaking change detected by chart version difference, skipping job"; exit 0; fi
+    - echo "Install Big Bang from ${CI_DEFAULT_BRANCH}"
+    - git fetch && git checkout ${CI_DEFAULT_BRANCH}
+    - *deploy_bigbang
+    - *test_bigbang
+    - echo "Upgrade Big Bang from ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}"
+    - git reset --hard && git clean -fd
+    - git checkout ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
+    - *deploy_bigbang
+    - *test_bigbang
+  artifacts:
+    paths:
+      - images.txt
+    expire_in: 7 days
+>>>>>>> chore: enable upgrade job
 
 upgrade:
   stage: smoke tests
