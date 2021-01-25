@@ -26,7 +26,6 @@ metadata:
   namespace: gitlab
 type: kubernetes.io/opaque
 stringData:
-  gitlab-sso.json: |-
-  {{- .Values.addons.gitlab.sso.secret }}
-{{- end}}
+  gitlab-sso.json: {{ toYaml .Values.addons.gitlab.sso.secret | indent 2 }}
+{{- end }}
 {{- end }}

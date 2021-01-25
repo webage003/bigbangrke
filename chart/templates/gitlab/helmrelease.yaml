@@ -101,7 +101,7 @@ spec:
     {{- end }}
     global:
       appConfig:
-        {{- if .Values.addons.gitlab.sso.enable }}
+        {{- if .Values.addons.gitlab.sso.enabled }}
         omniauth:
           enabled: true
         {{- end }}
