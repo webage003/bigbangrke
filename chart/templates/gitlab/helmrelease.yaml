@@ -100,6 +100,16 @@ spec:
       - name: private-registry
     {{- end }}
     global:
+      {{- if .Values.addons.gitlab.database.external }}
+      psql:
+        host: {{ .Values.addons.gitlab.database.host }}
+        port: {{ .Values.addons.gitlab.database.port }}
+        username: {{ .Values.addons.gitlab.database.username }}
+        database: {{ .Values.addons.gitlab.database.database }}
+        password:
+          secret: gitlab-database
+          key: PGPASSWORD
+      {{- end }}
       appConfig:
         {{- if .Values.addons.gitlab.sso.enabled }}
         omniauth:

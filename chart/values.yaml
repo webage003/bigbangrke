@@ -179,6 +179,13 @@ addons:
     sso:
       enabled: false
       secret: {}
+    database:
+      external: true
+      host: postgres-postgresql-headless.postgres.svc.cluster.local
+      port: 5432
+      username: postgres
+      database: postgres
+      password: postgres
     values:
       postgresql:
         install: false

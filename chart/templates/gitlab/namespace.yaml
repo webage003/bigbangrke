@@ -28,4 +28,16 @@ type: kubernetes.io/opaque
 stringData:
   gitlab-sso.json: {{ toYaml .Values.addons.gitlab.sso.secret | indent 2 }}
 {{- end }}
+---
+# create database secret
+{{- if .Values.addons.gitlab.database.external }}
+apiVersion: v1
+kind: Secret
+metadata:
+    name: gitlab-database
+    namespace: gitlab
+type: kubernetes.io/opaque
+stringData:
+    PGPASSWORD: {{- .Values.addons.gitlab.database.password }}
+{{- end }}
 {{- end }}
