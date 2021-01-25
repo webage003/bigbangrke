@@ -130,6 +130,7 @@ pre vars:
   - find ./tests -type f -name '*.sh' | sort | xargs -r -I {} sh -c 'echo {} && sh {}'
 
 .package_script: &package_script
+    #Note: This should be removed when all registry entries reference .mil
     - sed -i 's/registry1.dso.mil/registry1.dsop.io/g' images.txt
 
     - cp ./scripts/package/synker.yaml ./synker.yaml

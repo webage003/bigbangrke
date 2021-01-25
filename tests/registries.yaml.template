@@ -3,3 +3,4 @@ configs:
     auth:
       username: robot${DOLLAR}bigbang
       password: ${REGISTRY1_PASSWORD}
+
