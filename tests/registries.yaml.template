@@ -3,4 +3,7 @@ configs:
     auth:
       username: robot${DOLLAR}bigbang
       password: ${REGISTRY1_PASSWORD}
-
+  "registry1.dso.mil":
+    auth:
+      username: robot${DOLLAR}bigbang
+      password: ${REGISTRY1_PASSWORD}
