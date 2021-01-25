@@ -130,6 +130,8 @@ pre vars:
   - find ./tests -type f -name '*.sh' | sort | xargs -r -I {} sh -c 'echo {} && sh {}'
 
 .package_script: &package_script
+    - sed -i 's/registry1.dso.mil/registry1.dsop.io/g' images.txt
+
     - cp ./scripts/package/synker.yaml ./synker.yaml
 
     # Populate images list in synker config
@@ -137,7 +139,6 @@ pre vars:
     - cat images.txt | sed -e 's/^/    - /' >> synker.yaml
     - cat images.txt
     
-    - sed -i 's/registry1.dso.mil/registry1.dsop.io/g' images.txt
 
     - synker pull -b=1
 
