@@ -19,7 +19,7 @@ data:
 {{- end }}
 ---
 # create sso secret
-{{- if .Values.addons.gitlab.sso.enable }}
+{{- if .Values.addons.gitlab.sso.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
