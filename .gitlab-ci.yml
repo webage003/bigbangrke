@@ -136,6 +136,9 @@ pre vars:
     # NOTE: This is stupid and hacky, use yq or something better to do this
     - cat images.txt | sed -e 's/^/    - /' >> synker.yaml
     - cat images.txt
+    
+    - sed -i 's/registry1.dso.mil/registry1.dsop.io/g' images.txt
+
     - synker pull -b=1
 
     # Tar up synker as well?
