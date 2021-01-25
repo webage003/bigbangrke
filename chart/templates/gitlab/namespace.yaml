@@ -16,7 +16,6 @@ type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
 {{- end }}
-{{- end }}
 ---
 # create sso secret
 {{- if .Values.addons.gitlab.sso.enabled }}
@@ -30,3 +29,4 @@ stringData:
   gitlab-sso.json: |-
   {{- .Values.addons.gitlab.sso.secret }}
 {{- end}}
+{{- end }}
