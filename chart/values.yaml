@@ -186,6 +186,63 @@ addons:
       username: {}
       database: {}
       password: {}
+    objectstorage:
+      external: true
+      secrets:
+        rails: {}
+        registry: {}
+        backups: {}
+      registry:
+        bucket: gitlab-registry-storage
+        connection:
+          nameOfSecret: gitlab-object-storage
+          key: registry
+      lfs:
+        bucket: gitlab-lfs
+        connection:
+          nameOfSecret: gitlab-object-storage
+          key: rails
+      artifacts:
+        bucket: gitlab-artifacts
+        connection:
+          nameOfSecret: gitlab-object-storage
+          key: rails
+      uploads:
+        bucket: gitlab-uploads
+        connection:
+          nameOfSecret: gitlab-object-storage
+          key: rails
+      packages:
+        bucket: gitlab-packages
+        connection:
+          nameOfSecret: gitlab-object-storage
+          key: rails
+      externalDiffs:
+        bucket: gitlab-mr-diffs
+        connection:
+          nameOfSecret: gitlab-object-storage
+          key: rails
+      terraformState:
+        bucket: gitlab-terraform-state
+        connection:
+          nameOfSecret: gitlab-object-storage
+          key: rails
+      dependencyProxy:
+        bucket: gitlab-dependency-proxy
+        connection: 
+          nameOfSecret: gitlab-object-storage
+          key: rails
+      pseudonymizer:
+        bucket: gitlab-pseudo
+        connection:
+          nameOfSecret: gitlab-object-storage
+          key: rails
+      backups:
+        bucket: gitlab-backup
+        tmpBucket: gitlab-backup-tmp
+        connection:
+          nameOfSecret: gitlab-object-storage
+          key: backups
     values:
       postgresql:
         install: false

@@ -40,4 +40,19 @@ type: kubernetes.io/opaque
 stringData:
     PGPASSWORD: {{ .Values.addons.gitlab.database.password }}
 {{- end }}
+---
+# create object storage secret
+{{- if .Values.addons.gitlab.objectstorage.external }}
+apiVersion: v1
+kind: Secret
+metadata:
+    name: gitlab-object-storage
+    namespace: gitlab
+type: kubernetes.io/opaque
+stringData:
+    rails: {{ toYaml .Values.addons.gitlab.objectstorage.secrets.rails | indent 4 }}
+    registry: {{ toYaml .Values.addons.gitlab.objectstorage.secrets.registry | indent 4 }}
+    backups: {{ toYaml .Values.addons.gitlab.objectstorage.secrets.backups | indent 4 }}
+{{- end }}
+
 {{- end }}
