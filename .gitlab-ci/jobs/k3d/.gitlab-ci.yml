@@ -9,6 +9,9 @@
   - k3d node list
 
 .k3d_after_script: &k3d_after_script
+  - kubectl get pods -A
+  - kubectl get gitrepository -A
+  - kubectl get helmrelease -A
   - k3d cluster delete ${CLUSTER_NAME}
 
 .k3d:
