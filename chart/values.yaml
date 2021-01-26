@@ -179,7 +179,12 @@ addons:
     sso:
       # enabling this option will auto-create any required secrets 
       enabled: true
-      secret: {} # unencoded multi-line stringData
+      # the secret is unencoded stringData
+      secret: |-
+        {
+          yourJsonSecret: here
+          override: this
+        }
       autoSignInWithProvider: false
       syncProfileFromProvider: []
       syncProfileAttributes: ['email']
@@ -193,10 +198,10 @@ addons:
     database:
       # enabling this option will auto-create any required secrets 
       external: true
-      host: {}
-      port: {}
-      username: {}
-      database: {}
+      host: ""
+      port: ""
+      username: ""
+      database: ""
       password: {} # unencoded stringData
     objectstorage:
       # enabling this option will auto-create any required secrets 
@@ -213,14 +218,21 @@ addons:
           dependencyProxy: gitlab-dependency-proxy
           pseudonymizer: gitlab-pseudo
         connection:
-          secret: {} # unencoded multi-line stringData
+          # the secret is unencoded stringData
+          secret: |-
+            yourConnectionInfo: here
+            override: this
           key: rails
       # image registry storage
       registry:
         buckets:
           bucket: gitlab-registry-storage
         connection:
-          secret: {} # unencoded multi-line stringData
+          # the secret is unencoded stringData
+          secret: |-
+            s3:
+              yourConnectionInfo: here
+              override: this
           key: registry        
       # backup storage
       backups:
@@ -228,11 +240,10 @@ addons:
           bucket: gitlab-backup
           tmpBucket: gitlab-backup-tmp
         connection:
-          secret: {}  # unencoded multi-line stringData
+          # the secret is unencoded stringData
+          secret: |-
+            [default]
+            yourConnectionInfo:  here
+            override: this
           key: backups
-    values:
-      postgresql:
-        install: false
-      global:
-        minio:
-          enabled: false
+    values: {}

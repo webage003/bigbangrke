@@ -3,93 +3,92 @@ Thank you for supporting PlatformOne!
 {{ if $.Values.addons.gitlab.enabled }}
 Gitlab is enabled.
 Please follow the Gitlab online documentation for proper configuration. 
-Here is an example of how to configure external perstistent storage for postgres DB and object storage.
+This Umbrella chart provides convenient enhancements to the Gitlab package chart.
+If you enable these features certain settings will be defaulted for you and any required secrets will be automatically created.
+Here is an example of how to configure your customer template. The following settings were used for local testing.
+You should point to your cloud provider's RDS and object storage.
 
 addons:
   gitlab:
     enabled: true
-    values:
-      postgresql:
-        install: false
-      global:
-        minio:
-          enabled: false
-        psql:
-          host: postgres-postgresql-headless.postgres.svc.cluster.local
-          port: 5432
-          username: postgres
-          database: postgres
-          password:
-            secret: db-credentials
-            key: PGPASSWORD
-        registry:
-          bucket: gitlab-registry-storage
-        appConfig:
-          lfs:
-            bucket: gitlab-lfs
-            connection:
-              secret: gitlab-object-storage
-              key: rails
-          artifacts:
-            bucket: gitlab-artifacts
-            connection:
-              secret: gitlab-object-storage
-              key: rails
-          uploads:
-            bucket: gitlab-uploads
-            connection:
-              secret: gitlab-object-storage
-              key: rails
-          packages:
-            bucket: gitlab-packages
-            connection:
-              secret: gitlab-object-storage
-              key: rails
-          externalDiffs:
-            bucket: gitlab-mr-diffs
-            connection:
-              secret: gitlab-object-storage
-              key: rails
-          terraformState:
-            enabled: false
-            bucket: gitlab-terraform-state
-            connection:
-              secret: gitlab-object-storage
-              key: rails
-          backups:
-            bucket: gitlab-backup
-            tmpBucket: gitlab-backup-tmp
-      gitlab:
-        task-runner:
-          psql:
-            host: postgres-postgresql-headless.postgres.svc.cluster.local
-            port: 5432
-            username: postgres
-            database: postgres
-            password:
-              secret: db-credentials
-              key: PGPASSWORD
-          backups:
-            objectStorage:
-              config:
-                secret: gitlab-object-storage
-                key: backups
+    database:
+      external: true
+      host: postgres-postgresql-headless.postgres.svc.cluster.local
+      port: 5432
+      username: postgres
+      database: postgres
+      password: postgres
+    objectstorage:
+      external: true
+      rails:
+        connection:
+          secret: |-
+            provider: AWS
+            region: us-east-1
+            aws_access_key_id: myaccesskey
+            aws_secret_access_key: mysecretkey
+            aws_signature_version: 4
+            host: minio.minio.svc.cluster.local
+            endpoint: "http://minio.minio.svc.cluster.local:9000"
+            path_style: true
       registry:
-        storage:
-          secret: gitlab-object-storage
-          key: registry
+        connection:
+          secret: |-
+            s3:
+              aws_signature_version: 4
+              host: minio.minio.svc.cluster.local
+              regionendpoint: "http://minio.minio.svc.cluster.local:9000"
+              path_style: true
+              region: us-east-1
+              bucket: registry
+              accesskey: myaccesskey
+              secretkey: mysecretkey
+      backups:
+        connection:
+          secret: |-
+            [default]
+            access_key = myaccesskey
+            secret_key = mysecretkey
+            bucket_location = us-gov-west-1
+            host_bucket = http://minio.minio.svc.cluster.local:9000
+    sso:
+      enabled: true
+      secret: |-
+        {
+          "name": "openid_connect",
+          "label": "Platform One SSO",
+          "args": {
+            "name": "openid_connect",
+            "scope": [
+              "Gitlab"
+            ],
+            "response_type": "code",
+            "issuer": "https://login.dso.mil/auth/realms/baby-yoda",
+            "client_auth_method": "query",
+            "discovery": true,
+            "uid_field": "preferred_username",
+            "client_options": {
+              "identifier": "platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-gitlab",
+              "secret": "",
+              "redirect_uri": "https://code.bigbang.dev/users/auth/openid_connect/callback",
+              "end_session_endpoint": "https://login.dso.mil/auth/realms/baby-yoda/protocol/openid-connect/logout"
+            }
+          }
+        }
 
 
-{{- if $.Values.addons.gitlab.values.postgresql.install }}
+{{- if $.Values.addons.gitlab.database.external }}
+{{ else }}
 PLATFORM ONE GITLAB WARNING:
-  You have enabled an internal postgres database in the values configuration.
+  You have enabled an internal postgres database in the Umbrella configuration.
   PlatformOne does not support this option for production deployments because your persistent data can be permanently lost.
   This option should only be used for development or CI pipelines.
 {{- end -}}
 
-{{- if $.Values.addons.gitlab.values.global.minio.enabled }}
+{{- if $.Values.addons.gitlab.objectstorage.external }}
+{{ else }}
 PLATFORM ONE GITLAB WARNING: 
-  You have enabled a MinIO internal service in the values configuration.
+  You have enabled a MinIO internal service in the Umbrella configuration.
   PlatformOne does not support this option for production deployments because your persistent data can be permanently lost.
   This option should only be used for development or CI pipelines.
 {{- end }}

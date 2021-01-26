@@ -44,6 +44,10 @@ spec:
       enabled: {{ .Values.istio.enabled }}
     monitoring:
       enabled: {{ .Values.monitoring.enabled }}
+    {{- if .Values.addons.gitlab.database.external }}
+    postgresql:
+      install: false
+    {{- end }}
     {{- if ( include "imagePullSecret" . ) }}
     ## values for image pull secrets
     redis:
@@ -116,6 +120,10 @@ spec:
       - name: private-registry
     {{- end }}
     global:
+      {{- if .Values.addons.gitlab.objectstorage.external }}
+      minio:
+        enabled: false
+      {{- end }}
       {{- if .Values.addons.gitlab.database.external }}
       psql:
         host: {{ .Values.addons.gitlab.database.host }}
