@@ -177,9 +177,21 @@ addons:
       path: "./chart"
       branch: bb-1287
     sso:
-      enabled: false
+      # enabling this option will auto-create any required secrets 
+      enabled: true
       secret: {} # unencoded multi-line stringData
+      autoSignInWithProvider: false
+      syncProfileFromProvider: []
+      syncProfileAttributes: ['email']
+      allowSingleSignOn: ['openid_connect']
+      blockAutoCreatedUsers: false
+      autoLinkLdapUser: false
+      autoLinkSamlUser: false
+      autoLinkUser: []
+      externalProviders: []
+      allowBypassTwoFactor: []
     database:
+      # enabling this option will auto-create any required secrets 
       external: true
       host: {}
       port: {}
@@ -187,6 +199,7 @@ addons:
       database: {}
       password: {} # unencoded stringData
     objectstorage:
+      # enabling this option will auto-create any required secrets 
       external: true
       # gitlab application storage
       rails:

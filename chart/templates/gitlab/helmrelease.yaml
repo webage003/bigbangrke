@@ -133,7 +133,20 @@ spec:
       appConfig:
         {{- if .Values.addons.gitlab.sso.enabled }}
         omniauth:
-          enabled: true
+          enabled: {{ .Values.addons.gitlab.sso.enabled }}
+          autoSignInWithProvider: {{ .Values.addons.gitlab.sso.autoSignInWithProvider }}
+          syncProfileFromProvider: {{ .Values.addons.gitlab.sso.syncProfileFromProvider }}
+          syncProfileAttributes: {{ .Values.addons.gitlab.sso.syncProfileAttributes }}
+          allowSingleSignOn: {{ .Values.addons.gitlab.sso.allowSingleSignOn }}
+          blockAutoCreatedUsers: {{ .Values.addons.gitlab.sso.blockAutoCreatedUsers }}
+          autoLinkLdapUser: {{ .Values.addons.gitlab.sso.autoLinkLdapUser }}
+          autoLinkSamlUser: {{ .Values.addons.gitlab.sso.autoLinkSamlUser }}
+          autoLinkUser: {{ .Values.addons.gitlab.sso.autoLinkUser }}
+          externalProviders: {{ .Values.addons.gitlab.sso.externalProviders }}
+          allowBypassTwoFactor: {{ .Values.addons.gitlab.sso.allowBypassTwoFactor }}
+          providers:
+              - secret: gitlab-sso-provider
+                key: gitlab-sso.json
         {{- end }}
         {{- if .Values.addons.gitlab.objectstorage.external }}
         lfs:
