@@ -138,7 +138,9 @@ spec:
       registry: 
         bucket: {{ .Values.addons.gitlab.objectstorage.registry.buckets.bucket }}
       {{- end }}
+      {{- if or .Values.addons.gitlab.sso.enabled .Values.addons.gitlab.objectstorage.external }}
       appConfig:
+      {{- end }}
         {{- if .Values.addons.gitlab.sso.enabled }}
         omniauth:
           enabled: {{ .Values.addons.gitlab.sso.enabled }}
