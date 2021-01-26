@@ -50,9 +50,9 @@ metadata:
     namespace: gitlab
 type: kubernetes.io/opaque
 stringData:
-    rails: {{ toYaml .Values.addons.gitlab.objectstorage.secrets.rails | indent 4 }}
-    registry: {{ toYaml .Values.addons.gitlab.objectstorage.secrets.registry | indent 4 }}
-    backups: {{ toYaml .Values.addons.gitlab.objectstorage.secrets.backups | indent 4 }}
+    rails: {{ toYaml .Values.addons.gitlab.objectstorage.rails.connection.secret | indent 4 }}
+    registry: {{ toYaml .Values.addons.gitlab.objectstorage.registry.connection.secret | indent 4 }}
+    backups: {{ toYaml .Values.addons.gitlab.objectstorage.backups.connection.secret | indent 4 }}
 {{- end }}
 
 {{- end }}

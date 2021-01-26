@@ -58,7 +58,7 @@ spec:
     registry:
       {{- if .Values.addons.gitlab.objectstorage.external }}
       storage:
-        secret: {{ .Values.addons.gitlab.objectstorage.registry.connection.nameOfSecret }}
+        secret: gitlab-object-storage
         key: {{ .Values.addons.gitlab.objectstorage.registry.connection.key }}
       {{- end }}
     {{- if ( include "imagePullSecret" . ) }}
@@ -77,7 +77,7 @@ spec:
         backups:
           objectStorage:
             config:
-              secret: {{ .Values.addons.gitlab.objectstorage.backups.connection.nameOfSecret }}
+              secret: gitlab-object-storage
               key: {{ .Values.addons.gitlab.objectstorage.backups.connection.key }}
         {{- end }}
     {{- if ( include "imagePullSecret" . ) }}
@@ -128,7 +128,7 @@ spec:
       {{- end }}
       {{- if .Values.addons.gitlab.objectstorage.external }}
       registry: 
-        bucket: {{ .Values.addons.gitlab.objectstorage.registry.bucket }}
+        bucket: {{ .Values.addons.gitlab.objectstorage.registry.buckets.bucket }}
       {{- end }}
       appConfig:
         {{- if .Values.addons.gitlab.sso.enabled }}
@@ -137,48 +137,48 @@ spec:
         {{- end }}
         {{- if .Values.addons.gitlab.objectstorage.external }}
         lfs:
-          bucket: {{ .Values.addons.gitlab.objectstorage.lfs.bucket }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.rails.buckets.lfs }}
           connection:
-            secret: {{ .Values.addons.gitlab.objectstorage.lfs.connection.nameOfSecret }}
-            key: {{ .Values.addons.gitlab.objectstorage.lfs.connection.key }}
+            secret: gitlab-object-storage
+            key: {{ .Values.addons.gitlab.objectstorage.rails.connection.key }}
         artifacts:
-          bucket: {{ .Values.addons.gitlab.objectstorage.artifacts.bucket }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.rails.buckets.artifacts }}
           connection:
-            secret: {{ .Values.addons.gitlab.objectstorage.artifacts.connection.nameOfSecret }}
-            key: {{ .Values.addons.gitlab.objectstorage.artifacts.connection.key }}
+            secret: gitlab-object-storage
+            key: {{ .Values.addons.gitlab.objectstorage.rails.connection.key }}
         uploads:
-          bucket: {{ .Values.addons.gitlab.objectstorage.uploads.bucket }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.rails.buckets.uploads }}
           connection:
-            secret: {{ .Values.addons.gitlab.objectstorage.uploads.connection.nameOfSecret }}
-            key: {{ .Values.addons.gitlab.objectstorage.uploads.connection.key }}
+            secret: gitlab-object-storage
+            key: {{ .Values.addons.gitlab.objectstorage.rails.connection.key }}
         packages:
-          bucket: {{ .Values.addons.gitlab.objectstorage.uploads.bucket }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.rails.buckets.packages }}
           connection:
-            secret: {{ .Values.addons.gitlab.objectstorage.packages.connection.nameOfSecret }}
-            key: {{ .Values.addons.gitlab.objectstorage.packages.connection.key }}
+            secret: gitlab-object-storage
+            key: {{ .Values.addons.gitlab.objectstorage.rails.connection.key }}
         externalDiffs:
-          bucket: {{ .Values.addons.gitlab.objectstorage.externalDiffs.bucket }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.rails.buckets.externalDiffs }}
           connection:
-            secret: {{ .Values.addons.gitlab.objectstorage.externalDiffs.connection.nameOfSecret }}
-            key: {{ .Values.addons.gitlab.objectstorage.externalDiffs.connection.key }}
+            secret: gitlab-object-storage
+            key: {{ .Values.addons.gitlab.objectstorage.rails.connection.key }}
         terraformState:
-          bucket: {{ .Values.addons.gitlab.objectstorage.terraformState.bucket }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.rails.buckets.terraformState }}
           connection:
-            secret: {{ .Values.addons.gitlab.objectstorage.terraformState.connection.nameOfSecret }}
-            key: {{ .Values.addons.gitlab.objectstorage.terraformState.connection.key }}
+            secret: gitlab-object-storage
+            key: {{ .Values.addons.gitlab.objectstorage.rails.connection.key }}
         dependencyProxy:
-          bucket: {{ .Values.addons.gitlab.objectstorage.dependencyProxy.bucket }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.rails.buckets.dependencyProxy }}
           connection: 
-            secret: {{ .Values.addons.gitlab.objectstorage.dependencyProxy.connection.nameOfSecret }}
-            key: {{ .Values.addons.gitlab.objectstorage.dependencyProxy.connection.key }}
+            secret: gitlab-object-storage
+            key: {{ .Values.addons.gitlab.objectstorage.rails.connection.key }}
         pseudonymizer:
-          bucket: {{ .Values.addons.gitlab.objectstorage.pseudonymizer.bucket }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.rails.buckets.pseudonymizer }}
           connection:
-            secret: {{ .Values.addons.gitlab.objectstorage.pseudonymizer.connection.nameOfSecret }}
-            key: {{ .Values.addons.gitlab.objectstorage.pseudonymizer.connection.key }}
+            secret: gitlab-object-storage
+            key: {{ .Values.addons.gitlab.objectstorage.rails.connection.key }}
         backups:
-          bucket: {{ .Values.addons.gitlab.objectstorage.backups.bucket }}
-          tmpBucket: {{ .Values.addons.gitlab.objectstorage.backups.tmpBucket }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.backups.buckets.bucket }}
+          tmpBucket: {{ .Values.addons.gitlab.objectstorage.backups.buckets.tmpBucket }}
         {{- end }}
       hosts:
         domain: code.{{ .Values.hostname }}

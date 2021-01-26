@@ -178,70 +178,44 @@ addons:
       branch: bb-1287
     sso:
       enabled: false
-      secret: {}
+      secret: {} # unencoded multi-line stringData
     database:
       external: true
       host: {}
       port: {}
       username: {}
       database: {}
-      password: {}
+      password: {} # unencoded stringData
     objectstorage:
       external: true
-      secrets:
-        rails: {}
-        registry: {}
-        backups: {}
+      # gitlab application storage
+      rails:
+        buckets:
+          lfs: gitlab-lfs
+          artifacts: gitlab-artifacts
+          uploads: gitlab-uploads
+          packages: gitlab-packages
+          externalDiffs: gitlab-mr-diffs
+          terraformState: gitlab-terraform-state
+          dependencyProxy: gitlab-dependency-proxy
+          pseudonymizer: gitlab-pseudo
+        connection:
+          secret: {} # unencoded multi-line stringData
+          key: rails
+      # image registry storage
       registry:
-        bucket: gitlab-registry-storage
+        buckets:
+          bucket: gitlab-registry-storage
         connection:
-          nameOfSecret: gitlab-object-storage
-          key: registry
-      lfs:
-        bucket: gitlab-lfs
-        connection:
-          nameOfSecret: gitlab-object-storage
-          key: rails
-      artifacts:
-        bucket: gitlab-artifacts
-        connection:
-          nameOfSecret: gitlab-object-storage
-          key: rails
-      uploads:
-        bucket: gitlab-uploads
-        connection:
-          nameOfSecret: gitlab-object-storage
-          key: rails
-      packages:
-        bucket: gitlab-packages
-        connection:
-          nameOfSecret: gitlab-object-storage
-          key: rails
-      externalDiffs:
-        bucket: gitlab-mr-diffs
-        connection:
-          nameOfSecret: gitlab-object-storage
-          key: rails
-      terraformState:
-        bucket: gitlab-terraform-state
-        connection:
-          nameOfSecret: gitlab-object-storage
-          key: rails
-      dependencyProxy:
-        bucket: gitlab-dependency-proxy
-        connection: 
-          nameOfSecret: gitlab-object-storage
-          key: rails
-      pseudonymizer:
-        bucket: gitlab-pseudo
-        connection:
-          nameOfSecret: gitlab-object-storage
-          key: rails
+          secret: {} # unencoded multi-line stringData
+          key: registry        
+      # backup storage
       backups:
-        bucket: gitlab-backup
-        tmpBucket: gitlab-backup-tmp
+        buckets:
+          bucket: gitlab-backup
+          tmpBucket: gitlab-backup-tmp
         connection:
-          nameOfSecret: gitlab-object-storage
+          secret: {}  # unencoded multi-line stringData
           key: backups
     values:
       postgresql:
