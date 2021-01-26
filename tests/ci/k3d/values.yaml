@@ -60,9 +60,9 @@ addons:
     enabled: true
   gitlab:
     enabled: true
-    values:
-      postgresql:
-        install: true
-      global:
-        minio:
-          enabled: true
+    sso:
+      enabled: false
+    database:
+      external: false
+    objectstorage:
+      external: false
