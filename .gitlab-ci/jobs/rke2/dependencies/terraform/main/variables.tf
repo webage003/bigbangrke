@@ -48,7 +48,7 @@ variable "download" {
 # Server variables
 #
 variable "server_ami" {
-  default = "ami-57ecd436" # RHEL 8.3
+  default = "ami-0d4a6eb3bbbeb0cbd" # RHEL 8.3 STIGd
 }
 variable "server_instance_type" {
   default = "m5a.large"
@@ -64,7 +64,7 @@ variable "rke2_version" {
 # Generic agent variables
 #
 variable "agent_ami" {
-  default = "ami-57ecd436" # RHEL 8.3
+  default = "ami-0d4a6eb3bbbeb0cbd" # RHEL 8.3 STIGd
 }
 variable "agent_instance_type" {
   default = "m5a.4xlarge"
