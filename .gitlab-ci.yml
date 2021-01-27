@@ -10,6 +10,7 @@ workflow:
     # skip pipeline for branches that start with "docs"
     - if: '$CI_COMMIT_REF_NAME =~ /^docs/'
       when: never
+    - when: always
 
 # include templates
 include:
@@ -47,6 +48,7 @@ variables:
     - kubectl get helmrelease -A
 
 lazy:
+  stage: lazy
   extends:
     - .release
 
