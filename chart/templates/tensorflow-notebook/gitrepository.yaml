@@ -1,0 +1,16 @@
+{{- if .Values.tensorflow-notebook.enabled }}
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: tensorflow-notebook
+  namespace: {{ .Release.Namespace }}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.tensorflow-notebook.git.repo }}
+  ref:
+  {{- include "validRef" .Values.tensorflow-notebook.git | nindent 4 }}
+  {{ include "gitIgnore" . }}
+  {{- include "gitCreds" .Values.git | nindent 2 }}
+  secretRef:
+    name: appsrepo
+{{- end }}

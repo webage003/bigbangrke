@@ -1,0 +1,39 @@
+{{- if .Values.tensorflow-notebook.enabled }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: tensorflow-notebook
+  namespace: {{ .Release.Namespace }}
+spec:
+  targetNamespace: tensorflow
+  chart:
+    spec:
+      chart: {{ .Values.tensorflow-notebook.git.path }}
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: tensorflow-notebook
+        namespace: {{ .Release.Namespace }}
+
+  {{- with .Values.flux }}
+  interval: {{ .interval }}
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: {{ .install.retries }}
+  upgrade:
+    remediation:
+      retries: {{ .upgrade.retries }}
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: {{ .rollback.timeout }}
+    cleanupOnFail: {{ .rollback.cleanupOnFail }}
+  {{- end }}
+
+  valuesFrom:
+    - name: values
+      kind: Secret
+      valuesKey: "tensorflow-notebook.yaml"
+{{- end }}

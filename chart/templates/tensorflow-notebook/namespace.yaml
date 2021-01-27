@@ -1,0 +1,32 @@
+{{- if .Values.tensorflow-notebook.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: {{ .Release.Name }}-tensorflow-notebook
+  name: tensorflow
+
+{{- if and (ne .Values.jaic.credentials.password "") (ne .Values.jaic.credentials.username "") }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: appsrepo
+  namespace: bigbang
+type: opaque
+data:
+  password: {{ .Values.jaic.credentials.password | b64enc }}
+  username: {{ .Values.jaic.credentials.username | b64enc }}
+{{- end }}
+{{- if and (ne .Values.registryCredentials2.username "") (ne .Values.registryCredentials2.password "") }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: il2-registry
+  namespace: tensorflow
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret2" . }}
+{{- end }}
+{{- end }}
