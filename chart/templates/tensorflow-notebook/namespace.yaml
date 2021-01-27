@@ -1,4 +1,4 @@
-{{- if .Values.tensorflow-notebook.enabled }}
+{{- if .Values.tensorflownotebook.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:

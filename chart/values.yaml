@@ -157,7 +157,7 @@ nifi:
 # ----------------------------------------------------------------------------------------------------------------------
 # Tensorflow-Notebook
 #
-tensorflow-notebook:
+tensorflownotebook:
   enabled: true
   git:
     repo: https://code.il2.dso.mil/jaic-devsecops/apps.git
