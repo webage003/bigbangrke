@@ -9,7 +9,7 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: private-registry
+  name: {{ include "bigbang.name" . }}-registry-credentials
   namespace: logging
 type: kubernetes.io/dockerconfigjson
 data:

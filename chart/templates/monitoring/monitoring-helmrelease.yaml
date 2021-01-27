@@ -45,18 +45,18 @@ spec:
       enabled: {{ .Values.monitoring.sso.enabled }}
     global:
       imagePullSecrets:
-        - name: private-registry
+        - name: {{ include "bigbang.name" . }}-registry-credentials
     grafana:
       image:
         pullSecrets:
-        - private-registry
+        - {{ include "bigbang.name" . }}-registry-credentials
     prometheus-node-exporter:
       serviceAccount:
         imagePullSecrets:
-        - name: private-registry
+        - name: {{ include "bigbang.name" . }}-registry-credentials
     kube-state-metrics:
       imagePullSecrets:
-      - name: private-registry
+      - name: {{ include "bigbang.name" . }}-registry-credentials
 
 {{- if .Values.monitoring.sso.enabled }}
     ingress:

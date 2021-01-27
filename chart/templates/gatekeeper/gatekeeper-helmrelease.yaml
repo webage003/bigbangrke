@@ -44,5 +44,5 @@ spec:
     disableValidatingWebhook: true
     createNamespace: false
     imagePullSecrets:
-      - name: private-registry
+      - name: {{ include "bigbang.name" . }}-registry-credentials
 {{- end }}

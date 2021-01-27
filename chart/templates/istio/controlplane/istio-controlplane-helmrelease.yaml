@@ -42,7 +42,7 @@ spec:
       enabled: {{ .Values.istio.sso.enabled }}
 
     imagePullSecrets:
-      - private-registry
+      - {{ include "bigbang.name" . }}-registry-credentials
 
 {{- if .Values.istio.sso.enabled }}
     ingress:

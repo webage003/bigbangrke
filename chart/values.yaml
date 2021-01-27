@@ -1,3 +1,6 @@
+nameOverride: ""
+fullnameOverride: ""
+
 hostname: bigbang.dev
 
 # Toggle sourcing from external repos

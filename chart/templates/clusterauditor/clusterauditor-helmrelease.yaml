@@ -39,7 +39,7 @@ spec:
 
   values:
     #conversion from umbrella values to package values
-    imagePullSecrets: [ private-registry ]
+    imagePullSecrets: [ {{ include "bigbang.name" . }}-registry-credentials ]
 
   dependsOn:
   - name: ek

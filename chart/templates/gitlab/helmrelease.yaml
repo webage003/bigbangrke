@@ -50,54 +50,54 @@ spec:
       metrics:
         image:
           pullSecrets: 
-          - private-registry
+          - {{ include "bigbang.name" . }}-registry-credentials
       image:
         pullSecrets: 
-        - private-registry
+        - {{ include "bigbang.name" . }}-registry-credentials
     registry:
       image:
         pullSecrets:
-        - name: private-registry
+        - name: {{ include "bigbang.name" . }}-registry-credentials
     shared-secrets:
       selfsign:
         image:
           pullSecrets:
-          - name: private-registry
+          - name: {{ include "bigbang.name" . }}-registry-credentials
     gitlab:
       task-runner:
         image:
           pullSecrets:
-          - name: private-registry
+          - name: {{ include "bigbang.name" . }}-registry-credentials
       migrations:
         image:
           pullSecrets:
-          - name: private-registry
+          - name: {{ include "bigbang.name" . }}-registry-credentials
       webservice:
         image:
           pullSecrets:
-          - name: private-registry 
+          - name: {{ include "bigbang.name" . }}-registry-credentials
         workhorse:
           pullSecrets:
-          - name: private-registry 
+          - name: {{ include "bigbang.name" . }}-registry-credentials
       sidekiq:
         image:
           pullSecrets:
-          - name: private-registry
+          - name: {{ include "bigbang.name" . }}-registry-credentials
       gitaly:
         image:
           pullSecrets:
-          - name: private-registry
+          - name: {{ include "bigbang.name" . }}-registry-credentials
       gitlab-shell:
         image:
           pullSecrets:
-          - name: private-registry
+          - name: {{ include "bigbang.name" . }}-registry-credentials
       gitlab-exporter:
         image:
           pullSecrets:
-          - name: private-registry
+          - name: {{ include "bigbang.name" . }}-registry-credentials
     minio:
       pullSecrets:
-      - name: private-registry
+      - name: {{ include "bigbang.name" . }}-registry-credentials
     {{- end }}
     global:
       hosts:
@@ -111,11 +111,11 @@ spec:
       certificates:
         image:
           pullSecrets:
-          - name: private-registry
+          - name: {{ include "bigbang.name" . }}-registry-credentials
       kubectl:
         image:
           pullSecrets:
-          - name: private-registry
+          - name: {{ include "bigbang.name" . }}-registry-credentials
       {{ end }}
 
   {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.monitoring.enabled }}

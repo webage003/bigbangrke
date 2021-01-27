@@ -43,7 +43,7 @@ spec:
     createNamespace: false
 
     imagePullSecrets:
-      - name: private-registry
+      - name: {{ include "bigbang.name" . }}-registry-credentials
 
   {{- if .Values.gatekeeper.enabled }}
   dependsOn:

@@ -1,3 +1,29 @@
+{{/* vim: set filetype=mustache: */}}
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "bigbang.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "bigbang.fullname" -}}
+{{- if .Values.fullnameOverride -}}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "imagePullSecret" }}
   {{- if .Values.registryCredentials -}}
     {{- $credType := typeOf .Values.registryCredentials -}}
@@ -52,13 +78,13 @@ branch: {{ .branch | quote }}
 Build the appropriate git credentials secret for private git repositories
 */}}
 {{- define "gitCreds" -}}
-{{- if .existingSecret -}}
+{{- if .Values.git.existingSecret -}}
 secretRef:
-  name: {{ .existingSecret }}
-{{- else if coalesce .credentials.username .credentials.password .credentials.privateKey .credentials.publicKey .credentials.knownHosts "" -}}
+  name: {{ .Values.git.existingSecret }}
+{{- else if coalesce .Values.git.credentials.username .Values.git.credentials.password .Values.git.credentials.privateKey .Values.git.credentials.publicKey .Values.git.credentials.knownHosts "" -}}
 {{- /* Input validation happens in git-credentials.yaml template */ -}}
 secretRef:
-  name: git-credentials
+  name: {{ $.Release.Name }}-git-credentials
 {{- end -}}
 {{- end -}}
 
