@@ -2,15 +2,8 @@
   tags:
     - bigbang
     - dogfood
-  services:
-    - name: moby/buildkit:rootless
-      alias: buildkitd
-      command:
-        - "--oci-worker-no-process-sandbox"
-        - "--addr"
-        - "tcp://0.0.0.0:1234"
   variables:
-    BUILDKIT_HOST: tcp://buildkitd:1234
+    BUILDKITD_FLAGS: --oci-worker-no-process-sandbox
   image:
     name: moby/buildkit:rootless
     entrypoint:
@@ -18,7 +11,7 @@
       - "-c"
   script:
     - |
-      buildctl build \
+      buildctl-daemonless.sh build \
         --frontend=dockerfile.v0 \
         --local context=. \
         --local dockerfile=.
