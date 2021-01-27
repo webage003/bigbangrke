@@ -9,7 +9,7 @@ include:
   - local: '/.gitlab-ci/jobs/rke2/.gitlab-ci.yml'
 
   # Release jobs
-  - local: '/.gitlab-ci/release/.gitlab-ci.yml'
+  - local: '/.gitlab-ci/jobs/release/.gitlab-ci.yml'
 
 .terraformer:
   image:
