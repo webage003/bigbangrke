@@ -16,6 +16,7 @@ include:
   - local: '/.gitlab-ci/templates.yml'
 
 stages:
+  - lazy
   - smoke tests
   - network up
   - cluster up
@@ -44,6 +45,10 @@ variables:
   after_script:
     - kubectl get all -A
     - kubectl get helmrelease -A
+
+lazy:
+  extends:
+    - .release
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Pre Stage Jobs

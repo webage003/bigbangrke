@@ -8,6 +8,9 @@ include:
   # RKE2 Gitlab CI jobs
   - local: '/.gitlab-ci/jobs/rke2/.gitlab-ci.yml'
 
+  # Release jobs
+  - local: '/.gitlab-ci/release/.gitlab-ci.yml'
+
 .terraformer:
   image:
     name: registry.dsop.io/platform-one/big-bang/pipeline-templates/pipeline-templates/terraform:0.13.5
