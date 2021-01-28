@@ -17,7 +17,7 @@ data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
 {{- end }}
 ---
-# create sso secret
+# create sso secret. The assumption is OIDC
 {{- if .Values.addons.gitlab.sso.enabled }}
 apiVersion: v1
 kind: Secret
@@ -26,7 +26,28 @@ metadata:
   namespace: gitlab
 type: kubernetes.io/opaque
 stringData:
-  gitlab-sso.json: {{ toYaml .Values.addons.gitlab.sso.secret | indent 2 }}
+  gitlab-sso.json: |-
+    {
+      "name": "openid_connect",
+      "label": "{{ .Values.addons.gitlab.sso.label }}",
+      "args": {
+        "name": "openid_connect",
+        "scope": [
+          "Gitlab"
+        ],
+        "response_type": "code",
+        "issuer": "{{ .Values.addons.gitlab.sso.issuer }}",
+        "client_auth_method": "query",
+        "discovery": true,
+        "uid_field": "preferred_username",
+        "client_options": {
+          "identifier": "{{ .Values.addons.gitlab.sso.clientId }}",
+          "secret": "{{ .Values.addons.gitlab.sso.label }}",
+          "redirect_uri": "{{ .Values.addons.gitlab.sso.redirectUri }}",
+          "end_session_endpoint": "{{ .Values.addons.gitlab.sso.endSessionEndpoint }}"
+        }
+      }
+    }
 {{- end }}
 ---
 # create database secret

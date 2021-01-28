@@ -177,24 +177,27 @@ addons:
       path: "./chart"
       branch: bb-1287
     sso:
-      # enabling this option will auto-create any required secrets 
-      enabled: true
-      # the secret is unencoded stringData
-      secret: |-
-        {
-          yourJsonSecret: here
-          override: this
-        }
-      autoSignInWithProvider: false
-      syncProfileFromProvider: []
-      syncProfileAttributes: ['email']
-      allowSingleSignOn: ['openid_connect']
-      blockAutoCreatedUsers: false
-      autoLinkLdapUser: false
-      autoLinkSamlUser: false
-      autoLinkUser: []
-      externalProviders: []
-      allowBypassTwoFactor: []
+      # enabling this option will auto-create any required secrets. 
+      # The defaults assume an OIDC provider. 
+      enabled: false
+      label: ""
+      issuer: ""
+      clientId: ""
+      secret: ""
+      redirectUri: ""
+      endSessionEndpoint: ""
+
+      # autoSignInWithProvider: false
+      # syncProfileFromProvider: []
+      # syncProfileAttributes: ['email']
+      # allowSingleSignOn: ['openid_connect']
+      # blockAutoCreatedUsers: false
+      # autoLinkLdapUser: false
+      # autoLinkSamlUser: false
+      # autoLinkUser: []
+      # externalProviders: []
+      # allowBypassTwoFactor: []
+
     database:
       # enabling this option will auto-create any required secrets 
       external: true
