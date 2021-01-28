@@ -5,7 +5,8 @@ hostname: bigbang.dev
 offline: false
 
 # Openshift Feature Toggle
-openshift: false
+global:
+  openshift: false
 
 # Registry credentials to use from pulling images from private registry, will create an appropriate imagePullSecret in all relevant namespaces
 registryCredentials:

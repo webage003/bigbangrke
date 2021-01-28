@@ -1,4 +1,4 @@
-{{- if and (not .Values.offline) .Values.istio.enabled .Values.openshift }}
+{{- if and (not .Values.offline) .Values.istio.enabled .Values.global.openshift }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
