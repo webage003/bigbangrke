@@ -30,9 +30,9 @@ stringData:
   monitoring.yaml: |
 {{ toYaml .Values.monitoring.values | indent 4 }}
   nifi.yaml: |
-{{ toYaml .Values.nifi.values | indent 4  }}
+{{ toYaml .Values.nifi.values | indent 4 }}
   tensorflow-notebook.yaml: |
-{{ toYaml .Values.tensorflownotebook.values | indent 4  }}
+{{ toYaml .Values.tensorflownotebook.values | indent 4 }}
   twistlock.yaml: |
 {{ toYaml .Values.twistlock.values | indent 4 }}
   clusterauditor.yaml: |
