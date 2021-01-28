@@ -209,7 +209,7 @@ addons:
     chains: {}
 
   gitlab:
-    enabled: false
+    enabled: true
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
