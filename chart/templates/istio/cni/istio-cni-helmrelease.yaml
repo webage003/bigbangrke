@@ -45,12 +45,8 @@ spec:
     #imagePullSecrets:
     #  - name: private-registry
 
-  dependsOn:
-    - name: istio-operator
-      namespace: { { .Release.Namespace } }
-    - name: istio
-      namespace: { { .Release.Namespace } }
   {{- if .Values.gatekeeper.enabled }}
+  dependsOn:
     - name: gatekeeper
       namespace: {{ .Release.Namespace }}
   {{- end }}
