@@ -11,7 +11,7 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: datarepo
+  name: nifi-datarepo
   namespace: bigbang
 type: opaque
 data:

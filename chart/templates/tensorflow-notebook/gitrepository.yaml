@@ -1,16 +1,16 @@
-{{- if .Values.airflow.enabled }}
+{{- if .Values.tensorflownotebook.enabled }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: airflow
+  name: tensorflow-notebook
   namespace: {{ .Release.Namespace }}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.airflow.git.repo }}
+  url: {{ .Values.tensorflownotebook.git.repo }}
   ref:
-  {{- include "validRef" .Values.airflow.git | nindent 4 }}
+  {{- include "validRef" .Values.tensorflownotebook.git | nindent 4 }}
   {{ include "gitIgnore" . }}
   {{- include "gitCreds" .Values.git | nindent 2 }}
   secretRef:
-    name: airflow-appsrepo
+    name: tensorflow-appsrepo
 {{- end }}

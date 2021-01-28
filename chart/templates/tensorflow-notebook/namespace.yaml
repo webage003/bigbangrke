@@ -1,17 +1,17 @@
-{{- if .Values.airflow.enabled }}
+{{- if .Values.tensorflownotebook.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    app: {{ .Release.Name }}-airflow
-  name: airflow
+    app: {{ .Release.Name }}-tensorflow-notebook
+  name: tensorflow
 
 {{- if and (ne .Values.jaic.credentials.password "") (ne .Values.jaic.credentials.username "") }}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: airflow-appsrepo
+  name: tensorflow-appsrepo
   namespace: bigbang
 type: opaque
 data:
@@ -24,7 +24,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: il2-registry
-  namespace: airflow
+  namespace: tensorflow
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret2" . }}
