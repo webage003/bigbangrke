@@ -1,4 +1,4 @@
-{{- if and .Values.istio.enabled .Values.global.openshift }}
+{{- if and .Values.istio.enabled .Values.istiocni.enabled .Values.global.openshift }}
 {{- if and (ne .Values.registryCredentials.username "") (ne .Values.registryCredentials.password "") }}
 ---
 apiVersion: v1

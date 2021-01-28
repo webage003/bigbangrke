@@ -1,4 +1,4 @@
-{{- if and .Values.istio.enabled .Values.global.openshift }}
+{{- if and .Values.istio.enabled .Values.istiocni.enabled .Values.global.openshift }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
