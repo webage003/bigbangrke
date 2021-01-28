@@ -39,9 +39,4 @@ spec:
 
   values:
     createNamespace: false
-    openshift:
-      scc:
-        enabled: true
-    istio:
-      enabled: true
 {{- end }}

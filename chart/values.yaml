@@ -149,7 +149,7 @@ monitoring:
 # NiFi
 #
 nifi:
-  enabled: true
+  enabled: false
   git:
     repo: https://code.il2.dso.mil/jaic-devsecops/data-pipelines.git
     path: "./apps/nifi/helm"
@@ -161,7 +161,7 @@ nifi:
 # Tensorflow-Notebook
 #
 tensorflownotebook:
-  enabled: true
+  enabled: false
   git:
     repo: https://code.il2.dso.mil/jaic-devsecops/apps.git
     path: "./tensorflow-notebook/helm"
@@ -189,7 +189,7 @@ airflow:
   git:
     repo: https://code.il2.dso.mil/jaic-devsecops/apps.git
     path: "./airflow/helm"
-    branch: "jcf-208"
+    branch: "master"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
