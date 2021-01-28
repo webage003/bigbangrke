@@ -71,7 +71,6 @@ istiooperator:
     tag: "1.7.0-bb.0"
   values: {}
 
-{{- if .Values.openshift }}
 istiocni:
   enabled: true
   git:
@@ -79,7 +78,6 @@ istiocni:
     path: "./charts/istio-cni"
     branch: "jaic"
   values: {}
-{{- end }}
 
 # ----------------------------------------------------------------------------------------------------------------------
 
