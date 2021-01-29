@@ -17,8 +17,9 @@ kubectl create secret docker-registry ironbank -n flux-system \
 kubectl apply -f ./scripts/deploy/flux.yaml
 
 # Wait for flux
-kubectl wait --for=condition=available --timeout 600s -n "flux-system" "deployment/helm-controller"
-kubectl wait --for=condition=available --timeout 300s -n "flux-system" "deployment/source-controller"
+sleep 300
+#kubectl wait --for=condition=available --timeout 600s -n "flux-system" "deployment/helm-controller"
+#kubectl wait --for=condition=available --timeout 300s -n "flux-system" "deployment/source-controller"
 flux check
 
 # Deploy BigBang using dev sized scaling
