@@ -132,10 +132,28 @@ spec:
       {{- end }}
       {{- if .Values.addons.gitlab.database.external }}
       psql:
+        {{- $global := .Values.addons.gitlab.values.global | default dict }}
+        {{- $psql := $global.psql | default dict }}
+        {{- if hasKey $psql "host" }}
+        host: {{ .Values.addons.gitlab.values.global.psql.host }}
+        {{- else }} 
         host: {{ .Values.addons.gitlab.database.host }}
+        {{- end }}
+        {{- if hasKey $psql "port" }}
+        port: {{ .Values.addons.gitlab.values.global.psql.port }}
+        {{- else }}
         port: {{ .Values.addons.gitlab.database.port }}
+        {{- end }}
+        {{- if hasKey $psql "username" }}
+        username: {{ .Values.addons.gitlab.values.global.psql.username }}
+        {{- else }}
         username: {{ .Values.addons.gitlab.database.username }}
+        {{- end }}
+        {{- if hasKey $psql "database" }}
+        database: {{ .Values.addons.gitlab.values.global.psql.database }}
+        {{- else }}
         database: {{ .Values.addons.gitlab.database.database }}
+        {{- end }}
         password:
           secret: gitlab-database
           key: PGPASSWORD
