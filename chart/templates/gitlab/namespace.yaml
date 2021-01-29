@@ -41,8 +41,8 @@ stringData:
         "discovery": true,
         "uid_field": "preferred_username",
         "client_options": {
-          "identifier": "{{ .Values.addons.gitlab.sso.clientId }}",
-          "secret": "{{ .Values.addons.gitlab.sso.label }}",
+          "identifier": "{{ .Values.sso.client_id }}",
+          "secret": "{{ .Values.sso.client_secret }}",
           "redirect_uri": "{{ .Values.addons.gitlab.sso.redirectUri }}",
           "end_session_endpoint": "{{ .Values.addons.gitlab.sso.endSessionEndpoint }}"
         }

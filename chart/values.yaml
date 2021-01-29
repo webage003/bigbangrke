@@ -218,10 +218,10 @@ addons:
       # enabling this option will auto-create any required secrets. 
       # The defaults assume an OIDC provider. 
       enabled: false
-      label: ""
+      label: ""  # the text next to the login button
       issuer: ""
-      clientId: ""
-      secret: ""
+      # clientId: ""
+      # secret: ""
       redirectUri: ""
       endSessionEndpoint: ""
 
