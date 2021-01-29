@@ -233,17 +233,9 @@ addons:
     objectstorage:
       # enabling this option will auto-create any required secrets 
       external: true
+      type: minio   # supported types "minio","s3". Comming in the future "Azure", "GCP"
       # gitlab application storage
       rails:
-        buckets:
-          lfs: gitlab-lfs
-          artifacts: gitlab-artifacts
-          uploads: gitlab-uploads
-          packages: gitlab-packages
-          externalDiffs: gitlab-mr-diffs
-          terraformState: gitlab-terraform-state
-          dependencyProxy: gitlab-dependency-proxy
-          pseudonymizer: gitlab-pseudo
         connection:
           # the secret is unencoded stringData
           secret: |-
@@ -252,8 +244,6 @@ addons:
           key: rails
       # image registry storage
       registry:
-        buckets:
-          bucket: gitlab-registry-storage
         connection:
           # the secret is unencoded stringData
           secret: |-
@@ -263,9 +253,6 @@ addons:
           key: registry        
       # backup storage
       backups:
-        buckets:
-          bucket: gitlab-backup
-          tmpBucket: gitlab-backup-tmp
         connection:
           # the secret is unencoded stringData
           secret: |-
