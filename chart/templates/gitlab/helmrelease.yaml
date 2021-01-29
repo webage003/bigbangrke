@@ -212,12 +212,6 @@ spec:
           bucket: {{ .Values.addons.gitlab.objectstorage.backups.buckets.bucket }}
           tmpBucket: {{ .Values.addons.gitlab.objectstorage.backups.buckets.tmpBucket }}
         {{- end }}
-      hosts:
-        domain: code.{{ .Values.hostname }}
-        gitlab:
-          name: code.{{ .Values.hostname }}
-        registry:
-          name: registry.{{ .Values.hostname }}
       {{- if ( include "imagePullSecret" . ) }}
       ## values for image pull secrets
       certificates:
