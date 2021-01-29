@@ -120,6 +120,12 @@ spec:
       - name: private-registry
     {{- end }}
     global:
+      hosts:
+        domain: {{ .Values.hostname }}
+        gitlab:
+          name: {{ .Values.addons.gitlab.hostnames.gitlab }} 
+        registry:
+          name: {{ .Values.addons.gitlab.hostnames.registry }}
       {{- if .Values.addons.gitlab.objectstorage.external }}
       minio:
         enabled: false

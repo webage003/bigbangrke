@@ -210,6 +210,9 @@ addons:
 
   gitlab:
     enabled: false
+    hostnames:
+      gitlab: gitlab.bigbang.dev
+      registry: registry.bigbang.dev
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
@@ -219,23 +222,6 @@ addons:
       # The defaults assume an OIDC provider. 
       enabled: false
       label: ""  # the text next to the login button
-      issuer: ""
-      # clientId: ""
-      # secret: ""
-      redirectUri: ""
-      endSessionEndpoint: ""
-
-      # autoSignInWithProvider: false
-      # syncProfileFromProvider: []
-      # syncProfileAttributes: ['email']
-      # allowSingleSignOn: ['openid_connect']
-      # blockAutoCreatedUsers: false
-      # autoLinkLdapUser: false
-      # autoLinkSamlUser: false
-      # autoLinkUser: []
-      # externalProviders: []
-      # allowBypassTwoFactor: []
-
     database:
       # enabling this option will auto-create any required secrets 
       external: true
