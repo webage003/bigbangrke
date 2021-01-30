@@ -38,7 +38,7 @@ spec:
       valuesKey: "istiooperator.yaml"
 
   values:
-    hub: registry1.dsop.io/ironbank/opensource/istio
+    hub: registry1.dsop.io/ironbank/opensource/istio-1.7
     tag: 1.7.3
     createNamespace: false
 
