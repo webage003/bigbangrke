@@ -69,7 +69,7 @@ istiooperator:
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-operator.git
     path: "./chart"
-    tag: "1.7.0-bb.0"
+    branch: "jaic"
   values: {}
 
 istiocni:
