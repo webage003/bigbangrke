@@ -37,13 +37,13 @@ spec:
       kind: Secret
       valuesKey: "istiooperator.yaml"
 
-  values:
-    hub: registry1.dsop.io/ironbank/opensource/istio-1.7
-    tag: 1.7.3
-    createNamespace: false
-
-    imagePullSecrets:
-      - name: private-registry
+#  values:
+#    hub: registry1.dsop.io/ironbank/opensource/istio
+#    tag: 1.7.3
+#    createNamespace: false
+#
+#    imagePullSecrets:
+#      - name: private-registry
 
   {{- if .Values.gatekeeper.enabled }}
   dependsOn:
