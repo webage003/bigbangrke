@@ -57,7 +57,7 @@ variable "servers" {
   default = 1
 }
 variable "rke2_version" {
-  default = "v1.18.12+rke2r2"
+  default = "v1.19.7+rke2r1"
 }
 
 #

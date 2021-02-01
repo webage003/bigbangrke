@@ -10,6 +10,19 @@
     - apk add bash aws-cli
     - terraform apply -input=false -auto-approve
     - mv rke2.yaml ${CI_PROJECT_DIR}/rke2.yaml
+
+    # Preconfigure cluster with BigBang dependencies
+    - export KUBECONFIG=${CI_PROJECT_DIR}/rke2.yaml
+    - kubectl apply -f ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
+
+    # RKE2 by default will deploy with PSPs that do not allow the permissions gatekeeper needs to deploy, exempt seccomp below so gatekeeper can deploy
+    - |
+      kubectl patch psp system-unrestricted-psp  -p '{"metadata": { "annotations": { "seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*" } } }'
+    - |
+      kubectl patch psp global-unrestricted-psp  -p '{ "metadata": { "annotations": { "seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*" } } }'
+    - |
+      kubectl patch psp global-restricted-psp  -p '{ "metadata": { "annotations": { "seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*" } } }'
+
   artifacts:
     paths:
       - ${CI_PROJECT_DIR}/rke2.yaml
