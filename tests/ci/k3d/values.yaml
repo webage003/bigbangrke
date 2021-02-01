@@ -17,6 +17,10 @@ logging:
           limits:
             cpu: 1
             memory: 2Gi
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
       data:
         count: 1
         persistence:
@@ -25,6 +29,10 @@ logging:
           limits:
             cpu: 1
             memory: 2Gi
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
 
 istio:
   enabled: true
