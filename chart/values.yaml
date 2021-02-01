@@ -149,25 +149,25 @@ monitoring:
 # ----------------------------------------------------------------------------------------------------------------------
 # NiFi
 #
-nifi:
-  enabled: false
-  git:
-    repo: https://code.il2.dso.mil/jaic-devsecops/data-pipelines.git
-    path: "./apps/nifi/helm"
-    branch: "master"
-  values: {}
+#nifi:
+#  enabled: false
+#  git:
+#    repo: https://code.il2.dso.mil/jaic-devsecops/data-pipelines.git
+#    path: "./apps/nifi/helm"
+#    branch: "master"
+#  values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Tensorflow-Notebook
 #
-tensorflownotebook:
-  enabled: false
-  git:
-    repo: https://code.il2.dso.mil/jaic-devsecops/apps.git
-    path: "./tensorflow-notebook/helm"
-    branch: "master"
-  values: {}
+#tensorflownotebook:
+#  enabled: false
+#  git:
+#    repo: https://code.il2.dso.mil/jaic-devsecops/apps.git
+#    path: "./tensorflow-notebook/helm"
+#    branch: "master"
+#  values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -185,13 +185,13 @@ twistlock:
 # ----------------------------------------------------------------------------------------------------------------------
 # Airflow
 #
-airflow:
-  enabled: false
-  git:
-    repo: https://code.il2.dso.mil/jaic-devsecops/apps.git
-    path: "./airflow/helm"
-    branch: "master"
-  values: {}
+#airflow:
+#  enabled: false
+#  git:
+#    repo: https://code.il2.dso.mil/jaic-devsecops/apps.git
+#    path: "./airflow/helm"
+#    branch: "master"
+#  values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
 addons:
