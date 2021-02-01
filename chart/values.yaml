@@ -231,35 +231,16 @@ addons:
       database: ""
       password: {} # unencoded stringData
     objectstorage:
-      # enabling this option will auto-create any required secrets 
+      # enabling this option will auto-create any required secrets
+      # Gitlab will not automatically create needed buckets when using external object storage
+      # you must do it manually or use configuration as code
       external: true
-      type: minio   # supported types "minio","s3". Comming in the future "Azure", "GCP"
-      # gitlab application storage
-      rails:
-        connection:
-          # the secret is unencoded stringData
-          secret: |-
-            yourConnectionInfo: here
-            override: this
-          key: rails
-      # image registry storage
-      registry:
-        connection:
-          # the secret is unencoded stringData
-          secret: |-
-            s3:
-              yourConnectionInfo: here
-              override: this
-          key: registry        
-      # backup storage
-      backups:
-        connection:
-          # the secret is unencoded stringData
-          secret: |-
-            [default]
-            yourConnectionInfo:  here
-            override: this
-          key: backups
+      type: s3   # supported types "minio","s3".
+      endpoint: http://minio.minio.svc.cluster.local:9000  # ignored if type is "s3". only used if type is "minio".
+      host: s3.amazonaws.com  # used for gitlab backup storage
+      region: us-west-1
+      accessKey: ""
+      accessSecret: ""
     values: {}
 
   haproxy:

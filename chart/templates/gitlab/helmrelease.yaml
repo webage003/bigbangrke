@@ -63,7 +63,7 @@ spec:
       {{- if .Values.addons.gitlab.objectstorage.external }}
       storage:
         secret: gitlab-object-storage
-        key: {{ .Values.addons.gitlab.objectstorage.registry.connection.key }}
+        key: registry
       {{- end }}
     {{- if ( include "imagePullSecret" . ) }}
       image:
@@ -82,7 +82,7 @@ spec:
           objectStorage:
             config:
               secret: gitlab-object-storage
-              key: {{ .Values.addons.gitlab.objectstorage.backups.connection.key }}
+              key: backups
         {{- end }}
     {{- if ( include "imagePullSecret" . ) }}
         image:

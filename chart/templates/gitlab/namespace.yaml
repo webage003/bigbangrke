@@ -71,9 +71,38 @@ metadata:
     namespace: gitlab
 type: kubernetes.io/opaque
 stringData:
-    rails: {{ toYaml .Values.addons.gitlab.objectstorage.rails.connection.secret | indent 4 }}
-    registry: {{ toYaml .Values.addons.gitlab.objectstorage.registry.connection.secret | indent 4 }}
-    backups: {{ toYaml .Values.addons.gitlab.objectstorage.backups.connection.secret | indent 4 }}
+    rails: |-
+      provider: AWS
+      region: {{ .Values.addons.gitlab.objectstorage.region }}
+      aws_access_key_id: {{ .Values.addons.gitlab.objectstorage.accessKey }}
+      aws_secret_access_key: {{ .Values.addons.gitlab.objectstorage.accessSecret }}
+      {{- if eq .Values.addons.gitlab.objectstorage.type "minio" }}
+      aws_signature_version: 4
+      host: {{ .Values.addons.gitlab.objectstorage.host }}
+      endpoint: "{{ .Values.addons.gitlab.objectstorage.endpoint }}"
+      path_style: true
+      {{- end }}
+    registry: |-
+      s3:
+        bucket: registry
+        accesskey: {{ .Values.addons.gitlab.objectstorage.accessKey }}
+        secretkey: {{ .Values.addons.gitlab.objectstorage.accessSecret }}
+        region: {{ .Values.addons.gitlab.objectstorage.region }}
+        {{- if eq .Values.addons.gitlab.objectstorage.type "s3" }}
+        v4auth: true
+        {{- end }}
+        {{- if eq .Values.addons.gitlab.objectstorage.type "minio" }}
+        aws_signature_version: 4
+        host: {{ .Values.addons.gitlab.objectstorage.host }}
+        regionendpoint: "{{ .Values.addons.gitlab.objectstorage.endpoint }}"
+        path_style: true
+        {{- end }}
+    backups: |-
+      [default]
+      access_key = {{ .Values.addons.gitlab.objectstorage.accessKey }}
+      secret_key = {{ .Values.addons.gitlab.objectstorage.accessSecret }}
+      bucket_location = {{ .Values.addons.gitlab.objectstorage.region }}
+      host_bucket = %(bucket)s.{{ .Values.addons.gitlab.objectstorage.host }}
 {{- end }}
 
 {{- end }}
