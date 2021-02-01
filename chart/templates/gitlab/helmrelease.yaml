@@ -159,8 +159,8 @@ spec:
           key: PGPASSWORD
       {{- end }}
       {{- if .Values.addons.gitlab.objectstorage.external }}
-      registry: 
-        bucket: gitlab-registry-storage
+      registry:
+        bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-registry
       {{- end }}
       {{- if or .Values.addons.gitlab.sso.enabled .Values.addons.gitlab.objectstorage.external }}
       appConfig:
@@ -187,48 +187,48 @@ spec:
         {{- end }}
         {{- if .Values.addons.gitlab.objectstorage.external }}
         lfs:
-          bucket: gitlab-lfs
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-lfs
           connection:
             secret: gitlab-object-storage
             key: rails
         artifacts:
-          bucket: gitlab-artifacts
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-artifacts
           connection:
             secret: gitlab-object-storage
             key: rails
         uploads:
-          bucket: gitlab-uploads
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-uploads
           connection:
             secret: gitlab-object-storage
             key: rails
         packages:
-          bucket: gitlab-packages
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-packages
           connection:
             secret: gitlab-object-storage
             key: rails
         externalDiffs:
-          bucket: gitlab-mr-diffs
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-mr-diffs
           connection:
             secret: gitlab-object-storage
             key: rails
         terraformState:
-          bucket: gitlab-terraform-state
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-terraform-state
           connection:
             secret: gitlab-object-storage
             key: rails
         dependencyProxy:
-          bucket: gitlab-dependency-proxy
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-dependency-proxy
           connection: 
             secret: gitlab-object-storage
             key: rails
         pseudonymizer:
-          bucket: gitlab-pseudo
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-pseudo
           connection:
             secret: gitlab-object-storage
             key: rails
         backups:
-          bucket: gitlab-backup
-          tmpBucket: gitlab-backup-tmp
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-backup
+          tmpBucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-backup-tmp
         {{- end }}
       {{- if ( include "imagePullSecret" . ) }}
       ## values for image pull secrets

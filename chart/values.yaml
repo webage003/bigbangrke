@@ -241,6 +241,7 @@ addons:
       region: us-west-1
       accessKey: ""
       accessSecret: ""
+      bucketPrefix: ""  # optional. example: dev-
     values: {}
 
   haproxy:
