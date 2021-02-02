@@ -188,6 +188,19 @@ twistlock:
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Zalando Postgres Operator
+#
+zalandoPostgresOperator:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/zalando-postgres-operator.git
+    path: "./chart"
+    # tag: "0.0.2-bb.0"
+    branch: bigbang-demo
+  values: {}
+# ----------------------------------------------------------------------------------------------------------------------
+
 addons:
   argocd:
     enabled: false

@@ -45,6 +45,8 @@ stringData:
 {{- end }}
   twistlock.yaml: |
 {{ toYaml .Values.twistlock.values | indent 4 }} 
+  zalando-postgres-operator.yaml: |
+{{ toYaml .Values.zalandoPostgresOperator.values | indent 4 }} 
   clusterauditor.yaml: |
 {{ toYaml .Values.twistlock.values | indent 4 }}
   gitlab.yaml: |

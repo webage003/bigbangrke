@@ -1,0 +1,19 @@
+{{- if .Values.zalandoPostgresOperator.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: zalandoPostgresOperator
+  name: postgres-operator
+---
+{{- if ( include "imagePullSecret" . ) }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-registry
+  namespace: postgres-operator
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+{{- end }}
+{{- end }}
