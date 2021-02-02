@@ -35,8 +35,23 @@ addons:
       accessSecret: mysecretkey
       bucketPrefix: prod-
 
+{{ if $.Values.addons.gitlab.objectstorage.external }}
+GITLAB: You have enabled Gitlab external object storage. 
+Here is the list of buckets that you must provision in your s3 service:
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-registry
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-lfs
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-artifacts
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-uploads
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-packages
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-mr-diffs
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-terraform-state
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-dependency-proxy
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-pseudo
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-backup
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-backup-tmp
+{{- end }}
 
-{{- if $.Values.addons.gitlab.database.external }}
+{{ if $.Values.addons.gitlab.database.external }}
 {{ else }}
 PLATFORM ONE GITLAB WARNING:
   You have enabled an internal postgres database in the Umbrella configuration.
@@ -44,7 +59,7 @@ PLATFORM ONE GITLAB WARNING:
   This option should only be used for development or CI pipelines.
 {{- end -}}
 
-{{- if $.Values.addons.gitlab.objectstorage.external }}
+{{ if $.Values.addons.gitlab.objectstorage.external }}
 {{ else }}
 PLATFORM ONE GITLAB WARNING: 
   You have enabled a MinIO internal service in the Umbrella configuration.
