@@ -1,0 +1,17 @@
+{{- if and .Values.flux.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-system
+{{- end }}
+{{- if ( include "imagePullSecret" . ) }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-registry
+  namespace: flux-system
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+{{- end }}

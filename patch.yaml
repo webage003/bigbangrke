@@ -1,0 +1,23 @@
+hostname: bigbang.dev
+
+registryCredentials:
+  registry: registry1.dso.mil
+  username: 'robot$bigbang'
+  password: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1OTYxMzkxNTIsImlzcyI6ImhhcmJvci10b2tlbi1kZWZhdWx0SXNzdWVyIiwiaWQiOjYsInBpZCI6MywiYWNjZXNzIjpbeyJSZXNvdXJjZSI6Ii9wcm9qZWN0LzMvcmVwb3NpdG9yeSIsIkFjdGlvbiI6InB1bGwiLCJFZmZlY3QiOiIifSx7IlJlc291cmNlIjoiL3Byb2plY3QvMy9oZWxtLWNoYXJ0IiwiQWN0aW9uIjoicmVhZCIsIkVmZmVjdCI6IiJ9XX0.H-t7iqr5Sn7w71B7kB9D9mewN4UqVuAaYstDYFNPeoM34bQ87hYHM4FkOBGFmefeZmjvKJ5vxYXhW8cqwQlYvphZIbEbY4jGWV5QJuoaUTzQhPh435NBx1s0vgI83Wl4ClIqhX4vCIoQjOObfzNpQp5GNr0dIT9XMTFokCn_77Yd_ob6-NpDuP-X8wbAP7QizdUjuGFLaircoGiTcvLEqe01MeXMYaVCZ-Vy2b9kDk7LungSWAXd5i694OIP9D9yfpWS5yxr6_5QgRjno-YOTPoWpSJMpmlPCwRsYcz8c1mdIZQy8sjnRC9U2E9MRbZ8Jw50DCiT9H18dWA8MYdyUS3ftqXg6vHYXPuIT8JSvMAv3IurHwtxGrU_HpmLiROERGB034ZwwJ_G6M6szEhJAkaSaTOsmfVmprgtV88sR9k8Eq5VoyEmRkEIq09Nk5No_qWBwoA1RENema19EPz2Ya9OwSNTSviBivX1tkKnwXxT7Xhryhr1sTl9lzV80BAujKV7KoweXwIg9XbB8KwkXBf-jXl3rolPpkV2Qgqri-M3yI8rC22qPWr9chpLPHLGCMx0YfJtcgqeA8WJwoZSsZS5eMc95JUlbnpLXvnD_Tdjx300KtveNJSRGUUhaKslPNEalnSo-lGDTEV2zsC1FSiuo2B3F4zigBpzbHxLftA'
+
+addons:
+  argocd:
+    enabled: true
+  authservice:
+    enabled: true
+    chains:
+      minimal:
+        callback_uri: "https://minimal.bigbang.dev"
+  gitlab:
+    enabled: true
+    values:
+      postgresql:
+        install: true
+      global:
+        minio:
+          enabled: true

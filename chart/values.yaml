@@ -58,6 +58,8 @@ sso:
 
 # Flux reconciliation parameters
 flux:
+  enabled: true
+  repo: registry1.dsop.io
   interval: 2m
   install:
     retries: 3
