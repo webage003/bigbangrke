@@ -44,7 +44,7 @@ spec:
     imagePullSecrets:
       - name: private-registry
     commonLabels:
-      {{- include "commonLabels" . | nindent 6}}
+      {{- include "sharedLabels" . | nindent 6}}
     global:
       oidc:
         host: {{ .Values.sso.oidc.host }}

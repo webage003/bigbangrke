@@ -43,7 +43,7 @@ spec:
 
   values:
     commonLabels:
-      {{- include "commonLabels" . | nindent 6}}
+      {{- include "sharedLabels" . | nindent 6}}
     image:
       repository: registry1.dsop.io/ironbank/opensource/openpolicyagent/gatekeeper
       release: v3.1.2

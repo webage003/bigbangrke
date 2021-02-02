@@ -11,6 +11,11 @@ registryCredentials:
   password: ""
   email: ""
 
+# labels that will be shared with all charts as well as added to bigbang resources
+commonLabels: {}
+  # app.kubernetes.io/part-of: "bigbang"
+  # app.kubernetes.io/managed-by: "flux"
+
 # Or a list of registires:
 # registryCredentials:
 # - registry: registry1.dsop.io

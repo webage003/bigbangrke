@@ -42,7 +42,7 @@ spec:
 
   values:
     commonLabels:
-      {{- include "commonLabels" . | nindent 6}}
+      {{- include "sharedLabels" . | nindent 6}}
     elasticsearch:
       host: "logging-ek-es-http"
       password:

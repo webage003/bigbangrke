@@ -43,7 +43,7 @@ spec:
 
   values:
     commonLabels:
-      {{- include "commonLabels" . | nindent 6}}
+      {{- include "sharedLabels" . | nindent 6}}
     hub: registry1.dsop.io/ironbank/opensource/istio
     tag: 1.7.3
     createNamespace: false

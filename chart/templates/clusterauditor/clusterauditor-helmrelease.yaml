@@ -45,7 +45,7 @@ spec:
     #conversion from umbrella values to package values
     imagePullSecrets: [ private-registry ]
     commonLabels:
-      {{- include "commonLabels" . | nindent 6}}
+      {{- include "sharedLabels" . | nindent 6}}
 
   dependsOn:
   - name: ek

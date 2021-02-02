@@ -79,6 +79,15 @@ Common labels for all objects
 {{- define "commonLabels" -}}
 app.kubernetes.io/instance: "{{ .Release.Name }}"
 app.kubernetes.io/version: "{{ .Chart.Version }}"
-app.kubernetes.io/part-of: "bigbang"
-app.kubernetes.io/managed-by: "flux"
+{{- range $key, $value := .Values.commonLabels }}
+"{{ $key }}": "{{- $value }}"
+{{- end }}
+{{- end -}}
+
+{{- define "sharedLabels" -}}
+app.kubernetes.io/bigbang-instance: "{{ .Release.Name }}"
+app.kubernetes.io/bigbang-version: "{{ .Chart.Version }}"
+{{- range $key, $value := .Values.commonLabels }}
+"{{ $key }}": "{{- $value }}"
+{{- end }}
 {{- end -}}

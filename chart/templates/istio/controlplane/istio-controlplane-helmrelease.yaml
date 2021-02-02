@@ -48,7 +48,7 @@ spec:
     imagePullSecrets:
       - private-registry
     commonLabels:
-      {{- include "commonLabels" . | nindent 6}}
+      {{- include "sharedLabels" . | nindent 6}}
 
 {{- if .Values.istio.sso.enabled }}
     ingress:

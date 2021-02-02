@@ -43,7 +43,7 @@ spec:
 
   values:
     commonLabels:
-      {{- include "commonLabels" . | nindent 6}}
+      {{- include "sharedLabels" . | nindent 6}}
     console:
       hostname: {{ .Values.hostname }}
     prometheus:

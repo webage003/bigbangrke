@@ -43,7 +43,7 @@ spec:
 
   values:
     commonLabels:
-      {{- include "commonLabels" . | nindent 6}}
+      {{- include "sharedLabels" . | nindent 6}}
     podAnnotations:
       sidecar.istio.io/inject: "true"
       traffic.sidecar.istio.io/includeInboundPorts: "*"
