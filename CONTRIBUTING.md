@@ -57,7 +57,7 @@ This is done using the following tools:
 After cloning this git repo run the following command:
 
 ```bash
-npm install --only=dev
+npm install --save-dev
 ```
 
 This will download `husky` and `commitlint` to your local repo and modify your `.git/hooks` to allow husky to run pre-commit hooks. Once installed it will enforce the usage of convential-commits.

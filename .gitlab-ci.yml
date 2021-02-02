@@ -82,7 +82,7 @@ commits:
   allow_failure: true
   script:
   - dnf module install -y nodejs
-  - npm install --only=dev
+  - npm install --save-dev
   - git fetch --all
   - ./scripts/lint_commits.sh
 

@@ -14,3 +14,6 @@ certs/
 
 # debug
 npm-debug.log*
+
+notes
+patch.yaml
