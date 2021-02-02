@@ -37,6 +37,10 @@ stringData:
 {{ toYaml .Values.eckoperator.values | indent 4 }}
   logging.yaml: |
 {{ toYaml .Values.logging.values | indent 4 }}
+  mattermost.yaml: |
+{{ toYaml .Values.mattermost.values | indent 4  }}
+  mattermostoperator.yaml: |
+{{ toYaml .Values.mattermostoperator.values | indent 4  }}
   monitoring.yaml: |
     grafana_client_id: {{ .Values.monitoring.sso.grafana.client_id | quote }}
     grafana_client_secret: {{ .Values.monitoring.sso.grafana.client_secret | quote }}
