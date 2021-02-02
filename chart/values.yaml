@@ -223,7 +223,8 @@ addons:
       enabled: false
       label: ""  # the text next to the login button
     database:
-      # enabling this option will auto-create any required secrets 
+      # enabling this option will auto-create any required secrets.
+      # Gitlab will not provison the database when using external an external service
       external: true
       host: ""
       port: ""
@@ -232,11 +233,10 @@ addons:
       password: {} # unencoded stringData
     objectstorage:
       # enabling this option will auto-create any required secrets
-      # Gitlab will not automatically create needed buckets when using external object storage
-      # you must do it manually or use configuration as code
+      # Gitlab will not provision the S3 buckets when using an external servcie
       external: true
-      type: s3   # supported types "minio","s3".
-      endpoint: http://minio.minio.svc.cluster.local:9000  # ignored if type is "s3". only used if type is "minio".
+      type: s3   # supported types are "s3" or "minio"
+      endpoint: "" # ignored if type is "s3". used only for minio. example "http://minio.minio.svc.cluster.local:9000" 
       host: s3.amazonaws.com  # used for gitlab backup storage
       region: us-west-1
       accessKey: ""

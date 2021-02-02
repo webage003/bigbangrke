@@ -3,78 +3,36 @@ Thank you for supporting PlatformOne!
 {{ if $.Values.addons.gitlab.enabled }}
 Gitlab is enabled.
 Please follow the Gitlab online documentation for proper configuration. 
-This Umbrella chart provides convenient enhancements to the Gitlab package chart.
+This Umbrella chart provides convenient enhancements to the Gitlab Package helm chart.
 If you enable these features certain settings will be defaulted for you and any required secrets will be automatically created.
-Here is an example of how to configure your customer template. The following settings were used for local testing.
 You should point to your cloud provider's RDS and object storage.
+Gitlab will not provision storage for you. You will need to provision the database and the S3 buckets.
+Here is an example of how to configure your deployment.
 
 addons:
   gitlab:
     enabled: true
-    database:
-      external: true
-      host: postgres-postgresql-headless.postgres.svc.cluster.local
-      port: 5432
-      username: postgres
-      database: postgres
-      password: postgres
-    objectstorage:
-      external: true
-      rails:
-        connection:
-          secret: |-
-            provider: AWS
-            region: us-east-1
-            aws_access_key_id: myaccesskey
-            aws_secret_access_key: mysecretkey
-            aws_signature_version: 4
-            host: minio.minio.svc.cluster.local
-            endpoint: "http://minio.minio.svc.cluster.local:9000"
-            path_style: true
-      registry:
-        connection:
-          secret: |-
-            s3:
-              aws_signature_version: 4
-              host: minio.minio.svc.cluster.local
-              regionendpoint: "http://minio.minio.svc.cluster.local:9000"
-              path_style: true
-              region: us-east-1
-              bucket: registry
-              accesskey: myaccesskey
-              secretkey: mysecretkey
-      backups:
-        connection:
-          secret: |-
-            [default]
-            access_key = myaccesskey
-            secret_key = mysecretkey
-            bucket_location = us-gov-west-1
-            host_bucket = http://minio.minio.svc.cluster.local:9000
+    hostnames:
+      gitlab: gitlab.bigbang.dev
+      registry: registry.bigbang.dev
     sso:
       enabled: true
-      secret: |-
-        {
-          "name": "openid_connect",
-          "label": "Platform One SSO",
-          "args": {
-            "name": "openid_connect",
-            "scope": [
-              "Gitlab"
-            ],
-            "response_type": "code",
-            "issuer": "https://login.dso.mil/auth/realms/baby-yoda",
-            "client_auth_method": "query",
-            "discovery": true,
-            "uid_field": "preferred_username",
-            "client_options": {
-              "identifier": "platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-gitlab",
-              "secret": "",
-              "redirect_uri": "https://code.bigbang.dev/users/auth/openid_connect/callback",
-              "end_session_endpoint": "https://login.dso.mil/auth/realms/baby-yoda/protocol/openid-connect/logout"
-            }
-          }
-        }
+      label: "Platform One SSO"
+    database:
+      external: false
+      host: postgres.bigbang.dev
+      port: 5432
+      username: gitlab
+      database: gitlab
+      password: mysecretpassword
+    objectstorage:
+      external: true
+      type: s3
+      host: s3.amazonaws.com
+      region: us-west-1
+      accessKey: myaccesskey
+      accessSecret: mysecretkey
+      bucketPrefix: prod-
 
 
 {{- if $.Values.addons.gitlab.database.external }}
