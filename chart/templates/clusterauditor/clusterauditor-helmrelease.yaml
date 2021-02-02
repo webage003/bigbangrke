@@ -38,8 +38,9 @@ spec:
       valuesKey: "clusterauditor.yaml"
 
   values:
-    #conversion from umbrella values to package values
-    imagePullSecrets: [ private-registry ]
+    elasticsearch:
+      imagePullSecrets:
+      - name: private-registry
 
   dependsOn:
   - name: ek
