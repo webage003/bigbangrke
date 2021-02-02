@@ -216,7 +216,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
-      branch: bb-1287
+      tag: "4.7.2-bb.0"
     sso:
       # enabling this option will auto-create any required secrets. 
       # The defaults assume an OIDC provider. 
