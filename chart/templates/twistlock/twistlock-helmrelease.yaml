@@ -42,6 +42,8 @@ spec:
     valuesKey: "twistlock.yaml"
 
   values:
+    commonLabels:
+      {{- include "commonLabels" . | nindent 6}}
     console:
       hostname: {{ .Values.hostname }}
     prometheus:

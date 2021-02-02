@@ -42,6 +42,8 @@ spec:
       valuesKey: "monitoring.yaml"
 
   values:
+    commonLabels:
+      {{- include "commonLabels" . | nindent 6}}
     hostname: {{ .Values.hostname }}
     istio:
       enabled: {{ .Values.istio.enabled }}

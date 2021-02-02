@@ -44,6 +44,8 @@ spec:
 
   values:
     hostname: {{ .Values.hostname }}
+    commonLabels:
+      {{- include "commonLabels" . | nindent 6}}
     istio:
       enabled: {{ .Values.istio.enabled }}
     monitoring:

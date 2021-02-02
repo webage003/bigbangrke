@@ -49,6 +49,9 @@ spec:
       config:
         url: https://argocd.{{ .Values.hostname }}
 
+    commonLabels:
+      {{- include "commonLabels" . | nindent 6}}
+
   {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
   dependsOn:
   {{- if .Values.istio.enabled }}

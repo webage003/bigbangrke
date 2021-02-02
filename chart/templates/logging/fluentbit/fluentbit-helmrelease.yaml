@@ -41,6 +41,8 @@ spec:
       valuesKey: "fluentbit.yaml"
 
   values:
+    commonLabels:
+      {{- include "commonLabels" . | nindent 6}}
     elasticsearch:
       host: "logging-ek-es-http"
       password:
