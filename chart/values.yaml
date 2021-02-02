@@ -222,6 +222,7 @@ addons:
       # The defaults assume an OIDC provider. 
       enabled: false
       label: ""  # the text next to the login button
+      client_id: ""
     database:
       # enabling this option will auto-create any required secrets.
       # Gitlab will not provison the database when using external an external service

@@ -41,7 +41,7 @@ stringData:
         "discovery": true,
         "uid_field": "preferred_username",
         "client_options": {
-          "identifier": "{{ .Values.sso.client_id }}",
+          "identifier": "{{ .Values.addons.gitlab.sso.client_id }}",
           "secret": "{{ .Values.sso.client_secret }}",
           "redirect_uri": "https://{{ .Values.addons.gitlab.hostnames.gitlab }}/users/auth/openid_connect/callback",
           "end_session_endpoint": "https://{{ .Values.sso.oidc.host }}/auth/realms/{{ .Values.sso.oidc.realm }}/protocol/openid-connect/logout"
