@@ -376,6 +376,13 @@ spec:
           spec:
             description: GitRepositorySpec defines the desired state of a Git repository.
             properties:
+              gitImplementation:
+                default: go-git
+                description: Determines which git client library to use. Defaults to go-git, valid values are ('go-git', 'libgit2').
+                enum:
+                - go-git
+                - libgit2
+                type: string
               ignore:
                 description: Ignore overrides the set of excluded patterns in the .sourceignore format (which is the same as .gitignore). If not provided, a default will be used, consult the documentation for your version to find out what those are.
                 type: string
@@ -942,7 +949,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: registry1.dsop.io/ironbank/fluxcd/source-controller:v0.4.0
+        image: runyonsolutions/source-controller:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
