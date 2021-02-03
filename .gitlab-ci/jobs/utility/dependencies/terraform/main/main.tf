@@ -25,15 +25,6 @@ data "aws_vpc" "vpc_id" {
   id = var.vpc_id
 }
 
-resource "aws_route53_zone" "dsop" {
-  name = "dsop.io"
-
-  vpc {
-    vpc_id = data.aws_vpc.vpc_id.id
-  }
-  tags = local.tags
-}
-
 resource "aws_route53_zone" "dso" {
   name = "dso.mil"
 
@@ -44,25 +35,10 @@ resource "aws_route53_zone" "dso" {
 }
 
 # Registry
-resource "aws_route53_record" "dsop_registry" {
-  zone_id = aws_route53_zone.dsop.zone_id
-  name    = "registry.dsop.io"
-  type    = "A"
-  ttl     = "300"
-  records = [aws_instance.utility.private_ip]
-}
 
 resource "aws_route53_record" "dso_registry" {
   zone_id = aws_route53_zone.dso.zone_id
   name    = "registry.dso.mil"
-  type    = "A"
-  ttl     = "300"
-  records = [aws_instance.utility.private_ip]
-}
-
-resource "aws_route53_record" "dsop_registry1" {
-  zone_id = aws_route53_zone.dsop.zone_id
-  name    = "registry1.dsop.io"
   type    = "A"
   ttl     = "300"
   records = [aws_instance.utility.private_ip]
@@ -78,25 +54,10 @@ resource "aws_route53_record" "dso_registry1" {
 
 
 #Repository
-resource "aws_route53_record" "dsop_repository" {
-  zone_id = aws_route53_zone.dsop.zone_id
-  name    = "repository.dsop.io"
-  type    = "A"
-  ttl     = "300"
-  records = [aws_instance.utility.private_ip]
-}
 
 resource "aws_route53_record" "dso_repository" {
   zone_id = aws_route53_zone.dso.zone_id
   name    = "repository.dso.mil"
-  type    = "A"
-  ttl     = "300"
-  records = [aws_instance.utility.private_ip]
-}
-
-resource "aws_route53_record" "dsop_repo1" {
-  zone_id = aws_route53_zone.dsop.zone_id
-  name    = "repo1.dsop.io"
   type    = "A"
   ttl     = "300"
   records = [aws_instance.utility.private_ip]
@@ -112,14 +73,6 @@ resource "aws_route53_record" "dso_repo1" {
 
 
 #Proxy
-
-resource "aws_route53_record" "dsop_proxy" {
-  zone_id = aws_route53_zone.dsop.zone_id
-  name    = "proxy.dsop.io"
-  type    = "A"
-  ttl     = "300"
-  records = [aws_instance.utility.private_ip]
-}
 
 resource "aws_route53_record" "dso_proxy" {
   zone_id = aws_route53_zone.dso.zone_id

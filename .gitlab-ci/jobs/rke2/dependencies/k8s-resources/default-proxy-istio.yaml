@@ -4,7 +4,7 @@ metadata:
   name: proxy
 spec:
   hosts:
-  - proxy.dsop.io # ignored
+  - proxy.dso.mil # ignored
   addresses:
   - PROXY_IP/32
   ports:

@@ -2,7 +2,7 @@
 
 This job creates a utility instance in the previously created private subnet which contains three processes: a forward, internet facing proxy, git repository, and docker registry. The git repository is preloaded with the umbrella application repository and the docker registry contains images from iron bank. Additionally, Route 53 internal records are created which will resolve to these services.
 
-Note that pulling from the git repository is done over http://repository.dsop.io/umbrella.git
+Note that pulling from the git repository is done over http://repository.dso.mil/umbrella.git
 
 Note that this step consumes a tf state from the previous networking job. This is done through a remote state hosted in S3 or local file if in Dev. 
 
@@ -14,11 +14,11 @@ We run a terraform apply from the `.gitlab-ci/jobs/utility/dependencies/terrafor
 
 Output is the ip of the utility instance. This does not need to be consumed given that pre-defined Route 53 records are created:
 
-* proxy.dsop.io
-* repository.dsop.io
-* registry.dsop.io
+* proxy.dso.mil
+* repository.dso.mil
+* registry.dso.mil
 
-repository.dsop.io and registry.dsop.io are blank and require artifacts to be pushed into them. This is done with `git push` and `docker push` respectively. Both of these resources are secured behind basic auth which may be randomly generated during `terraform apply`. To consume this auth, use the following terraform state method to retrieve the credentials.
+repository.dso.mil and registry.dso.mil are blank and require artifacts to be pushed into them. This is done with `git push` and `docker push` respectively. Both of these resources are secured behind basic auth which may be randomly generated during `terraform apply`. To consume this auth, use the following terraform state method to retrieve the credentials.
 
 main.tf
 ```
