@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+# set -ex
 
 # Deploy flux and wait for it to be ready
 echo "Installing Flux"

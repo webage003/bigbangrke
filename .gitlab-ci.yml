@@ -224,6 +224,9 @@ upgrade:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
       allow_failure: false
       when: manual
+    #temp test
+    - if: $CI_MERGE_REQUEST_LABELS =~ /elasticsearch-kibana/
+
 
 # Abstract for jobs responsible for creating infrastructure
 .infra create:
@@ -233,6 +236,8 @@ upgrade:
       when: never
     # run infrastructure pipelines only on merges into master
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    #temp test
+    - if: $CI_MERGE_REQUEST_LABELS =~ /elasticsearch-kibana/
 
 # Abstract for jobs responsible for cleaning up infrastructure
 .infra cleanup:
@@ -244,6 +249,9 @@ upgrade:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
       allow_failure: true
       when: always
+    #temp test
+    - if: $CI_MERGE_REQUEST_LABELS =~ /elasticsearch-kibana/
+      allow_failure: true
 
 #-----------------------------------------------------------------------------------------------------------------------
 
