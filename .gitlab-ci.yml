@@ -221,11 +221,9 @@ upgrade:
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
       when: never
     # run infrastructure pipelines only on merges into master, and run regardless of failure
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_LABELS =~ /ci/'
       allow_failure: false
       when: manual
-    #temp test
-    - if: $CI_MERGE_REQUEST_LABELS =~ /elasticsearch-kibana/
 
 
 # Abstract for jobs responsible for creating infrastructure
@@ -235,9 +233,7 @@ upgrade:
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
       when: never
     # run infrastructure pipelines only on merges into master
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
-    #temp test
-    - if: $CI_MERGE_REQUEST_LABELS =~ /elasticsearch-kibana/
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_LABELS =~ /ci/'
 
 # Abstract for jobs responsible for cleaning up infrastructure
 .infra cleanup:
@@ -246,12 +242,9 @@ upgrade:
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
       when: never
     # run infrastructure pipelines only on merges into master, and run regardless of failure
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_LABELS =~ /ci/'
       allow_failure: true
       when: always
-    #temp test
-    - if: $CI_MERGE_REQUEST_LABELS =~ /elasticsearch-kibana/
-      allow_failure: true
 
 #-----------------------------------------------------------------------------------------------------------------------
 
