@@ -4,12 +4,57 @@ hostname: bigbang.dev
 # TODO: All this does right now is toggle GitRepositories, it is _not_ fully functional
 offline: false
 
-# Registry credentials to use from pulling images from private registry, will create an appropriate imagePullSecret in all relevant namespaces
+# Regisitires can be an explicit map of registries as provided here
 registryCredentials:
   registry: registry1.dsop.io
   username: ""
   password: ""
   email: ""
+
+# Or a list of registires:
+# registryCredentials:
+# - registry: registry1.dsop.io
+#   username: user.name
+#   password: user-secret
+#   email: xxx@xxx.xxx
+# - registry: registry1.dso.mil
+#   username: user.name
+#   password: user-secret
+#   email: xxx@xxx.xxx
+# - registry: registry.dso.mil
+#   username: user.name
+#   password: user-secret
+#   email: xxx@xxx.xxx
+
+# Global git values
+# Order of precedence is:
+#   1. existingSecret
+#   2. http credentials (username/password)
+#   3. ssh credentials (privateKey/publicKey/knownHosts)
+git:
+  # Existing secret to use for git credentials, must be in the appropriate format: https://toolkit.fluxcd.io/components/source/gitrepositories/#https-authentication
+  existingSecret: ""
+
+  # Chart created secrets with user defined values
+  credentials:
+    # HTTP git credentials, both username and password must be provided
+    username: ""
+    password: ""
+
+    # SSH git credentials, privateKey, publicKey, and knownHosts must be provided
+    privateKey: ""
+    publicKey: ""
+    knownHosts: ""
+
+# Gloabl SSO parameters
+sso:
+  oidc:
+    host: login.dso.mil
+    realm: baby-yoda
+  certificate_authority: ''
+  jwks: ""
+  client_id: ""
+  client_secret: ""
 
 # Flux reconciliation parameters
 flux:
@@ -19,62 +64,126 @@ flux:
   upgrade:
     retries: 3
   rollback:
-    timeout: 5m
+    timeout: 10m
     cleanupOnFail: true
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Istio
+#
 istio:
   enabled: true
   git:
-    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/servicemesh.git
-    branch: chart-release
-#    commit: ""
-#    tag: ""
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-controlplane.git
+    path: "./chart"
+    tag: "1.7.3-bb.6"
+  sso:
+    enabled: false
+    kiali:
+      client_id: kiali
+      client_secret: "change_me"
+    jaeger:
+      client_id: jaeger
+      client_secret: "change_me"
   values: {}
 
+istiooperator:
+  enabled: true
+  git:
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/istio-operator.git
+    path: "./chart"
+    tag: "1.7.0-bb.0"
+  values: {}
+# ----------------------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Cluster Auditor
+#
 clusterAuditor:
   enabled: true
   git: 
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/cluster-auditor.git
-    branch: docs
+    branch: docs-robk
 #    commit: ""
 #    tag: ""
+    path: "./chart"
+    # tag: "0.1.7-bb.0"
   values: {}
+# ----------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------------------------------------------------
+# OPA Gatekeeper
+#
 gatekeeper:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/policy.git
-    branch: chart-release
-#    commit: ""
-#    tag: ""
+    path: "./chart"
+    tag: "3.1.2-bb.2"
   values: {}
+# ----------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Logging
+#
 logging:
   enabled: true
   git:
-    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/logging.git
-    branch: release-v0.2.x
-#    commit: ""
-#    tag: ""
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/elasticsearch-kibana.git
+    path: "./chart"
+    tag: "0.1.2-bb.0"
   values: {}
 
+eckoperator:
+  enabled: true
+  git:
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/eck-operator.git
+    path: "./chart"
+    tag: "1.3.0-bb.2"
+  values: {}
+
+fluentbit:
+  enabled: true
+  git:
+    repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/fluentbit.git
+    path: "./chart"
+    tag: "0.1.0-bb.0"
+  values: {}
+# ----------------------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Monitoring
+#
 monitoring:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/monitoring.git
-    branch: release-v0.2.x
-#    commit: ""
-#    tag: ""
+    path: "./chart"
+    tag: "11.0.0-bb.6"
+  sso:
+    enabled: false
+    prometheus:
+      client_id: prometheus
+      client_secret: "change_me"
+    alertmanager:
+      client_id: alertmanager
+      client_secret: "change_me"
+    grafana:
+      client_id: grafana
+      client_secret: "change_me"
   values: {}
+# ----------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Twistlock
+#
 twistlock:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/security-tools/twistlock.git
-    branch: chart-release
-#    commit: ""
-#    tag: ""
+    path: "./chart"
+    tag: "0.0.2-bb.0"
   values: {}
+# ----------------------------------------------------------------------------------------------------------------------
 
 documentation:
   enabled: true
@@ -87,5 +196,38 @@ addons:
     enabled: false
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/argocd.git
-      branch: docs
+      branch: docs-robk
+      path: "./chart"
+      # tag: "2.9.5-bb.2"
+    values: {}
+
+  authservice:
+    # if enabling authservice, a filter needs to be provided by either enabling
+    # sso for monitoring or istio, or manually adding a filter chain in the values here:
+    # values:
+    #   chain:
+    #     minimal:
+    #       callback_uri: "https://somecallback"
+    enabled: false
+    git:
+      repo: https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/authservice.git
+      path: "./chart"
+      tag: "0.1.6-bb.0"
+    # Dont put chain configuraitons in this section
+    values: {}
+    # Put additional chain configuration in this section
+    chains: {}
+
+  gitlab:
+    enabled: false
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
+      path: "./chart"
+      tag: "4.2.0-bb.1"
+
+  haproxy:
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/haproxy.git
+      path: "./chart"
+      tag: 1.1.2-bb.0
     values: {}

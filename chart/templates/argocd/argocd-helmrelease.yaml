@@ -8,7 +8,7 @@ spec:
   targetNamespace: argocd
   chart:
     spec:
-      chart: chart
+      chart: {{ .Values.addons.argocd.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
@@ -37,9 +37,14 @@ spec:
       kind: Secret
       valuesKey: "argocd.yaml"
   values:
+    hostname: {{ .Values.hostname }}
     createNamespace: false
     imagePullSecrets:
       - name: private-registry
+    server:
+      config:
+        url: https://argocd.{{ .Values.hostname }}
+
   {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
     istio:
       enabled: {{ .Values.istio.enabled }}

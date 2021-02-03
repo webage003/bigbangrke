@@ -1,0 +1,18 @@
+{{- if or .Values.logging.enabled .Values.clusterAuditor.enabled }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logging
+---
+{{- if ( include "imagePullSecret" . ) }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-registry
+  namespace: logging
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+{{- end }}
+{{- end }}
