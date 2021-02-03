@@ -491,7 +491,7 @@ airgap/rke2/bigbang up:
       artifacts: true
   before_script:
     # Replace https with http for git server
-    - sed -i 's/https:\/\/repo1.dso.mil/http:\/\/repo1.dsop.io/g' chart/values.yaml  tests/ci/shared-secrets.yaml
+    - sed -i 's/https:\/\/repo1.dso.mil/http:\/\/repo1.dso.mil/g' chart/values.yaml  tests/ci/shared-secrets.yaml
 
     - mkdir -p ~/.kube
     - cp ${CI_PROJECT_DIR}/rke2.yaml ~/.kube/config
