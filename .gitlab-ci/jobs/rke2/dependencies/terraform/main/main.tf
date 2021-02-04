@@ -2,9 +2,10 @@ locals {
   name = "umbrella-${var.env}"
 
   tags = {
-    "project"   = "umbrella"
-    "env"       = var.env
-    "terraform" = "true"
+    "project"         = "umbrella"
+    "env"             = var.env
+    "terraform"       = "true",
+    "ci_pipeline_url" = var.ci_pipeline_url
   }
 }
 
