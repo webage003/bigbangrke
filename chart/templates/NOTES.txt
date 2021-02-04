@@ -3,7 +3,7 @@ Thank you for supporting PlatformOne!
 {{ if $.Values.addons.gitlab.enabled }}
 Gitlab is enabled.
 Please follow the Gitlab online documentation for proper configuration. 
-This Umbrella chart provides convenient enhancements to the Gitlab Package helm chart.
+This BigBang chart provides convenient enhancements to the Gitlab Package helm chart.
 If you enable these features certain settings will be defaulted for you and any required secrets will be automatically created.
 You should point to your cloud provider's RDS and object storage.
 Gitlab will not provision storage for you. You will need to provision the database and the S3 buckets.
@@ -66,7 +66,7 @@ gitlab-backup-tmp
 {{ if $.Values.addons.gitlab.database.host }}
 {{ else }}
 PLATFORM ONE GITLAB WARNING:
-  You have enabled an internal postgres database in the Umbrella configuration.
+  You have enabled an internal postgres database in the BigBang configuration.
   PlatformOne does not support this option for production deployments because your persistent data can be permanently lost.
   This option should only be used for development or CI pipelines.
 {{- end -}}
@@ -74,7 +74,7 @@ PLATFORM ONE GITLAB WARNING:
 {{ if $.Values.addons.gitlab.objectstorage.endpoint }}
 {{ else }}
 PLATFORM ONE GITLAB WARNING: 
-  You have enabled a MinIO internal service in the Umbrella configuration.
+  You have enabled a MinIO internal service in the BigBang configuration.
   PlatformOne does not support this option for production deployments because your persistent data can be permanently lost.
   This option should only be used for development or CI pipelines.
 {{- end }}
