@@ -41,8 +41,8 @@ stringData:
         "discovery": true,
         "uid_field": "preferred_username",
         "client_options": {
-          "identifier": "{{ .Values.addons.gitlab.sso.client_id }}",
-          "secret": "{{ .Values.sso.client_secret }}",
+          "identifier": "{{ .Values.addons.gitlab.sso.client_id | default .Values.sso.client_id }}",
+          "secret": "{{ .Values.addons.gitlab.sso.client_secret | default .Values.sso.client_secret }}",
           "redirect_uri": "https://{{ .Values.addons.gitlab.hostnames.gitlab }}/users/auth/openid_connect/callback",
           "end_session_endpoint": "https://{{ .Values.sso.oidc.host }}/auth/realms/{{ .Values.sso.oidc.realm }}/protocol/openid-connect/logout"
         }
@@ -51,7 +51,7 @@ stringData:
 {{- end }}
 ---
 # create database secret
-{{- if .Values.addons.gitlab.database.external }}
+{{- if .Values.addons.gitlab.database.host }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -63,7 +63,7 @@ stringData:
 {{- end }}
 ---
 # create object storage secret
-{{- if .Values.addons.gitlab.objectstorage.external }}
+{{- if .Values.addons.gitlab.objectstorage.endpoint }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -102,7 +102,7 @@ stringData:
       access_key = {{ .Values.addons.gitlab.objectstorage.accessKey }}
       secret_key = {{ .Values.addons.gitlab.objectstorage.accessSecret }}
       bucket_location = {{ .Values.addons.gitlab.objectstorage.region }}
-      host_bucket = %(bucket)s.{{ .Values.addons.gitlab.objectstorage.host }}
+      host_bucket = %(bucket)s.{{ regexReplaceAll "http(s*)://" .Values.addons.gitlab.objectstorage.endpoint "" }}
 {{- end }}
 
 {{- end }}

@@ -44,12 +44,10 @@ spec:
       enabled: {{ .Values.istio.enabled }}
     monitoring:
       enabled: {{ .Values.monitoring.enabled }}
-    {{- if .Values.addons.gitlab.database.external }}
+    {{- if .Values.addons.gitlab.database.host }}
     postgresql:
       install: false
     {{- end }}
-    {{- if ( include "imagePullSecret" . ) }}
-    ## values for image pull secrets
     redis:
       metrics:
         image:
@@ -58,14 +56,12 @@ spec:
       image:
         pullSecrets: 
         - private-registry
-    {{- end }}
     registry:
       {{- if .Values.addons.gitlab.objectstorage.external }}
       storage:
         secret: gitlab-object-storage
         key: registry
       {{- end }}
-    {{- if ( include "imagePullSecret" . ) }}
       image:
         pullSecrets:
         - name: private-registry
@@ -74,7 +70,6 @@ spec:
         image:
           pullSecrets:
           - name: private-registry
-    {{- end }}
     gitlab:
       task-runner:
         {{- if .Values.addons.gitlab.objectstorage.external }}
@@ -84,7 +79,6 @@ spec:
               secret: gitlab-object-storage
               key: backups
         {{- end }}
-    {{- if ( include "imagePullSecret" . ) }}
         image:
           pullSecrets:
           - name: private-registry
@@ -118,7 +112,6 @@ spec:
     minio:
       pullSecrets:
       - name: private-registry
-    {{- end }}
     global:
       hosts:
         domain: {{ .Values.hostname }}
@@ -126,43 +119,29 @@ spec:
           name: {{ .Values.addons.gitlab.hostnames.gitlab }} 
         registry:
           name: {{ .Values.addons.gitlab.hostnames.registry }}
-      {{- if .Values.addons.gitlab.objectstorage.external }}
+      {{- if .Values.addons.gitlab.objectstorage.endpoint }}
       minio:
         enabled: false
       {{- end }}
-      {{- if .Values.addons.gitlab.database.external }}
+      {{- if .Values.addons.gitlab.database.host }}
       psql:
-        {{- $global := .Values.addons.gitlab.values.global | default dict }}
-        {{- $psql := $global.psql | default dict }}
-        {{- if hasKey $psql "host" }}
-        host: {{ .Values.addons.gitlab.values.global.psql.host }}
-        {{- else }} 
         host: {{ .Values.addons.gitlab.database.host }}
-        {{- end }}
-        {{- if hasKey $psql "port" }}
-        port: {{ .Values.addons.gitlab.values.global.psql.port }}
-        {{- else }}
         port: {{ .Values.addons.gitlab.database.port }}
-        {{- end }}
-        {{- if hasKey $psql "username" }}
-        username: {{ .Values.addons.gitlab.values.global.psql.username }}
-        {{- else }}
         username: {{ .Values.addons.gitlab.database.username }}
-        {{- end }}
-        {{- if hasKey $psql "database" }}
-        database: {{ .Values.addons.gitlab.values.global.psql.database }}
-        {{- else }}
         database: {{ .Values.addons.gitlab.database.database }}
-        {{- end }}
         password:
           secret: gitlab-database
           key: PGPASSWORD
       {{- end }}
-      {{- if .Values.addons.gitlab.objectstorage.external }}
+      {{- if .Values.addons.gitlab.objectstorage.endpoint }}
       registry:
-        bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-registry
+        {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+        bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-registry
+        {{- else }}
+        bucket: gitlab-registry
+        {{- end }}
       {{- end }}
-      {{- if or .Values.addons.gitlab.sso.enabled .Values.addons.gitlab.objectstorage.external }}
+      {{- if or .Values.addons.gitlab.sso.enabled .Values.addons.gitlab.objectstorage.endpoint }}
       appConfig:
       {{- end }}
         {{- if .Values.addons.gitlab.sso.enabled }}
@@ -185,53 +164,91 @@ spec:
               - secret: gitlab-sso-provider
                 key: gitlab-sso.json
         {{- end }}
-        {{- if .Values.addons.gitlab.objectstorage.external }}
+        {{- if .Values.addons.gitlab.objectstorage.endpoint }}
         lfs:
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-lfs
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-lfs
+          {{- else }}
+          bucket: gitlab-lfs
+          {{- end }}
           connection:
             secret: gitlab-object-storage
             key: rails
         artifacts:
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-artifacts
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-artifacts
+          {{- else }}
+          bucket: gitlab-artifacts
+          {{- end }}
           connection:
             secret: gitlab-object-storage
             key: rails
         uploads:
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-uploads
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-uploads
+          {{- else }}
+          bucket: gitlab-uploads
+          {{- end }}
           connection:
             secret: gitlab-object-storage
             key: rails
         packages:
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-packages
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-packages
+          {{- else }}
+          bucket: gitlab-packages
+          {{- end }}
           connection:
             secret: gitlab-object-storage
             key: rails
         externalDiffs:
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-mr-diffs
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-mr-diffs
+          {{- else }}
+          bucket: gitlab-mr-diffs
+          {{- end }}
           connection:
             secret: gitlab-object-storage
             key: rails
         terraformState:
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-terraform-state
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-terraform-state
+          {{- else }}
+          bucket: gitlab-terraform-state
+          {{- end }}
           connection:
             secret: gitlab-object-storage
             key: rails
         dependencyProxy:
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-dependency-proxy
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-dependency-proxy
+          {{- else }}
+          bucket: gitlab-dependency-proxy
+          {{- end }}
           connection: 
             secret: gitlab-object-storage
             key: rails
         pseudonymizer:
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-pseudo
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-pseudo
+          {{- else }}
+          bucket: gitlab-pseudo
+          {{- end }}
           connection:
             secret: gitlab-object-storage
             key: rails
         backups:
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-backup
-          tmpBucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-backup-tmp
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-backup
+          {{- else }}
+          bucket: gitlab-backup
+          {{- end }}
+          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+          tmpBucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-backup-tmp
+          {{- else }}
+          tmpBucket: gitlab-backup-tmp
+          {{- end }}
         {{- end }}
-      {{- if ( include "imagePullSecret" . ) }}
-      ## values for image pull secrets
       certificates:
         image:
           pullSecrets:
@@ -240,7 +257,6 @@ spec:
         image:
           pullSecrets:
           - name: private-registry
-      {{ end }}
 
   {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.monitoring.enabled }}
   dependsOn:

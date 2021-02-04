@@ -66,6 +66,6 @@ addons:
     sso:
       enabled: false
     database:
-      external: false
+      host: ""       # install internal database
     objectstorage:
-      external: false
+      endpoint: ""   # install internal minio

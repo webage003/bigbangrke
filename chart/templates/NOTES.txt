@@ -13,45 +13,57 @@ addons:
   gitlab:
     enabled: true
     hostnames:
-      gitlab: gitlab.bigbang.dev
-      registry: registry.bigbang.dev
+      gitlab: gitlab.example.mil
+      registry: registry.example.mil
     sso:
       enabled: true
       label: "Platform One SSO"
       client_id: "platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-gitlab"
     database:
-      external: true
-      host: postgres.bigbang.dev
+      host: postgres.example.mil
       port: 5432
       username: gitlab
       database: gitlab
       password: mysecretpassword
     objectstorage:
-      external: true
       type: s3
-      host: s3.amazonaws.com
-      region: us-west-1
+      endpoint: https://s3.us-gov-west-1.amazonaws.com
+      region: us-gov-west-1
       accessKey: myaccesskey
       accessSecret: mysecretkey
-      bucketPrefix: prod-
+      bucketPrefix: prod
 
-{{ if $.Values.addons.gitlab.objectstorage.external }}
+{{ if $.Values.addons.gitlab.objectstorage.endpoint }}
 GITLAB: You have enabled Gitlab external object storage. 
 Here is the list of buckets that you must provision in your s3 service:
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-registry
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-lfs
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-artifacts
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-uploads
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-packages
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-mr-diffs
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-terraform-state
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-dependency-proxy
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-pseudo
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-backup
-{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-backup-tmp
+{{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-registry
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-lfs
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-artifacts
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-uploads
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-packages
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-mr-diffs
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-terraform-state
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-dependency-proxy
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-pseudo
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-backup
+{{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-backup-tmp
+{{- else }}
+gitlab-registry
+gitlab-lfs
+gitlab-artifacts
+gitlab-uploads
+gitlab-packages
+gitlab-mr-diffs
+gitlab-terraform-state
+gitlab-dependency-proxy
+gitlab-pseudo
+gitlab-backup
+gitlab-backup-tmp
+{{- end }}
 {{- end }}
 
-{{ if $.Values.addons.gitlab.database.external }}
+{{ if $.Values.addons.gitlab.database.host }}
 {{ else }}
 PLATFORM ONE GITLAB WARNING:
   You have enabled an internal postgres database in the Umbrella configuration.
@@ -59,7 +71,7 @@ PLATFORM ONE GITLAB WARNING:
   This option should only be used for development or CI pipelines.
 {{- end -}}
 
-{{ if $.Values.addons.gitlab.objectstorage.external }}
+{{ if $.Values.addons.gitlab.objectstorage.endpoint }}
 {{ else }}
 PLATFORM ONE GITLAB WARNING: 
   You have enabled a MinIO internal service in the Umbrella configuration.
