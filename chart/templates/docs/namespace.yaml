@@ -5,12 +5,12 @@ metadata:
   name: docs
 
 ---
-{{- if and (ne .Values.registryCredentials.username "") (ne .Values.registryCredentials.password "") }}
+{{- if ( include "imagePullSecret" . ) }}
 apiVersion: v1
 kind: Secret
 metadata:
   name: private-registry
-  namespace: docs
+  namespace: gatekeeper-system
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
