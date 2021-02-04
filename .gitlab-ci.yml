@@ -220,7 +220,7 @@ upgrade:
     # skip job when branch name starts with "hotfix" or "patch"
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
       when: never
-    # run infrastructure pipelines only on merges into master, and run regardless of failure
+    # run infrastructure pipelines only on merges into master or 'ci' label and run regardless of failure
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_LABELS =~ /ci/'
       allow_failure: false
       when: manual
@@ -232,7 +232,7 @@ upgrade:
     # skip job when branch name starts with "hotfix" or "patch"
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
       when: never
-    # run infrastructure pipelines only on merges into master
+    # run infrastructure pipelines only on merges into master or 'ci' label
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_LABELS =~ /ci/'
 
 # Abstract for jobs responsible for cleaning up infrastructure
@@ -241,7 +241,7 @@ upgrade:
     # skip job when branch name starts with "hotfix" or "patch"
     - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
       when: never
-    # run infrastructure pipelines only on merges into master, and run regardless of failure
+    # run infrastructure pipelines only on merges into master, or 'ci' label and run regardless of failure
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" || $CI_MERGE_REQUEST_LABELS =~ /ci/'
       allow_failure: true
       when: always
@@ -327,6 +327,7 @@ aws/airgap/package delete:
   extends:
     - .bigbang-dogfood
     - .package
+    - .infra fork
   variables:
     PKG_S3_BUCKET: '$CI_PKG_BUCKET'
     PKG_PATH: '$CI_COMMIT_SHORT_SHA'
