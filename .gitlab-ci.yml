@@ -31,7 +31,7 @@ stages:
 
 variables:
   RELEASE_BUCKET: umbrella-bigbang-releases
-  CI_PKG_BUCKET: umbrella-bigbang-airgap
+  AIRGAP_PKG_BUCKET: umbrella-bigbang-airgap
   IMAGE_LIST: images.txt
   IMAGE_PKG: images.tar.gz
   REPOS_PKG: repositories.tar.gz
@@ -309,7 +309,7 @@ aws/airgap/package:
     - .infra fork
     - .package
   variables:
-    PKG_S3_BUCKET: '$CI_PKG_BUCKET'
+    PKG_S3_BUCKET: '$AIRGAP_PKG_BUCKET'
     PKG_PATH: '$CI_COMMIT_SHORT_SHA'
   stage: network up
   dependencies:
@@ -329,7 +329,7 @@ aws/airgap/package delete:
     - .package
     - .infra fork
   variables:
-    PKG_S3_BUCKET: '$CI_PKG_BUCKET'
+    PKG_S3_BUCKET: '$AIRGAP_PKG_BUCKET'
     PKG_PATH: '$CI_COMMIT_SHORT_SHA'
   script:
     - aws s3 rm --recursive s3://${PKG_S3_BUCKET}/umbrella/${PKG_PATH}

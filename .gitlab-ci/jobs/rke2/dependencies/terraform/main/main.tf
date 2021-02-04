@@ -43,12 +43,6 @@ module "rke2" {
   enable_ccm = var.enable_ccm
   download   = var.download
 
-  rke2_config = <<-EOF
-# kube-apiserver-arg:
-# - "--runtime-config=settings.k8s.io/v1alpha1=true"
-# - "--enable-admission-plugins=PodPreset"
-EOF
-
   # TODO: These need to be set in pre-baked ami's
   pre_userdata = var.airgap == false ? data.template_file.nonairgap_userdata.rendered : data.template_file.airgap_userdata.rendered
 
@@ -71,12 +65,6 @@ module "generic_agents" {
   enable_ccm        = var.enable_ccm
   enable_autoscaler = var.enable_autoscaler
   download          = var.download
-
-  rke2_config = <<-EOF
-# kube-apiserver-arg:
-# - "--runtime-config=settings.k8s.io/v1alpha1=true"
-# - "--enable-admission-plugins=PodPreset"
-EOF
 
   # TODO: These need to be set in pre-baked ami's
   pre_userdata = var.airgap == false ? data.template_file.nonairgap_userdata.rendered : data.template_file.airgap_userdata.rendered

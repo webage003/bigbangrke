@@ -32,13 +32,12 @@ include:
     TF_VAR_env: ${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
   before_script:
     - export TF_VAR_env=$(echo "${CI_COMMIT_REF_SLUG}"| cut -c 1-7)-$(echo "${CI_COMMIT_SHA}" | cut -c 1-7)
-    # VPC CIDR race-condition between airgap and non-airgap network up
-    - sleep 10
     - *terraformer_script
   
 .terraformer_airgap:
   variables: 
     TF_VAR_env: ${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
+    DELAY: 0
   extends:
     - .terraformer
   before_script:
