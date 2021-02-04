@@ -57,7 +57,7 @@ spec:
         pullSecrets: 
         - private-registry
     registry:
-      {{- if .Values.addons.gitlab.objectstorage.external }}
+      {{- if .Values.addons.gitlab.objectstorage.endpoint }}
       storage:
         secret: gitlab-object-storage
         key: registry
@@ -72,7 +72,7 @@ spec:
           - name: private-registry
     gitlab:
       task-runner:
-        {{- if .Values.addons.gitlab.objectstorage.external }}
+        {{- if .Values.addons.gitlab.objectstorage.endpoint }}
         backups:
           objectStorage:
             config:
