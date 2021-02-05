@@ -69,3 +69,10 @@ addons:
       global:
         minio:
           enabled: true
+  coder:
+    enabled: true
+    values:
+      postgres:
+        useDefault: true
+        
+

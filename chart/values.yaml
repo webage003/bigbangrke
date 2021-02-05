@@ -207,6 +207,25 @@ addons:
     values: {}
     # Put additional chain configuration in this section
     chains: {}
+  
+  coder:
+    enabled: false
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/coder.git
+      path: "./chart"
+      branch: "main"
+    values: {}
+    sso:
+      enabled: false   # default to false
+      client_id: ""
+    postgres:
+      useDefault: true
+      host:
+      port:
+      user:
+      database:
+      passwordSecret: ""
+      sslMode: "require"
 
   gitlab:
     enabled: false

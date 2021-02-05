@@ -1,0 +1,17 @@
+{{- if .Values.twistlock.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: coder
+---
+{{- if ( include "imagePullSecret" . ) }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-registry
+  namespace: coder
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+{{- end }}
+{{- end }}
