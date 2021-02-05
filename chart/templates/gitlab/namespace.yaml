@@ -84,7 +84,11 @@ stringData:
       {{- end }}
     registry: |-
       s3:
-        bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}gitlab-registry
+        {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
+        bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-registry
+        {{- else }}
+        bucket: gitlab-registry
+        {{- end }}
         accesskey: {{ .Values.addons.gitlab.objectstorage.accessKey }}
         secretkey: {{ .Values.addons.gitlab.objectstorage.accessSecret }}
         region: {{ .Values.addons.gitlab.objectstorage.region }}
