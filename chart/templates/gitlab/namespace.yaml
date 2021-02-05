@@ -78,7 +78,7 @@ stringData:
       aws_secret_access_key: {{ .Values.addons.gitlab.objectstorage.accessSecret }}
       {{- if eq .Values.addons.gitlab.objectstorage.type "minio" }}
       aws_signature_version: 4
-      host: {{ .Values.addons.gitlab.objectstorage.host }}
+      host: {{ regexReplaceAll "http(s{0,1})://(.*):(\\d+)" .Values.addons.gitlab.objectstorage.endpoint "${2}" }}
       endpoint: "{{ .Values.addons.gitlab.objectstorage.endpoint }}"
       path_style: true
       {{- end }}
@@ -93,7 +93,7 @@ stringData:
         {{- end }}
         {{- if eq .Values.addons.gitlab.objectstorage.type "minio" }}
         aws_signature_version: 4
-        host: {{ .Values.addons.gitlab.objectstorage.host }}
+        host: {{ regexReplaceAll "http(s{0,1})://(.*):(\\d+)" .Values.addons.gitlab.objectstorage.endpoint "${2}" }}
         regionendpoint: "{{ .Values.addons.gitlab.objectstorage.endpoint }}"
         path_style: true
         {{- end }}
