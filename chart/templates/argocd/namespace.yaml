@@ -7,7 +7,7 @@ metadata:
   name: argocd
 
 ---
-{{- if ( include "imagePullSecret" . ) }}
+{{- if and (ne .Values.registryCredentials.username "") (ne .Values.registryCredentials.password "") }}
 apiVersion: v1
 kind: Secret
 metadata:

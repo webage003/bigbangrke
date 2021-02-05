@@ -6,7 +6,8 @@ metadata:
   labels:
     istio-operator-managed: Reconcile
     istio-injection: disabled
-{{- if ( include "imagePullSecret" . ) }}
+
+{{- if and (ne .Values.registryCredentials.username "") (ne .Values.registryCredentials.password "") }}
 ---
 apiVersion: v1
 kind: Secret

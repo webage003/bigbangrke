@@ -6,12 +6,6 @@ Table of Contents:
 
 - [Contributing to Big Bang](#contributing-to-big-bang)
   - [Developers Guide](#developers-guide)
-  - [Local Git Setup](#local-git-setup)
-    - [Pre-commit hooks](#pre-commit-hooks)
-      - [Local Setup](#local-setup)
-        - [Prereqs](#prereqs)
-        - [Steps](#steps)
-      - [Combining Multiple Commits](#combining-multiple-commits)
   - [Iron Bank Images](#iron-bank-images)
   - [Local Kubernetes cluster](#local-kubernetes-cluster)
   - [Deploying Big Bang (Quick Start)](#deploying-big-bang-quick-start)
@@ -29,54 +23,9 @@ Table of Contents:
         - [Big Bang Tests](#big-bang-tests)
       - [Teardown](#teardown)
 
-## Developers Guide 
+## Developers Guide
 
 Big Bang is designed in such a way as to be as easily deployed locally as it is in production.  In fact, most contributions begin locally.
-
-## Local Git Setup
-
-### Pre-commit hooks
-
-We would require developers to leverage [conventional commits](https://www.conventionalcommits.org/) when contributing.
-
-In order to help enforce this we are leveraging client-side pre-commit hooks.
-
-This is done using the following tools:
-
-- [husky](https://www.npmjs.com/package/husky)
-- [commitlint](https://commitlint.js.org/#/)
-
-#### Local Setup
-
-##### Prereqs
-
-- Install [npm](https://www.npmjs.com/get-npm)
-
-##### Steps
-
-After cloning this git repo run the following command:
-
-```bash
-npm install --only=dev
-```
-
-This will download `husky` and `commitlint` to your local repo and modify your `.git/hooks` to allow husky to run pre-commit hooks. Once installed it will enforce the usage of convential-commits.
-
-#### Combining Multiple Commits
-
-If you have pushed commits that do not conform to the conventional-commit guide lines, you can combine all of the incorrectly formatted commit messages by using `git rebase`.
-
-A more expansive guide of how this is done can be found [here](https://www.w3docs.com/snippets/git/how-to-combine-multiple-commits-into-one-with-3-steps.html).
-
-Here is a quick tip to squash all commits for a branch named `test`:
-
-```
-git checkout test
-git reset $(git merge-base master $(git rev-parse --abbrev-ref HEAD))
-git add -A
-git commit -m "feat: example conventional commit"
-git push --force
-```
 
 ## Iron Bank Images
 
