@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 set -ex
 
 # Deploy flux and wait for it to be ready
@@ -9,10 +10,11 @@ flux check --pre
 # Install flux in the cluster
 kubectl create ns flux-system || true
 
-kubectl create secret docker-registry ironbank -n flux-system \
+# TODO When changing the flux images to .mil this will need to chagne
+kubectl create secret docker-registry private-registry -n flux-system \
    --docker-server=registry1.dsop.io \
-   --docker-username=${ROBOT_ACCOUNT} \
-   --docker-password=${ROBOT_TOKEN} \
+   --docker-username='robot$bigbang' \
+   --docker-password=${REGISTRY1_PASSWORD} \
    --docker-email=bigbang@bigbang.dev || true
 kubectl apply -f ./scripts/deploy/flux.yaml
 
@@ -24,8 +26,11 @@ flux check
 # Deploy BigBang using dev sized scaling
 echo "Installing BigBang"
 helm upgrade -i bigbang chart -n bigbang --create-namespace \
-  --set registryCredentials.username=${ROBOT_ACCOUNT} --set registryCredentials.password=${ROBOT_TOKEN} \
-  -f tests/ci/k3d/values.yaml
+--set registryCredentials[0].username='robot$bigbang' --set registryCredentials[0].password=${REGISTRY1_PASSWORD} \
+--set registryCredentials[0].registry=registry1.dsop.io                                                         \
+--set registryCredentials[1].username='robot$bigbang' --set registryCredentials[1].password=${REGISTRY1_PASSWORD} \
+--set registryCredentials[1].registry=registry1.dso.mil                                                         \
+-f tests/ci/k3d/values.yaml
 
 ## Apply secrets kustomization pointing to current branch
 echo "Deploying secrets from the ${CI_COMMIT_REF_NAME} branch"
