@@ -227,20 +227,20 @@ addons:
     database:
       # entering connection info will enable external database and will auto-create any required secrets.
       # Gitlab will not provison the database when using an external service
-      host: postgres.bigbang.dev
-      port: 5432
-      username: gitlab
-      database: gitlab
-      password: enter-secret-here   # unencoded stringData. This should be put in the secret values
+      host: ""     # example: postgres.bigbang.dev
+      port: ""     # example: 5432
+      username: "" # example: gitlab
+      database: "" # example: gitlab
+      password: "" # unencoded string data. This should be put in the secret values
     objectstorage:
       # entering connection info will enable this option and will auto-create any required secrets
-      # Gitlab will not provision the S3 buckets when using an external servcie
-      type: s3   # supported types are "s3" or "minio"
-      endpoint: https://s3.amazonaws.com  # for C1D use "https://s3.us-gov-west-1.amazonaws.com" minio example "http://minio.minio.svc.cluster.local:9000"
-      region: us-gov-west-1
-      accessKey: ""
-      accessSecret: ""
-      bucketPrefix: ""  # optional. example: "prod"
+      # Gitlab will not provision the S3 buckets when using an external service
+      type: ""         # supported types are "s3" or "minio"
+      endpoint: ""     # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
+      region: ""       # example: us-gov-west-1
+      accessKey: ""    # unencoded string data
+      accessSecret: "" # unencoded string data. This should be put in the secret values
+      bucketPrefix: "" # optional. example: "prod"
     values: {}
 
   haproxy:
