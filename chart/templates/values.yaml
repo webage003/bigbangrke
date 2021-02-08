@@ -9,6 +9,8 @@ stringData:
 {{ toYaml .Values | indent 4}}
   argocd.yaml: |
 {{ toYaml .Values.addons.argocd.values | indent 4 }}
+  coder.yaml: |
+{{ toYaml .Values.addons.coder.values | indent 4 }}
   istiooperator.yaml: |
 {{ toYaml .Values.istiooperator.values | indent 4  }}
   authservice.yaml: | 
@@ -27,6 +29,7 @@ stringData:
 {{ if .Values.addons.authservice.values }}
 {{ toYaml .Values.addons.authservice.values | indent 4 }}
 {{- end }}
+  
   istio.yaml: |
 {{ toYaml .Values.istio.values | indent 4  }}
   gatekeeper.yaml: |
@@ -49,4 +52,5 @@ stringData:
 {{ toYaml .Values.twistlock.values | indent 4 }}
   gitlab.yaml: |
 {{ toYaml .Values.addons.gitlab.values | indent 4 }}
+  
 data:

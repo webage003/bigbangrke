@@ -4,11 +4,15 @@ kind: HelmRelease
 metadata:
   name: coder
   namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: coder
+    app.kubernetes.io/component: "security"
+    {{- include "commonLabels" . | nindent 4}}
 spec:
   targetNamespace: coder
   chart:
     spec:
-      chart: {{ .Values.addons.coder.git.path }}
+      chart: {{ .Values.coder.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
@@ -32,33 +36,4 @@ spec:
     cleanupOnFail: {{ .rollback.cleanupOnFail }}
   {{- end }}
 
-  valuesFrom:
-  - name: values
-    kind: Secret
-    valuesKey: "coder.yaml"
-
-  values:
-    console:
-      hostname: {{ .Values.hostname }}
-    prometheus:
-      servicemonitor:
-        enabled: {{ .Values.monitoring.enabled }}
-    istio:
-      enabled: {{ .Values.istio.enabled }}
-  # TODO: DRY this up
-  {{- if or .Values.gatekeeper.enabled .Values.istio.enabled }}
-  dependsOn:
-    {{- if .Values.gatekeeper.enabled }}
-    - name: gatekeeper
-      namespace: {{ .Release.Namespace }}
-    {{- end }}
-    {{- if .Values.istio.enabled }}
-    - name: istio
-      namespace: {{ .Release.Namespace }}
-    {{- end }}
-    {{- if .Values.monitoring.enabled }}
-    - name: monitoring
-      namespace: {{ .Release.Namespace }}
-    {{- end }}
   {{- end }}
-{{- end }}
