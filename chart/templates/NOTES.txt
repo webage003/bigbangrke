@@ -94,3 +94,13 @@ PLATFORM ONE GITLAB WARNING:
   This option should only be used for development or CI pipelines.
 {{- end }}
 {{- end }}
+
+{{- if and $.Values.eckoperator.enabled $.Values.logging.enabled }}
+  {{- if $.Values.logging.sso.enabled }}
+    {{- if and (not $.Values.logging.license.trial) (not $.Values.logging.license.keyJSON) }}
+PLATFORM ONE LOGGING WARNING:
+  You have enabled SSO but not provided an enterprise license configuration to use. SSO is not functional without a license.
+  Edit the values for the eck-operator to specify a license key JSON or use the trial license for development.
+    {{- end }}
+  {{- end }}
+{{- end }}
