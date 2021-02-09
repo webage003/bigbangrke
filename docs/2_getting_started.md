@@ -56,7 +56,7 @@ Table of Contents
 
 ## Configuration Template
 
-A [template for configuring multi-cluster environments](https://repo1.dso.mil/platform-one/big-bang/customers/template/) is provided to assist with getting Big Bang setup correctly.  You should make a copy of the `./bigbang` folder from the [customer Big Bang repository](https://repo1.dso.mil/platform-one/big-bang/customers/template) and place it into a Git repository under your control.
+A template for configuring multi-cluster environments is provided to assist with getting Big Bang setup correctly.  You should make a copy of the `./bigbang` folder from the [customer Big Bang repository](https://repo1.dso.mil/platform-one/big-bang/customers/template/) and place it into a Git repository under your control.
 
 ### Overview
 
