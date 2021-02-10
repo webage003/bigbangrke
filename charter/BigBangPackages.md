@@ -26,10 +26,10 @@ graph TB
   end
   ServiceMesh
   ArgoCD
-  
+
   ClusterAuditor --> LoggingECK
   ClusterAuditor --> OPA(Policy Enforcement)
-  end      
+  end
 
   subgraph "Package Utilities"
     Postgres
@@ -85,10 +85,10 @@ graph TB
   ServiceMesh
   ArgoCD
   Twistlock
-  
+
   ClusterAuditor --> LoggingECK
   ClusterAuditor --> OPA(Policy Enforcement)
-  end      
+  end
 ```
 
 ### ArgoCD
@@ -173,7 +173,7 @@ The logging capability is comprised of:
 * Fluentd
 * Logging Operator
 
-Repository: 
+Repository:
 * [Elasticsearch-kibana](https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana)
 * [Fluentbit](https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit)
 * [Eck-operator](https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator)
@@ -290,7 +290,7 @@ Addons are supported Big Bang packages that come disabled by default.
 Security Tools are hosted here: [Security Tools](https://repo1.dso.mil/platform-one/big-bang/apps/security-tools)
 
 ```mermaid
-graph TB  
+graph TB
 
   subgraph "Package Utilities"
     Postgres
@@ -439,11 +439,11 @@ Owners:
 
 #### Fortify
 
-Fortify provides code 
+Fortify provides code
 
 Product:
 
-* 
+*
 
 Repository:
 
@@ -596,6 +596,21 @@ Owners:
 Product:
 
 * [MySQL](https://www.mysql.com/)
+
+Repository:
+
+* TBD
+
+Owners:
+
+* TBD
+* TBD
+
+#### FluentD
+
+Product:
+
+* [FluentD](ttps://www.fluentd.org/)
 
 Repository:
 
