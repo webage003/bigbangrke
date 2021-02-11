@@ -49,6 +49,8 @@ stringData:
 {{ toYaml .Values.addons.anchore.values | indent 4 }}
   argocd.yaml: |
 {{ toYaml .Values.addons.argocd.values | indent 4 }}
+  confluence.yaml: |
+{{ toYaml .Values.addons.confluence.values | indent 4 }}
   gitlab.yaml: |
 {{ toYaml .Values.addons.gitlab.values | indent 4 }}
   gitlab-runner.yaml: |
