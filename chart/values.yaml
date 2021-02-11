@@ -325,6 +325,11 @@ addons:
       port: ""
       password: ""
     values: {}
+  
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# Fortify
+#
   fortify:
     enabled: false
     git:
@@ -332,32 +337,32 @@ addons:
       path:
       tag:
     config:
-      hostname: fortify.dev.dsop.io
-      license_path: /app/secrets/fortify-license
-      auto_config: /app/secrets/fortify-autoconfig
-      http_server_certificate_keystore_file: /app/secrets/httpCertificateKeystoreFile
-      http_server_certificate_keystore_password: /app/secrets/httpCertificateKeystorePassword
-      https_server_certificate_key_password: /app/secrets/httpCertificateKeyPassword
+      hostname: ""
+      license_path: ""
+      auto_config: ""
+      http_server_certificate_keystore_file: ""
+      http_server_certificate_keystore_password: ""
+      https_server_certificate_key_password: ""
       enforce_secure_transport: false
-      http_server_cert_alias: dsop
+      http_server_cert_alias: ""
       jdbc_driver: https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.21/mysql-connector-java-8.0.21.jar
-      host_url: https://fortify.dev.dsop.io
-      key_store_password: bTR0dHNtMG0=
-      key_store_cert_password : bTR0dHNtMG0=
-      fortify_autoconfig: YXBwUHJvcGVydGllczogewogICAgaG9zdC52YWxpZGF0aW9uOiBmYWxzZSwKICAgIHNlYXJjaEluZGV4LmxvY2F0aW9uOiAnL2FwcC90b21jYXQvZm9ydGlmeS9zc2Mvc3NjX3NlYXJjaF9pbmRleCcKICAgIAp9CmRhdGFzb3VyY2VQcm9wZXJ0aWVzOiB7CiAgICBqZGJjLnVybDogImpkYmM6bXlzcWw6Ly9mb3J0aWZ5LW15c3FsOjMzMDYvZm9ydGlmeT91c2VTU0w9ZmFsc2UmY29ubmVjdGlvbkNvbGxhdGlvbj08Y29sbGF0aW9uPiZyZXdyaXRlQmF0Y2hlZFN0YXRlbWVudHM9dHJ1ZSZtYXhfYWxsb3dlZF9wYWNrZXQ9MTA3Mzc0MTgyNCZzcWxfbW9kZT1UUkFESVRJT05BTCIsCiAgICBkYi5kcml2ZXIuY2xhc3M6IGNvbS5teXNxbC5jai5qZGJjLkRyaXZlciwKICAgIGRiLnVzZXJuYW1lOiByb290LAogICAgZGIucGFzc3dvcmQ6IGFkbWluQDEyMywKICAgIGRiLmRpYWxlY3Q6IGNvbS5mb3J0aWZ5Lm1hbmFnZXIudXRpbC5oaWJlcm5hdGUuTXlTUUxEaWFsZWN0LAogICAgZGIubGlrZS5zcGVjaWFsQ2hhcmFjdGVyczogJyVfXFwnCn0Kc2VlZHM6IFsKICAgICcvYXBwL3NlZWRzLzAwMC1mb3J0aWZ5LzAwMC1Gb3J0aWZ5X1Byb2Nlc3NfU2VlZF9CdW5kbGUtMjAyMF9RMV8wMDI0LnppcCcsCiAgICAnL2FwcC9zZWVkcy8wMDAtZm9ydGlmeS9Gb3J0aWZ5X1BDSV9CYXNpY19TZWVkX0J1bmRsZS0yMDIwX1ExXzAwMjQuemlwJywKICAgICcvYXBwL3NlZWRzLzAwMC1mb3J0aWZ5L0ZvcnRpZnlfUENJX1NTRl9CYXNpY19TZWVkX0J1bmRsZS0yMDIwX1ExXzAwMjQuemlwJywKICAgICcvYXBwL3NlZWRzLzAwMC1mb3J0aWZ5L0ZvcnRpZnlfUmVwb3J0X1NlZWRfQnVuZGxlLTIwMjBfUTFfMDAyNC56aXAnCl0=
-      fortify_license: I0NyZWF0ZWQgMjAxOS0xMS0yNg1NZXRhZGF0YTogb3duZXI9QWlyIEZvcmNlIFJlc2VhcmNoIExhYm9yYXRvcnkNTWV0YWRhdGE6IExpY2Vuc2UgRGVzY3JpcHRpb249RUxBIFQ1MDMyQUFFLUFGUkwtUFJPRCwgMjE1MzU3MzgwM19GLUEsIDExIFNjYW5uaW5nIFVzZXJzDU1ldGFkYXRhOiBTdWJzY3JpcHRpb24gSUQ9U2M4OWEzMzBmLTEzNGEtNGRiYi1hNGZlLWViMjVhMzQzZmQ1Ng1NZXRhZGF0YTogQ3JlYXRlZCBPbj0yMDE4LTExLTA1IDIxOjEwOjA5LjANTWV0YWRhdGE6IExpY2Vuc2UgSUQ9TGY4MTk1ZTJlLTgwNjItNDczNy1hOTA3LTIyZDVmN2I0NTBlZg1TQ0EtUHl0aG9uLVN1cHBvcnQgMjAzMi0xMi0zMQ1FbnRlcnByaXNlLVJlcG9ydGluZyAyMDMyLTEyLTMxDVNlY3VyaXR5QXNzaXN0YW50RE9UTkVUIDIwMzItMTItMzENVlNQbHVnaW5zIDIwMzItMTItMzENU0NBLUFCQVAtU3VwcG9ydCAyMDMyLTEyLTMxDVJ1bGVQYWNrVXBkYXRlIDIwMzItMTItMzEgbGlkPUxmODE5NWUyZS04MDYyLTQ3MzctYTkwNy0yMmQ1ZjdiNDUwZWYNRjM2MC1Db2xsYWJNb2R1bGUgMjAzMi0xMi0zMQ1TQ0EtQ29sZEZ1c2lvbi1TdXBwb3J0IDIwMzItMTItMzENU0NBLUFuYWx5c2lzIDIwMzItMTItMzENU0NBLUNPQk9MLVN1cHBvcnQgMjAzMi0xMi0zMQ1BdWRpdFdvcmtiZW5jaCAyMDMyLTEyLTMxDVNlY3VyaXR5QXNzaXN0YW50IDIwMzItMTItMzENSkRldmVsb3BlclBsdWdpbnMgMjAzMi0xMi0zMQ1TZWN1cml0eUFzc2lzdGFudEphdmEgMjAzMi0xMi0zMQ1GMzYwLVNlcnZlciAyMDMyLTEyLTMxDUVjbGlwc2VQbHVnaW5zIDIwMzItMTItMzENTUN3Q0ZFd1pDSGU1NUVYM0RoVFh0cHVacGY0SG1tYVdBaFFWWmJGbEdPTVEyZnJSaEc3YnBZVm5SQWxRZ0E9PQ0=
-      fortify_java_keystore: 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
+      host_url: ""
+      key_store_password: ""
+      key_store_cert_password : ""
+      fortify_autoconfig: ""
+      fortify_license: ""
+      fortify_java_keystore: ""
     storage:
       volume: 50Gi
     mysql:
       nameOverride: mysql
       enabled: true
       internal:
-        database_user: admin@123
-        database_password: admin@123
-        database_host: Zm9ydGlmeS1teXNxbA==
+        database_user: ""
+        database_password: ""
+        database_host: ""
       # If enabled: false, please provide you external database  details to connect
       external:
-        database_host: Zm9ydGlmeS1teXNxbA==
-        database_user: cm9vdA==
-        database_password: YWRtaW5AMTIz
+        database_host: ""
+        database_user: ""
+        database_password: ""

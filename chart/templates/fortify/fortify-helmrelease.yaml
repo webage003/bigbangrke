@@ -46,7 +46,7 @@ spec:
       - name: private-registry
     server:
       config:
-        url: https://argocd.{{ .Values.hostname }}
+        url: https://fortify.{{ .Values.hostname }}
 
   {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
   dependsOn:
