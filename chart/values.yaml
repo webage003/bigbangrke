@@ -103,7 +103,7 @@ istiooperator:
 #
 clusterAuditor:
   enabled: true
-  git: 
+  git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
     path: "./chart"
     tag: "0.1.8-bb.1"
@@ -253,8 +253,8 @@ addons:
       path: "./chart"
       tag: "4.7.2-bb.0"
     sso:
-      # enabling this option will auto-create any required secrets. 
-      # The defaults assume an OIDC provider. 
+      # enabling this option will auto-create any required secrets.
+      # The defaults assume an OIDC provider.
       enabled: false
       label: ""  # the text next to the login button
       client_id: ""
@@ -314,7 +314,7 @@ addons:
       accessMode: ReadWriteOnce
       size: 10Gi
     values: {}
-      
+
   haproxy:
     enabled: false
     git:

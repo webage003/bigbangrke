@@ -1,0 +1,18 @@
+{{- if and (not .Values.offline) .Values.addons.confluence.enabled }}
+{{ $name := "confluence" }}
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/component: "collaboration-tools"
+    {{- include "commonLabels" . | nindent 4}}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.addons.confluence.git.repo }}
+  ref:
+    {{- include "validRef" .Values.addons.confluence.git | nindent 4 }}
+  {{- include "gitCreds" .Values.git | nindent 2 }}
+{{- end }}
