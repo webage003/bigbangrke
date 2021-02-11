@@ -3,7 +3,7 @@
 # This script will deploy install the bigbang-dev.asc private key into a sops-gpg secret in the bigbang namespace
 
 # Constants
-file=$(realpath `dirname "$0"`)/bigbang-dev.asc
+file=bigbang-dev.asc
 ns=bigbang
 secret=sops-gpg
 key=bigbangkey

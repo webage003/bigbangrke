@@ -1,0 +1,52 @@
+{{- if .Values.addons.coder.enabled }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: coder
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: coder
+    app.kubernetes.io/component: "developer"
+    {{- include "commonLabels" . | nindent 4}}
+spec:
+  targetNamespace: coder
+  chart:
+    spec:
+      chart: {{ .Values.addons.coder.git.path }}
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: coder
+        namespace: {{ .Release.Namespace }}
+
+  {{- with .Values.flux }}
+  interval: {{ .interval }}
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: {{ .install.retries }}
+  upgrade:
+    remediation:
+      retries: {{ .upgrade.retries }}
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: {{ .rollback.timeout }}
+    cleanupOnFail: {{ .rollback.cleanupOnFail }}
+  {{- end }}
+  valuesFrom:
+    - name: values
+      kind: Secret
+      valuesKey: "coder.yaml"
+  values:
+    istio: 
+      enabled: true
+    global:
+      imagePullSecrets:
+      - name: private-registry
+  dependsOn:
+  - name: istio
+    namespace: {{ .Release.Namespace }}
+  
+{{- end }}

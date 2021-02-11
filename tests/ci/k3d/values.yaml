@@ -69,3 +69,21 @@ addons:
       global:
         minio:
           enabled: true
+  coder:
+    enabled: true
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/coder.git
+      path: "./chart"
+      branch: "main"
+    values: {}
+    sso:
+      enabled: false   # default to false
+      client_id: ""
+    postgres:
+      useDefault: true
+      host:
+      port:
+      user:
+      database:
+      passwordSecret: ""
+      sslMode: "required"
