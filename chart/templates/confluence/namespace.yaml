@@ -1,10 +1,11 @@
 {{- if .Values.addons.confluence.enabled }}
+{{ $name := "confluence" }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .Release.Namespace }}
+  name: {{ $name }}
   labels:
-    app.kubernetes.io/name: "confluence"
+    app.kubernetes.io/name: {{ $name }}
     app.kubernetes.io/component: "collaboration-tools"
     {{- include "commonLabels" . | nindent 4}}
 {{- end }}
