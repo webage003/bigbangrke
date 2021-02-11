@@ -214,6 +214,35 @@ addons:
     # Put additional chain configuration in this section
     chains: {}
 
+  confluence:
+    enabled: false
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/confluence.git
+      path: "./chart"
+      tag: "0.1.0-bb.0"
+    sso: # NOT YET IMPLEMENTED #
+      # enabling this option will auto-create any required secrets.
+      # The defaults assume an OIDC provider.
+      enabled: false
+      client_id: ""
+      client_secret: ""
+    database: # NOT YET IMPLEMENTED #
+      # entering connection info will enable external database and will auto-create any required secrets.
+      host: ""     # example: postgres.bigbang.dev
+      port: ""     # example: 5432
+      username: "" # example: confluence
+      database: "" # example: confluence
+      password: "" # unencoded string data. This should be placed in the secret values and then encrypted
+    objectstorage: # NOT YET IMPLEMENTED #
+      # entering connection info will enable this option and will auto-create any required secrets
+      type: ""         # supported types are "s3" or "minio"
+      endpoint: ""     # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
+      region: ""       # example: us-gov-west-1
+      accessKey: ""    # unencoded string data
+      accessSecret: "" # unencoded string data. This should be placed in the secret values and then encrypted
+      bucketPrefix: "" # optional. example: "prod"
+    values: {}
+
   gitlab:
     enabled: false
     hostnames:
