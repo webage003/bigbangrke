@@ -5,14 +5,14 @@ metadata:
   name: fortify
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: fortify-sc
+    app.kubernetes.io/name: fortify-ssc
     app.kubernetes.io/component: "addon"
     {{- include "commonLabels" . | nindent 4}}
 spec:
   targetNamespace: fortify
   chart:
     spec:
-      chart: {{ .Values.addons.argocd.git.path }}
+      chart: {{ .Values.addons.fortify.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
@@ -44,9 +44,6 @@ spec:
     createNamespace: false
     imagePullSecrets:
       - name: private-registry
-    server:
-      config:
-        url: https://fortify.{{ .Values.hostname }}
 
   {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
   dependsOn:

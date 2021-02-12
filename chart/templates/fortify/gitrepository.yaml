@@ -1,4 +1,4 @@
-{{- if .Values.addons.argocd.enabled  }}
+{{- if .Values.addons.fortify.enabled  }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
@@ -10,9 +10,9 @@ metadata:
     {{- include "commonLabels" . | nindent 4}}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.addons.argocd.git.repo }}
+  url: {{ .Values.addons.fortify.git.repo }}
   ref:
-    {{- include "validRef" .Values.addons.argocd.git | nindent 4 }}
+    {{- include "validRef" .Values.addons.fortify.git | nindent 4 }}
   {{ include "gitIgnore" . }}
   {{- include "gitCreds" .Values.git | nindent 2 }}
 {{- end }}

@@ -69,3 +69,5 @@ addons:
     enabled: true
   sonarqube:
     enabled: true
+  fortify:
+    enabled: true
