@@ -71,3 +71,6 @@ addons:
     enabled: true
   fortify:
     enabled: true
+    values:
+      mysql:
+        enabled: true
