@@ -4,16 +4,22 @@
 
 Included here is a setup that will allow you to checkout and begin development using your workstation and a minimal EC2 instance in AWS.
 
-### Prequisites
+### Prerequisites
 
 #### Access
 + [AWS GovCloud (US) EC2](https://console.amazonaws-us-gov.com/ec2)
 + [Umbrella repository](https://repo1.dso.mil/platform-one/big-bang/umbrella)
 + [Iron Bank registry](https://registry1.dso.mil/)
+<<<<<<< HEAD
+<<<<<<< HEAD
 
 - [AWS GovCloud (US) EC2](https://console.amazonaws-us-gov.com/ec2)
 - [Umbrella repository](https://repo1.dsop.io/platform-one/big-bang/umbrella)
 - [Iron Bank registry](https://registry1.dsop.io/)
+=======
+>>>>>>> 3bca909 (Squash commits.)
+=======
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 
 #### Utilities
 
@@ -58,7 +64,15 @@ aws --version
 This section will cover the creation of an environment manually. This is a good place to start because it creates an understanding of everything that the automated method does for you.
 
 Step 1: Create an Ubuntu EC2 instance with the following attributes:
+<<<<<<< HEAD
 
+=======
+        (see addendum for using Amazon Linux2)
++ Ubuntu Server 20.04 LTS (HVM), SSD Volume Type
++ t2.2xlarge
++ IAM Role: InstanceOpsRole (This will add support for sops encryption with KMS)
++ User Data (as Text):
+>>>>>>> 3bca909 (Squash commits.)
 ```bash
 
 # Note: There is an issue with aws configure import, configuration is manual.
@@ -185,6 +199,8 @@ wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bas
 k3d version
 ```
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 - We can now spin up our dev cluster on the EC2 instance using K3D
 
 ```bash
@@ -195,23 +211,38 @@ k3d cluster create -s 1 -a 3  --k3s-server-arg "--disable=traefik" --k3s-server-
 
 - **_Optionally_** you can set your image pull secret on the cluster so that you don't have to put your credentials in the code or in the command line in later steps
 
+=======
++ We can now spin up our dev cluster on the EC2 instance using K3D. Set your image pull secret on the cluster so that you don't have to put your credentials in the code or in the command line in later steps.
+Username and CLI Secret *must* be copied from your [Registry1 (Harbor)](https://registry1.dso.mil/harbor/projects) user profile.
+>>>>>>> 3bca909 (Squash commits.)
+=======
++ We can now spin up our dev cluster on the EC2 instance using K3D. Set your image pull secret on the cluster so that you don't have to put your credentials in the code or in the command line in later steps.
+Username and CLI Secret *must* be copied from your [Registry1 (Harbor)](https://registry1.dso.mil/harbor/projects) user profile.
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 ```bash
 # Create the directory for the k3s registry config.
 mkdir ~/.k3d/
 
-# Create the config file. Use your registry1 credentials. Copy your user name and token secret from your Harbor profile.
+# Define variables
+YOURUSERNAME="<user_name>"
+YOURCLISECRET="<CLI secret>"
+YOURPUBLICEC2IP=$( curl https://ipinfo.io/ip )
+
+# Create the config file using your registry1 credentials.
 cat << EOF > ~/.k3d/p1-registries.yaml
 configs:
   "registry1.dso.mil":
     auth:
-      username: "user.name"
-      password: "place_token_secret_here"
+      username: $YOURUSERNAME
+      password: $YOURCLISECRET
 EOF
 
-YOURPUBLICEC2IP=$( curl https://ipinfo.io/ip )
+# Create k3d cluster
 k3d cluster create --servers 1 --agents 3 -v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=$YOURPUBLICEC2IP"  -p 80:80@loadbalancer -p 443:443@loadbalancer
 ```
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 Here is a break down of what we are doing with this command:
 
 - `-s 1` Creating 1 master/server
@@ -221,35 +252,70 @@ Here is a break down of what we are doing with this command:
 - `--k3s-server-arg "--tls-san=<your public ec2 ip>"` This adds the public IP to the kubeapi certificate so that you can access it remotely.
 - `-p 80:80@loadbalancer` Exposes the cluster on the host on port 80
 - `-p 443:443@loadbalancer` Exposes the cluster on the host on port 443
+=======
+=======
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
+Here is a explaination of what we are doing with this command:
++ `-s 1` Creating 1 master/server
++ `-a 3` Creating 3 agent nodes
++ `--k3s-server-arg "--disable=traefik"` Disable the default Traefik Ingress
++ `--k3s-server-arg "--disable=metrics-server"` Disable default metrics
++ `--k3s-server-arg "--tls-san=<your public ec2 ip>"` This adds the public IP to the kubeapi certificate so that you can access it remotely.
++ `-p 80:80@loadbalancer` Exposes the cluster on the host on port 80
++ `-p 443:443@loadbalancer` Exposes the cluster on the host on port 443
+>>>>>>> 3bca909 (Squash commits.)
 
 optional:
-`-v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml` volume mount image pull secret config for k3d cluster
-`--api-port 0.0.0.0:38787` Chooses a port for the API server instead of being assigned a random one. You can set this to any port number that you want.
++ `-v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml` volume mount image pull secret config for k3d cluster
++ `--api-port 0.0.0.0:38787` Chooses a port for the API server instead of being assigned a random one. You can set this to any port number that you want.
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 - Once your cluster is up, you can copy the kubeconfig from the EC2 instance to your workstation and update the IP Address. If you do not have an existing configuration to preserve on your local workstation, you can delete and recreate the configuration file.
 
 Copy the contents of the remote configuation file.
 
+=======
++ Once your cluster is up, copy the kubeconfig from the EC2 instance to your workstation and update the IP Address. If you do not have an existing configuration to preserve on your local workstation, you can delete and recreate the configuration file.
+
+Copy the contents of the remote configuration file.
+>>>>>>> 3bca909 (Squash commits.)
+=======
++ Once your cluster is up, copy the kubeconfig from the EC2 instance to your workstation and update the IP Address. If you do not have an existing configuration to preserve on your local workstation, you can delete and recreate the configuration file.
+
+Copy the contents of the remote configuration file.
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 ```bash
+echo $YOURPUBLICEC2IP
 cat ~/.kube/config
 ```
 
 - Move to your workstation and setup namespace
 
 Update the configuration file on your local workstation.
+<<<<<<< HEAD
+<<<<<<< HEAD
 
 ```bash
 # Remove existing configuation if defined.
+=======
+```Bash
+# Remove existing configuration if defined.
+>>>>>>> 3bca909 (Squash commits.)
+=======
+```Bash
+# Remove existing configuration if defined.
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 rm ~/.kube/config
 
-# Create empty configuation
-touch ~/kube/config
+# Create empty configuration
+touch ~/.kube/config
 
 # Update permissions
 # (Prevents Helm warnings)
 chmod go-r ~/.kube/config
 
-# Open vi to edit configuation
+# Open vi to edit configuration
 vi ~/.kube/config
 ```
 
@@ -261,7 +327,6 @@ kubectl cluster-info
 kubectl get nodes
 
 # Create Project base
-
 mkdir -pv ~/repos/
 cd ~/repos
 git clone https://repo1.dso.mil/platform-one/big-bang/umbrella.git
@@ -280,11 +345,24 @@ kubectl create ns bigbang
 
 - Customize your Helm values
 
+You will be overriding values in `chart/values.yaml` for development. You can use the [Big Bang template's dev ConfigMap](https://repo1.dso.mil/platform-one/big-bang/customers/template/-/blob/main/dev/configmap.yaml) to start. This will minimize the resources for deploying BigBang. For convenience, it is also copied here
 ```bash
+<<<<<<< HEAD
+<<<<<<< HEAD
 # You will be overriding values in `chart/values.yaml` for development
 # You can use the [Big Bang template's dev ConfigMap](https://repo1.dso.mil/platform-one/big-bang/customers/bigbang/-/blob/template/bigbang/dev/configmap.yaml) to start.  This will minimize the resources for deploying BigBang.
 # For convenience, it is also copied here
 
+=======
+# Add any additional development values to this file as needed.
+# You can add registry1 pull credentials here for development.
+# Examples included enabling add-ons, disabling unneeded features, etc.
+>>>>>>> 3bca909 (Squash commits.)
+=======
+# Add any additional development values to this file as needed.
+# You can add registry1 pull credentials here for development.
+# Examples included enabling add-ons, disabling unneeded features, etc.
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 cat << EOF > my-values.yaml
 hostname: bigbang.dev
 flux:
@@ -332,10 +410,6 @@ twistlock:
       persistence:
         size: 5Gi
 EOF
-
-# Add any additional development values to this file as needed
-# You can add registry1 pull credentials here for development
-# Examples included enabling add-ons, disabling unneeded features, etc.
 ```
 
 - Deploy secrets
@@ -343,11 +417,17 @@ EOF
 ```bash
 # These are all OPTIONAL.  Deploy them if you need them
 
-# Deploy the bigbang-dev.asc SOPS key into the bigbang namespace
+# Deploy the bigbang-dev.asc SOPS key into the bigbang namespace.
+# Requires realpath, part of coreutils package on macOS
+# `brew install coreutils`
 ./hack/sops-create.sh
 
 # Deploy the authservice configuration
-sops -d ./hack/secrets/authservice-config.yaml | kubectl apply -f -
+# Requires installation of sops and gpg.
+# `brew install sops`
+# `brew install gpg`
+gpg --import ./hack/bigbang-dev.asc
+sops -d ./hack/secrets/authservice.yaml | kubectl apply -f -
 
 # Deploy the ingress certificates
 sops -d ./hack/secrets/ingress-cert.yaml | kubectl apply -f -
@@ -360,7 +440,7 @@ kubectl apply -f tests/ci/shared-secrets.yaml
 
 ```bash
 # Helm install BigBang
-helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCredentials.username='<your user>' --set registryCredentials.password=<your cli key> -f my-values.yaml
+helm upgrade -i bigbang chart -n bigbang --create-namespace -f my-values.yaml
 ```
 
 - You can now modify your local `/etc/hosts` file to allow for local name resolution. On Windows, this file is located at `$env:windir\System32\drivers\etc\hosts`
@@ -369,7 +449,7 @@ helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCreden
 <X.X.X.X>     kibana.bigbang.dev
 <X.X.X.X>     kiali.bigbang.dev
 <X.X.X.X>     prometheus.bigbang.dev
-<X.X.X.X>     graphana.bigbang.dev
+<X.X.X.X>     grafana.bigbang.dev
 ```
 
 - You can watch your install take place with
@@ -377,12 +457,12 @@ helm upgrade -i bigbang chart -n bigbang --create-namespace --set registryCreden
 ```bash
 # macOS does not include watch
 # recommend install with brew
-# brew install watch
+# `brew install watch`
 
 watch kubectl get po,gitrepository,kustomizations,helmreleases -A
 ```
 
-As of this time, Twistlock is the last thing to be installed. Once you see Twistlock sync and everything else is up and healty you are fully installed.
+As of this time, Twistlock is the last thing to be installed. Once you see Twistlock sync and everything else is up and healthy you are fully installed.
 
 ### Addendum for Amazon Linux 2
 
