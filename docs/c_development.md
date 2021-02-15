@@ -11,12 +11,15 @@ Included here is a setup that will allow you to checkout and begin development u
 + [Umbrella repository](https://repo1.dso.mil/platform-one/big-bang/umbrella)
 + [Iron Bank registry](https://registry1.dso.mil/)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 - [AWS GovCloud (US) EC2](https://console.amazonaws-us-gov.com/ec2)
 - [Umbrella repository](https://repo1.dsop.io/platform-one/big-bang/umbrella)
 - [Iron Bank registry](https://registry1.dsop.io/)
 =======
 >>>>>>> 3bca909 (Squash commits.)
+=======
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 
 #### Utilities
 
@@ -197,6 +200,7 @@ k3d version
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 - We can now spin up our dev cluster on the EC2 instance using K3D
 
 ```bash
@@ -211,6 +215,10 @@ k3d cluster create -s 1 -a 3  --k3s-server-arg "--disable=traefik" --k3s-server-
 + We can now spin up our dev cluster on the EC2 instance using K3D. Set your image pull secret on the cluster so that you don't have to put your credentials in the code or in the command line in later steps.
 Username and CLI Secret *must* be copied from your [Registry1 (Harbor)](https://registry1.dso.mil/harbor/projects) user profile.
 >>>>>>> 3bca909 (Squash commits.)
+=======
++ We can now spin up our dev cluster on the EC2 instance using K3D. Set your image pull secret on the cluster so that you don't have to put your credentials in the code or in the command line in later steps.
+Username and CLI Secret *must* be copied from your [Registry1 (Harbor)](https://registry1.dso.mil/harbor/projects) user profile.
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 ```bash
 # Create the directory for the k3s registry config.
 mkdir ~/.k3d/
@@ -234,6 +242,7 @@ k3d cluster create --servers 1 --agents 3 -v ~/.k3d/p1-registries.yaml:/etc/ranc
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Here is a break down of what we are doing with this command:
 
 - `-s 1` Creating 1 master/server
@@ -244,6 +253,8 @@ Here is a break down of what we are doing with this command:
 - `-p 80:80@loadbalancer` Exposes the cluster on the host on port 80
 - `-p 443:443@loadbalancer` Exposes the cluster on the host on port 443
 =======
+=======
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 Here is a explaination of what we are doing with this command:
 + `-s 1` Creating 1 master/server
 + `-a 3` Creating 3 agent nodes
@@ -259,6 +270,7 @@ optional:
 + `--api-port 0.0.0.0:38787` Chooses a port for the API server instead of being assigned a random one. You can set this to any port number that you want.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 - Once your cluster is up, you can copy the kubeconfig from the EC2 instance to your workstation and update the IP Address. If you do not have an existing configuration to preserve on your local workstation, you can delete and recreate the configuration file.
 
 Copy the contents of the remote configuation file.
@@ -268,6 +280,11 @@ Copy the contents of the remote configuation file.
 
 Copy the contents of the remote configuration file.
 >>>>>>> 3bca909 (Squash commits.)
+=======
++ Once your cluster is up, copy the kubeconfig from the EC2 instance to your workstation and update the IP Address. If you do not have an existing configuration to preserve on your local workstation, you can delete and recreate the configuration file.
+
+Copy the contents of the remote configuration file.
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 ```bash
 echo $YOURPUBLICEC2IP
 cat ~/.kube/config
@@ -277,6 +294,7 @@ cat ~/.kube/config
 
 Update the configuration file on your local workstation.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ```bash
 # Remove existing configuation if defined.
@@ -284,6 +302,10 @@ Update the configuration file on your local workstation.
 ```Bash
 # Remove existing configuration if defined.
 >>>>>>> 3bca909 (Squash commits.)
+=======
+```Bash
+# Remove existing configuration if defined.
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 rm ~/.kube/config
 
 # Create empty configuration
@@ -326,6 +348,7 @@ kubectl create ns bigbang
 You will be overriding values in `chart/values.yaml` for development. You can use the [Big Bang template's dev ConfigMap](https://repo1.dso.mil/platform-one/big-bang/customers/template/-/blob/main/dev/configmap.yaml) to start. This will minimize the resources for deploying BigBang. For convenience, it is also copied here
 ```bash
 <<<<<<< HEAD
+<<<<<<< HEAD
 # You will be overriding values in `chart/values.yaml` for development
 # You can use the [Big Bang template's dev ConfigMap](https://repo1.dso.mil/platform-one/big-bang/customers/bigbang/-/blob/template/bigbang/dev/configmap.yaml) to start.  This will minimize the resources for deploying BigBang.
 # For convenience, it is also copied here
@@ -335,6 +358,11 @@ You will be overriding values in `chart/values.yaml` for development. You can us
 # You can add registry1 pull credentials here for development.
 # Examples included enabling add-ons, disabling unneeded features, etc.
 >>>>>>> 3bca909 (Squash commits.)
+=======
+# Add any additional development values to this file as needed.
+# You can add registry1 pull credentials here for development.
+# Examples included enabling add-ons, disabling unneeded features, etc.
+>>>>>>> 077868f186d4b6cbfc67568ce949884de4eeaa82
 cat << EOF > my-values.yaml
 hostname: bigbang.dev
 flux:
