@@ -163,7 +163,7 @@ Understudy:
 
 ### Logging
 
-The logging package is responsible for deploying Elasticsearch, Kibana, and Fluentd.  It is also responsible for configuring the logging pipelines to aggregate all running containers logs for viewing by both Cluster Owners and Application Operators.
+The logging package is responsible for deploying Elasticsearch, Kibana, and Fluentbit.  It is also responsible for configuring the logging pipelines to aggregate all running containers logs for viewing by both Cluster Owners and Application Operators.
 
 The logging capability is comprised of:
 
@@ -608,6 +608,8 @@ Owners:
 
 #### FluentD
 
+FluentD is a tool that can be used to transform, filter and distribute logging information. FluentD is a "heavier" weight alternative to fluentbit. Bigbang's default deployment will use fluentbit as the log collector deployed on every node. However is users need to perform complex actions with their logging data, fluentbit may not be flexible enough to perform these tasks. They can optionally deploy Fluentd as a forward and use it to perform more complex actions.
+
 Product:
 
 * [FluentD](ttps://www.fluentd.org/)
@@ -618,7 +620,7 @@ Repository:
 
 Owners:
 
-* TBD
+* @iahmad - Oteemo
 * TBD
 
 #### MongoDB
