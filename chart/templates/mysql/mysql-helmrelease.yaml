@@ -41,6 +41,8 @@ spec:
       valuesKey: "mysql.yaml"
   values:
     createNamespace: false
+    auth:
+      rootPassword: "admin@123"
 
   {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
   dependsOn:

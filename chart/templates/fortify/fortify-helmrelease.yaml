@@ -60,5 +60,7 @@ spec:
   - name: monitoring
     namespace: {{ .Release.Namespace }}
   {{- end }}
+  - name: mysql
+    namespace: {{ .Release.Namespace }}
   {{- end }}
 {{- end }}

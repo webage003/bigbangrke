@@ -72,4 +72,4 @@ addons:
   mysql:
     enabled: true
   fortify:
-    enabled: false
+    enabled: true
