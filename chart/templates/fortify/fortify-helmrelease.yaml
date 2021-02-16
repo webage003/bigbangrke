@@ -43,12 +43,29 @@ spec:
     createNamespace: false
     imagePullSecrets:
       - name: private-registry
-    rootPassword: admin@123
-    mysql:
-      enabled: false
-      rootPassword: admin@123
-      auth:
-        rootPassword: admin@123
+    hostname: "fortify.{{ .Values.hostname }}"
+    database:
+      username: {{ .Values.addons.fortify.values.database.username }}
+      password: {{ .Values.addons.fortify.values.database.password }}
+    fortify_autoconfig: |
+      appProperties: {
+        host.validation: false,
+        searchIndex.location: '/app/tomcat/fortify/ssc/ssc_search_index'
+      }
+      datasourceProperties: {
+        jdbc.url: "jdbc:mysql://{{ .Values.addons.fortify.values.database.host }}:{{ .Values.addons.fortify.values.database.port }}/fortify?useSSL=false&connectionCollation=<collation>&rewriteBatchedStatements=true&max_allowed_packet=1073741824&sql_mode=TRADITIONAL",
+        db.driver.class: com.mysql.cj.jdbc.Driver,
+        db.username: "{{ .Values.addons.fortify.values.database.username }}",
+        db.password: "{{ .Values.addons.fortify.values.database.password }}",
+        db.dialect: com.fortify.manager.util.hibernate.MySQLDialect,
+        db.like.specialCharacters: '%_\\'
+      }
+      seeds: [
+        '/app/seeds/000-fortify/000-Fortify_Process_Seed_Bundle-2020_Q1_0024.zip',
+        '/app/seeds/000-fortify/Fortify_PCI_Basic_Seed_Bundle-2020_Q1_0024.zip',
+        '/app/seeds/000-fortify/Fortify_PCI_SSF_Basic_Seed_Bundle-2020_Q1_0024.zip',
+        '/app/seeds/000-fortify/Fortify_Report_Seed_Bundle-2020_Q1_0024.zip'
+      ]
 
   {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
   dependsOn:

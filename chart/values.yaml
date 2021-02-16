@@ -326,7 +326,7 @@ addons:
       port: ""
       password: ""
     values: {}
-  
+
   mysql:
     enabled: false
     git:
@@ -336,36 +336,32 @@ addons:
     values:
       fullnameOverride: "mysql"
       auth:
-        rootPassword: "admin@123"
-  
+        rootPassword: ""
+
   fortify:
     enabled: true
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/fortify.git
       path: ./chart
-      tag: 0.0.3
+      tag: 0.0.4
     values:
-      rootPassword: admin@123
       replicaCount: 1
       image:
         repository: registry.dso.mil/platform-one/big-bang/apps/developer-tools/fortify/scc-webapp
         pullPolicy: IfNotPresent
         tag: 20.1.0.0169
         imagePullSecrets: ""
-
-      config:
-        hostname: fortify.dev.dsop.io
-        http_server_cert_alias: dsop
-        host_url: https://fortify.dev.dsop.io
-        key_store_password: ""
-        key_store_cert_password : ""
-        fortify_license: |
-          <License>
-        fortify_java_keystore: <base64 java keystore>
+      hostname: ""
+      http_server_cert_alias: ""
+      key_store_password: ""
+      key_store_cert_password : ""
+      fortify_license: |
+        <LICENSE>
+      fortify_java_keystore: 
       storage:
         volume: 10Gi
-      mysql:
-        external:
-          database_host: "mysql.mysql.svc.cluster.local"
-          database_user: "root"
-          database_password: "admin@123"
+      database:
+        username: ""
+        password: ""
+        host: "mysql.mysql.svc.cluster.local"
+        port: "3306"
