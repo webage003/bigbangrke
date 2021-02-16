@@ -5,26 +5,25 @@ hostname: bigbang.dev
 offline: false
 
 # Regisitires can be an explicit map of registries as provided here
-#registryCredentials:
-#  registry: registry1.dso.mil
-#  username: ""
-#  password: ""
-#  email: ""
+registryCredentials:
+  registry: registry1.dso.mil
+  username: "robot$p1-dev"
+  password: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDQ2ODk3NTksImlzcyI6ImhhcmJvci10b2tlbi1kZWZhdWx0SXNzdWVyIiwiaWQiOjQ5ODQsInBpZCI6MywiYWNjZXNzIjpbeyJSZXNvdXJjZSI6Ii9wcm9qZWN0LzMvcmVwb3NpdG9yeSIsIkFjdGlvbiI6InB1bGwiLCJFZmZlY3QiOiIifSx7IlJlc291cmNlIjoiL3Byb2plY3QvMy9oZWxtLWNoYXJ0IiwiQWN0aW9uIjoicmVhZCIsIkVmZmVjdCI6IiJ9XX0.GYOjiQK4E9pQWwZlvfFd-BRsBUoBvZxIOjkX0X6YFf3J2GQZi2vaNGxj2LC0jK3ZXldsYVM_fydBfJgtRB5HrQYQCiZCbp06glplw5ntqxIfovGTWauJQ_AfdZ9zo3XEBW19Qv3a6EVSKIYvZ_cEQ7Q4_hwrAKe4014fCUxaJFK5lw6z410JXQ-aOQjE9CjmWHHD9U2vi8t13fa1kW6QrKXtD99419rh2I8xquisWjb6sxs2sGVF0uFEJ2Imz7iSCWvI4BzpAEOVAmhw51NOcJhj4V8EGJsWQXX23f9JTgN4X4mxVHrmpPbMMcvtCm3gILO6kqIUslvetX5fJjDI_IAms-xa7vIveHxKM6v86w3Gd47y9UoWDU_Cz6TrauxYfC5y5rIBdaNvh8NYmo67QODS5P9L4zdSh_QWKpHBBIjcLXt4mtohucs9s54u-eZY89hcreT-6bo_56UU7HqYG8CBhVld-OERFY6yL_uE0YKRtvGqaUZZE2DgGWPvuP7rD_qV1wATo-d_l8zJJSmXqQ_xSn2ASAkJ5F286BlVQJBRZdW5eNkt8tr_NovopP0wyitKScMjNJQw2mhGtp66VF7uqee-dFZ3UVA_xmLjenNRh-d8Ul43wOQh79grBV-QsXZeCdp82G7XDMEq7qZ7TFDs283ZwZnShU_FF3YD36Q"
+  email: ""
 
 # Or a list of registires:
-registryCredentials:
-  - registry: registry.dso.mil
-    username: ""
-    password: ""
-    email: xxx@xxx.xxx
-  - registry: registry1.dso.mil
-    username: ""
-    password: ""
-    email: xxx@xxx.xxx
-# - registry: registry.example.com
-#   username: user.name
-#   password: user-secret
-#   email: xxx@xxx.xxx
+# registryCredentials:
+#   - registry: registry.dso.mil
+#     username: ""
+#     password: ""
+#     email: xxx@xxx.xxx
+#   - registry: registry1.dso.mil
+#     username: ""
+#     password: ""
+#   - registry: registry.example.com
+#     username: user.name
+#     password: user-secret
+#     email: xxx@xxx.xxx
 
 # Global git values
 # Order of precedence is:
@@ -334,8 +333,9 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/fortify.git
       path: ./chart
-      tag: 0.0.1
+      tag: 0.0.3
     values:
+      rootPassword: admin@123
       replicaCount: 1
       image:
         repository: registry.dso.mil/platform-one/big-bang/apps/developer-tools/fortify/scc-webapp
@@ -344,54 +344,18 @@ addons:
         imagePullSecrets: ""
 
       config:
-        hostname: fortify.dev.dsop.io
-        license_path: /app/secrets/fortify-license
-        auto_config: /app/secrets/fortify-autoconfig
-        http_server_certificate_keystore_file: /app/secrets/httpCertificateKeystoreFile
-        http_server_certificate_keystore_password: /app/secrets/httpCertificateKeystorePassword
-        https_server_certificate_key_password: /app/secrets/httpCertificateKeyPassword
-        enforce_secure_transport: false
-        http_server_cert_alias: 
-        jdbc_driver: https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.21/mysql-connector-java-8.0.21.jar
+        hostname: ""
+        http_server_cert_alias: ""
         host_url: ""
         key_store_password: ""
         key_store_cert_password : ""
-        fortify_autoconfig: |
-          appProperties: {
-            host.validation: false,
-            searchIndex.location: '/app/tomcat/fortify/ssc/ssc_search_index'
-          }
-          datasourceProperties: {
-            jdbc.url: "jdbc:mysql://<DB-DNS>:3306/fortify?useSSL=false&connectionCollation=<collation>&rewriteBatchedStatements=true&max_allowed_packet=1073741824&sql_mode=TRADITIONAL",
-            db.driver.class: com.mysql.cj.jdbc.Driver,
-            db.username: "",
-            db.password: "",
-            db.dialect: com.fortify.manager.util.hibernate.MySQLDialect,
-            db.like.specialCharacters: '%_\\'
-          }
-          seeds: [
-            '/app/seeds/000-fortify/000-Fortify_Process_Seed_Bundle-2020_Q1_0024.zip',
-            '/app/seeds/000-fortify/Fortify_PCI_Basic_Seed_Bundle-2020_Q1_0024.zip',
-            '/app/seeds/000-fortify/Fortify_PCI_SSF_Basic_Seed_Bundle-2020_Q1_0024.zip',
-            '/app/seeds/000-fortify/Fortify_Report_Seed_Bundle-2020_Q1_0024.zip'
-          ]
         fortify_license: |
-          License
-        fortify_java_keystore: Java Keystore base64
-
-      # No data will be stored on the EBS you can keep it small
+          "<LICENSE>"
+        fortify_java_keystore: "<BASE64 ENCODED JAVA KEYSTORE>"
       storage:
-        volume: 50Gi
-
-      # This is external dependency fortify need mysql
+        volume: 10Gi
       mysql:
-        nameOverride: mysql
-        # This flag will disable and enable the creation of local database.
-        enabled:  true
-        auth:
-          rootPassword: ""
-        # If enabled: false, please provide you external database  details to connect
         external:
-          database_host: ""
-          database_user: ""
-          database_password: ""
+          database_host: "mysql"
+          database_user: "root"
+          database_password: "admin@123"

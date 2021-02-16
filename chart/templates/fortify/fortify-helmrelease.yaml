@@ -40,10 +40,15 @@ spec:
       kind: Secret
       valuesKey: "fortify.yaml"
   values:
-    hostname: {{ .Values.hostname }}
     createNamespace: false
     imagePullSecrets:
       - name: private-registry
+    rootPassword: admin@123
+    mysql:
+      enabled: false
+      rootPassword: admin@123
+      auth:
+        rootPassword: admin@123
 
   {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
   dependsOn:
