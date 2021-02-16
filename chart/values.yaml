@@ -9,20 +9,22 @@ registryCredentials:
   registry: registry1.dso.mil
   username: ""
   password: ""
+  email: ""
 
 # Or a list of registires:
 # registryCredentials:
-#   - registry: registry.dso.mil
-#     username: ""
-#     password: ""
-#     email: xxx@xxx.xxx
-#   - registry: registry1.dso.mil
-#     username: ""
-#     password: ""
-#   - registry: registry.example.com
-#     username: user.name
-#     password: user-secret
-#     email: xxx@xxx.xxx
+# - registry: registry.dso.mil
+#   username: user.name
+#   password: user-secret
+#   email: xxx@xxx.xxx
+# - registry: registry1.dso.mil
+#   username: user.name
+#   password: user-secret
+#   email: xxx@xxx.xxx
+# - registry: registry.example.com
+#   username: user.name
+#   password: user-secret
+#   email: xxx@xxx.xxx
 
 # Global git values
 # Order of precedence is:
