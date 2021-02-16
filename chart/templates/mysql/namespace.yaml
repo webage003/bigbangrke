@@ -1,0 +1,22 @@
+{{- if .Values.addons.mysql.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/name: mysql
+    app.kubernetes.io/component: "addon"
+    {{- include "commonLabels" . | nindent 4}}
+  name: mysql
+
+---
+{{- if ( include "imagePullSecret" . ) }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-registry
+  namespace: mysql
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+{{- end }}
+{{- end }}

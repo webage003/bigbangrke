@@ -1,0 +1,56 @@
+{{- if .Values.addons.mysql.enabled }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mysql
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: mysql
+    app.kubernetes.io/component: "addon"
+    {{- include "commonLabels" . | nindent 4}}
+spec:
+  targetNamespace: mysql
+  chart:
+    spec:
+      chart: {{ .Values.addons.mysql.git.path }}
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: mysql
+        namespace: {{ .Release.Namespace }}
+
+  {{- with .Values.flux }}
+  interval: {{ .interval }}
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: {{ .install.retries }}
+  upgrade:
+    remediation:
+      retries: {{ .upgrade.retries }}
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: {{ .rollback.timeout }}
+    cleanupOnFail: {{ .rollback.cleanupOnFail }}
+  {{- end }}
+  valuesFrom:
+    - name: values
+      kind: Secret
+      valuesKey: "mysql.yaml"
+  values:
+    createNamespace: false
+
+  {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
+  dependsOn:
+  {{- if .Values.istio.enabled }}
+  - name: istio
+    namespace: {{ .Release.Namespace}}
+  {{- end}}
+  {{- if .Values.monitoring.enabled }}
+  - name: monitoring
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- end }}
+{{- end }}

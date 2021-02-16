@@ -69,5 +69,7 @@ addons:
     enabled: false
   sonarqube:
     enabled: false
-  fortify:
+  mysql:
     enabled: true
+  fortify:
+    enabled: false
