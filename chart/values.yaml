@@ -40,8 +40,6 @@ git:
     # HTTP git credentials, both username and password must be provided
     username: ""
     password: ""
-    #username: "arunsanna"
-    #password: "vbjd5Qyqf_eBbaW7dG8S"
 
     # SSH git credentials, privateKey, publicKey, and knownHosts must be provided
     privateKey: ""
