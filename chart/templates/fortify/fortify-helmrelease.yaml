@@ -72,12 +72,14 @@ spec:
   {{- if .Values.istio.enabled }}
   - name: istio
     namespace: {{ .Release.Namespace}}
-  {{- end}}
+  {{- end }}
   {{- if .Values.monitoring.enabled }}
   - name: monitoring
     namespace: {{ .Release.Namespace }}
   {{- end }}
+  {{- if .Values.addons.mysql.enabled }}
   - name: mysql
     namespace: {{ .Release.Namespace }}
+  {{- end }}
   {{- end }}
 {{- end }}
