@@ -353,3 +353,11 @@ addons:
       port: ""
       password: ""
     values: {}
+  confluence:
+    enabled: false
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/confluence.git
+      path: "./chart"
+      tag: "0.0.1"
+    values: {}
+

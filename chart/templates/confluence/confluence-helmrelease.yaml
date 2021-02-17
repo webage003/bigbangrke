@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: confluence
-    app.kubernetes.io/component: "addon"
+    app.kubernetes.io/component: "addons"
     {{- include "commonLabels" . | nindent 4}}
 spec:
   targetNamespace: confluence
