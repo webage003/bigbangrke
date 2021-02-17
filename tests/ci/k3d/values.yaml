@@ -69,5 +69,5 @@ addons:
     enabled: true
   sonarqube:
     enabled: true
-  confluece:
+  confluence:
     enabled: true
