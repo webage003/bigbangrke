@@ -20,3 +20,4 @@ npm-debug.log*
 # (used frequently in deployments)
 patch.yaml
 notes
+.envrc
