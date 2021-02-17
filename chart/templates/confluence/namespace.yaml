@@ -1,0 +1,20 @@
+{{- if .Values.addons.confluence.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: {{ .Release.Name }}-confluence
+  name: confluence
+
+---
+{{- if ( include "imagePullSecret" . ) }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-registry
+  namespace: confluence
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+{{- end }}
+{{- end }}
