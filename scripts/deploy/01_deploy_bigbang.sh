@@ -31,7 +31,7 @@ echo "Installing BigBang"
 helm upgrade -i bigbang chart -n bigbang --create-namespace \
 --set registryCredentials[0].username='robot$p1-dev' --set registryCredentials[0].password=${REGISTRY1_PASSWORD} \
 --set registryCredentials[0].registry=registry1.dso.mil \
--f ./tests/ci/k3d/values.yaml
+-f /Users/thisiza/code/workshop/fortify/bigbang.yaml
 # # apply secrets kustomization pointing to current branch
 # echo "Deploying secrets from the ${CI_COMMIT_REF_NAME} branch"
 # if [[ -z "${CI_COMMIT_TAG}" ]]; then
