@@ -72,10 +72,10 @@ spec:
       {{- end }}
     {{- end }}
     # External Postgres config
-    {{- if .Values.addons.sonarqube.database.enabled }}
     postgresql:
       # Set to false for external postgres server
       enabled: {{ not .Values.addons.sonarqube.database.enabled  }}
+    {{- if not .Values.addons.sonarqube.database.enabled }}
       postgresqlServer: {{ .Values.addons.sonarqube.database.server }}
       postgresqlDatabase: {{ .Values.addons.sonarqube.database.database }}
       postgresqlUsername: {{ .Values.addons.sonarqube.database.user }}
