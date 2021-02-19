@@ -358,6 +358,6 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/confluence.git
       path: "./chart"
-      tag: "release-0.0.2"
+      tag: "release-0.0.3"
     values: {}
 
