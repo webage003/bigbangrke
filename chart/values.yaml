@@ -339,18 +339,30 @@ addons:
         pullPolicy: IfNotPresent
         tag: 20.1.0.0169
         imagePullSecrets: ""
-      hostname: ""
+
+      # You have to create a java keystore with a cert and key and provide them to fortify to communicate
+      fortify_java_keystore: ""
+      # cert alias for cert added into keystore
       http_server_cert_alias: ""
+      # Keystore password
       key_store_password: ""
+      # Certificate password
       key_store_cert_password : ""
+      # you need to add the multi line license here and indent it properly
       fortify_license: |
         <LICENSE>
-      fortify_java_keystore: 
+
       storage:
+        # Fortify Storage if production keep it more than 200GB for dev keep Default 10GB
         volume: 10Gi
       database:
+        # Dev only in cluster databse
         internalDatabase: true
+        # for internal database default user is root
+        # you have to provide the user if you use exterbal database ie.. RDS
         username: ""
         password: ""
-        host: "mysql.mysql.svc.cluster.local"
+        # Default host is internal database service host
+        # Update with external database endpoint if you use external database
+        host: "fortify-mysql"
         port: "3306"
