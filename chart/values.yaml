@@ -326,21 +326,6 @@ addons:
       password: ""
     values: {}
 
-  mysql:
-    enabled: false
-    git:
-      repo: "https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/mysql.git"
-      path: ./chart
-      tag: 0.0.3
-    values:
-      image:
-        registry: registry.dso.mil
-        repository: platform-one/big-bang/apps/application-utilities/mysql/mysql
-        tag: 8.0.23-debian-10-r0
-      fullnameOverride: "mysql"
-      auth:
-        rootPassword: ""
-
   fortify:
     enabled: true
     git:
