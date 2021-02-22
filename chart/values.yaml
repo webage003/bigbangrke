@@ -333,6 +333,10 @@ addons:
       path: ./chart
       tag: 0.0.3
     values:
+      image:
+        registry: registry.dso.mil
+        repository: platform-one/big-bang/apps/application-utilities/mysql/mysql
+        tag: 8.0.23-debian-10-r0
       fullnameOverride: "mysql"
       auth:
         rootPassword: ""
@@ -360,6 +364,7 @@ addons:
       storage:
         volume: 10Gi
       database:
+        internalDatabase: true
         username: ""
         password: ""
         host: "mysql.mysql.svc.cluster.local"
