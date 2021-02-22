@@ -1,0 +1,18 @@
+{{- if  .Values.addons.coder.enabled }}
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: coder
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: coder
+    app.kubernetes.io/component: "developer-tools"
+    {{- include "commonLabels" . | nindent 4}}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.addons.coder.git.repo }}
+  ref:
+    {{- include "validRef" .Values.addons.coder.git | nindent 4 }}
+  {{- include "gitCreds" . | nindent 2 }}
+{{- end }}
+

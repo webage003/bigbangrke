@@ -1,0 +1,31 @@
+{{- if .Values.addons.coder.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: coder
+  labels:
+    istio-injection: enabled
+---
+{{- if ( include "imagePullSecret" . ) }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-registry
+  namespace: coder
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+{{- end }}
+
+---
+{{- if .Values.addons.coder.database.password }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: coder-postgres-secret
+  namespace: coder
+type: Opaque
+data:
+  password: {{ .Values.addons.coder.database.password | b64enc }}
+{{- end }}
+{{- end }}

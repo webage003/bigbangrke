@@ -225,6 +225,22 @@ addons:
         g, Impact Level 2 Authorized, role:admin
     values: {}
 
+  coder:
+    enabled: false
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/coder.git
+      path: "./chart"
+      tag: "1.11.2-bb.0"
+    database:
+      # entering connection info will enable external database and will auto-create any required secrets.
+      # Coder will not provison the database when using an external service
+      host:      # example: postgres.bigbang.dev
+      port:     # example: 5432
+      username:  # example: gitlab
+      database:  # example: gitlab
+      password:  # unencoded string data. This should be placed in the secret values and then encrypted
+    values: {}
+
   authservice:
     # if enabling authservice, a filter needs to be provided by either enabling
     # sso for monitoring or istio, or manually adding a filter chain in the values here:

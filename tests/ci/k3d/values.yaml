@@ -69,3 +69,6 @@ addons:
     enabled: true
   sonarqube:
     enabled: true
+  
+  coder:
+    enabled: true
