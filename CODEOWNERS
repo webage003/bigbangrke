@@ -27,10 +27,6 @@ chart/values.yaml               @kenna81 @kavitha @cmcgrath
 chart/templates/authservice     @kenna81 @kavitha @cmcgrath
 chart/templates/istio           @kenna81 @kavitha @cmcgrath
 
-^[Anchore]
-chart/Chart.yaml
-# chart/values.yaml
-# chart/templates/argocd
 
 ^[ArgoCD]
 chart/Chart.yaml                @matthew.kaiser
@@ -68,6 +64,6 @@ chart/values.yaml               @egoode @kevin.wilder
 chart/templates/gitlab          @egoode @kevin.wilder
 
 [Anchore]
-chart/Chart.yaml                @aneufville @micah.nagel
-chart/values.yaml               @aneufville @micah.nagel
-chart/templates/anchore         @aneufville @micah.nagel
+chart/Chart.yaml                @blake.hearn @micah.nagel
+chart/values.yaml               @blake.hearn @micah.nagel
+chart/templates/anchore         @blake.hearn @micah.nagel
