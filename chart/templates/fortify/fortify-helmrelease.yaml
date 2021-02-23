@@ -44,10 +44,12 @@ spec:
     imagePullSecrets:
       - name: private-registry
     hostname: "fortify.{{ .Values.hostname }}"
+    {{- if .Values.addons.fortify.values.mysql.enabled }}
     mysql:
       fullnameOverride: fortify-mysql
       auth:
         rootPassword: {{ .Values.addons.fortify.values.database.password }}
+    {{- end }}
     database:
       username: {{ .Values.addons.fortify.values.database.username }}
       password: {{ .Values.addons.fortify.values.database.password }}
