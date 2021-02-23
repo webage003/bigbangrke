@@ -357,7 +357,7 @@ addons:
         volume: 10Gi
       
       mysql:
-        enabled: true
+        enabled: false
       
       database:
         # for internal database default user is root
