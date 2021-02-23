@@ -355,10 +355,10 @@ addons:
       storage:
         # Fortify Storage if production keep it more than 200GB for dev keep Default 10GB
         volume: 10Gi
-      
+
       mysql:
         enabled: false
-      
+
       database:
         # for internal database default user is root
         # you have to provide the user if you use exterbal database ie.. RDS
