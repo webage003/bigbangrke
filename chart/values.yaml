@@ -355,13 +355,18 @@ addons:
       storage:
         # Fortify Storage if production keep it more than 200GB for dev keep Default 10GB
         volume: 10Gi
+      
+      mysql:
+        enabled: true
+        auth:
+          rootPassword: admin@123
+        nameOverride: fortify-mysql
+      
       database:
-        # Dev only in cluster databse
-        internalDatabase: true
         # for internal database default user is root
         # you have to provide the user if you use exterbal database ie.. RDS
-        username: ""
-        password: ""
+        username: "root"
+        password: "admin@123"
         # Default host is internal database service host
         # Update with external database endpoint if you use external database
         host: "fortify-mysql"
