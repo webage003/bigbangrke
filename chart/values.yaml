@@ -535,3 +535,30 @@ addons:
 
     # -- Values to passthrough to the anchore chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/anchore-enterprise.git
     values: {}
+
+  jira:
+    enabled: false
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/jira.git
+      path: "./chart"
+      tag: "0.1.0-bb.1"
+
+    database:
+      # -- Hostname of a pre-existing PostgreSQL database to use for Jira.
+      # Entering connection info will disable the deployment of an internal database and will auto-create any required secrets.
+      host: ""
+
+      # -- Port of a pre-existing PostgreSQL database to use for Jira.
+      port: 5432
+
+      # -- Database name to connect to on host.
+      database: ""
+
+      # -- Username to connect as to external database, the user must have all privileges on the database.
+      username: ""
+
+      # -- Database password for the username used to connect to the existing database.
+      password: ""
+      
+    # -- Values to passthrough to the jira chart: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/jira.git
+    values: {}

@@ -1,0 +1,76 @@
+{{- if .Values.addons.jira.enabled }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: jira
+  namespace: {{ .Release.Namespace }}
+spec:
+  targetNamespace: jira
+  chart:
+    spec:
+      chart: {{ .Values.addons.jira.git.path }}
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: jira
+        namespace: {{ .Release.Namespace }}
+  timeout: 10m
+{{- with .Values.flux }}
+  interval: {{ .interval }}
+  test:
+    enable: false
+  install:
+    remediation:
+      retries: {{ .install.retries }}
+  upgrade:
+    remediation:
+      retries: {{ .upgrade.retries }}
+      remediateLastFailure: true
+    cleanupOnFail: true
+  rollback:
+    timeout: {{ .rollback.timeout }}
+    cleanupOnFail: {{ .rollback.cleanupOnFail }}
+  {{- end }}
+
+  valuesFrom:
+    - name: values
+      kind: Secret
+      valuesKey: "jira.yaml"
+  values:
+    hostname: {{ .Values.hostname }}
+    istio:
+      enabled: {{ .Values.istio.enabled }}
+    monitoring:
+      enabled: {{ .Values.monitoring.enabled }}
+{{- if ( include "imagePullSecret" . ) }}
+    ## values for image pull secrets
+    serviceAccount:
+      imagePullSecrets:
+        - name: private-registry
+{{- end }}
+{{- if and .Values.addons.jira.database.host .Values.addons.jira.database.port .Values.addons.jira.database.database .Values.addons.jira.database.username .Values.addons.jira.database.password }} 
+    database:
+      type: 'postgres72'
+      url: jdbc:postgresql://{{ .Values.addons.jira.database.host }}:{{ .Values.addons.jira.database.port }}/{{ .Values.addons.jira.database.database }}
+      driver: org.postgresql.Driver
+      credentials:
+        secretName: jira-postgres
+        usernameSecretKey: username
+        passwordSecretKey: password
+{{- end }}
+  {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.monitoring.enabled }}
+  dependsOn:
+  {{- if .Values.gatekeeper.enabled }}
+  - name: gatekeeper
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- if .Values.istio.enabled }}
+  - name: istio
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- if .Values.monitoring.enabled }}
+  - name: monitoring
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- end }}
+{{- end }}
