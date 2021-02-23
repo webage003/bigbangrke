@@ -49,6 +49,9 @@ spec:
       fullnameOverride: fortify-mysql
       auth:
         rootPassword: {{ .Values.addons.fortify.values.database.password }}
+    database:
+      host: "fortify-mysql"
+      port: "3306"
     {{- end }}
     database:
       username: {{ .Values.addons.fortify.values.database.username }}

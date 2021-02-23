@@ -358,16 +358,13 @@ addons:
       
       mysql:
         enabled: true
-        auth:
-          rootPassword: admin@123
-        nameOverride: fortify-mysql
       
       database:
         # for internal database default user is root
         # you have to provide the user if you use exterbal database ie.. RDS
-        username: "root"
-        password: "admin@123"
+        username: ""
+        password: ""
         # Default host is internal database service host
         # Update with external database endpoint if you use external database
-        host: "fortify-mysql"
+        host: ""
         port: "3306"
