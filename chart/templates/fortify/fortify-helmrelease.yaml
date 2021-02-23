@@ -53,16 +53,17 @@ spec:
       host: "fortify-mysql"
       port: "3306"
     {{- end }}
-    database:
-      username: {{ .Values.addons.fortify.values.database.username }}
-      password: {{ .Values.addons.fortify.values.database.password }}
     fortify_autoconfig: |
       appProperties: {
         host.validation: false,
         searchIndex.location: '/app/tomcat/fortify/ssc/ssc_search_index'
       }
       datasourceProperties: {
+        {{- if .Values.addons.fortify.values.mysql.enabled }}
+        jdbc.url: "jdbc:mysql://mysql-fortify:3306/fortify?useSSL=false&connectionCollation=<collation>&rewriteBatchedStatements=true&max_allowed_packet=1073741824&sql_mode=TRADITIONAL",
+        {{- else }}
         jdbc.url: "jdbc:mysql://{{ .Values.addons.fortify.values.database.host }}:{{ .Values.addons.fortify.values.database.port }}/fortify?useSSL=false&connectionCollation=<collation>&rewriteBatchedStatements=true&max_allowed_packet=1073741824&sql_mode=TRADITIONAL",
+        {{- end}}
         db.driver.class: com.mysql.cj.jdbc.Driver,
         db.username: "{{ .Values.addons.fortify.values.database.username }}",
         db.password: "{{ .Values.addons.fortify.values.database.password }}",
