@@ -52,6 +52,7 @@ spec:
     database:
       host: "fortify-mysql"
       port: "3306"
+      username: "root"
     {{- end }}
     fortify_autoconfig: |
       appProperties: {

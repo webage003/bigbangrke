@@ -361,10 +361,10 @@ addons:
 
       database:
         # for internal database default user is root
-        # you have to provide the user if you use exterbal database ie.. RDS
+        # you have to provide the user if you use external database ie.. RDS
         username: ""
+        # you need to provide a root password for local or external database
         password: ""
-        # Default host is internal database service host
         # Update with external database endpoint if you use external database
         host: ""
         port: "3306"
