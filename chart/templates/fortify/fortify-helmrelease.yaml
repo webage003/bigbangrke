@@ -60,7 +60,7 @@ spec:
       }
       datasourceProperties: {
         {{- if .Values.addons.fortify.values.mysql.enabled }}
-        jdbc.url: "jdbc:mysql://mysql-fortify:3306/fortify?useSSL=false&connectionCollation=<collation>&rewriteBatchedStatements=true&max_allowed_packet=1073741824&sql_mode=TRADITIONAL",
+        jdbc.url: "jdbc:mysql://fortify-mysql:3306/fortify?useSSL=false&connectionCollation=<collation>&rewriteBatchedStatements=true&max_allowed_packet=1073741824&sql_mode=TRADITIONAL",
         {{- else }}
         jdbc.url: "jdbc:mysql://{{ .Values.addons.fortify.values.database.host }}:{{ .Values.addons.fortify.values.database.port }}/fortify?useSSL=false&connectionCollation=<collation>&rewriteBatchedStatements=true&max_allowed_packet=1073741824&sql_mode=TRADITIONAL",
         {{- end}}
