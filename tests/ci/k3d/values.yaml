@@ -68,6 +68,6 @@ addons:
   anchore:
     enabled: true
   sonarqube:
-    enabled: false
+    enabled: true
   fortify:
-    enabled: false
+    enabled: true
