@@ -51,71 +51,22 @@ spec:
     {{- if .Values.addons.gitlab.database.host }}
     postgresql:
       install: false
-    {{- end }}
-    redis:
-      metrics:
-        image:
-          pullSecrets: 
-          - private-registry
-      image:
-        pullSecrets: 
-        - private-registry
-    registry:
-      {{- if .Values.addons.gitlab.objectstorage.endpoint }}
+    {{- end }} 
+    {{- if .Values.addons.gitlab.objectStorage.endpoint }}
+    registry:      
       storage:
         secret: gitlab-object-storage
         key: registry
-      {{- end }}
-      image:
-        pullSecrets:
-        - name: private-registry
-    shared-secrets:
-      selfsign:
-        image:
-          pullSecrets:
-          - name: private-registry
+    {{- end }}
+    {{- if .Values.addons.gitlab.objectStorage.endpoint }}
     gitlab:
-      task-runner:
-        {{- if .Values.addons.gitlab.objectstorage.endpoint }}
+      task-runner:        
         backups:
           objectStorage:
             config:
               secret: gitlab-object-storage
               key: backups
-        {{- end }}
-        image:
-          pullSecrets:
-          - name: private-registry
-      migrations:
-        image:
-          pullSecrets:
-          - name: private-registry
-      webservice:
-        image:
-          pullSecrets:
-          - name: private-registry 
-        workhorse:
-          pullSecrets:
-          - name: private-registry 
-      sidekiq:
-        image:
-          pullSecrets:
-          - name: private-registry
-      gitaly:
-        image:
-          pullSecrets:
-          - name: private-registry
-      gitlab-shell:
-        image:
-          pullSecrets:
-          - name: private-registry
-      gitlab-exporter:
-        image:
-          pullSecrets:
-          - name: private-registry
-    minio:
-      pullSecrets:
-      - name: private-registry
+    {{- end }}
     global:
       hosts:
         domain: {{ .Values.hostname }}
@@ -123,7 +74,7 @@ spec:
           name: {{ .Values.addons.gitlab.hostnames.gitlab }} 
         registry:
           name: {{ .Values.addons.gitlab.hostnames.registry }}
-      {{- if .Values.addons.gitlab.objectstorage.endpoint }}
+      {{- if .Values.addons.gitlab.objectStorage.endpoint }}
       minio:
         enabled: false
       {{- end }}
@@ -137,15 +88,15 @@ spec:
           secret: gitlab-database
           key: PGPASSWORD
       {{- end }}
-      {{- if .Values.addons.gitlab.objectstorage.endpoint }}
+      {{- if .Values.addons.gitlab.objectStorage.endpoint }}
       registry:
-        {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-        bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-registry
+        {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+        bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-registry
         {{- else }}
         bucket: gitlab-registry
         {{- end }}
       {{- end }}
-      {{- if or .Values.addons.gitlab.sso.enabled .Values.addons.gitlab.objectstorage.endpoint }}
+      {{- if or .Values.addons.gitlab.sso.enabled .Values.addons.gitlab.objectStorage.endpoint }}
       appConfig:
       {{- end }}
         {{- if .Values.addons.gitlab.sso.enabled }}
@@ -168,10 +119,10 @@ spec:
               - secret: gitlab-sso-provider
                 key: gitlab-sso.json
         {{- end }}
-        {{- if .Values.addons.gitlab.objectstorage.endpoint }}
+        {{- if .Values.addons.gitlab.objectStorage.endpoint }}
         lfs:
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-lfs
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-lfs
           {{- else }}
           bucket: gitlab-lfs
           {{- end }}
@@ -179,8 +130,8 @@ spec:
             secret: gitlab-object-storage
             key: rails
         artifacts:
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-artifacts
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-artifacts
           {{- else }}
           bucket: gitlab-artifacts
           {{- end }}
@@ -188,8 +139,8 @@ spec:
             secret: gitlab-object-storage
             key: rails
         uploads:
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-uploads
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-uploads
           {{- else }}
           bucket: gitlab-uploads
           {{- end }}
@@ -197,8 +148,8 @@ spec:
             secret: gitlab-object-storage
             key: rails
         packages:
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-packages
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-packages
           {{- else }}
           bucket: gitlab-packages
           {{- end }}
@@ -206,8 +157,8 @@ spec:
             secret: gitlab-object-storage
             key: rails
         externalDiffs:
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-mr-diffs
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-mr-diffs
           {{- else }}
           bucket: gitlab-mr-diffs
           {{- end }}
@@ -215,8 +166,8 @@ spec:
             secret: gitlab-object-storage
             key: rails
         terraformState:
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-terraform-state
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-terraform-state
           {{- else }}
           bucket: gitlab-terraform-state
           {{- end }}
@@ -224,8 +175,8 @@ spec:
             secret: gitlab-object-storage
             key: rails
         dependencyProxy:
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-dependency-proxy
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-dependency-proxy
           {{- else }}
           bucket: gitlab-dependency-proxy
           {{- end }}
@@ -233,8 +184,8 @@ spec:
             secret: gitlab-object-storage
             key: rails
         pseudonymizer:
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-pseudo
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-pseudo
           {{- else }}
           bucket: gitlab-pseudo
           {{- end }}
@@ -242,25 +193,17 @@ spec:
             secret: gitlab-object-storage
             key: rails
         backups:
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          bucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-backup
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-backup
           {{- else }}
           bucket: gitlab-backup
           {{- end }}
-          {{- if .Values.addons.gitlab.objectstorage.bucketPrefix }}
-          tmpBucket: {{ .Values.addons.gitlab.objectstorage.bucketPrefix }}-gitlab-backup-tmp
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          tmpBucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-backup-tmp
           {{- else }}
           tmpBucket: gitlab-backup-tmp
           {{- end }}
         {{- end }}
-      certificates:
-        image:
-          pullSecrets:
-          - name: private-registry
-      kubectl:
-        image:
-          pullSecrets:
-          - name: private-registry
 
   {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.monitoring.enabled }}
   dependsOn:

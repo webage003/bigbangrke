@@ -152,6 +152,13 @@ aws ec2 run-instances \
 
 Step 2: SSH into your new EC2 instance and configure it with the following:
 
+- SSH: Find your instance's public IP. This may be in the output of your `run-instance` command, if not search for your instance id in the AWS web console and under the details copy your public ipv4 address. Example below assumes this value is `1.2.3.4`, replace that with the actual value.
+
+```bash
+YOURPUBLICEC2IP=1.2.3.4
+ssh -i $AWSUSERNAME.pem ubuntu@$YOURPUBLICEC2IP
+```
+
 - Install Docker CE
 
 ```bash
@@ -190,7 +197,7 @@ k3d version
 ```bash
 YOURPUBLICEC2IP=$( curl https://ipinfo.io/ip )
 echo $YOURPUBLICEC2IP
-k3d cluster create -s 1 -a 3  --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=$YOURPUBLICEC2IP"  -p 80:80@loadbalancer -p 443:443@loadbalancer
+k3d cluster create -s 1 -a 3 -v /etc/machine-id:/etc/machine-id  --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=$YOURPUBLICEC2IP"  -p 80:80@loadbalancer -p 443:443@loadbalancer
 ```
 
 - **_Optionally_** you can set your image pull secret on the cluster so that you don't have to put your credentials in the code or in the command line in later steps
@@ -199,17 +206,19 @@ k3d cluster create -s 1 -a 3  --k3s-server-arg "--disable=traefik" --k3s-server-
 # Create the directory for the k3s registry config.
 mkdir ~/.k3d/
 
-# Create the config file. Use your registry1 credentials. Copy your user name and token secret from your Harbor profile.
+# Create the config file. Use your registry1 credentials. 
+# To get those go to Harbor (https://registry1.dso.mil/) and login via OIDC (using your P1 login).
+# From the top right menu access your user profile and the username and CLI secret will be there.
 cat << EOF > ~/.k3d/p1-registries.yaml
 configs:
   "registry1.dso.mil":
     auth:
       username: "user.name"
-      password: "place_token_secret_here"
+      password: "cli.secret"
 EOF
 
 YOURPUBLICEC2IP=$( curl https://ipinfo.io/ip )
-k3d cluster create --servers 1 --agents 3 -v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=$YOURPUBLICEC2IP"  -p 80:80@loadbalancer -p 443:443@loadbalancer
+k3d cluster create --servers 1 --agents 3 -v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml -v /etc/machine-id:/etc/machine-id --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" --k3s-server-arg "--tls-san=$YOURPUBLICEC2IP"  -p 80:80@loadbalancer -p 443:443@loadbalancer
 ```
 
 Here is a break down of what we are doing with this command:
@@ -225,6 +234,7 @@ Here is a break down of what we are doing with this command:
 optional:
 `-v ~/.k3d/p1-registries.yaml:/etc/rancher/k3s/registries.yaml` volume mount image pull secret config for k3d cluster
 `--api-port 0.0.0.0:38787` Chooses a port for the API server instead of being assigned a random one. You can set this to any port number that you want.
+`-v /etc/machine-id:/etc/machine-id` volume mount so k3d nodes have a file at /etc/machine-id for fluentbit DaemonSet.
 
 - Once your cluster is up, you can copy the kubeconfig from the EC2 instance to your workstation and update the IP Address. If you do not have an existing configuration to preserve on your local workstation, you can delete and recreate the configuration file.
 
@@ -243,7 +253,7 @@ Update the configuration file on your local workstation.
 rm ~/.kube/config
 
 # Create empty configuation
-touch ~/kube/config
+touch ~/.kube/config
 
 # Update permissions
 # (Prevents Helm warnings)
@@ -253,7 +263,7 @@ chmod go-r ~/.kube/config
 vi ~/.kube/config
 ```
 
-Paste the contents into the new file, and update the `server` URL to the public IP address (`$YOURPUBLICEC2IP`).
+Paste the contents into the new file, and update the `server` URL to the public IP address (`$YOURPUBLICEC2IP`). Leave the port untouched.
 
 ```bash
 # Test to see if you can connect to your cluster

@@ -1,14 +1,14 @@
-{{- if .Values.addons.anchore.enabled  }}
+{{- if and (not .Values.offline) .Values.minio.enabled }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: anchore
+  name: minio
   namespace: {{ .Release.Namespace }}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.addons.anchore.git.repo }}
+  url: {{ .Values.minio.minioinstance.git.repo }}
   ref:
-    {{- include "validRef" .Values.addons.anchore.git | nindent 4 }}
+    {{- include "validRef" .Values.minio.minioinstance.git | nindent 4 }}
   {{ include "gitIgnore" . }}
   {{- include "gitCreds" . | nindent 2 }}
 {{- end }}
