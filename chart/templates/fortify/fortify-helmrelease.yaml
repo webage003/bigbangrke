@@ -67,7 +67,7 @@ spec:
         {{- end}}
         db.driver.class: com.mysql.cj.jdbc.Driver,
         {{- if .Values.addons.fortify.values.mysql.enabled }}
-        db.username: root
+        db.username: root,
         {{- else}}
         db.username: {{ .Values.addons.fortify.values.database.username }},
         {{- end }}
