@@ -541,7 +541,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/jira.git
       path: "./chart"
-      tag: "0.1.0-bb.1"
+      tag: "0.1.0-bb.2"
 
     database:
       # -- Hostname of a pre-existing PostgreSQL database to use for Jira.
