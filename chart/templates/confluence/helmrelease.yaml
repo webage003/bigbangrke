@@ -1,5 +1,6 @@
 {{- if .Values.addons.confluence.enabled }}
 {{ $name := "confluence" }}
+{{ $component := "collaboration-tools" }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -7,7 +8,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ $name }}
-    app.kubernetes.io/component: "collaboration-tools"
+    app.kubernetes.io/component: {{ $component }}
     {{- include "commonLabels" . | nindent 4}}
 spec:
   releaseName: {{ $name }}
@@ -52,6 +53,10 @@ spec:
     serviceAccount:
       imagePullSecrets:
       - name: private-registry
+    additionalLabels:
+      app.kubernetes.io/component: {{ $component }}
+      app.kubernetes.io/part-of: "bigbang"
+      bigbang/version: {{ .Chart.Version | quote }}
 
   {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.monitoring.enabled }}
   dependsOn:
