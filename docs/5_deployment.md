@@ -14,7 +14,7 @@ Big Bang follows a [GitOps](https://www.weave.works/blog/what-is-gitops-really) 
 
 ## Installation
 
-1. Before pushing changes to Git, validate all configuration is syntatically correct.
+1. Before pushing changes to Git, validate all configuration is syntactically correct.
 
    ```bash
    # If everything is successful, YAML should be output
@@ -27,7 +27,7 @@ Big Bang follows a [GitOps](https://www.weave.works/blog/what-is-gitops-really) 
    git push
    ```
 
-1. Validate the Kuberbernetes context is correct
+1. Validate the Kubernetes context is correct
 
    ```bash
    # This should match the environment you intend to deploy
@@ -116,7 +116,7 @@ The following commands will help you monitor the progress of the Big Bang deploy
 
    # 'bigbang' READY should be True
     NAME            URL                                                        READY   STATUS                                                                      AGE
-    bigbang         https://repo1.dso.mil/platform-one/big-bang/umbrella.git   True    Fetched revision: master/8a4a1ddd0c9edf316f5362680cf2921baf0c3451   25m
+    bigbang         https://repo1.dso.mil/platform-one/big-bang/bigbang.git   True    Fetched revision: master/8a4a1ddd0c9edf316f5362680cf2921baf0c3451   25m
    ```
 
 1. Verify the Big Bang Helm Chart was deployed
@@ -137,7 +137,7 @@ The following commands will help you monitor the progress of the Big Bang deploy
    # The Git repository holding the Helm charts for each package can be seen in the URL column.
    # The STATUS column shows the branch and tag of the revision being used.
     NAMESPACE     NAME              URL                                                                             READY   STATUS                                                                      AGE
-    bigbang       bigbang           https://repo1.dso.mil/platform-one/big-bang/umbrella.git                        True    Fetched revision: master/3a44686520152e576a8c2c6f264876efff497c4b           8m25s
+    bigbang       bigbang           https://repo1.dso.mil/platform-one/big-bang/bigbang.git                        True    Fetched revision: master/3a44686520152e576a8c2c6f264876efff497c4b           8m25s
     bigbang       logging           https://repo1.dso.mil/platform-one/big-bang/apps/core/logging.git               True    Fetched revision: release-v0.2.x/9cfe1e14c12098464ee89eb877614f781cd78fb7   8m23s
     bigbang       certmanager       https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/cert-manager.git       True    Fetched revision: release-v1.0.x/1247135baf145dcfad4a4a02ef679c48fb76d9fb   8m23s
     bigbang       istio             https://repo1.dso.mil/platform-one/big-bang/apps/core/servicemesh.git           True    Fetched revision: chart-release/2b02a51b7950ce21bac26403fa25d09e7e3f86c3    8m23s

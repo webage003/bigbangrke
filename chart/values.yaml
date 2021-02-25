@@ -24,6 +24,9 @@ registryCredentials:
 #    password: ""
 #    email: ""
 
+# Openshift Container Platform Feature Toggle
+openshift: false
+
 # -- Git credential settings for accessing private repositories
 # Order of precedence is:
 #   1. existingSecret
@@ -85,7 +88,7 @@ istio:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    tag: "1.7.3-bb.7"
+    tag: "1.7.3-bb.8"
 
   # -- Certificate/Key pair to use as the default certificate for exposing BigBang created applications.
   # If nothing is provided, applications will expect a valid tls secret to exist in the `istio-system` namespace called `wildcard-cert`.
@@ -166,6 +169,24 @@ logging:
     path: "./chart"
     tag: "0.1.4-bb.3"
 
+  sso:
+    # -- Toggle OIDC SSO for Kibana/Elasticsearch on and off.
+    # Enabling this option will auto-create any required secrets.
+    enabled: false
+
+    # -- Elasticsearch/Kibana OIDC client ID
+    client_id: ""
+
+    # -- Elasticsearch/Kibana OIDC client secret
+    client_secret: ""
+
+  license:
+    # -- Toggle trial license installation of elasticsearch.  Note that enterprise (non trial) is required for SSO to work.
+    trial: false
+
+    # -- Elasticsearch license in json format seen here: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana#enterprise-license
+    keyJSON: ""
+
   # -- Values to passthrough to the elasticsearch-kibana chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
   values: {}
 
@@ -175,9 +196,7 @@ eckoperator:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
-    tag: "1.3.0-bb.3"
-
-  # -- Values to passthrough to the eck-operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
+    tag: "1.3.0-bb.4"
   values: {}
 
 fluentbit:
@@ -243,7 +262,7 @@ twistlock:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
-    tag: "0.0.2-bb.1"
+    tag: "0.0.3-bb.0"
 
   # -- Values to passthrough to the twistlock chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
   values: {}
@@ -287,9 +306,9 @@ addons:
     enabled: false
     git:
       repo: https://repo1.dsop.io/platform-one/big-bang/apps/core/argocd.git
-      branch: docs-robk
+      # branch: docs-robk
       path: "./chart"
-      # tag: "2.9.5-bb.4"
+      tag: "2.14.7-bb.0"
     sso:
       # -- Toggle SSO for ArgoCD on and off
       enabled: false
