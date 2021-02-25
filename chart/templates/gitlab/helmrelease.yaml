@@ -96,6 +96,13 @@ spec:
         bucket: gitlab-registry
         {{- end }}
       {{- end }}
+      pages:
+        objectStore:
+          {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
+          bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-pages
+          {{- else }}
+          bucket: gitlab-pages
+          {{- end }}
       {{- if or .Values.addons.gitlab.sso.enabled .Values.addons.gitlab.objectStorage.endpoint }}
       appConfig:
       {{- end }}

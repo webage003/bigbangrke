@@ -49,6 +49,7 @@ Here is the list of buckets that you must provision in your s3 service:
 {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-pseudo
 {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-backup
 {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-backup-tmp
+{{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-pages
 {{- else }}
 gitlab-registry
 gitlab-lfs
@@ -61,6 +62,7 @@ gitlab-dependency-proxy
 gitlab-pseudo
 gitlab-backup
 gitlab-backup-tmp
+gitlab-pages
 {{- end }}
 {{- end }}
 
