@@ -1,4 +1,4 @@
-{{- if .Values.postgresoperator.enabled }}
+{{- if .Values.addons.postgresoperator.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:

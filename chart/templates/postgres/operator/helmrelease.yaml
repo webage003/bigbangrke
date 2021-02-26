@@ -1,4 +1,4 @@
-{{- if .Values.postgresoperator.enabled }}
+{{- if .Values.addons.postgresoperator.enabled }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -12,7 +12,7 @@ spec:
   targetNamespace: postgres-operator
   chart:
     spec:
-      chart: {{ .Values.postgresoperator.git.path }}
+      chart: {{ .Values.addons.postgresoperator.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository

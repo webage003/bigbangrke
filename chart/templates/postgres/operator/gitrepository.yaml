@@ -1,4 +1,4 @@
-{{- if and (not .Values.offline) .Values.postgresoperator.enabled }}
+{{- if and (not .Values.offline) .Values.addons.postgresoperator.enabled }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
@@ -10,9 +10,9 @@ metadata:
     {{- include "commonLabels" . | nindent 4}}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.postgresoperator.git.repo }}
+  url: {{ .Values.addons.postgresoperator.git.repo }}
   ref:
-    {{- include "validRef" .Values.postgresoperator.git | nindent 4 }}
+    {{- include "validRef" .Values.addons.postgresoperator.git | nindent 4 }}
   {{ include "gitIgnore" . }}
   {{- include "gitCreds" . | nindent 2 }}
 {{- end }}
