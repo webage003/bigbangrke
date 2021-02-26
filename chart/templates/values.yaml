@@ -11,7 +11,7 @@ stringData:
 {{ toYaml .Values.addons.argocd.values | indent 4 }}
   istiooperator.yaml: |
 {{ toYaml .Values.istiooperator.values | indent 4  }}
-  authservice.yaml: | 
+  authservice.yaml: |
     chains:
     {{- if .Values.addons.authservice.chains }}
       {{ .Values.addons.authservice.chains | toYaml | nindent 6 }}
@@ -46,13 +46,15 @@ stringData:
 {{ toYaml .Values.monitoring.values | indent 4 }}
 {{- end }}
   twistlock.yaml: |
-{{ toYaml .Values.twistlock.values | indent 4 }} 
+{{ toYaml .Values.twistlock.values | indent 4 }}
   clusterauditor.yaml: |
 {{ toYaml .Values.twistlock.values | indent 4 }}
   miniooperator.yaml: |
 {{ toYaml .Values.addons.minioOperator.values | indent 4 }}
   minio.yaml: |
 {{ toYaml .Values.addons.minio.values | indent 4 }}
+  postgresoperator.yaml: |
+{{ toYaml .Values.postgresoperator.values | indent 4 }}
   gitlab.yaml: |
 {{ toYaml .Values.addons.gitlab.values | indent 4 }}
   anchore.yaml: |
