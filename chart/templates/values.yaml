@@ -54,7 +54,7 @@ stringData:
   minio.yaml: |
 {{ toYaml .Values.addons.minio.values | indent 4 }}
   postgresoperator.yaml: |
-{{ toYaml .Values.postgresoperator.values | indent 4 }}
+{{ toYaml .Values.addons.postgresoperator.values | indent 4 }}
   gitlab.yaml: |
 {{ toYaml .Values.addons.gitlab.values | indent 4 }}
   anchore.yaml: |
