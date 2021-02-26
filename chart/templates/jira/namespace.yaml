@@ -16,7 +16,7 @@ data:
 {{- end }}
 ---
 # create database secret
-{{- if .Values.addons.jira.database.enabled }}
+{{- with .Values.addons.jira.database }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -24,7 +24,7 @@ metadata:
     namespace: jira
 type: kubernetes.io/opaque
 stringData:
-    username: {{ .Values.addons.jira.database.username }}
-    password: {{ .Values.addons.jira.database.password }}
+    username: {{ .username }}
+    password: {{ .password }}
 {{- end }}
 {{- end }}
