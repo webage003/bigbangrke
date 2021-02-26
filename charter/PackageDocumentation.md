@@ -49,7 +49,7 @@ The documentation should include:
 ```text
 package
 |--docs
-   |  index.html [landing page for application within hugo]
+   |  _index.html [landing page for application within hugo]
    |  overview.md [Overview of application, purpose, and default config options]
    |  keycloak.md [Manual or automated steps to configure sso]
    |  example-optional-config.md [Addtional files for optional configuration for the app]
@@ -71,6 +71,24 @@ virtualServices = ["argocd"]
 ```
 
 By including this at the top of a markdown file, hugo can now render this page.
+
+### Changes to the Umbrella chart
+
+For each package that is added, we must also add a flag to ensure that Hugo picks up the documentation files. This is done through the values [here](../chart/templates/documentation/documentation-helmrelease.yaml).
+
+Example:
+
+```yaml
+spec:
+  values:
+    packages:
+    {{- if .Values.clusterAuditor.enabled }}
+    - name: cluster-auditor
+      repo: {{ .Values.clusterAuditor.git.repo }}
+      branch: {{ .Values.clusterAuditor.git.branch }}
+      path: docs
+    {{- end }}
+```
 
 ### CI/CD pipeline additions
 
