@@ -43,8 +43,7 @@ spec:
     monitoring:
       enabled: {{ .Values.monitoring.enabled }}
 {{- if ( include "imagePullSecret" . ) }}
-    ## values for image pull secrets
-    serviceAccount:
+    image:
       imagePullSecrets:
         - name: private-registry
 {{- end }}
