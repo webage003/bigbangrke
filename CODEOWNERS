@@ -33,9 +33,9 @@ chart/Chart.yaml
 # chart/templates/argocd
 
 ^[ArgoCD]
-chart/Chart.yaml                @matthew.kaiser
-chart/values.yaml               @matthew.kaiser
-chart/templates/argocd          @matthew.kaiser
+chart/Chart.yaml                @matthew.kaiser @brian.rexrode
+chart/values.yaml               @matthew.kaiser @brian.rexrode
+chart/templates/argocd          @matthew.kaiser @brian.rexrode
 
 # ^[Cluster Auditor]
 # chart/Chart.yaml
