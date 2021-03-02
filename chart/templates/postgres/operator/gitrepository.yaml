@@ -1,12 +1,14 @@
 {{- if and (not .Values.offline) .Values.addons.postgresoperator.enabled }}
+{{ $name := "postgres-operator" }}
+{{ $component := "package-utilities" }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: postgres-operator
+  name: {{ $name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: postgres-operator
-    app.kubernetes.io/component: "application-utilities"
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/component: {{ $component }}
     {{- include "commonLabels" . | nindent 4}}
 spec:
   interval: {{ .Values.flux.interval }}

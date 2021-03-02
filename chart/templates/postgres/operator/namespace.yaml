@@ -1,10 +1,12 @@
 {{- if .Values.addons.postgresoperator.enabled }}
+{{ $name := "postgres-operator" }}
+{{ $component := "package-utilities" }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: postgres-operator
+  name: {{ $name }}
   labels:
-    app.kubernetes.io/name: postgres-operator
-    app.kubernetes.io/component: "application-utilities"
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/component: {{ $component }}
     {{- include "commonLabels" . | nindent 4}}
 {{- end }}

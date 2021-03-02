@@ -1,22 +1,24 @@
 {{- if .Values.addons.postgresoperator.enabled }}
+{{ $name := "postgres-operator" }}
+{{ $component := "package-utilities" }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: postgres-operator
+  name: {{ $name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: postgres-operator
-    app.kubernetes.io/component: "application-utilities"
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/component: {{ $component }}
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: postgres-operator
+  targetNamespace: {{ $name }}
   chart:
     spec:
       chart: {{ .Values.addons.postgresoperator.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: postgres-operator
+        name: {{ $name }}
         namespace: {{ .Release.Namespace }}
 
   {{- with .Values.flux }}
@@ -38,7 +40,7 @@ spec:
   valuesFrom:
     - name: values
       kind: Secret
-      valuesKey: "postgresoperator.yaml"
+      valuesKey: {{ print $name ".yaml" }}
   values:
     imagePullSecrets:
       - name: private-registry
