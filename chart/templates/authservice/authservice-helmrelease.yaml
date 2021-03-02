@@ -1,4 +1,4 @@
-{{- if and .Values.istio.enabled ( or .Values.addons.authservice.enabled .Values.istio.sso.enabled ) }}
+{{- if and .Values.istio.enabled ( or .Values.addons.authservice.enabled ( or .Values.monitoring.sso.enabled .Values.istio.sso.enabled ) ) }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -56,7 +56,9 @@ spec:
 {{- if .Values.sso.client_secret }}
       client_secret: {{ .Values.sso.client_secret }}
 {{- end }}
-      certificate_authority: {{ .Values.sso.certificate_authority }}
+{{- if .Values.sso.certificate_authority }}
+      certificate_authority: {{ .Values.sso.certificate_authority  }}
+{{- end }}
     chains:
       kiali:
         match:

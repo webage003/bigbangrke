@@ -11,12 +11,15 @@ docs/                 @michaelmcleroy @egoode
 base/                 @michaelmcleroy
 
 ^[CI Owners]
-.gitlab-ci/           @zdzielinksi @iahmad @toladipupo
-tests/                @zdzielinksi @iahmad @toladipupo
+.gitlab-ci/           @toladipupo
+tests/                @toladipupo
 
 ^[Hack Owners]
-scripts/              @zdzielinksi @iahmad @toladipupo @michaelmcleroy @egoode
-hack/                 @zdzielinksi @iahmad @toladipupo @michaelmcleroy @egoode
+scripts/              @toladipupo @michaelmcleroy @egoode
+hack/                 @toladipupo @michaelmcleroy @egoode
+
+^[Charter Owners]
+charter/              @runyontr @joshwolf
 
 ^[Istio and Authservice]
 chart/Chart.yaml                @kenna81 @kavitha @cmcgrath
@@ -26,7 +29,7 @@ chart/templates/istio           @kenna81 @kavitha @cmcgrath
 
 ^[Anchore]
 chart/Chart.yaml
-# chart/values.yaml
+# chart/values.yaml             @jasonkrause 
 # chart/templates/argocd
 
 ^[ArgoCD]
@@ -63,3 +66,8 @@ chart/templates/twistlock       @thomas.burton
 chart/Chart.yaml                @egoode @kevin.wilder
 chart/values.yaml               @egoode @kevin.wilder
 chart/templates/gitlab          @egoode @kevin.wilder
+
+[Anchore]
+chart/Chart.yaml                @aneufville @micah.nagel
+chart/values.yaml               @aneufville @micah.nagel
+chart/templates/anchore         @aneufville @micah.nagel

@@ -6,8 +6,10 @@
     {{- include "multipleCreds" . | b64enc }}
     {{- else if eq $credType "map[string]interface {}" }}
       {{- /* If we have a map, treat those as key-value pairs. */ -}}
+      {{- if and .Values.registryCredentials.username .Values.registryCredentials.password }}
       {{- with .Values.registryCredentials }}
       {{- printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"email\":\"%s\",\"auth\":\"%s\"}}}" .registry .username .password .email (printf "%s:%s" .username .password | b64enc) | b64enc }}
+      {{- end }}
       {{- end }}
     {{- end -}}
   {{- end }}
@@ -16,14 +18,17 @@
 {{- define "multipleCreds" -}}
 {
   "auths": {
-    {{- $length := len .Values.registryCredentials }}
-    {{- range $index, $entry := .Values.registryCredentials }}
-    "{{- $entry.registry }}": {
-      "username{{ $index }}":"{{- $entry.username }}",
-      "password":"{{- $entry.password }}",
-      "email":"{{- $entry.email }}",
-      "auth":"{{- (printf "%s:%s" $entry.username $entry.password | b64enc) }}"
-    }{{- if ne $length (add $index 1) }},{{- end }}
+    {{- range $i, $m := .Values.registryCredentials }}
+    {{- /* Only create entry if resulting entry is valid */}}
+    {{- if and $m.registry $m.username $m.password }}
+    {{- if $i }},{{ end }}
+    "{{ $m.registry }}": {
+      "username": "{{ $m.username }}",
+      "password": "{{ $m.password }}",
+      "email": "{{ $m.email | default "" }}",
+      "auth": "{{ printf "%s:%s" $m.username $m.password | b64enc }}"
+    }
+    {{- end }}
     {{- end }}
   }
 }
@@ -52,13 +57,13 @@ branch: {{ .branch | quote }}
 Build the appropriate git credentials secret for private git repositories
 */}}
 {{- define "gitCreds" -}}
-{{- if .existingSecret -}}
+{{- if .Values.git.existingSecret -}}
 secretRef:
-  name: {{ .existingSecret }}
-{{- else if coalesce .credentials.username .credentials.password .credentials.privateKey .credentials.publicKey .credentials.knownHosts "" -}}
+  name: {{ .Values.git.existingSecret }}
+{{- else if coalesce .Values.git.credentials.username .Values.git.credentials.password .Values.git.credentials.privateKey .Values.git.credentials.publicKey .Values.git.credentials.knownHosts "" -}}
 {{- /* Input validation happens in git-credentials.yaml template */ -}}
 secretRef:
-  name: git-credentials
+  name: {{ $.Release.Name }}-git-credentials
 {{- end -}}
 {{- end -}}
 
