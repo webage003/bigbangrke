@@ -493,6 +493,8 @@ airgap/rke2/bigbang down:
     - helm un -n bigbang bigbang
     # TODO: Smarter wait
     - sleep 180
+  #For debugging
+  when: manual
 
 # Destroy RKE2 cluster on AWS
 airgap/rke2/cluster down:
