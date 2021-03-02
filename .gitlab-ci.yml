@@ -205,7 +205,8 @@ upgrade:
     # Run on scheduled jobs
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master" || $CI_MERGE_REQUEST_LABELS =~ /ci/'
       allow_failure: true
-      when: always
+      #Debug
+      when: manual
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -492,9 +493,6 @@ airgap/rke2/bigbang down:
   script:
     - helm un -n bigbang bigbang
     # TODO: Smarter wait
-    - sleep 180
-  #For debugging
-  when: manual
 
 # Destroy RKE2 cluster on AWS
 airgap/rke2/cluster down:
