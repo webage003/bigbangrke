@@ -132,7 +132,7 @@ istiooperator:
 #
 clusterAuditor:
   # -- Toggle deployment of Cluster Auditor.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
     path: "./chart"
@@ -147,7 +147,7 @@ clusterAuditor:
 #
 gatekeeper:
   # -- Toggle deployment of OPA Gatekeeper.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
@@ -162,7 +162,7 @@ gatekeeper:
 #
 logging:
   # -- Toggle deployment of Logging (EFK).
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
@@ -191,7 +191,7 @@ logging:
 
 eckoperator:
   # -- Toggle deployment of ECK Operator.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
@@ -200,7 +200,7 @@ eckoperator:
 
 fluentbit:
   # -- Toggle deployment of Fluent-Bit.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
@@ -213,7 +213,7 @@ fluentbit:
 #
 monitoring:
   # -- Toggle deployment of Monitoring (Prometheus, Grafana, and Alertmanager).
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
@@ -257,7 +257,7 @@ monitoring:
 #
 twistlock:
   # -- Toggle deployment of Twistlock.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
@@ -271,7 +271,7 @@ twistlock:
 #
 minio:
   # -- Toggle deployment of minio operator and instance.
-  enabled: true
+  enabled: false
   miniooperator:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git
@@ -294,7 +294,7 @@ documentation:
   enabled: true
   git:
     repo: https://repo1.dsop.io/platform-one/big-bang/apps/sandbox/documentation.git
-    branch: master
+    branch: doc-hardened
 
 #
 # ----------------------------------------------------------------------------------------------------------------------
@@ -302,9 +302,10 @@ documentation:
 addons:
   argocd:
     # -- Toggle deployment of ArgoCD.
-    enabled: false
+    enabled: true
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd.git
+      branch: docs
       path: "./chart"
       tag: "2.14.7-bb.0"
     sso:

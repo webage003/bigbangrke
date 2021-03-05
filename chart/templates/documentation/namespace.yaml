@@ -1,8 +1,8 @@
-{{- if or .Values.gatekeeper.enabled .Values.clusterAuditor.enabled }}
+{{- if .Values.documentation.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: docs
+  name: documentation
 
 ---
 {{- if ( include "imagePullSecret" . ) }}
@@ -10,7 +10,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: private-registry
-  namespace: gatekeeper-system
+  namespace: documentation
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
