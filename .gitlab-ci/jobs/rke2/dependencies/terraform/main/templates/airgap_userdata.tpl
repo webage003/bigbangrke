@@ -21,15 +21,14 @@ cat << EOR > /etc/rancher/rke2/registries.yaml
 mirrors:
   registry.dso.mil:
     endpoint:
-      - "http://registry.dso.mil:5000"
+      - "http://registry1.dso.mil:5000"
   registry1.dso.mil:
     endpoint:
       - "http://registry1.dso.mil:5000"
+  docker.io:
+    endpoint:
+      - "http://registry1.dso.mil:5000"
 configs:
-  "registry.dso.mil:5000":
-    auth:
-      username: ${registry_username}
-      password: ${registry_password}
   "registry1.dso.mil:5000":
     auth:
       username: ${registry_username}

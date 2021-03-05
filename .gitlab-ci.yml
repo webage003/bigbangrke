@@ -107,6 +107,8 @@ pre vars:
     - echo $DOCKER_AUTH_CONFIG > /root/.docker/config.json
   script:
     - cp ./scripts/package/synker.yaml ./synker.yaml
+    # Fetch Rke2 images if airgap
+    - ./tests/bash/images.sh
 
     # Populate images list in synker config
     # NOTE: This is stupid and hacky, use yq or something better to do this
@@ -284,7 +286,7 @@ aws/airgap/package delete:
   extends:
     - .bigbang-dogfood
     - .package
-    - .infra fork
+    - .infra cleanup
   variables:
     PKG_S3_BUCKET: '$AIRGAP_PKG_BUCKET'
     PKG_PATH: '$CI_COMMIT_SHORT_SHA'

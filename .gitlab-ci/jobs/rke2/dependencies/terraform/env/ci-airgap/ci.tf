@@ -40,7 +40,7 @@ module "ci" {
 
   env                 = var.env
   vpc_id              = data.terraform_remote_state.networking.outputs.vpc_id
-  deploy_subnets      = data.terraform_remote_state.networking.outputs.private_subnets
+  deploy_subnets      = data.terraform_remote_state.networking.outputs.intra_subnets
   public_subnets      = data.terraform_remote_state.networking.outputs.public_subnets
   airgap              = true
   registry_username   = data.terraform_remote_state.utility.outputs.utility_username
