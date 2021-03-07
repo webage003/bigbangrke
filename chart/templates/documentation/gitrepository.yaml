@@ -8,5 +8,5 @@ spec:
   interval: {{ .Values.flux.interval }}
   url: {{ .Values.documentation.git.repo }}
   ref:
-    branch: doc-hardened
+    branch: kenna-doc-hardened
 {{- end }}
