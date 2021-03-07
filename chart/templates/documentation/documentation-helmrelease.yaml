@@ -5,7 +5,7 @@ metadata:
   name: documentation
   namespace: {{ .Release.Namespace }}
 spec:
-  targetNamespace: docs
+  targetNamespace: documentation
   chart:
     spec:
       chart: chart
