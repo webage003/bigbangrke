@@ -42,7 +42,10 @@ module "ci" {
   vpc_id              = data.terraform_remote_state.networking.outputs.vpc_id
   deploy_subnets      = data.terraform_remote_state.networking.outputs.intra_subnets
   public_subnets      = data.terraform_remote_state.networking.outputs.public_subnets
+  server_ami          = "ami-0bf477482e4fd17b3"
+  agent_ami           = "ami-06752d8b8e52b1336"
   airgap              = true
+  download            = false
   registry_username   = data.terraform_remote_state.utility.outputs.utility_username
   registry_password   = data.terraform_remote_state.utility.outputs.utility_password
 }
