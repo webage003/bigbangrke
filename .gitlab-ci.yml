@@ -207,8 +207,7 @@ upgrade:
     # Run on scheduled jobs
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master" || $CI_MERGE_REQUEST_LABELS =~ /ci/'
       allow_failure: true
-      #Debug
-      when: manual
+      when: always
 
 #-----------------------------------------------------------------------------------------------------------------------
 
