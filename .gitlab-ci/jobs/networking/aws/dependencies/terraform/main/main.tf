@@ -139,6 +139,6 @@ module "spoke" {
   hub_tgwa   = var.hub_tgwa
 
   spoke_vpc_id  = module.vpc.vpc_id
-  spoke_subnets = module.vpc.private_subnets
-  spoke_rt_ids  = module.vpc.private_route_table_ids
+  spoke_subnets = var.enable_spoke_intranets ? concat(module.vpc.private_subnets,module.vpc.private_subnets) : module.vpc.private_subnets
+  spoke_rt_ids  = var.enable_spoke_intranets ? concat(module.vpc.private_route_table_ids,module.vpc.intra_route_table_ids) : module.vpc.private_route_table_ids
 }

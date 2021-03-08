@@ -14,6 +14,11 @@ variable "aws_region" {
 # Spoke variables
 # We can hardcode these for now... they haven't changed in 8 months
 #
+variable "enable_spoke_intranets" {
+  type = bool
+  default = false
+}
+
 variable "hub_vpc_id" {
   default = "vpc-5f627a3b"
 }

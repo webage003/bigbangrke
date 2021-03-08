@@ -451,7 +451,6 @@ airgap/rke2/bigbang up:
 
     # Deploy a default storage class for aws
     - kubectl apply -f ${CI_PROJECT_DIR}/.gitlab-ci/jobs/rke2/dependencies/k8s-resources/aws/default-ebs-sc.yaml
-  allow_failure: true
   script:
     - *deploy_bigbang
 
@@ -463,7 +462,6 @@ airgap/rke2/bigbang test:
     - .bigbang-dogfood
     - .infra create
     - .bigbang
-  allow_failure: true
   needs:
     - job: airgap/rke2/cluster up
       artifacts: true

@@ -37,6 +37,7 @@ include:
 .terraformer_airgap:
   variables: 
     TF_VAR_env: ${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}-airgap
+    TF_VAR_enable_spoke_intranets: true
     DELAY: 0
   extends:
     - .terraformer

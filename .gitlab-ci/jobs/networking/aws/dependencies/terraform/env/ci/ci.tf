@@ -15,7 +15,7 @@ module "ci" {
   env = var.env
   # Set by CI - "TF_VAR_ci_pipeline_url=$ci_pipeline_url"
   ci_pipeline_url = var.ci_pipeline_url
-
+  enable_spoke_intranets = var.enable_spoke_intranets
   # Calculated in CI
   vpc_cidr = var.vpc_cidr
 }
