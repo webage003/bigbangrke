@@ -432,6 +432,7 @@ airgap/rke2/cluster up:
 # Install BigBang on RKE2 cluster on AWS
 airgap/rke2/bigbang up:
   stage: bigbang up
+  allow_failure: true
   extends:
     - .bigbang-dogfood
     - .infra create
@@ -457,6 +458,7 @@ airgap/rke2/bigbang up:
 
 airgap/rke2/bigbang test:
   stage: test
+  allow_failure: true
   extends:
     - .bigbang-dogfood
     - .infra create
