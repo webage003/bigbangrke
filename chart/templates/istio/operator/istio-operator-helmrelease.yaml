@@ -34,6 +34,11 @@ spec:
   rollback:
     timeout: {{ .rollback.timeout }}
     cleanupOnFail: {{ .rollback.cleanupOnFail }}
+  {{- if .secret }}
+  kubeConfig:
+    secretRef:
+      name: {{ .secret }}
+  {{- end }}
   {{- end }}
 
   valuesFrom:
