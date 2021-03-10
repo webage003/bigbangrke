@@ -3,7 +3,7 @@
 set -ex
 
 ## This is an array to instantiate the order of wait conditions
-ORDERED_HELMRELEASES="gatekeeper istio-operator istio monitoring eck-operator ek fluent-bit twistlock cluster-auditor authservice argocd gitlab haproxy-sso anchore sonarqube"
+ORDERED_HELMRELEASES="gatekeeper istio-operator istio monitoring eck-operator ek fluent-bit twistlock cluster-auditor authservice argocd gitlab haproxy-sso gitlab-runner minio-operator minio anchore sonarqube mattermost-operator mattermost"
 
 ## This the actual deployed helmrelease objects in the cluster
 DEPLOYED_HELMRELEASES=$(kubectl get hr --no-headers -n bigbang | awk '{ print $1}')
@@ -41,6 +41,8 @@ do
   fi
 done
 
+kubectl get hr,kustomizations,gitrepositories -A
+
 for package in $DEPLOYED_HELMRELEASES;
 do
   if array_contains ORDERED_HELMRELEASES "$package";
@@ -52,4 +54,4 @@ do
 done
 
 echo "Waiting on Secrets Kustomization"
-kubectl wait --for=condition=Ready --timeout 30s kustomizations.kustomize.toolkit.fluxcd.io -n bigbang secrets
+kubectl wait --for=condition=Ready --timeout 120s kustomizations.kustomize.toolkit.fluxcd.io -n bigbang secrets

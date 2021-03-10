@@ -49,43 +49,6 @@ variables:
 # Pre Stage Jobs
 #
 
-changelog:
-  image: registry.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates/pre-envs:ubi8.3
-  stage: .pre
-  extends:
-    - .bigbang-dogfood
-  allow_failure: true
-  variables:
-    CHANGELOG_FILE: CHANGELOG.md
-  script:
-  - git fetch --all
-  - ./scripts/lint_changelog.sh
-
-version:
-  image: registry.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates/pre-envs:ubi8.3
-  stage: .pre
-  extends:
-    - .bigbang-dogfood
-  allow_failure: true
-  variables:
-    CHART_FILE: chart/Chart.yaml
-    BASEGIT_FILE: base/gitrepository.yaml
-  script:
-  - git fetch --all
-  - ./scripts/lint_version.sh
-
-commits:
-  image: registry.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates/pre-envs:ubi8.3
-  stage: .pre
-  extends:
-    - .bigbang-dogfood
-  allow_failure: true
-  script:
-  - dnf module install -y nodejs
-  - npm install --only=dev
-  - git fetch --all
-  - ./scripts/lint_commits.sh
-
 pre vars:
   image: registry.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates/pre-envs:ubi8.3
   stage: .pre
@@ -122,6 +85,14 @@ pre vars:
 # Smoke Tests
 #
 
+.chart_changes: &chart_changes
+  changes:
+    - chart/**/*
+    - .gitlab-ci.yml
+    - .gitlab-ci/jobs/**/*
+    - scripts/**/*
+    - tests/**/*
+
 .deploy_bigbang: &deploy_bigbang
   - find ./scripts/deploy -type f -name '*.sh' | sort | xargs -r -I {} sh -c 'echo {} && sh {}'
 
@@ -134,6 +105,8 @@ clean install:
     - .k3s-ci
   variables:
     CLUSTER_NAME: "clean-${CI_COMMIT_SHORT_SHA}"
+  rules:
+    - *chart_changes
   script:
     - *deploy_bigbang
     - *test_bigbang
@@ -157,6 +130,7 @@ upgrade:
       when: never
     # run pipeline on merge request events
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      <<: *chart_changes
   variables:
     CLUSTER_NAME: "upgrade-${CI_COMMIT_SHORT_SHA}"
   script:
@@ -181,10 +155,6 @@ upgrade:
 .infra fork:
   stage: network up
   rules:
-    # run infrastructure pipelines only on merges into release branches, and run regardless of failure
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release*/'
-      allow_failure: false
-      when: manual
     # Run on scheduled jobs
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master"'
       allow_failure: false
@@ -192,18 +162,15 @@ upgrade:
 # Abstract for jobs responsible for creating infrastructure
 .infra create:
   rules:
-    # run infrastructure pipelines only on merges into release branches
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release*/'
     # Run on scheduled jobs
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master"'
+    # skip job when branch name starts with "hotfix" or "patch"
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^(hotfix|patch)/'
+      when: never
 
 # Abstract for jobs responsible for cleaning up infrastructure
 .infra cleanup:
   rules:
-    # run infrastructure pipelines only on merges into release branches, and run regardless of failure
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^release*/'
-      allow_failure: true
-      when: always
     # Run on scheduled jobs
     - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "master"'
       allow_failure: true
