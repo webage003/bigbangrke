@@ -57,8 +57,22 @@ spec:
       app.kubernetes.io/component: {{ $component }}
       app.kubernetes.io/part-of: "bigbang"
       bigbang/version: {{ .Chart.Version | quote }}
-
-  {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.monitoring.enabled }}
+    database:
+      type: {{ .Values.addons.confluence.database.type }}
+      url: jdbc:{{ .Values.addons.confluence.database.type }}://
+        {{- (default (printf "%s-database.confluence.svc.cluster.local" .Values.addons.confluence.database.type) .Values.addons.confluence.database.host) }}
+        {{- if .Values.addons.confluence.database.port }}
+          {{- printf ":%s" .Values.addons.confluence.database.port }}
+        {{- end -}}
+        /{{ default "confluence" .Values.addons.confluence.database.database }}
+      credentials:
+        secretName:{{" "}}
+        {{- if and (not .Values.addons.confluencedatabase.enabled) .Values.addons.confluence.database.username .Values.addons.confluence.database.password }}
+          {{- "confluence-database" }}
+        {{- else if (and .Values.addons.confluencedatabase.enabled (eq .Values.addons.confluence.database.type "postgresql")) }}
+          {{- default "confluence-user" .Values.addons.confluence.database.username }}.postgresql-database.credentials.postgresql.acid.zalan.do
+        {{- end }}
+  {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.monitoring.enabled .Values.addons.confluencedatabase.enabled }}
   dependsOn:
   {{- if .Values.gatekeeper.enabled }}
   - name: gatekeeper
@@ -70,6 +84,10 @@ spec:
   {{- end }}
   {{- if .Values.monitoring.enabled }}
   - name: monitoring
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- if .Values.addons.confluencedatabase.enabled }}
+  - name: confluence-database
     namespace: {{ .Release.Namespace }}
   {{- end }}
   {{- end }}

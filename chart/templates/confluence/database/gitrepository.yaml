@@ -1,5 +1,5 @@
-{{- if and (not .Values.offline) .Values.addons.confluence.enabled }}
-{{ $name := "confluence" }}
+{{- if and (not .Values.offline) .Values.addons.confluencedatabase.enabled }}
+{{ $name := "confluence-database" }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
@@ -11,8 +11,8 @@ metadata:
     {{- include "commonLabels" . | nindent 4}}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.addons.confluence.git.repo }}
+  url: {{ .Values.addons.confluencedatabase.git.repo }}
   ref:
-    {{- include "validRef" .Values.addons.confluence.git | nindent 4 }}
+    {{- include "validRef" .Values.addons.confluencedatabase.git | nindent 4 }}
   {{- include "gitCreds" . | nindent 2 }}
 {{- end }}

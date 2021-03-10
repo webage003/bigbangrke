@@ -69,4 +69,8 @@ stringData:
 {{ toYaml .Values.addons.mattermostoperator.values | indent 4 }}
   mattermost.yaml: |
 {{ toYaml .Values.addons.mattermost.values | indent 4 }}
+  confluence.yaml: |
+{{ toYaml .Values.addons.confluence.values | indent 4 }}
+  confluence-database.yaml: |
+{{ toYaml .Values.addons.confluence.values | indent 4 }}
 data:

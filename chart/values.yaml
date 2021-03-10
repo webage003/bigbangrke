@@ -663,9 +663,36 @@ addons:
   postgresoperator:
     enabled: false
     git:
-      repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/postgres-operator.git
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/package-utilities/postgres-operator.git
       path: "./chart"
       tag: "1.6.1-bb.0"
     values: {}
   # ----------------------------------------------------------------------------------------------------------------------
   #
+
+  confluence:
+    enabled: false
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/confluence.git
+      path: "./chart"
+      tag: "0.1.0-bb.0"
+    database:
+      type: postgresql  # Supported database types: postgresql
+      host: ""          # example: postgres.bigbang.dev
+      port: ""          # example: 5432
+      database: ""      # example: confluence
+      username: ""      # example: confluence
+      password: ""      # unencoded string data. This should be placed in the secret values and then encrypted
+    values: {}
+
+  confluencedatabase:
+    # If enabled, this will create a database in the cluster for confluence to use.
+    #  The host:port, username/password, and database values will automatically be
+    #  set unless overridden in the confluence section
+    enabled: false
+    git:
+      # Supported databases: postgresql
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/package-utilities/postgresql.git
+      path: "./chart"
+      tag: "1.6.1-bb.0"
+    values: {}
