@@ -104,16 +104,16 @@ twistlock:
 # Explicitly enable all addons for CI
 addons:
   argocd:
-    enabled: true
+    enabled: false
 
   authservice:
-    enabled: true
+    enabled: false
     chains:
       minimal:
         callback_uri: "https://minimal.bigbang.dev"
 
   gitlab:
-    enabled: true
+    enabled: false
     sso:
       enabled: false
     values:
@@ -166,7 +166,7 @@ addons:
             cpu: 50m
 
   gitlabRunner:
-    enabled: true
+    enabled: false
     values:
       resources:
         requests:
@@ -174,14 +174,14 @@ addons:
           cpu: 50m
 
   anchore:
-    enabled: true
+    enabled: false
     values:
       postgresql:
         persistence:
           size: 5Gi
 
   sonarqube:
-    enabled: true
+    enabled: false
     values:
       plugins:
         install: []
@@ -190,8 +190,8 @@ addons:
           cpu: 100m
           memory: 200Mi
         limits:
-          cpu: 200m
-          memory: 500Mi
+          cpu: 500m
+          memory: 1Gi
       persistence:
         enabled: false
         size: 5Gi
@@ -209,20 +209,20 @@ addons:
         enabled: false
 
   minioOperator:
-    enabled: true
+    enabled: false
 
   minio:
-    enabled: true
+    enabled: false
     values:
       zones:
         servers: 1
       volumesPerServer: 1
 
   mattermostoperator:
-    enabled: true
+    enabled: false
 
   mattermost:
-    enabled: true
+    enabled: false
     values:
       replicaCount: 1
       resources:
