@@ -28,9 +28,10 @@ package tests:
     - |
       mkdir cypress-tests/
       cd cypress-tests/
-      for i in "$(grep -r "repo:" chart/values.yaml | sed -e 's/repo: \(.*\)/\1/')"
+      for i in "$(grep -r "enabled: true" tests/ci/k3d/values.yaml -B 1 | grep -v "enabled: true" | sed -e 's/:.*//' | sed 's/^ *//g')"
       do
-          git clone -b main $i
+          git -C cypress-tests/ clone -b $(yq r "chart/values.yaml" "${i}.git.tag") $(yq r "chart/values.yaml" "${i}.git.repo")
+          git -C cypress-tests/ clone -b $(yq r "chart/values.yaml" "addons.${i}.git.tag") $(yq r "chart/values.yaml" "addons.${i}.git.repo") 
       done
 
   script:
