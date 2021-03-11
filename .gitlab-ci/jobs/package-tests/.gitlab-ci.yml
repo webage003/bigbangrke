@@ -1,0 +1,44 @@
+stages:
+  - package tests
+
+package tests:
+  stage: package tests
+  tags:
+    - bigbang
+    - dogfood
+    - privileged
+
+  image:
+    name: registry.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates/k3d-builder:afdd9b77
+  services:
+    - registry.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates/docker:dind
+  variables:
+    DOCKER_HOST: tcp://localhost:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+
+  artifacts:
+    when: always
+    paths:
+      - tests/cypress/screenshots
+      - tests/cypress/videos
+    expire_in: 3 days
+
+  before_script:
+    - |
+      mkdir cypress-tests/
+      cd cypress-tests/
+      for i in "$(grep -r "repo:" chart/values.yaml | sed -e 's/repo: \(.*\)/\1/')"
+      do
+          git clone -b main $i
+      done
+
+  script:
+    - |
+      for dir in cypress-tests/*/
+      do
+        if [ -f "${dir}tests/cypress.json" ]; then
+          cd ${dir}tests && cypress run
+        fi
+      done
+
