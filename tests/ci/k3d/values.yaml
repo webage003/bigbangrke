@@ -39,11 +39,60 @@ clusterAuditor:
 
 monitoring:
   enabled: true
+  values:
+    alertmanager:
+      alertmanagerSpec:
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "400Mi"
+          limits:
+            cpu: "500m"
+            memory: "800Mi"
+      prometheusOperator:
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "400Mi"
+          limits:
+            cpu: "500m"
+            memory: "800Mi"
+      grafana:
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+      kubeStateMetrics:
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "32Mi"
+          limits:
+            cpu: "100m"
+            memory: "64Mi"
+      nodeExporter:
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "30Mi"
+          limits:
+            cpu: "200m"
+            memory: "50Mi"
 
 gatekeeper:
   enabled: true
   values:
     replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
 
 twistlock:
   enabled: true
@@ -56,26 +105,130 @@ twistlock:
 addons:
   argocd:
     enabled: true
+
   authservice:
     enabled: true
     chains:
       minimal:
         callback_uri: "https://minimal.bigbang.dev"
+
   gitlab:
     enabled: true
     sso:
       enabled: false
+    values:
+      global:
+        rails:
+          bootstrap:
+            enabled: false
+      gitlab-runner:
+        resources:
+          requests:
+            cpu: 10m
+      gitlab:
+        webservice:
+          minReplicas: 1
+          maxReplicas: 1
+        sidekiq:
+          minReplicas: 1
+          maxReplicas: 1
+        gitlab-shell:
+          minReplicas: 1
+          maxReplicas: 1
+        gitaly:
+          resources:
+            requests:
+              cpu: 50m
+        shared-secrets:
+          resources:
+            requests:
+              cpu: 10m
+        migrations:
+          resources:
+            requests:
+              cpu: 10m
+        task-runner:
+          resources:
+            requests:
+              cpu: 10m
+      registry:
+        hpa:
+          minReplicas: 1
+          maxReplicas: 1
+      postgresql:
+        metrics:
+          resources:
+            requests:
+              cpu: 10m
+      minio:
+        resources:
+          requests:
+            cpu: 50m
+
   gitlabRunner:
     enabled: true
+    values:
+      resources:
+        requests:
+          memory: 64Mi
+          cpu: 50m
+
   anchore:
     enabled: true
+    values:
+      postgresql:
+        persistence:
+          size: 5Gi
+
   sonarqube:
     enabled: true
+    values:
+      plugins:
+        install: []
+      resources:
+        requests:
+          cpu: 100m
+          memory: 200Mi
+        limits:
+          cpu: 200m
+          memory: 500Mi
+      persistence:
+        enabled: false
+        size: 5Gi
+      postgresql:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            cpu: 200m
+            memory: 500Mi
+        persistence:
+          size: 2Gi
+      tests:
+        enabled: false
+
   minioOperator:
     enabled: true
+
   minio:
     enabled: true
+    values:
+      zones:
+        servers: 1
+      volumesPerServer: 1
+
   mattermostoperator:
     enabled: true
+
   mattermost:
     enabled: true
+    values:
+      replicaCount: 1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
