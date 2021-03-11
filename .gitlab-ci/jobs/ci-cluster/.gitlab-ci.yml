@@ -19,6 +19,7 @@
         - "--tls-san=k3s"
         - "--disable=metrics-server"
         - "--disable=traefik"
+        - "-v /etc/machine-id:/etc/machine-id"
   before_script:
     - mkdir -p ~/.kube
     - curl -sfL k3s:8081?service=k3s > ~/.kube/config
