@@ -116,6 +116,8 @@ clean install:
     paths:
       - images.txt
     expire_in: 7 days
+  after_script:
+    - sleep 1200
 
 upgrade:
   stage: smoke tests
