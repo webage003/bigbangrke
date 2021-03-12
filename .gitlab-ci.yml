@@ -119,8 +119,8 @@ clean install:
   artifacts:
     paths:
       - images.txt
-      - cypress-tests/*/tests/cypress/screenshots
-      - cypress-tests/*/tests/cypress/videos
+      - "cypress-tests/*/tests/cypress/screenshots"
+      - "cypress-tests/*/tests/cypress/videos"
     expire_in: 7 days 
 
 upgrade:
