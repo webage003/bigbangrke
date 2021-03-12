@@ -16,6 +16,7 @@ spec:
         name: anchore
         namespace: {{ .Release.Namespace }}
 
+
   {{- with .Values.flux }}
   interval: {{ .interval }}
   test:
