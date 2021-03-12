@@ -111,6 +111,7 @@ clean install:
   script:
     - *deploy_bigbang
     - *test_bigbang
+    - *package_test_bigbang
 
     # Fetch list of all images ran
     - cid=$(docker ps -aqf "name=k3d-${CI_JOB_ID}-server-0")
@@ -118,7 +119,9 @@ clean install:
   artifacts:
     paths:
       - images.txt
-    expire_in: 7 days
+      - cypress-tests/*/tests/cypress/screenshots
+      - cypress-tests/*/tests/cypress/videos
+    expire_in: 7 days 
 
 upgrade:
   stage: smoke tests
