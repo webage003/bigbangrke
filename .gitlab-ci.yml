@@ -111,7 +111,6 @@ clean install:
   script:
     - *deploy_bigbang
     - *test_bigbang
-    - *package_test_bigbang
 
     # Fetch list of all images ran
     - cid=$(docker ps -aqf "name=k3d-${CI_JOB_ID}-server-0")
