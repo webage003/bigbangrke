@@ -17,8 +17,10 @@ done
 IFS=","
 for package in $CI_MERGE_REQUEST_LABELS
 do
-  echo "Cloning ${package} into cypress-tests"
-  git -C cypress-tests/ clone -b $(yq e "addons.${package}.git.tag" "chart/values.yaml") $(yq e "addons.${package}.git.repo" "chart/values.yaml")
+  if [ "$(yq e ".addons.${package}.enabled" "tests/ci/k3d/values.yaml" 2>/dev/null)" == "false" ]; then
+    echo "Cloning ${package} into cypress-tests"
+    git -C cypress-tests/ clone -b $(yq e "addons.${package}.git.tag" "chart/values.yaml") $(yq e "addons.${package}.git.repo" "chart/values.yaml")
+  fi
 done
 
 #Running Cypress tests
