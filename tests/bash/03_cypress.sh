@@ -1,26 +1,28 @@
 #!/usr/bin/env bash
 
 # exit on error
-set -ex
+set -e
 
 mkdir -p cypress-tests/
 
 #Cloning core
-for i in $( grep -r "addons:" tests/ci/k3d/values.yaml -B 100 | grep "enabled: true" -B 1 | grep -v "enabled: true" | sed -e 's/:.*//' | sed 's/^ *//g' | sed 's/--//' | grep . )
-do
-    git -C cypress-tests/ clone -b $(yq r "chart/values.yaml" "${i}.git.tag") $(yq r "chart/values.yaml" "${i}.git.repo")
+yq e '. | keys | .[] | ... comments=""' "tests/ci/k3d/values.yaml" | while IFS= read -r package; do
+  if [[ "$(yq e ".${package}.enabled" "tests/ci/k3d/values.yaml")" == "true" ]]; then
+    git -C cypress-tests/ clone -b $(yq e ".${package}.git.tag" "chart/values.yaml") $(yq e ".${package}.git.repo" "chart/values.yaml")
+  fi
 done
 
 #Cloning addons
-for i in $( grep -r "addons:" tests/ci/k3d/values.yaml -A 100 | grep "enabled: true" -B 1 | grep -v "enabled: true" | sed -e 's/:.*//' | sed 's/^ *//g' | sed 's/--//' | grep . )
+IFS=","
+for for package in $CI_MERGE_REQUEST_LABELS
 do
-    git -C cypress-tests/ clone -b $(yq r "chart/values.yaml" "addons.${i}.git.tag") $(yq r "chart/values.yaml" "addons.${i}.git.repo")
+    git -C cypress-tests/ clone -b $(yq e "addons.${package}.git.tag" "chart/values.yaml") $(yq e "addons.${package}.git.repo" "chart/values.yaml")
 done
 
 #Running Cypress tests
 for dir in cypress-tests/*/
 do
   if [ -f "${dir}tests/cypress.json" ]; then
-    cypress run --project ${dir}tests
+    cypress run -w "${dir}"tests
   fi
 done
