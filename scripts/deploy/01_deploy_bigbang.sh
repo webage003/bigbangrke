@@ -53,7 +53,7 @@ kubectl set env deploy/source-controller -n flux-system HTTP_PROXY=http://proxy.
 kubectl set env deploy/source-controller -n flux-system HTTPS_PROXY=http://proxy.dso.mil:8888
 kubectl set env deploy/source-controller -n flux-system NO_PROXY=notification-controller,10.42.0.0/16,10.43.0.0/16
 helm upgrade -i bigbang chart -n bigbang --create-namespace \
--f ${CI_VALUES_FILE}l --set registryCredentials=null
+-f ${CI_VALUES_FILE} --set registryCredentials=null
 fi
 
 # apply secrets kustomization pointing to current branch
