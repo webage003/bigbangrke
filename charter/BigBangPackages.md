@@ -456,6 +456,25 @@ Owners:
 * @kevin.wilder
 * @LynnStill
 
+#### Coder
+
+Coder moves software development to your cloud, centralizing an organization's development initiatives and unlocking gains in both developer velocity and enterprise security.
+
+Product:
+
+* * [Coder]https://coder.com/)
+
+Repository:
+
+* [Coder Repo](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/coder)
+
+Dependencies:
+
+Owners:
+
+* @kavitha
+* @micah.nagel
+
 ### Collaboration Tools
 
 Collaboration tools are hosted here: [Collaboration Tools](https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools)
