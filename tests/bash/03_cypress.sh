@@ -28,6 +28,6 @@ for dir in cypress-tests/*/
 do
   if [ -f "${dir}tests/cypress.json" ]; then
     echo "Running cypress tests in ${dir}"
-    cypress run -w "${dir}"tests
+    cypress run --project "${dir}"tests
   fi
 done
