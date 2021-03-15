@@ -15,7 +15,7 @@ done
 
 #Cloning addons
 IFS=","
-for for package in $CI_MERGE_REQUEST_LABELS
+for package in $CI_MERGE_REQUEST_LABELS
 do
   echo "Cloning ${package} into cypress-tests"
   git -C cypress-tests/ clone -b $(yq e "addons.${package}.git.tag" "chart/values.yaml") $(yq e "addons.${package}.git.repo" "chart/values.yaml")
