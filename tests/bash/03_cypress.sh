@@ -20,9 +20,8 @@ yq e '. | keys | .[] | ... comments=""' "tests/ci/k3d/values.yaml" | while IFS= 
 done
 
 #Cloning addons
-IFS=","
-for package in $CI_MERGE_REQUEST_LABELS; do
-  if [ "$(yq e ".addons.${package}.enabled" "tests/ci/k3d/values.yaml" 2>/dev/null)" == "true" ]; then
+yq e '.addons | keys | .[] | ... comments=""' "tests/ci/k3d/values.yaml" | while IFS= read -r package; do
+  if [ "$(yq e ".addons.${package}.enabled" "tests/ci/k3d/values.yaml")" == "true" ]; then
     #Checking for branch not tag
     if [ "$(yq e ".addons.${package}.git.tag" "chart/values.yaml")" != null ]; then
       echo "Cloning ${package} into cypress-tests"
