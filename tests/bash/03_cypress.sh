@@ -31,6 +31,7 @@ do
     else
       echo "Cloning ${package} into cypress-tests"
       git -C cypress-tests/ clone -b $(yq e "addons.${package}.git.branch" "chart/values.yaml") $(yq e "addons.${package}.git.repo" "chart/values.yaml")
+    fi
   fi
 done
 
