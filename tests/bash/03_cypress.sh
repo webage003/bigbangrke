@@ -22,7 +22,7 @@ done
 #Cloning addons
 IFS=","
 for package in $CI_MERGE_REQUEST_LABELS; do
-  if [ "$(yq e ".addons.${package}.enabled" "tests/ci/k3d/values.yaml" 2>/dev/null)" == "false" ]; then
+  if [ "$(yq e ".addons.${package}.enabled" "tests/ci/k3d/values.yaml" 2>/dev/null)" == "true" ]; then
     #Checking for branch not tag
     if [ "$(yq e ".addons.${package}.git.tag" "chart/values.yaml")" != null ]; then
       echo "Cloning ${package} into cypress-tests"
