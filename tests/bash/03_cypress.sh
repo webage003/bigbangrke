@@ -3,6 +3,7 @@
 # exit on error
 set -e
 
+sleep 1000
 mkdir -p cypress-tests/
 
 #Cloning core
