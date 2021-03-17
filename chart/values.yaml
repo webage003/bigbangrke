@@ -217,7 +217,7 @@ monitoring:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
-    branch: "cypress-version-fix"
+    tag: "11.0.0-bb.14"
 
   sso:
     # -- Toggle SSO for monitoring components on and off
@@ -276,7 +276,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd.git
       path: "./chart"
-      branch: "main"
+      tag: "2.14.7-bb.1"
     sso:
       # -- Toggle SSO for ArgoCD on and off
       enabled: false
