@@ -4,11 +4,15 @@ kind: HelmRelease
 metadata:
   name: keycloak
   namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: "core"
+    {{- include "commonLabels" . | nindent 4}}
 spec:
   targetNamespace: keycloak
   chart:
     spec:
-      chart: chart
+      chart: {{ .Values.keycloak.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
@@ -33,13 +37,16 @@ spec:
   {{- end }}
 
   valuesFrom:
-    - name: values
+    - name: {{ .Release.Name }}-keycloak-values
       kind: Secret
-      valuesKey: "keycloak.yaml"
-  values:
-    createNamespace: false
-    imagePullSecrets:
-      - name: private-registry
+      valuesKey: "common"
+    - name: {{ .Release.Name }}-keycloak-values
+      kind: Secret
+      valuesKey: "defaults"
+    - name: {{ .Release.Name }}-keycloak-values
+      kind: Secret
+      valuesKey: "overlays"
+
   {{- if .Values.istio.enabled }}
   dependsOn:
   {{- if .Values.istio.enabled }}
