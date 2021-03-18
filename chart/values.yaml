@@ -654,14 +654,14 @@ addons:
     values: {}
 
   keycloak:
+  # -- Toggle deployment of Keycloak.
     enabled: false
     git:
-      # Current location:
-      repo: https://repo1.dsop.io/platform-one/private/big-bang/apps/keycloak.git
-      # Future location:
-      #repo: https://repo1.dsop.io/platform-one/big-bang/apps/security-tools/keycloak.git
-      branch: chart-release
-#      secret: git-ssh-key
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak.git
+      branch: public-release
+      path: "./chart"
+      tag: "0.1.0"
+    # -- Values to passthrough to the Keycloak chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/-/blob/main/chart/values.yaml
     values: {}
   #
   # ----------------------------------------------------------------------------------------------------------------------

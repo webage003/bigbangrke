@@ -1,9 +1,13 @@
-{{- if .Values.addons.argocd.enabled  }}
+{{- if and (not .Values.offline) .Values.addons.keycloak.enabled  }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
   name: keycloak
   namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: "core"
+    {{- include "commonLabels" . | nindent 4}}
 spec:
   ignore: |
     # exclude file extensions
@@ -13,8 +17,5 @@ spec:
   url: {{ .Values.addons.keycloak.git.repo }}
   ref:
     {{- include "validRef" .Values.addons.keycloak.git | nindent 4 }}
-{{- if .Values.addons.keycloak.git.secret }}
-  secretRef:
-    name: {{ .Values.addons.keycloak.git.secret | quote }}
-{{- end }}
+  {{- include "gitCreds" . | nindent 2 }}
 {{- end }}

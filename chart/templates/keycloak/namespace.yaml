@@ -1,19 +1,24 @@
-{{- if .Values.addons.argocd.enabled }}
+{{- if .Values.addons.keycloak.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  labels:
-    app: {{ .Release.Name }}-keycloak
-    istio-injection: disabled-because-keycloak-hates-istio
   name: keycloak
-
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: "core"
+    istio-injection: disabled-because-keycloak-hates-istio
+    {{- include "commonLabels" . | nindent 4}}
 ---
-{{- if and (ne .Values.registryCredentials.username "") (ne .Values.registryCredentials.password "") }}
+{{- if ( include "imagePullSecret" . ) }}
 apiVersion: v1
 kind: Secret
 metadata:
   name: private-registry
   namespace: keycloak
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/component: "core"
+    {{- include "commonLabels" . | nindent 4}}
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "imagePullSecret" . }}
