@@ -47,6 +47,11 @@ spec:
       kind: Secret
       valuesKey: "overlays"
 
+  postRenderers:
+    - kustomize:
+        patchesStrategicMerge:
+          - {{- include "istio-controlplane.default-kpsm" . | nindent 12 }}
+
   dependsOn:
     - name: istio-operator
       namespace: {{ .Release.Namespace }}
@@ -56,3 +61,31 @@ spec:
       namespace: {{ .Release.Namespace }}
     {{- end }}
 {{- end }}
+
+{{- define "istio-controlplane.default-kpsm" -}}
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: istiocontrolplane
+  namespace: istio-system
+spec:
+  profile: default
+  hub: docker.io/istio
+
+  meshConfig:
+    accessLogFile: /dev/stdout
+
+  values:
+    global:
+      imagePullSecrets:
+        - private-registry
+
+    sidecarInjectorWebhook:
+      rewriteAppHTTPProbe: true
+
+      neverInjectSelector:
+        - matchExpressions:
+            - key: app.kubernetes.io/component
+              operator: In
+              values: [fluentd-configcheck]
+{{- end -}}
