@@ -31,3 +31,7 @@ notes
 
 # Local History for Visual Studio Code
 .history/
+
+# Utility cluster makeself packaging
+package/utility/payload
+package/utility/*run*
