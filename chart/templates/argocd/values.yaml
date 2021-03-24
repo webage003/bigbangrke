@@ -11,6 +11,9 @@ global:
   imagePullSecrets:
     - name: private-registry
 
+istio:
+  enabled: true
+
 controller:
   imagePullSecrets:
     - name: private-registry
