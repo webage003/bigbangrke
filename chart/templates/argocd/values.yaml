@@ -12,7 +12,7 @@ global:
     - name: private-registry
 
 istio:
-  enabled: true
+  enabled: {{ .Values.istio.enabled }}
 
 controller:
   imagePullSecrets:
