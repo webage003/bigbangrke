@@ -69,12 +69,19 @@ config: |
     acl host_tracing hdr(host) -i tracing.{{ .Values.hostname }}
     acl host_alertmanager hdr(host) -i alertmanager.{{ .Values.hostname }}
     acl host_prometheus hdr(host) -i prometheus.{{ .Values.hostname }}
+    {{- if and .Values.logging.sso.enabled (not .Values.logging.license.trial) (not .Values.logging.license.keyJSON) }}
+    acl host_kibana hdr(host) -i kibana.{{ .Values.hostname }}
+    {{- end }}
 
     option forwardfor
     use_backend kiali_main if host_kiali
     use_backend tracing_main if host_tracing
     use_backend alertmanager_main if host_alertmanager
     use_backend prometheus_main if host_prometheus
+    {{- if and .Values.logging.sso.enabled (not .Values.logging.license.trial) (not .Values.logging.license.keyJSON) }}
+    use_backend kibana_main if host_kibana
+    {{- end }}
+
   backend kiali_main
     mode http
     server kiali kiali.istio-system.svc.cluster.local:20001
@@ -91,6 +98,13 @@ config: |
     option forwardfor
     http-request replace-header Host .* monitoring-monitoring-kube-prometheus.monitoring.svc.cluster.local
     server prometheus monitoring-monitoring-kube-prometheus.monitoring.svc.cluster.local:9090
+  {{- if and .Values.logging.sso.enabled (not .Values.logging.license.trial) (not .Values.logging.license.keyJSON) }}
+  backend kibana_main
+    mode http
+    option forwardfor
+    http-request replace-header Host .* logging-ek-kb-http.logging.svc.cluster.local
+    server kibana logging-ek-kb-http.logging.svc.cluster.local:5601
+  {{- end }}
 
 image:
   repository: registry1.dso.mil/ironbank/opensource/haproxy/haproxy22
