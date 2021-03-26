@@ -64,4 +64,14 @@ chains:
     client_secret: "{{ .Values.monitoring.sso.alertmanager.client_secret }}"
     callback_uri: https://alertmanager.{{ .Values.hostname }}/login/generic_oauth
 
+  {{- if and .Values.logging.sso.enabled (not .Values.logging.license.trial) (not .Values.logging.license.keyJSON) }}
+  kibana:
+    match:
+      header: ":authority"
+      prefix: "kibana"
+    client_id: {{ .Values.logging.sso.kibana.client_id }}
+    client_secret: "{{ .Values.logging.sso.kibana.client_secret }}"
+    callback_uri: https://kibana.{{ .Values.hostname }}/login
+  {{- end }}
+
 {{- end -}}
