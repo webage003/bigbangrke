@@ -1,4 +1,4 @@
-Goals of this Diagram: 
+# Goals of this Diagram: 
 * Help new users understand the data flow of pod logs
 * Help new users understand the data flow of prometheus metrics
 
