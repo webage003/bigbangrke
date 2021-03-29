@@ -6,7 +6,7 @@
   * How web sites hosted on BigBang are protected by an SSO Authentication Proxy
   * Internet vs LAN vs Inner Cluster Network
     * How sites are generally exposed via Istio Ingress Gateway
-    * That sometimes there are services existing on the Inner Cluster Network that are n
+    * That sometimes there are services existing on the Inner Cluster Network that are not reachable outside of the Inner Cluster Network
 
 
 ## Notice:
