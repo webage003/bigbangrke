@@ -25,34 +25,60 @@
 
 
 ## Notes:  
-* Notice: These notes reflect a normal deployment, varitions will causef
-1. Git Repo: 
+### 1. Git Repo:  
+* Can be HTTPS or SSH based, can exist on the Internet or in Private IP Space
+* Argo CD / Flux CD need network access and in most cases credentials to authenticate against the repo.
 
-2. CNAP (Cloud Native Access Point) or Equivalent Edge LB: 
-Load Balancer at the Edge:      
-* The istio-ingressgateway A Cloud Service Provider Load Balancer 
-* 443 of this Cloud Service Provider Load Balancer (CSP LB) is load balanced between a NodePort of the worker nodes, kubeproxy then maps the NodePort to 443 of Istio Ingress Gateway, which uses Envoy as a Inner Cluster Layer 7 LB that can expose the services running in the cluster. 
-* By default BB UHC leverages a single CSP LB, and uses SSO groups + authentication proxy to separate user and admin traffic.
 
-3. Ingress LB
+### 2. CNAP or Equivalent Edge LB: 
+* More details can be found on the [Ask Me Anything Slides located here](https://software.af.mil/dsop/documents/), but the CNAP is basically an advanced edge firewall.
+* Platform One's CNAP involves a public Cloud Service Provider LB forwarding traffic to a Palo Alto Firewall then to an AppGate Software Defined Perimeter and then to the Private IP of a CSP LB / Ingreses LB of a Kubernetes Cluster running the BigBang Application Stack. 
+* CNAP is NOT part of BigBang, and there is no hard requirement that says you need to use CNAP. 
+  * In cases where users will be connecting purely over private IP space CNAP isn't needed.
+  * Your own CNAP equivalent may be used in place of P1's CNAP.
+  * If your DoD command is interested in leveraging P1's CNAP + P1's Common Access Card Integrated SSO with your own BigBang Cluster that can be arranged with VPC peering [this page has instructions on how to ask for more details](https://p1.dso.mil/#/services)
 
-4. Mutating Admission Controllers
-* istiod pod hosts this functionality
 
-5. Validating Admission Controllers
-Open Policy Agent Gatekeeper and Twistlock can be used as Validating Admission Controls; however, by default Twistlock is disabled as it requires a license and OPA GK defaults to dryrun/warning vs blocking/enforcing. 
+### 3. Ingress LB:      
+* istiocontrolplane IstioOperator Custom Resource will spawn a Kubernetes service of type Load Balancer, which spawns a CSP LB. 
+* Most deployments of BigBang should be configured to spawn a CSP LB with a Private IP Address.
+* Traffic Flow:
+  1. Port 443 of the Cloud Service Provider Load Balancer gets load balanced between a NodePort of the worker nodes. (The NodePort can be randomly generated or static, depending on helm values.)
+  2. Kube Proxy then maps the NodePort, which is accessible on the Private IP Space Network, to port 443 of the istio-ingressgateway service which is accessible on the Kubernetes Inner Cluster Network. (So Kube Proxy and Node Ports are how traffic crosses the boundary from Private IP Space to Kubernetes Inner Cluster Network Space.)
+  3. Istio-ingressgateway service port 443 then maps to port 8443 of istio-ingressgateway pods (they use the non-privileged port 8443, because they've gone through the IronBank Container hardening process. (That being said from the end users perspective the end user only sees 443.) use IronBank Containers.)
+  4. The Istio Ingress Gateway pods are basically Envoy Proxies / Layer 7 Load Balancers that are dynamically configured using declarative Kubernetes Custom Resources managed via GitOps. These Ingress Gateway pods forward traffic to websites hosted in the BigBang Cluster / expose websites hosted in a BigBang Cluster.
+* It's possible to have BigBang leverage a single CSP LB to expose both admin facing websites like kibana.bigbang.dev (*.bigbang.dev is the default helm value for websites hosted on a BigBang cluster) and user facing websites like gitlab.bigbang.dev. An SSO Authentication Proxy and Identity Provider groups can be used to make it so only users in certain groups can be routed to webpages intended for admins. 
 
-6. SSO Provider
-https://login.dso.mil/auth/realms/baby-yoda/
-P1's Keycloak SSO:
-* .mil and whitelisted domains can self register
-* Federates the x509 certs associated with CAC Cards
-General Flow:
-. Human visits: https://grafana.bigbang.dev
-. Istio-Ingress Gateway Directs them to Auth Service
-. Auth Service Directs them to https://login.dso.mil
-. User logins in and if they're in the correct authorization group/should have rights to see the backend, baby yoda gives user a cookie and redirects them to their original destination
-. Now when user is directed to the auth service proxy, because they have cookie, they can go on to their destination.
+
+### 4. Mutating Admission Controllers
+* Istiod pod hosts this functionality of the sidecar injector webhook that mutates pod YAML to add istio init containers and envoy proxy sidecar containers to pods that need to be integrated into the service mesh. 
+* It's possible to use Istio CNI plugin to eliminate the need for istio init containers.
+
+
+### 5. Validating Admission Controllers
+* Open Policy Agent Gatekeeper and Twistlock can be used as Validating Admission Controls; however, by default Twistlock is disabled as it requires a license and OPA GK defaults to dryrun/warning instead of blocking/enforcing. 
+
+
+### 6. SSO Provider
+* Note SSO Provider is not part of BigBang
+* Example Scenario: 
+  * Authorized User and Rando user both self register with P1 SSO https://login.dso.mil/      
+  * The Authorized User either has a .mil email domain or links their CAC Card to an arbitrary email, and gets assigned a group.      
+  * The other user with an arbitrary email gets put into a Randos group with limited access. 
+  * Both users notice a https://confluence.il2.dso.mil link on the https://p1.dso.mil/#/products/big-bang/ website. 
+  * The authorized user can access *.il2.dso.mil, repo1.dso.mil, and registry1.dso.mil
+  * The rando user can't access il2, but can access repo1 and registry1.
+* 1st Example Traffic Flow for someone using P1's Keycloak SSO:       
+  1. Human Visits: https://grafana.bigbang.dev
+  2. Istio-Ingress Gateway Directs traffic destined for that URL to the Istio Envoy Proxy of Auth Service
+  3. Auth Service redirects them to https://login.dso.mil
+  4. User logs in and if they're in the correct authorization group / if they should have rights to see the backend website the user will get a cookie and be redirected to the original URL which will redirect them to auth service only this time because they have a cookie it'll redirect them to their original destination. ir original destination. 
+  5. Now when the user hits the auth service with the cookie they get redirected to their intended destination. 
+* 2nd Example Traffic Flow for someone using P1's Keycloak SSO:       
+  1. s
+  2. s
+
+
 
 7. HA Proxy
 Why is HA Proxy there?
