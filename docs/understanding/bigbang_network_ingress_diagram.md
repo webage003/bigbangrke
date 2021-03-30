@@ -22,6 +22,7 @@
 
 
 # BigBang Network Ingress Diagram:
+* If the Image looks fuzzy left click it, or right click it and "Open Image in New Tab"
 ![](images/bigbang_network_ingress_diagram.app.diagrams.net.png)
 
 
