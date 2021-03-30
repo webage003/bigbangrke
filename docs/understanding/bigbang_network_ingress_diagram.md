@@ -21,7 +21,7 @@
   It's difficult to make a generic diagram with high accuracy. BigBang's Helm Values are variables, some values can produce significantly different traffic flows, the same can be said of SSO and Load Balancer Implementation options. Nuances specific to the deployment environment and hardened configurations like SELinux & Istio CNI can effect the implementation. 
 
 
-# BigBang Network Ingress Diagram
+# BigBang Network Ingress Diagram:
 ![](images/bigbang_network_ingress_diagram.app.diagrams.net.png)
 
 
