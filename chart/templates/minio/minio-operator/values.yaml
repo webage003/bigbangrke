@@ -10,4 +10,4 @@ podAnnotations:
 
 imagePullSecrets:
   - name: private-registry
-{{- end -}}
+  {{- end -}}
