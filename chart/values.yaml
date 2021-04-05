@@ -335,7 +335,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git
       path: "./chart"
-      branch: "add-test-consolidated"
+      branch: "helm-tests"
 
     # -- Default access key to use for minio.
     accesskey: ""
