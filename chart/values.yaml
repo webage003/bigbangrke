@@ -317,8 +317,8 @@ addons:
       path: "./chart"
       branch: add-redis
     redis:
-      enabled: true
-      redis_server_uri: tcp://redis-master.default.svc.cluster.local:6379
+      enabled: false
+      redis_server_uri: 
 
     # -- Values to passthrough to the authservice chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice.git
     values: {}
