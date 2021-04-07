@@ -47,7 +47,16 @@ spec:
     - name: {{ .Release.Name }}-authservice-values
       kind: Secret
       valuesKey: "overlays"
-
+  
+  values:
+    {{ if and .Values.addons.authservice.redis.enabled  .Values.addons.authservice.redis.redis_server_uri}}
+     redis:
+       enabled: true
+     redis_server_uri:  {{ .Values.addons.authservice.redis.redis_server_uri}}
+   {{ else if .Values.addons.authservice.redis.redis_server_uri }}
+     redis:
+     redis_server_uri: {{ .Values.addons.authservice.redis.redis_server_uri}}
+  {{ end }}
   {{- if .Values.istio.enabled }}
   dependsOn:
   - name: istio
