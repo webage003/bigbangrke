@@ -311,11 +311,11 @@ addons:
     #   chain:
     #     minimal:
     #       callback_uri: "https://somecallback"
-    enabled: false
+    enabled: true
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/authservice.git
       path: "./chart"
-      tag: "0.1.6-bb.4"
+      branch: add-redis
     redis:
       enabled: true
       redis_server_uri: tcp://redis-master.default.svc.cluster.local:6379
