@@ -321,7 +321,7 @@ addons:
       port: 6379
       password:
      # This is an additional set to true if authservice needs an additional redis server to be deployed for authservice , set this to false if you are using existing external redis server
-      enabled: true
+      enabled: false
       
     # -- Values to passthrough to the authservice chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice.git
     values: {}
