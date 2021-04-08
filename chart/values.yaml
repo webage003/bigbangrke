@@ -67,6 +67,12 @@ sso:
   # -- OIDC client secret used for packages authenticated through authservice
   client_secret: ""
 
+  # -- OIDC token URL template string (to be used as default)
+  token_url: "https://{{ .Values.sso.oidc.host }}/auth/realms/{{ .Values.sso.oidc.realm }}/protocol/openid-connect/token"
+    
+  # -- OIDC auth URL template string (to be used as default)
+  auth_url: "https://{{ .Values.sso.oidc.host }}/auth/realms/{{ .Values.sso.oidc.realm }}/protocol/openid-connect/auth"
+
 # -- (Advanced) Flux reconciliation parameters.
 # The default values provided will be sufficient for the majority of workloads.
 flux:
@@ -136,7 +142,7 @@ clusterAuditor:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
     path: "./chart"
-    tag: "0.1.8-bb.1"
+    tag: "0.1.8-bb.2"
 
   # -- Values to passthrough to the cluster auditor chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
   values: {}
@@ -166,7 +172,7 @@ logging:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
-    tag: "0.1.4-bb.4"
+    tag: "0.1.7-bb.0"
 
   sso:
     # -- Toggle OIDC SSO for Kibana/Elasticsearch on and off.
@@ -204,7 +210,7 @@ fluentbit:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
-    tag: "0.7.10-bb.0"
+    tag: "0.15.3-bb.0"
   values: {}
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -217,7 +223,7 @@ monitoring:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
-    tag: "11.0.0-bb.15"
+    tag: "11.0.0-bb.17"
 
   sso:
     # -- Toggle SSO for monitoring components on and off
@@ -261,7 +267,7 @@ twistlock:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
-    tag: "0.0.3-bb.1"
+    tag: "0.0.3-bb.3"
 
   # -- Values to passthrough to the twistlock chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
   values: {}
@@ -433,7 +439,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube.git
       path: "./chart"
-      tag: "9.2.6-bb.4"
+      tag: "9.2.6-bb.6"
 
     sso:
       # -- Toggle OIDC SSO for SonarQube.
@@ -498,7 +504,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/anchore-enterprise.git
       path: "./chart"
-      tag: "1.12.4-bb.1"
+      tag: "1.12.7-bb.1"
 
     # -- Initial admin password used to authenticate to Anchore.
     adminPassword: ""
@@ -568,7 +574,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator.git
       path: "./chart"
-      tag: "1.13.0-bb.0"
+      tag: "1.13.0-bb.2"
     # -- Values to passthrough to the mattermost operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator/-/blob/main/chart/values.yaml
     values: {}
 
@@ -578,7 +584,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost.git
       path: "./chart"
-      tag: "0.1.1-bb.0"
+      tag: "0.1.3-bb.0"
 
     # -- Mattermost Enterprise functionality.
     enterprise:
@@ -652,6 +658,21 @@ addons:
 
     # -- Values to passthrough to the Mattermost chart: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost/-/blob/main/chart/values.yaml
     values: {}
+
+  velero:
+    # -- Toggle deployment of Velero.
+    enabled: false
+
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero.git
+      path: "./chart"
+      tag: "2.14.8-bb.0"
+
+    # -- Values to passthrough to the Velero chart: https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/-/blob/main/chart/values.yaml
+    values:
+      # Requires at least one plugin installed. Current supported values: aws, azure
+      plugins: []
+      # - aws
   #
   # ----------------------------------------------------------------------------------------------------------------------
 

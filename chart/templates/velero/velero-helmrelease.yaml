@@ -1,22 +1,22 @@
-{{- if or .Values.eckoperator.enabled .Values.logging.enabled .Values.clusterAuditor.enabled }}
+{{- if .Values.addons.velero.enabled }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: eck-operator
+  name: velero
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: eck-operator
-    app.kubernetes.io/component: "core"
+    app.kubernetes.io/name: velero
+    app.kubernetes.io/component: "cluster-utilities"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: eck-operator
+  targetNamespace: velero
   chart:
     spec:
-      chart: {{ .Values.eckoperator.git.path }}
+      chart: {{ .Values.addons.velero.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: eck-operator
+        name: velero
         namespace: {{ .Release.Namespace }}
 
   {{- with .Values.flux }}
@@ -37,19 +37,14 @@ spec:
   {{- end }}
 
   valuesFrom:
-    - name: {{ .Release.Name }}-eck-operator-values
+    - name: {{ .Release.Name }}-velero-values
       kind: Secret
       valuesKey: "common"
-    - name: {{ .Release.Name }}-eck-operator-values
+    - name: {{ .Release.Name }}-velero-values
       kind: Secret
       valuesKey: "defaults"
-    - name: {{ .Release.Name }}-eck-operator-values
+    - name: {{ .Release.Name }}-velero-values
       kind: Secret
       valuesKey: "overlays"
-
-  {{- if .Values.gatekeeper.enabled }}
-  dependsOn:
-    - name: gatekeeper
-      namespace: {{ .Release.Namespace }}
-  {{- end }}
+    
 {{- end }}
