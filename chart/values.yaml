@@ -317,9 +317,12 @@ addons:
       path: "./chart"
       branch: add-redis
     redis:
-      enabled: false
-      redis_server_uri: 
-
+      host: redis-master.default.svc.cluster.local
+      port: 6379
+      password:
+     # This is an additional set to true if authservice needs an additional redis server to be deployed for authservice , set this to false if you are using existing external redis server
+      enabled: true
+      
     # -- Values to passthrough to the authservice chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice.git
     values: {}
 
