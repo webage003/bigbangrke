@@ -317,9 +317,9 @@ addons:
       path: "./chart"
       branch: add-redis
     redis:
-      host: a
-      port: 34
-      password: df
+      host: 
+      port: 
+      password: 
      
       
     # -- Values to passthrough to the authservice chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice.git
