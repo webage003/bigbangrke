@@ -35,9 +35,9 @@ eckoperator:
 N/A
 
 ## Licensing
-[ECK License Documentation](https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-licensing.html#k8s-licensing)
-[Start Trial for ECK](https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-licensing.html#k8s-start-trial)
-[Add a License for ECK](https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-licensing.html#k8s-start-trial)
+[ECK License Documentation](https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-licensing.html#k8s-licensing)\
+[Start Trial for ECK](https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-licensing.html#k8s-start-trial)\
+[Add a License for ECK](https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-licensing.html#k8s-start-trial)\
 [Update License for ECK](https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-licensing.html#k8s-update-license)
 
 
