@@ -26,9 +26,8 @@ N/A
 This can be accomplished by increasing the number of replicas in the deployment.
 
 ```yaml
-addons:
-  sonarqube:
-    values:
+eckoperator:
+   values:
       replicaCount: 2
 ```
 
