@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
+    istio-injection: enabled
     app: {{ .Release.Name }}-mattermost
     app.kubernetes.io/name: mattermost
     app.kubernetes.io/component: "collaboration-tools"
