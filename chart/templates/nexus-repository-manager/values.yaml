@@ -3,8 +3,8 @@
 {{- end }}
 
 {{- define "bigbang.defaults.nexus-repository-manager" -}}
-hostname: {{ .Values.hostname }}
-
+domain: {{ .Values.hostname }}
+hostname: {{ .Values.addons.nexusRepositoryManager.hostname }}
 istio:
   enabled: {{ .Values.istio.enabled }}
 
