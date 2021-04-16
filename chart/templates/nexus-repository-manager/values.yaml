@@ -8,9 +8,10 @@ hostname: {{ .Values.hostname }}
 istio:
   enabled: {{ .Values.istio.enabled }}
 
-## followup on this
-#image:
-#  pullSecret: private-registry
+nexus:
+  imagePullSecrets:
+    - name: private-registry
+
 
 license_key: "{{ .Values.addons.nexusRepositoryManager.license_key }}"
 
