@@ -563,6 +563,27 @@ Owners:
 * @ryan.j.garcia
 * @kevin.wilder
 
+#### Pydio
+
+Pydio Cells is a privacy conscious file management and sharing solution for organizations interested in self hosted solution with robust rbac framework and capabilities such as automated document management and integration with other colloboration tools.
+
+Product:
+
+* [Pydio](https://www.pydio.com/)
+* [Pydio Cells](https://pydio.com/en/features/pydio-cells-overview)
+
+Repository:
+
+* TBD
+
+Dependencies:
+
+* TBD
+
+Owners:
+
+* TBD
+
 ### Package Utilities
 
 Application utilities are deployments of utilities used by one or more packages.  They are usually not user facing, and are dependencies of user facing packages.
