@@ -17,6 +17,19 @@ The Provider services include:
 - A helm chart repository(Chart Museum), and mirroring of charts
 - Git repository cloning and lifecycle
 
+## Prerequisites
+
+Hardware Prerequisites:
+
+- 4 hosts, VM or otherwise.  Each sharing the same user credentials
+- 32gb RAM, 128gb free space
+- centOS 8
+
+Software Prerequesites:
+
+- python/pip, otherwise everything else is installed by the install script.
+
+
 ## Cluster Topology
 
 * **Cluster Control Plane Nodes** – HA k8s nodes to run the cluster
