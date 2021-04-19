@@ -318,7 +318,6 @@ addons:
       tag: "0.4.0-bb.0"
     ## Redis coniguration for authservice.   
     redis: 
-     enabled: false  # set to true if you need a redis server with authservice deployment 
       host: ""  # set the host if you try to connect authservice to  existing  external redis
       port: "" # set the port of external  redis
       password: "" #  set the password of external  redis
