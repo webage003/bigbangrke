@@ -23,11 +23,11 @@ kubectl create secret docker-registry private-registry \
     --docker-username=$REGISTRY1_USER \
     --docker-password=$REGISTRY1_TOKEN \
     --namespace flux-system
-
+kubectl apply -f https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/scripts/deploy/flux.yaml
+```
 >   k apply -f flux.yaml, is equivalent to "flux install", but it installs a version of flux 
 >   that's pinned to a version that's been tested and has gone through IronBank.
 kubectl apply -f https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/scripts/deploy/flux.yaml
-```
 
 
 #### Now you can see new CRD objects types inside of the cluster
