@@ -11,12 +11,14 @@ sudo curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
 ```bash
 export REGISTRY1_USER='REPLACE_ME'
 export REGISTRY1_TOKEN='REPLACE_ME'
-
+```
 > In production use robot credentials similiar to the one below, single quotes are important due to the '$'
-export REGISTRY1_USER='robot$bigbang-onboarding-imagepull'     
+```bash
+export REGISTRY1_USER='robot$bigbang-onboarding-imagepull'
+```
 
 
-
+```bash
 kubectl create ns flux-system
 kubectl create secret docker-registry private-registry \
     --docker-server=registry1.dso.mil \
