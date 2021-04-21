@@ -1,7 +1,7 @@
 # BigBang Docs
 
 ## What is BigBang?
-* BigBang is a Helm Chart that is used to deploy a DevSecOps Platform. The DevSecOps Platform is composed of application packages which are bundled as helm charts that leverage IronBank hardened container images. 
+* BigBang is a Helm Chart that is used to deploy a DevSecOps Platform on a Kubernetes Cluster. The DevSecOps Platform is composed of application packages which are bundled as helm charts that leverage IronBank hardened container images. 
 * The BigBang Helm Chart deploys gitrepository and helmrelease Custom Resources to a Kubernetes Cluster that's running the Flux GitOps Operator. Flux then installs the helm charts defined by the Custom Resources into the cluster. 
 * The BigBang Helm Chart has a values.yaml file that does 2 main things:
   1. Defines which DevSecOps Platform packages/helm charts will be deployed
