@@ -30,3 +30,18 @@ kubectl apply -f https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/maste
 ```bash
 kubectl get crds | grep flux
 ```
+
+# Advanced Installation
+Clone the Big Bang repo and use the awesome intallation [scripts](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/tree/master/scripts) directory
+
+```bash
+git clone https://repo1.dso.mil/platform-one/big-bang/bigbang.git
+./bigbang/scripts/install_flux.sh
+```
+> **NOTE** install_flux.sh requires arguments to run properly, calling it will print out a friendly USAGE mesage with required arguments needed to complete installation.
+
+
+
+
+
+
