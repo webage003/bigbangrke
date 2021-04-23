@@ -74,28 +74,28 @@ Normally consumers of BigBang should update every 2 weeks (our release cadence).
 
 **Table Notes:** 
 1. OS Configuration Pre-Requisites: 
-* BigBang can work with selinux enforcing, but it requires additional OS configuration. 
-* The following OS configuration settings are usually required to make BigBang work:
-  * `sudo sysctl -w vm.max_map_count=262144`    #(ECK crash loops without this)
-  * `sudo setenforce 0`   #(Istio init-container crash loops without this if selinux is enabled) (WIP to remove this requirement in the future/consider disabling it a soft requirement)
+   * BigBang can work with selinux enforcing, but it requires additional OS configuration. 
+   * The following OS configuration settings are usually required to make BigBang work:
+     * `sudo sysctl -w vm.max_map_count=262144`    #(ECK crash loops without this)
+     * `sudo setenforce 0`   #(Istio init-container crash loops without this if selinux is enabled) (WIP to remove this requirement in the future/consider disabling it a soft requirement)
 
 2. Kubernetes Cluster Preconfigured to Best Practices: 
-* All Kubernetes Nodes and the LB associated with the kube-apiserver should all use private IPs.
-* In most case User Application Facing LBs should have Private IP Addresses and be paired with a defense in depth Ingress Protection mechanism like [P1's CNAP](https://p1.dso.mil/#/products/cnap/), a CNAP equivalent, VPN, VDI, port forwarding through a bastion, or air gap deployment. 
-* BigBang doesn't support PSPs (Pod Security Policies), because [PSP's are being removed from Kubernetes and will be gone by version 1.25.x](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/issues/10), thus we recommened users disable them: 
-  ```bash
-  kubectl patch psp system-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
-  kubectl patch psp global-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
-  kubectl patch psp global-restricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
-  ```
-* Make sure CoreDNS in the kube-system namespace is HA with pod anti-affinity rules, master nodes are HA and tainted. 
-* Ideally you want to use a default storage class that allows worker nodes in different AZs to mount the same volume (AWS's EBS storage class has a limitation where a PVC in AZ1, can't automatically be mounted by a worker node in AZ2 if AZ1 goes down.)
-* Some BigBang apps allow overriding the storage class, so you can mix multiple storage classes.
-* Some apps require a RWX storage class for HA, so it may make sense to leverage both AWS's EBS storage class and their EFS-CSI storage class. Otherwise Cloud Agnostic Storage Class solutions. 
+   * All Kubernetes Nodes and the LB associated with the kube-apiserver should all use private IPs.
+   * In most case User Application Facing LBs should have Private IP Addresses and be paired with a defense in depth Ingress Protection mechanism like [P1's CNAP](https://p1.dso.mil/#/products/cnap/), a CNAP equivalent, VPN, VDI, port forwarding through a bastion, or air gap deployment. 
+   * BigBang doesn't support PSPs (Pod Security Policies), because [PSP's are being removed from Kubernetes and will be gone by version 1.25.x](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/issues/10), thus we recommened users disable them: 
+   ```bash
+   kubectl patch psp system-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
+   kubectl patch psp global-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
+   kubectl patch psp global-restricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
+   ```
+   * Make sure CoreDNS in the kube-system namespace is HA with pod anti-affinity rules, master nodes are HA and tainted. 
+   * Ideally you want to use a default storage class that allows worker nodes in different AZs to mount the same volume (AWS's EBS storage class has a limitation where a PVC in AZ1, can't automatically be mounted by a worker node in AZ2 if AZ1 goes down.)
+   * Some BigBang apps allow overriding the storage class, so you can mix multiple storage classes.
+   * Some apps require a RWX storage class for HA, so it may make sense to leverage both AWS's EBS storage class and their EFS-CSI storage class. Otherwise Cloud Agnostic Storage Class solutions. 
 
 
 ## Additional Useful Background Contextual Information: 
 * We are still migrating some docs from IL2 Confluence, and the BigBang Onboarding Engineering Cohort into to this repo's /docs folder, the planned future state is for this to be a primary location for docs going forward. (Any docs hosted in other repos, will at least have pointers hosted here.)
 * There are multiple implementations of Helm Charts (Helm Repos, .tgz, and files and folders in a git repo), whenever P1 refers to a helm chart we're always referring to the files and folders in a git repo implementation, which is stored in /chart folder in a git repo.
 * Additional pre-reading materials to develop a better understanding of BigBang before deploying can be found in this understanding_bigbang folder. 
-* If you see an issue with docs or packages, please open an issue against the main [BigBang Repo](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/issues), instead of the individual package repo. 
+* If you see an issue with docs or packages, please [open an issue against the main BigBang Repo](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/issues), instead of the individual package repo. 
