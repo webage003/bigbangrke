@@ -73,21 +73,21 @@ Normally consumers of BigBang should update every 2 weeks (our release cadence).
 | Ops team to integrate, configure, and maintain BigBang in Production                                                                                             | NA for Demo                                                                                                                                                                                                                                                                                                 | pre-req* (*[P1 Customer Success can help with this](https://p1.dso.mil/#/services))                                                                                                                          | pre-req* (*[P1 Customer Success can help with this](https://p1.dso.mil/#/services))                                                                                                                                         |
 
 **Table Notes:** 
-1. OS Configuration Pre-Requisites: 
+1. OS Configuration Pre-Requisites:        
    * BigBang can work with selinux enforcing, but it requires additional OS configuration. 
    * The following OS configuration settings are usually required to make BigBang work:
      * `sudo sysctl -w vm.max_map_count=262144`    #(ECK crash loops without this)
      * `sudo setenforce 0`   #(Istio init-container crash loops without this if selinux is enabled) (WIP to remove this requirement in the future/consider disabling it a soft requirement)
 
-2. Kubernetes Cluster Preconfigured to Best Practices: 
+2. Kubernetes Cluster Preconfigured to Best Practices:        
    * All Kubernetes Nodes and the LB associated with the kube-apiserver should all use private IPs.
    * In most case User Application Facing LBs should have Private IP Addresses and be paired with a defense in depth Ingress Protection mechanism like [P1's CNAP](https://p1.dso.mil/#/products/cnap/), a CNAP equivalent, VPN, VDI, port forwarding through a bastion, or air gap deployment. 
    * BigBang doesn't support PSPs (Pod Security Policies), because [PSP's are being removed from Kubernetes and will be gone by version 1.25.x](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/issues/10), thus we recommened users disable them: 
-   ```bash
-   kubectl patch psp system-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
-   kubectl patch psp global-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
-   kubectl patch psp global-restricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
-   ```
+     ```bash
+     kubectl patch psp system-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
+     kubectl patch psp global-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
+     kubectl patch psp global-restricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
+     ```
    * Make sure CoreDNS in the kube-system namespace is HA with pod anti-affinity rules, master nodes are HA and tainted. 
    * Ideally you want to use a default storage class that allows worker nodes in different AZs to mount the same volume (AWS's EBS storage class has a limitation where a PVC in AZ1, can't automatically be mounted by a worker node in AZ2 if AZ1 goes down.)
    * Some BigBang apps allow overriding the storage class, so you can mix multiple storage classes.
