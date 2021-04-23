@@ -26,4 +26,5 @@
     * Flux reads the declarative configuration stored in the helmrelease CR to do a GitOps equivalent of `helm upgrade --install bigbang /chart -n=bigbang -f encrypted_values.yaml -f values.yaml --create-namespace=true`, the BigBang Helm Chart, then deploys more CR's that flux uses to deploy packages specified in BigBang's values.yaml
   
 
-
+## New User Orientation
+* New users are encouraged to read through the Useful Background Contextual Information present in the [understanding_bigbang folder](./understanding_bigbang)
