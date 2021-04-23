@@ -6,24 +6,25 @@
 * The BigBang Helm Chart has a values.yaml file that does 2 main things:
   1. Defines which DevSecOps Platform packages/helm charts will be deployed
   2. Defines what values.yaml input parameters will be paired with those helm charts. 
-* You can see what applications are part of the platform by clicking [here to see BigBang's default values.yaml](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/chart/values.yaml#L88) (Tip: control f "repo:", to quickly iterate through the list of applications supported by the BigBang team)
+* You can see what applications are part of the platform by clicking [here to see BigBang's default values.yaml](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/chart/values.yaml#L88)       
+(Tip: control f "repo:", to quickly iterate through the list of applications supported by the BigBang team)
 
 
 ## How do I deploy BigBang?
-* **Note:** The Deployment Process and Pre-Requisites will vary depending on the deployment scenario. (The Quick Start Demo Deployment for example, allows some steps to be skipped due to a mixture of automation and genericly reusable demo configuration that satisfies pre-requisites.) 
-* The following is a general overview of the process, the deployment guides go into more detail.
+**Note:** The Deployment Process and Pre-Requisites will vary depending on the deployment scenario. (The Quick Start Demo Deployment for example, allows some steps to be skipped due to a mixture of automation and genericly reusable demo configuration that satisfies pre-requisites.)        
+(The following is a general overview of the process, the deployment guides go into more detail.)
 1. Satisfy Pre-Requisites: 
-  * Provision a Kubernetes Cluster according to best practices
-  * Ensure the Cluster has network connectivity to a Git Repo you control 
-  * Install Flux GitOps Operator on the Cluster 
-  * Configure Flux, the Cluster, and the Git Repo for GitOps Deployments that support deploying encrypted values.
-  * Commit to the Git Repo BigBang's values.yaml and encrypted secrets that have been configured to match the desired state of the cluster (including HTTPS Certs and DNS names).  
+   * Provision a Kubernetes Cluster according to best practices
+   * Ensure the Cluster has network connectivity to a Git Repo you control 
+   * Install Flux GitOps Operator on the Cluster 
+   * Configure Flux, the Cluster, and the Git Repo for GitOps Deployments that support deploying encrypted values.
+   * Commit to the Git Repo BigBang's values.yaml and encrypted secrets that have been configured to match the desired state of the cluster (including HTTPS Certs and DNS names).  
 2. `kubectl apply -f bigbang.yaml`
-  * bigbang.yaml will trigger a chain reaction of GitOps Custom Resources's that will deploy other GitOps CR's that will eventually deploy an instance of a DevSecOps Platform that's declaratively defined in your Git Repo. 
-  * To be specific, the chain reaction pattern we consider best practice is to have:
-    * bigbang.yaml deploys a gitrepository and kustomization Custom Resource
-    * Flux reads the declarative configuration stored in the kustomization CR to do a GitOps equivalent of `kustomize build . | kubectl apply -f -`, to deploy a helmrelease CR of the BigBang Helm Chart, that references input values.yaml files defined in the Git Repo.
-    * Flux reads the declarative configuration stored in the helmrelease CR to do a GitOps equivalent of `helm upgrade --install bigbang /chart -n=bigbang -f encrypted_values.yaml -f values.yaml --create-namespace=true`, the BigBang Helm Chart, then deploys more CR's that flux uses to deploy packages specified in BigBang's values.yaml
+   * bigbang.yaml will trigger a chain reaction of GitOps Custom Resources's that will deploy other GitOps CR's that will eventually deploy an instance of a DevSecOps Platform that's declaratively defined in your Git Repo. 
+   * To be specific, the chain reaction pattern we consider best practice is to have:
+     * bigbang.yaml deploys a gitrepository and kustomization Custom Resource
+     * Flux reads the declarative configuration stored in the kustomization CR to do a GitOps equivalent of `kustomize build . | kubectl apply -f -`, to deploy a helmrelease CR of the BigBang Helm Chart, that references input values.yaml files defined in the Git Repo.
+     * Flux reads the declarative configuration stored in the helmrelease CR to do a GitOps equivalent of `helm upgrade --install bigbang /chart -n=bigbang -f encrypted_values.yaml -f values.yaml --create-namespace=true`, the BigBang Helm Chart, then deploys more CR's that flux uses to deploy packages specified in BigBang's values.yaml
   
 
 ## New User Orientation
