@@ -6,6 +6,8 @@
 | ----    | ---  |
 | [Istio Operator](https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator) |  ![Istio Operator Build](https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator/badges/main/pipeline.svg) |
 | [Istio Controlplane](https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane) | ![Istio Controlplane Build](https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane/badges/main/pipeline.svg) | 
+| [Jaeger](https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger) | ![Jaeger Build](https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger/badges/main/pipeline.svg) |
+| [Kiali](https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali) | ![Kiali Build](https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali/badges/main/pipeline.svg) |
 | [Monitoring](https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring) | ![Monitoring Build](https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring/badges/main/pipeline.svg) |
 | [ECK Operator](https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator) | ![ECK Operator Build](https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator/badges/main/pipeline.svg) | 
 | [Elasticsearch Kibana](https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana) |![EK Operator Build](https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana/badges/main/pipeline.svg)  |
@@ -29,7 +31,9 @@
 | ----    | ---  |
 | [Gitlab](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab)  | ![Gitlab Build](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab/badges/main/pipeline.svg)    |
 | [Gitlab Runner](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner) |  ![Gitlab Runner Build](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner/badges/main/pipeline.svg) |
+| [Nexus](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus) |  ![Nexus](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus/badges/main/pipeline.svg) |
 | [Sonarqube](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube) |  ![Sonarqube](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube/badges/main/pipeline.svg) |
+
 
 
 
@@ -47,7 +51,7 @@
 | [MinIO](https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio)  | ![MinIO Build](https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio/badges/main/pipeline.svg)    |
 | [MinIO Operator](https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator) |  ![MinIO Operator Build](https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator/badges/main/pipeline.svg) |
 
-## Application Utilities
+## Cluster Utilities
 
 | Package | Status |
 | ----    | ---  |

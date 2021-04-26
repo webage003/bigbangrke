@@ -92,6 +92,8 @@ The common components that each package will have are defined in the following f
 ├── tests/
     ├── cypress             # folder containing e2e tests using the cypress test framework
 ├── chart/                  # Folder containing helm chart
+    ├── templates           # folder helm chart templates
+      ├── tests             # folder containing helm chart tests 
 ```
 
 ## PR-X. CI/CD pipeline is required for each Big Bang Package
@@ -156,3 +158,6 @@ Each package will have a default branch of `main`.  Immutable tags will be used 
 * Helm chart dependency version,use version ranges instead of pinning to an exact version.
     version: ~1.2.3
 * There should be a Helm values file located at `tests/test-values.yaml` used for pipeline testing.
+* Charts should support `affinity` and `nodeSelector` configuration for all components.  If there is only one type of `Pods`, then a single, top level value shall be provided, otherwise there should be `affinity` and `nodeSelector` regions for each component.  See [the Kubernetes Docs](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/) for more information
+
+

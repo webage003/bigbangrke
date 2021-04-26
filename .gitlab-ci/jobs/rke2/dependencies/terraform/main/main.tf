@@ -7,7 +7,12 @@ locals {
 aws configure set default.region $(curl -s http://169.254.169.254/latest/meta-data/placement/region)
 
 # Tune vm sysctl for elasticsearch
-sysctl -w vm.max_map_count=262144
+sysctl -w vm.max_map_count=524288
+
+# SonarQube host pre-requisites
+sysctl -w fs.file-max=131072
+ulimit -n 131072
+ulimit -u 8192
 
 # Preload kernel modules required by istio-init, required for selinux enforcing instances using istio-init
 modprobe xt_REDIRECT
@@ -37,6 +42,11 @@ module "rke2" {
   ssh_authorized_keys   = var.ssh_authorized_keys
   controlplane_internal = var.controlplane_internal
   rke2_version          = var.rke2_version
+
+  rke2_config = <<EOF
+disable:
+  - rke2-ingress-nginx
+EOF
 
   enable_ccm = var.enable_ccm
   download   = var.download
@@ -101,4 +111,9 @@ resource "aws_ec2_tag" "private_subnets_tags" {
   resource_id = var.private_subnets[count.index]
   key         = "kubernetes.io/cluster/${module.rke2.cluster_name}"
   value       = "shared"
+}
+
+output "cluster_sg" {
+  description = "Cluster SG ID, used for dev ssh access"
+  value = module.rke2.cluster_data.cluster_sg
 }
