@@ -460,7 +460,7 @@ addons:
   nexusRepositoryManager:
     enabled: false
     git:
-      repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/nexus.git
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git
       path: "./chart"
       tag: "29.1.0-bb.0"
 
