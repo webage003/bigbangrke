@@ -462,8 +462,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git
       path: "./chart"
-      # tag: "29.1.0-bb.0"
-      branch: "bb-29/bigbang-addon"
+      tag: "29.1.0-bb.0"
 
     # -- Host portion of the VirtualService FQDN
     # -- This is prepended to the root hostname value as such:
