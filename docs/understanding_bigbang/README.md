@@ -27,6 +27,11 @@
 * Compliant with the [DoD DevSecOps Reference Architecture Design](https://dodcio.defense.gov/Portals/0/Documents/DoD%20Enterprise%20DevSecOps%20Reference%20Design%20v1.0_Public%20Release.pdf)
 * Can be used to check some but not all of the boxes needed to achieve a cATO (Continuous Authority to Operate.)
 * Uses hardened IronBank Container Images. (left shifted security concern)
+* GitOps adds security benefits, and BigBang leverages GitOps, and can be further extended using GitOps. 
+  Security Benefits of GitOps: 
+  * Prevents config drift between state of a live cluster and IaC/CaC source of truth: By avoiding giving any humans direct kubectl access, by only allowing humans to deploy via git commits, out of band changes are limited. 
+  * Git Repo based deployments create an audit trail. 
+  * Secure Configurations become reusable, whic lowers the burden of implementing secure configurations.
 * Lowers maintainability overhead involved in keeping the images of the DevSecOps Platform's up to date and maintaining a secure posture over the long term. This is achieved by pairing the GitOps pattern with the Umbrella Helm Chart Pattern.        
   Let's walk through an example:       
   * Initially a kustomization.yaml file in a git repo will tell the Flux GitOps operator (software deployment bot running in the cluster), to deploy version 1.0.0 of BigBang. BigBang could deploy 10 helm charts. And each helm chart could deploy 10 images. (So BigBang is managing 100 container images in this example.)
