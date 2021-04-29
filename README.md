@@ -57,11 +57,7 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | istio.enabled | bool | `true` | Toggle deployment of Istio. |
 | istio.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git"` |  |
 | istio.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| istio.git.tag | string | `"1.7.3-bb.9"` |  |
-=======
 | istio.git.tag | string | `"1.8.4-bb.0"` |  |
->>>>>>> origin/master
 | istio.ingress | object | `{"cert":"","key":""}` | Certificate/Key pair to use as the default certificate for exposing BigBang created applications. If nothing is provided, applications will expect a valid tls secret to exist in the `istio-system` namespace called `wildcard-cert`. |
 | istio.values | object | `{}` | Values to passthrough to the istio-controlplane chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git |
 | istiooperator.enabled | bool | `true` | Toggle deployment of Istio Operator. |
@@ -98,11 +94,7 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | logging.enabled | bool | `true` | Toggle deployment of Logging (EFK). |
 | logging.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git"` |  |
 | logging.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| logging.git.tag | string | `"0.1.4-bb.4"` |  |
-=======
 | logging.git.tag | string | `"0.1.8-bb.0"` |  |
->>>>>>> origin/master
 | logging.sso.enabled | bool | `false` | Toggle OIDC SSO for Kibana/Elasticsearch on and off. Enabling this option will auto-create any required secrets. |
 | logging.sso.client_id | string | `""` | Elasticsearch/Kibana OIDC client ID |
 | logging.sso.client_secret | string | `""` | Elasticsearch/Kibana OIDC client secret |
@@ -112,20 +104,12 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | eckoperator.enabled | bool | `true` | Toggle deployment of ECK Operator. |
 | eckoperator.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git"` |  |
 | eckoperator.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| eckoperator.git.tag | string | `"1.3.0-bb.4"` |  |
-=======
 | eckoperator.git.tag | string | `"1.4.0-bb.1"` |  |
->>>>>>> origin/master
 | eckoperator.values | object | `{}` |  |
 | fluentbit.enabled | bool | `true` | Toggle deployment of Fluent-Bit. |
 | fluentbit.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git"` |  |
 | fluentbit.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| fluentbit.git.tag | string | `"0.7.10-bb.0"` |  |
-=======
 | fluentbit.git.tag | string | `"0.15.8-bb.0"` |  |
->>>>>>> origin/master
 | fluentbit.values | object | `{}` |  |
 | monitoring.enabled | bool | `true` | Toggle deployment of Monitoring (Prometheus, Grafana, and Alertmanager). |
 | monitoring.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git"` |  |
@@ -145,20 +129,12 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | twistlock.enabled | bool | `true` | Toggle deployment of Twistlock. |
 | twistlock.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git"` |  |
 | twistlock.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| twistlock.git.tag | string | `"0.0.3-bb.1"` |  |
-=======
 | twistlock.git.tag | string | `"0.0.3-bb.3"` |  |
->>>>>>> origin/master
 | twistlock.values | object | `{}` | Values to passthrough to the twistlock chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git |
 | addons.argocd.enabled | bool | `false` | Toggle deployment of ArgoCD. |
 | addons.argocd.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd.git"` |  |
 | addons.argocd.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| addons.argocd.git.tag | string | `"2.14.7-bb.2"` |  |
-=======
 | addons.argocd.git.tag | string | `"2.14.7-bb.3"` |  |
->>>>>>> origin/master
 | addons.argocd.sso.enabled | bool | `false` | Toggle SSO for ArgoCD on and off |
 | addons.argocd.sso.client_id | string | `""` | ArgoCD OIDC client ID |
 | addons.argocd.sso.client_secret | string | `""` | ArgoCD OIDC client secret |
@@ -168,31 +144,18 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.authservice.enabled | bool | `false` | Toggle deployment of Authservice. if enabling authservice, a filter needs to be provided by either enabling sso for monitoring or istio, or manually adding a filter chain in the values here: values:   chain:     minimal:       callback_uri: "https://somecallback" |
 | addons.authservice.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/authservice.git"` |  |
 | addons.authservice.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| addons.authservice.git.tag | string | `"0.1.6-bb.4"` |  |
-| addons.authservice.values | object | `{}` | Values to passthrough to the authservice chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice.git |
-=======
 | addons.authservice.git.tag | string | `"0.4.0-bb.1"` |  |
 | addons.authservice.values | object | `{}` | Values to passthrough to the authservice chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/authservice.git |
->>>>>>> origin/master
 | addons.authservice.chains | object | `{}` | Additional authservice chain configurations. |
 | addons.minioOperator.enabled | bool | `false` | Toggle deployment of minio operator and instance. |
 | addons.minioOperator.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git"` |  |
 | addons.minioOperator.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| addons.minioOperator.git.tag | string | `"2.0.9-bb.2"` |  |
-=======
 | addons.minioOperator.git.tag | string | `"2.0.9-bb.3"` |  |
->>>>>>> origin/master
 | addons.minioOperator.values | object | `{}` | Values to passthrough to the minio operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git |
 | addons.minio.enabled | bool | `false` |  |
 | addons.minio.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git"` |  |
 | addons.minio.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| addons.minio.git.tag | string | `"2.0.9-bb.5"` |  |
-=======
 | addons.minio.git.tag | string | `"2.0.9-bb.9"` |  |
->>>>>>> origin/master
 | addons.minio.accesskey | string | `""` | Default access key to use for minio. |
 | addons.minio.secretkey | string | `""` | Default secret key to intstantiate with minio, you should change/delete this after installation. |
 | addons.minio.values | object | `{}` | Values to passthrough to the minio instance chart: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git |
@@ -226,11 +189,7 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.sonarqube.enabled | bool | `false` | Toggle deployment of SonarQube. |
 | addons.sonarqube.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube.git"` |  |
 | addons.sonarqube.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| addons.sonarqube.git.tag | string | `"9.2.6-bb.6"` |  |
-=======
 | addons.sonarqube.git.tag | string | `"9.2.6-bb.7"` |  |
->>>>>>> origin/master
 | addons.sonarqube.sso.enabled | bool | `false` | Toggle OIDC SSO for SonarQube. Enabling this option will auto-create any required secrets. |
 | addons.sonarqube.sso.client_id | string | `""` | SonarQube OIDC client ID |
 | addons.sonarqube.sso.label | string | `""` | SonarQube SSO login button label |
@@ -253,11 +212,7 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.anchore.enabled | bool | `false` | Toggle deployment of Anchore. |
 | addons.anchore.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/anchore-enterprise.git"` |  |
 | addons.anchore.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| addons.anchore.git.tag | string | `"1.12.7-bb.1"` |  |
-=======
 | addons.anchore.git.tag | string | `"1.12.7-bb.2"` |  |
->>>>>>> origin/master
 | addons.anchore.adminPassword | string | `""` | Initial admin password used to authenticate to Anchore. |
 | addons.anchore.enterprise | object | `{"enabled":false,"licenseYaml":"FULL LICENSE\n"}` | Anchore Enterprise functionality. |
 | addons.anchore.enterprise.enabled | bool | `false` | Toggle the installation of Anchore Enterprise.  This must be accompanied by a valid license. |
@@ -278,20 +233,12 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.mattermostoperator.enabled | bool | `false` |  |
 | addons.mattermostoperator.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator.git"` |  |
 | addons.mattermostoperator.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| addons.mattermostoperator.git.tag | string | `"1.13.0-bb.0"` |  |
-=======
 | addons.mattermostoperator.git.tag | string | `"1.13.0-bb.2"` |  |
->>>>>>> origin/master
 | addons.mattermostoperator.values | object | `{}` | Values to passthrough to the mattermost operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator/-/blob/main/chart/values.yaml |
 | addons.mattermost.enabled | bool | `false` | Toggle deployment of Mattermost. |
 | addons.mattermost.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost.git"` |  |
 | addons.mattermost.git.path | string | `"./chart"` |  |
-<<<<<<< HEAD
-| addons.mattermost.git.tag | string | `"0.1.1-bb.3"` |  |
-=======
 | addons.mattermost.git.tag | string | `"0.1.3-bb.2"` |  |
->>>>>>> origin/master
 | addons.mattermost.enterprise | object | `{"enabled":false,"license":""}` | Mattermost Enterprise functionality. |
 | addons.mattermost.enterprise.enabled | bool | `false` | Toggle the Mattermost Enterprise.  This must be accompanied by a valid license unless you plan to start a trial post-install. |
 | addons.mattermost.enterprise.license | string | `""` | License for Mattermost. This should be the entire contents of the license file from Mattermost (should be one line), example below license: "eyJpZCI6InIxM205bjR3eTdkYjludG95Z3RiOD---REST---IS---HIDDEN |
