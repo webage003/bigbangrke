@@ -7,13 +7,20 @@
 
 ## BigBang Specific Preconfiguration requirements: 
 ### BigBang doesn't support PSPs (Pod Security Policies)
+* Open Policy Agent Gatekeeper is a core component of BigBang, which operates as an elevated  [validating admission controller](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/) to audit and enforce various [constraints](https://github.com/open-policy-agent/frameworks/tree/master/constraint) on all requests sent to the kubernetes api server.
 * [PSP's are being removed from Kubernetes and will be gone by version 1.25.x](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/issues/10), thus we recommened users disable them: 
    ```bash
    kubectl patch psp system-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
    kubectl patch psp global-unrestricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
    kubectl patch psp global-restricted-psp -p '{"metadata": {"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames": "*"}}}'
    ```
+* Another way of disabling PSP is by editing the kube-apiserver's flags
 * BigBang Deploys OpenPolicyAgent Gatekeeper with some default policies configured that default to dryrun/log only. 
   * Users are expected to configure OPA GK to their needs.
   * If users find they need the functionality of PSPs, the user can import [OPA policies that have a near 1:1 mapping to the functionality offered by PSPs.](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy#pod-security-policies)
 
+
+## Distro Specific Notes
+### RKE2
+* RKE2 turns PSPs on by default (see above for tips on disabling)
+* RKE2 sets selinux to enforcing by default ([see os_preconfiguration.md for selinux config](os_preconfiguration.md))
