@@ -8,6 +8,9 @@ hostname: {{ .Values.addons.nexusRepositoryManager.hostname }}
 istio:
   enabled: {{ .Values.istio.enabled }}
 
+monitoring:
+  enabled: {{ .Values.monitoring.enabled }}
+
 nexus:
   imagePullSecrets:
     - name: private-registry
