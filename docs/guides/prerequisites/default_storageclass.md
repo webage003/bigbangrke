@@ -49,7 +49,7 @@ allowVolumeExpansion: true
 * An AWS EFS Storage Class can be installed according to the [vendors docs](https://github.com/kubernetes-sigs/aws-efs-csi-driver#installation).
 * AWS EFS Storage Class supports ReadWriteMany Access Mode. 
 * AWS EFS Persistent Volumes can be mounted by worker nodes in multiple AZs.
-* AWS EFS is basically NFS(NetworkFileSystem) as a Service. NFS cons like latency apply equally to EFS, thus it's not a good for for database, that being said it's best practice to leverage AWS Database as a Service offerings when available. 
+* AWS EFS is basically NFS(NetworkFileSystem) as a Service. NFS cons like latency apply equally to EFS, thus it's not a good fit for for databases.  
 
 ------------------------------------------------------
 
