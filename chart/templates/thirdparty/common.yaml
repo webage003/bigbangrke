@@ -3,12 +3,12 @@ kind: Secret
 metadata:
   name: bigbang
   namespace: bigbang
-type: kubernetes.io/dockerconfigjson
-data:
+type: generic
+stringData:
   values.yaml: |
     hostname: {{ .Values.hostname }}
     registryCredentials:
-    {{- .Values.registryCredentials | nindent 6 }}
+    {{- toYaml .Values.registryCredentials | nindent 6 }}
 
     istio:
       enabled: {{ .Values.istio.enabled }}
