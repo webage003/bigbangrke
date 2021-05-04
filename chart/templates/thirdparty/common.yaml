@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-registry
+  namespace: authservice
+type: kubernetes.io/dockerconfigjson
+data:
+  values.yaml: |
+    hostname: {{ .Values.hostname }}
+    registryCredentials:
+    {{- .Values.registryCredentials | nindent 6 }}
+
+    istio:
+      enabled: {{ .Values.istio.enabled }}
+    monitoring:
+      enabled: {{ .Values.monitoring.enabled }}
+    logging:
+      enabled: {{ .Values.logging.enabled }}
