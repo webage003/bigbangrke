@@ -7,7 +7,7 @@
   1. Defines which DevSecOps Platform packages/helm charts will be deployed
   2. Defines what values.yaml input parameters will be paired with those helm charts. 
 * You can see what applications are part of the platform by clicking [here to see BigBang's default values.yaml](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/chart/values.yaml#L88)       
-(Tip: control f "repo:", to quickly iterate through the list of applications supported by the BigBang team)
+(Tip: `[CTRL] + [F]` "repo:", to quickly iterate through the list of applications supported by the BigBang team)
 
 
 ## How do I deploy BigBang?
