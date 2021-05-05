@@ -15,7 +15,6 @@ More information can be found from elasticsearch's documentation [here](https://
 ## SELinux specific configuration:
 * If SELinux is enabled and the OS hasn't received additional pre-configuration, then users will see istio init-container crash loop.
 * Depending on security requirements it may be possible to set selinux in permissive mode: `sudo setenforce 0`.
-
 * Additional OS and Kubernetes specific configuration are required for istio to work on systems with selinux set to `Enforcing`.
 
 By default, BigBang will deploy istio configured to use `istio-init` (read more [here](https://istio.io/latest/docs/setup/additional-setup/cni/)).  To ensure istio can properly initialize enovy sidecars without container privileged escalation permissions, several system kernel modules must be pre-loaded before installing BigBang:

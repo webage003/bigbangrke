@@ -7,6 +7,7 @@
 * CoreDNS in the kube-system namespace should be HA with pod anti-affinity rules
 * Master Nodes should be HA and tainted.
 * Consider using a licensed Kubernetes Distribution with a support contract. 
+* [A default storage class should exist](default_storageclass.md) to support dynamic provisioning of persistent volumes.
 
 
 ## Service of Type Load Balancer:
@@ -110,6 +111,4 @@ cloud-provider-config: ...
 For example, if using the aws terraform modules provided [on repo1](https://repo1.dso.mil/platform-one/distros/rancher-federal/rke2/rke2-aws-terraform), setting the variable: `enable_ccm = true` will ensure all the necessary resources tags.
 
 In the absence of an in-tree cloud provider (such as on-prem), the requirements can be met by ensuring a default storage class and automatic load balancer provisioning exist. 
-
-
 
