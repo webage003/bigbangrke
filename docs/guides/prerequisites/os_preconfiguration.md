@@ -2,8 +2,8 @@
 
 
 ## ECK specific configuration (ECK is a Core BB App):
-Elasticsearch deployed by BigBang uses memory mapping by default.  In most cases, the default address space is too low and must be configured.
-To ensure unnecessary privileged escalation containers are not used, these kernel settings should be done before BigBang is deployed:
+Elastic Cloud on Kubernetes (Elasticsearch Operator) deployed by BigBang uses memory mapping by default. In most cases, the default address space is too low and must be configured.
+To ensure unnecessary privileged escalation containers are not used, these kernel settings should be applied before BigBang is deployed:
 
 ```bash
 sudo sysctl -w vm.max_map_count=262144      #(ECK crash loops without this)
