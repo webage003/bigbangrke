@@ -11,4 +11,8 @@ spec:
   interval: 10m
   url: https://repo1.dso.mil/platform-one/big-bang/bigbang.git
   ref:
+<<<<<<< HEAD
     tag: 1.6.2
+=======
+    branch: release-1.4.x
+>>>>>>> a2f1e9d0... release 1.4.x specific code changes
