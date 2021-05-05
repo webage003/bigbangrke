@@ -1,6 +1,13 @@
 # OS Configuration Pre-Requisites:
 
 
+## Disable swap (Kubernetes Best Practice)
+1. Identify configured swap devices and files with cat /proc/swaps.
+2. Turn off all swap devices and files with swapoff -a.
+3. Remove any matching reference found in /etc/fstab.
+(Credit: Above copy pasted from Aaron Copley of [Serverfault.com](https://serverfault.com/questions/684771/best-way-to-disable-swap-in-linux))
+
+
 ## ECK specific configuration (ECK is a Core BB App):
 Elastic Cloud on Kubernetes (Elasticsearch Operator) deployed by BigBang uses memory mapping by default. In most cases, the default address space is too low and must be configured.
 To ensure unnecessary privileged escalation containers are not used, these kernel settings should be applied before BigBang is deployed:
