@@ -9,7 +9,7 @@
 * A PersistentVolumeClaim that does not reference a specific StorageClass will leverage the default StorageClass. (Of which there should only be 1, identified using kubernetes annotations.) Some Helm Charts allow a storage class to be explicitly specified so that multiple storage classes can be used simultaneously. 
 
 
-## How to check what storageclasses are installed on your cluster
+## How to check what storage classes are installed on your cluster
 * `kubectl get storageclass` can be used to see what storage classes are available on a cluster, the default will be marked as such. 
 * Note: You can have multiple storage classes, but you should only have 1 default storage class.
 ```bash
