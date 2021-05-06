@@ -21,12 +21,12 @@ The following is a general overview of the process, the [deployment guides](guid
    * Install Flux GitOps Operator on the Cluster.
    * Configure Flux, the Cluster, and the Git Repo for GitOps Deployments that support deploying encrypted values.
    * Commit to the Git Repo BigBang's values.yaml and encrypted secrets that have been configured to match the desired state of the cluster (including HTTPS Certs and DNS names).  
-2. `kubectl apply -f bigbang.yaml`
+2. `kubectl apply --filename bigbang.yaml`
    * bigbang.yaml will trigger a chain reaction of GitOps Custom Resources' that will deploy other GitOps CR's that will eventually deploy an instance of a DevSecOps Platform that's declaratively defined in your Git Repo.
    * To be specific, the chain reaction pattern we consider best practice is to have:
      * bigbang.yaml deploys a gitrepository and kustomization Custom Resource
-     * Flux reads the declarative configuration stored in the kustomization CR to do a GitOps equivalent of `kustomize build . | kubectl apply -f -`, to deploy a helmrelease CR of the BigBang Helm Chart, that references input values.yaml files defined in the Git Repo.
-     * Flux reads the declarative configuration stored in the helmrelease CR to do a GitOps equivalent of `helm upgrade --install bigbang /chart -n=bigbang -f encrypted_values.yaml -f values.yaml --create-namespace=true`, the BigBang Helm Chart, then deploys more CR's that flux uses to deploy packages specified in BigBang's values.yaml
+     * Flux reads the declarative configuration stored in the kustomization CR to do a GitOps equivalent of `kustomize build . | kubectl apply  --filename -`, to deploy a helmrelease CR of the BigBang Helm Chart, that references input values.yaml files defined in the Git Repo.
+     * Flux reads the declarative configuration stored in the helmrelease CR to do a GitOps equivalent of `helm upgrade --install bigbang /chart  --namespace=bigbang  --filename encrypted_values.yaml --filename values.yaml --create-namespace=true`, the BigBang Helm Chart, then deploys more CR's that flux uses to deploy packages specified in BigBang's values.yaml
   
 ## New User Orientation
 
