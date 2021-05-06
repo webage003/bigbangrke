@@ -11,7 +11,7 @@ Note: The current implementation of the Quick Start limits customizability of th
 64GB ram, 16 CPU core, Ubuntu Server 20.04 LTS recommended for demo purposes       
 (Ubuntu comes up slightly faster than RHEL, although both work fine)       
 You want to have network connectivity to said VM, provisioning with a public IP and a security group locked down to your IP should work. Otherwise a Bare Metal server or even a vagrant box vm configured for remote ssh works fine.       
-Note: The quickstart repo's init-k3d.sh, starts up k3d using flags to disable the default ingress controller and map the VM's port 443 to a dockerized LB's port 443, which will eventually map to the istio ingress gateway. That along with some other things (Like leveraging a Lets Encrypt Free Wildcard HTTPS Certificate) are done to lower the prerequisites barrier to make basic demos easier. 
+Note: The quickstart repo's init-k3d.sh, starts up k3d using flags to disable the default ingress controller and map the VM's port 443 to a dockerized LB's port 443, which will eventually map to the istio ingress gateway. That along with some other things (Like leveraging a Lets Encrypt Free HTTPS Wildcard Certificate) are done to lower the prerequisites barrier to make basic demos easier. 
 
 
 ## Step 2. SSH into machine and install prerequisite software
@@ -158,7 +158,29 @@ registry1_password="REPLACE_ME"
 [Link to Big Bang Quick Start Repo](https://repo1.dso.mil/platform-one/quick-start/big-bang#big-bang-quick-start)
 
 
-## Step 5. Edit your Laptop's HostFile to access the web pages hosted on the BigBang Cluster
+## Step 5. Add the LEF HTTPS Demo Certificate
+* A Lets Encrypt Free HTTPS Wildcard Certificate, for *.bigbang.dev is included in the repo, we'll apply it from a regularly updated upstream source of truth.
+```bash
+[ubuntu@k3d:~/big-bang]
+# Download Encrypted HTTPS Wildcard Demo Cert
+curl https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/hack/secrets/ingress-cert.yaml > ~/ingress-cert.enc.yaml
+
+# Download BigBang's Demo GPG Key Pair to a local file
+curl https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/hack/bigbang-dev.asc > /tmp/demo-bigbang-gpg-keypair.dev
+
+# Import the Big Bang Demo Key Pair into keychain
+gpg --import /tmp/demo-bigbang-gpg-keypair.dev
+
+# Install sops (Secret Operations CLI tool by Mozilla)
+wget https://github.com/mozilla/sops/releases/download/v3.6.1/sops_3.6.1_amd64.deb
+sudo dpkg -i sops_3.6.1_amd64.deb
+
+# Decrypt and apply to the cluster
+sops --decrypt ~/ingress-cert.enc.yaml | kubectl apply -f - --namespace=istio-system
+```
+
+
+## Step 6. Edit your Laptop's HostFile to access the web pages hosted on the BigBang Cluster
 ```bash
 [ubuntu@k3d:~/big-bang]
 k get vs -A  # Short version of, kubectl get virtualservices --all-namespaces
