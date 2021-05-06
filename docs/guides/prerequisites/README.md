@@ -2,7 +2,7 @@
 * How the Prerequisites docs are organized:
   * This README.md is meant to be a high level overview of prerequsites.
   * /docs/guides/prerequsites/(some_topic).md files are meant to offer more specific guidance on prerequisites while staying generic. 
-  * /docs/guides/deployment_scenarios/(some_topic).md files may also offer additional details on prerequesites specific to the scenario. 
+  * The /docs/guides/deployment_scenarios/(some_topic).md files may also offer additional details on prerequesites specific to the scenario. 
 * Prerequisites vary depending on deployment scenario, thus a table is used to give an overview.
 * Note for future edits: The following table was generated using tablesgenerator.com/markdown_tables, recommended to copy the table's raw text contents, visit tablesgenerator.com/markdown_tables, and File -> Paste table data when edits are needed.
 

@@ -142,7 +142,7 @@ docker login https://registry1.dso.mil
 # Login Succeeded
 ```
 
-4. Create a terraform.tfvars file with you registry1 credentials in your copy of the cloned repo
+4. Create a terraform.tfvars file with your registry1 credentials in your copy of the cloned repo
 ```bash
 [ubuntu@k3d:~/big-bang]
 vi ~/big-bang/terraform.tfvars
