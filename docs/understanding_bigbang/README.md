@@ -19,7 +19,7 @@
   Example of some potential components in a full End to End Solution: 
   * P1's Cloud Native Access Point to protect Ingress Traffic. (This can be swapped with an equivalent, or considered optional in an internet disconnected setup.)
   * Hardened Host OS
-  * Hardened Kubernetes Cluster (BigBang assumes ByoC, Bring your own Cluster)
+  * Hardened Kubernetes Cluster (BigBang assumes ByoC, Bring your own Cluster) (The BigBang team recommends consumers who are interested in a full solution, partner with Vendors of Kubernetes Distributions to satisfy the prerequisite of a Hardened Kubernetes Cluster.)
   * Hardened Applications running on the Cluster (BigBang helps solve this component)
 
 
