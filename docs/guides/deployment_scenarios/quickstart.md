@@ -2,7 +2,7 @@
 
 
 ## Overview 
-The Big Bang Quick Start is meant to offer an easy to deploy preview of BigBang.       
+This guide is designed to offer an easy to deploy preview of BigBang, so new users can get to a hands-on state as quickly as possible.       
 Note: The current implementation of the Quick Start limits customizability of the BigBang Deployment.      
 (It's doing a GitOps defined deployment from a repo you don't control.)
 
