@@ -3,22 +3,22 @@
 ## What is BigBang?
 
 * BigBang is a Helm Chart that is used to deploy a DevSecOps Platform on a Kubernetes Cluster. The DevSecOps Platform is composed of application packages which are bundled as helm charts that leverage IronBank hardened container images.
-* The BigBang Helm Chart deploys gitrepository and helmrelease Custom Resources to a Kubernetes Cluster that's running the Flux GitOps Operator. Flux then installs the helm charts defined by the Custom Resources into the cluster.
+* The BigBang Helm Chart deploys gitrepository and helmrelease Custom Resources to a Kubernetes Cluster that's running the Flux GitOps Operator, these can be seen using `kubectl get gitrepository,helmrelease -n=bigbang`. Flux then installs the helm charts defined by the Custom Resources into the cluster.
 * The BigBang Helm Chart has a values.yaml file that does 2 main things:
   1. Defines which DevSecOps Platform packages/helm charts will be deployed
-  2. Defines what values.yaml input parameters will be paired with those helm charts.
-* You can see what applications are part of the platform by clicking [here to see BigBang's default values.yaml](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/chart/values.yaml#L88)
+  2. Defines what input parameters will be passed through to the chosen helm charts.
+* You can see what applications are part of the platform by clicking [here to see BigBang's default values.yaml](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/chart/values.yaml)
 (Tip: `[CTRL] + [F]` "repo:", to quickly iterate through the list of applications supported by the BigBang team)
 
 ## How do I deploy BigBang?
 
-**Note:** The Deployment Process and Pre-Requisites will vary depending on the deployment scenario. The Quick Start Demo Deployment for example, allows some steps to be skipped due to a mixture of automation and generically reusable demo configuration that satisfies pre-requisites.
-The following is a general overview of the process, the deployment guides go into more detail.
+**Note:** The Deployment Process and Pre-Requisites will vary depending on the deployment scenario. The [Quick Start Demo Deployment](guides/deployment_scenarios/quickstart.md) for example, allows some steps to be skipped due to a mixture of automation and generically reusable demo configuration that satisfies pre-requisites.
+The following is a general overview of the process, the [deployment guides](guides/deployment_scenarios) go into more detail.
 
 1. Satisfy Pre-Requisites:
-   * Provision a Kubernetes Cluster according to best practices
-   * Ensure the Cluster has network connectivity to a Git Repo you control
-   * Install Flux GitOps Operator on the Cluster
+   * Provision a Kubernetes Cluster according to [best practices](guides/prerequisites/kubernetes_preconfiguration.md#best-practices).
+   * Ensure the Cluster has network connectivity to a Git Repo you control.
+   * Install Flux GitOps Operator on the Cluster.
    * Configure Flux, the Cluster, and the Git Repo for GitOps Deployments that support deploying encrypted values.
    * Commit to the Git Repo BigBang's values.yaml and encrypted secrets that have been configured to match the desired state of the cluster (including HTTPS Certs and DNS names).  
 2. `kubectl apply --filename bigbang.yaml`
