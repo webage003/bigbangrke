@@ -120,18 +120,15 @@ cd ~/big-bang
 ```
 
 2. Look up your IronBank image pull credentials from https://registry1.dso.mil
-```text
-How to Look up IB Image Pull Credentials:
-1. In a web browser go to https://registry1.dso.mil
-2. Login via OIDC provider
-3. Top right of the page, click your name --> User Profile
-4. Your image pull username is labeled "Username"
-5. Your image pull password is labeled "CLI secret"
-(Note: The image pull creds are tied to the life cycle of an OIDC token
-which expires after 30 days, so if 30 days have passed since your last 
-login to IronBank, the credentials will stop working until you relogin
-to the https://registry1.dso.mil GUI)
-```
+
+  How to Look up IB Image Pull Credentials:
+  1. In a web browser go to https://registry1.dso.mil
+  2. Login via OIDC provider
+  3. Top right of the page, click your name --> User Profile
+  4. Your image pull username is labeled "Username"
+  5. Your image pull password is labeled "CLI secret"
+  (Note: The image pull creds are tied to the life cycle of an OIDC token which expires after 30 days, so if 30 days have passed since your last login to IronBank, the credentials will stop working until you relogin to the https://registry1.dso.mil GUI)
+
 
 3. Verify your credentials work 
 ```bash
