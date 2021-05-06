@@ -8,9 +8,10 @@ Note: The current implementation of the Quick Start limits customizability of th
 
 
 ## Step 1. Provision a VM
-64GB ram, 16 CPU core, Ubuntu Server 20.04 LTS recommended for demo purposes       
-(Ubuntu comes up slightly faster than RHEL, although both work fine)       
-You want to have network connectivity to said VM, provisioning with a public IP and a security group locked down to your IP should work. Otherwise a Bare Metal server or even a vagrant box vm configured for remote ssh works fine.       
+The following requirements are recommended for Demo Purposes: 
+* 1 VM with 64GB RAM, 16-Core CPU (This will become a single node cluster)
+* Ubuntu Server 20.04 LTS (Ubuntu comes up slightly faster than RHEL, although both work fine)
+* Network connectivity to said VM (provisioning with a public IP and a security group locked down to your IP should work. Otherwise a Bare Metal server or even a vagrant box vm configured for remote ssh works fine.)
 Note: The quickstart repo's init-k3d.sh, starts up k3d using flags to disable the default ingress controller and map the VM's port 443 to a dockerized LB's port 443, which will eventually map to the istio ingress gateway. That along with some other things (Like leveraging a Lets Encrypt Free HTTPS Wildcard Certificate) are done to lower the prerequisites barrier to make basic demos easier. 
 
 
