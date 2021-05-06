@@ -6,7 +6,7 @@
 
 ## How Dynamic volume provisioning works in a nut shell
 * StorageClass + PersistentVolumeClaim = Dynamically Created Persistent Volume
-* A PersistentVolumeClaim that does not reference a specific StorageClass will leverage the default StorageClass. (Of which there should only be 1, identified using kubernetes annotations.) Some Helm Charts allow a storage class to be explicitly specified so that multiple storage classe can be used simultaneously. 
+* A PersistentVolumeClaim that does not reference a specific StorageClass will leverage the default StorageClass. (Of which there should only be 1, identified using kubernetes annotations.) Some Helm Charts allow a storage class to be explicitly specified so that multiple storage classes can be used simultaneously. 
 
 
 ## How to check what storageclasses are installed on your cluster
