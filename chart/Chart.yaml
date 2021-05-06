@@ -1,6 +1,10 @@
 apiVersion: v2
 name: bigbang
-version: 1.6.0
+<<<<<<< HEAD
+version: 1.6.2
+=======
+version: 1.4.0
+>>>>>>> a2f1e9d0... release 1.4.x specific code changes
 description: Big Bang is a declarative, continuous delivery tool for core DoD hardened and approved packages into a Kubernetes cluster.
 
 type: application
