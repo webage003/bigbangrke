@@ -48,7 +48,7 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | sso.oidc.host | string | `"login.dso.mil"` | Domain for keycloak used for configuring SSO |
 | sso.oidc.realm | string | `"baby-yoda"` | Keycloak realm containing clients |
 | sso.certificate_authority | string | `""` | Keycloak's certificate authority (unencoded) used by authservice to support SSO for various packages |
-| sso.jwks | string | `""` | Keycloak realm's json web key uri, obtained through https://<keycloak-server>/auth/realms/<realm>/.well-known/openid-configuration |
+| sso.jwks | string | `""` | Keycloak realm's json web key uri, obtained through `https://<keycloak-server>/auth/realms/<realm>/.well-known/openid-configuration` |
 | sso.client_id | string | `""` | OIDC client ID used for packages authenticated through authservice |
 | sso.client_secret | string | `""` | OIDC client secret used for packages authenticated through authservice |
 | sso.token_url | string | `"https://{{ .Values.sso.oidc.host }}/auth/realms/{{ .Values.sso.oidc.realm }}/protocol/openid-connect/token"` | OIDC token URL template string (to be used as default) |
