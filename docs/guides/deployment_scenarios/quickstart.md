@@ -1,11 +1,9 @@
 # Big Bang Quick Start
 
+## Overview
 
-## Overview 
-This guide is designed to offer an easy to deploy preview of BigBang, so new users can get to a hands-on state as quickly as possible.       
-Note: The current implementation of the Quick Start limits customizability of the BigBang Deployment.      
-(It's doing a GitOps defined deployment from a repo you don't control.)
-
+This guide is designed to offer an easy to deploy preview of BigBang, so new users can get to a hands-on state as quickly as possible.
+Note: The current implementation of the Quick Start limits the ability to customize the BigBang Deployment. It's doing a GitOps defined deployment from a repository you don't control.
 
 ## Step 1. Provision a VM
 The following requirements are recommended for Demo Purposes: 
