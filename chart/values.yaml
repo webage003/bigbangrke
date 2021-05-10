@@ -571,7 +571,7 @@ addons:
     # -- Values to passthrough to the gitlab runner chart: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git
     values: {}
 
-  nexusRepositoryManager:
+  nexus:
     enabled: false
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git
@@ -580,7 +580,7 @@ addons:
 
     # -- Host portion of the VirtualService FQDN
     # -- This is prepended to the root hostname value as such:
-    # -- {{ .Values.addons.nexusRepositoryManager.hostname }}.{{ .Values.hostname }}
+    # -- {{ .Values.addons.nexus.hostname }}.{{ .Values.hostname }}
     hostname: nexus
 
     # -- Base64 encoded license file.
