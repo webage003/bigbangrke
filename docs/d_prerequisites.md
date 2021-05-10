@@ -166,3 +166,10 @@ addons:
         enabled: true
 ```
 **This is not the recommended solution as it requires running an init container as privileged.**
+
+## Azure AKS
+
+In order to deploy BigBang on AKS, the network policy must be configured in order to prevent an issue with Flux where [source-controller is unreachable](https://fluxcd.io/docs/use-cases/azure/). By default, there is not a `--network-policy` set when setting up an AKS cluster. In order for Flux to work properly, set the following values for the cluster network policy:
+```
+--network-plugin=azure --network-policy=calico
+```
