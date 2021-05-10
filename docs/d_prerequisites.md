@@ -169,7 +169,36 @@ addons:
 
 ## Azure AKS
 
-In order to deploy BigBang on AKS, the network policy must be configured in order to prevent an issue with Flux where [source-controller is unreachable](https://fluxcd.io/docs/use-cases/azure/). By default, there is not a `--network-policy` set when setting up an AKS cluster. In order for Flux to work properly, set the following values for the cluster network policy:
+In order to deploy BigBang on AKS, the network policy must be configured in order to prevent an issue with Flux where [source-controller is unreachable](https://fluxcd.io/docs/use-cases/azure/). By default, there is not a `--network-policy` set when setting up an AKS cluster. In order for Flux to work properly, set the following values for the cluster network:
 ```
 --network-plugin=azure --network-policy=calico
+```
+
+### ElasticSearch
+
+For ElasticSearch to work properly in AKS, the nodes must be configured in order for ElasticSearch to be able to create memory-mapped areas. ElasticSearch enforces the maximum map count check on Linux to verify this. In order to pass the [maximum map count check](https://www.elastic.co/guide/en/elasticsearch/reference/master/_maximum_map_count_check.html), the `vm.max_map_count` must be set to at least `262144` using `sysctl`. Otherwise, ElasticSearch will not spin up properly.
+
+In order to set this value within AKS, add the `sysctl -w vm.max_map_count=262144` command to the `initContainers` section of ElasticSearch in the `logging` section of `values.yaml`. An example is shown below:
+```
+logging:
+  enabled: true
+  values:
+    elasticsearch:
+      data:
+        count: 3
+        initCointainers:
+        - command:
+          - sh
+          - -c
+          - sysctl -w vm.max_map_count=262144
+          image: busybox
+          name: sysctl
+          securityContext:
+            privileged: true
+        persistence:
+          size: 5Gi
+        resources:
+          limits: {}
+          requests:
+            cpu: 0.1
 ```
