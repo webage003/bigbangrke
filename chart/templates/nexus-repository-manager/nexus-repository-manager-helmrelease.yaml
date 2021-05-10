@@ -1,4 +1,4 @@
-{{- $fluxSettingsNexus := merge .Values.addons.nexus.flux .Values.nexus -}}
+{{- $fluxSettingsNexus := merge .Values.addons.nexus.flux .Values.flux -}}
 {{- if .Values.addons.nexus.enabled }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
