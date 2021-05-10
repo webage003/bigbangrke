@@ -640,6 +640,8 @@ addons:
         roles:
           - "nx-admin"
 
+    flux: {}
+
     # -- Values to passthrough to the nxrm chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/nexus.git
     values: {}
 
