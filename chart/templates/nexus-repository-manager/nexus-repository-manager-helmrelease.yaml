@@ -20,6 +20,7 @@ spec:
       sourceRef:
         kind: GitRepository
         name: nexus-repository-manager
+        namespace: {{ .Release.Namespace }}
 
   {{- toYaml $fluxSettingsNexus | nindent 2 }}
 
@@ -34,9 +35,15 @@ spec:
       kind: Secret
       valuesKey: "overlays"
 
-{{- if .Values.istio.enabled }}
+  {{ if or .Values.istio.enabled .Values.monitoring.enabled }}
   dependsOn:
-  - name: istio
-    namespace: bigbang
-{{- end }}
+  {{- if .Values.istio.enabled }}
+    - name: istio
+      namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- if .Values.monitoring.enabled }}
+    - name: monitoring
+      namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- end }}
 {{- end }}
