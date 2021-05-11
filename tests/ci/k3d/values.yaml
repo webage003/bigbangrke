@@ -363,11 +363,11 @@ addons:
       # https://help.sonatype.com/repomanager3/installation/system-requirements#SystemRequirements-JVMDirectMemory
         env:
           - name: install4jAddVmParams
-            value: "-Xms500M -Xmx500M -XX:MaxDirectMemorySize=800M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
+            value: "-Xms500M -Xmx500M -XX:MaxDirectMemorySize=500M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
         resources:
           requests:
             cpu: 100m
-            memory: 2000Mi
+            memory: 1500Mi
 
   velero:
     enabled: false
