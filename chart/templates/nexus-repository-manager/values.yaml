@@ -4,7 +4,7 @@
 
 {{- define "bigbang.defaults.nexus-repository-manager" -}}
 domain: {{ .Values.hostname }}
-hostname: {{ .Values.addons.nexus.hostname }}
+hostname: nexus
 istio:
   enabled: {{ .Values.istio.enabled }}
 
@@ -15,39 +15,32 @@ nexus:
   imagePullSecrets:
     - name: private-registry
 
-
 license_key: "{{ .Values.addons.nexus.license_key }}"
 
 {{- if .Values.addons.nexus.sso.enabled }}
 sso:
   enabled: {{ .Values.addons.nexus.sso.enabled }}
   idp_data:
-    entityId: "{{ .Values.addons.nexus.sso.idp_data.entity_id }}"
+    entityId: "https://nexus.{{ .Values.hostname }}/service/rest/v1/security/saml/metadata"
     usernameAttribute: "{{ .Values.addons.nexus.sso.idp_data.username }}"
     firstNameAttribute: "{{ .Values.addons.nexus.sso.idp_data.firstName }}"
     lastNameAttribute: "{{ .Values.addons.nexus.sso.idp_data.lastName }}"
     emailAttribute: "{{ .Values.addons.nexus.sso.idp_data.email }}"
     groupsAttribute: "{{ .Values.addons.nexus.sso.idp_data.groups }}"
-    validateResponseSignature: "{{ .Values.addons.nexus.sso.idp_data.validateResponseSignature | default "true" }}"
-    validateAssertionSignature: "{{ .Values.addons.nexus.sso.idp_data.validateAssertionSignature | default "true" }}"
+    validateResponseSignature: "true"
+    validateAssertionSignature: "true"
     idpMetadata: '{{ .Values.addons.nexus.sso.idp_data.idpMetadata }}'
   realm:
-      {{- range .Values.addons.nexus.sso.realm }}
-      - {{ . | quote }}
-      {{- end }}
-  {{- with .Values.addons.nexus.sso.role }}
+    - "NexusAuthenticatingRealm"
+    - "NexusAuthorizingRealm"
+    - "SamlRealm"
   role:
-    id: {{ .id }}
-    name: {{ .name }}
-    description: {{ .description }}
+    id: "keycloak"
+    name: "keycloak"
+    description: "all keycloak users as admins"
     privileges:
-      {{- range .privileges }}
-      - {{ . | quote }}
-      {{- end }}
+      - "nx-all"
     roles:
-      {{- range .roles }}
-      - {{ . | quote }}
-      {{- end }}
-  {{- end }}
+      - "nx-admin"
 {{- end }}
 {{- end -}}

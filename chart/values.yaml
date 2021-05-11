@@ -69,7 +69,7 @@ sso:
 
   # -- OIDC token URL template string (to be used as default)
   token_url: "https://{{ .Values.sso.oidc.host }}/auth/realms/{{ .Values.sso.oidc.realm }}/protocol/openid-connect/token"
-    
+
   # -- OIDC auth URL template string (to be used as default)
   auth_url: "https://{{ .Values.sso.oidc.host }}/auth/realms/{{ .Values.sso.oidc.realm }}/protocol/openid-connect/auth"
 
@@ -297,7 +297,7 @@ fluentbit:
   # -- Flux reconciliation overrides specifically for the Fluent-Bit Package
   flux: {}
 
-  # -- Values to passthrough to the fluentbit chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git  
+  # -- Values to passthrough to the fluentbit chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
   values: {}
 
   # -- Post Renderers.  See docs/postrenders.md
@@ -578,11 +578,6 @@ addons:
       path: "./chart"
       tag: "29.1.0-bb.0"
 
-    # -- Host portion of the VirtualService FQDN
-    # -- This is prepended to the root hostname value as such:
-    # -- {{ .Values.addons.nexus.hostname }}.{{ .Values.hostname }}
-    hostname: nexus
-
     # -- Base64 encoded license file.
     license_key: ""
 
@@ -595,10 +590,6 @@ addons:
 
       # -- NXRM SAML SSO Integration data
       idp_data:
-        # -- NXRM Entity ID Value
-        # example: https://nexus-repository-manager.bigbang.dev/service/rest/v1/security/saml/metadata
-        entity_id: ""
-
         # -- IdP Field Mappings
         # -- NXRM username attribute
         username: ""
@@ -615,30 +606,15 @@ addons:
         # -- NXRM groups attribute (optional)
         groups: ""
 
-        # -- NXRM validate response/signature
-        # -- in production, these should be set to "True"
-        validateResponseSignature: ""
-        validateAssertionSignature: ""
-
         # -- IDP SAML Metadata XML as a single line string in single quotes
         # -- this information is public and does not require a secret
         idpMetadata: ''
-
-      # -- NXRM Realms, removing Nexus* will remove local auth
-      realm:
-        - "NexusAuthenticatingRealm"
-        - "NexusAuthorizingRealm"
-        - "SamlRealm"
 
       # -- NXRM Role
       role:
         id: ""
         name: ""
         description: ""
-        privileges:
-          - "nx-all"
-        roles:
-          - "nx-admin"
 
     flux: {}
 
