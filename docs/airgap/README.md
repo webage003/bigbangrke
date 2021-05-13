@@ -36,12 +36,64 @@ Hack commands:
 
 Airgap Deployment is a form of deployment which does not have any direct connection to the Internet or external network during cluster setup or runtime. During installation, bigbang requires certain images and git repos for installation. Since we will be installing in internet-disconnected environment, we need to perform extra steps to make sure these resources are available.
 
-## Requirements and Prerequisites
+---
 
-### General Prereqs
-- A kubernetes cluster with container mirroring support. There is a section below that covers mirroring in more detail with examples for supported clusters.
-- BigBang(BB) [release artifacts](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/releases).
-- Utility Server.
+# Airgapped Bundle
+This project will bundle all of the Big Bang artifacts from the latest
+release.
+
+**These instructions are:**
+* **focused on deploying Big Bang after an appropriate airgapped bundle
+has already been created and the prerequisite Kubernetes cluster has been stood up**
+* **based off our current bundling process where we include a bare-bones 
+git server container image as part of the bundling**
+* **structured around assuming that users will use kustomize to apply changes 
+to the Big Bang charts to more easily tweak Big Bang configuration options for their environments**
+
+WIPS:
+* prereqs  
+* fill out details on deploying an EC2 instance / utility server
+* Alternate instructions for Kubernetes distributions which do not have repo mirroring capabilities
+
+
+### Airgapped Environment Requirements
+
+- rke2/k3s cluster
+    - Kubernetes cluster CPU, Memory, and Disk space vary depending on what is enabled. If everything is enabled, the following is the minimum viable setup: vCores - 8 Memory - 32GB Disk Space - 20GB
+- `Flux CLI >= v0.5.2`
+- `sops`
+- `kustomize`
+- `kubectl`
+- `docker`: for running docker registry.
+- `openssl` for self-signed certificate.
+- `curl`: For troubleshooting registry.
+
+## Prep Work, Prerequisites & Assumptions:
+* You are able to deploy AMIs as EC2 instances
+* You have an AMI configured with the required tools (or an alternative server with them installed)
+* Grab a copy of the `template` repository from here: https://repo1.dso.mil/platform-one/big-bang/customers/template/-/tree/main/
+
+* Download the Big Bang bundle from: https://p1-airgapped-bundle.s3.amazonaws.com/bb-latest <br/>
+Extract the Big Bang bundle to your working area on the standalone instance you created above. You should have a folder structure similar to the following:
+```
+    bb-bundle.tar.gz
+    │   git-server.tar
+    └───1.6.0
+    │    │   images.tar.gz
+    │    │   images.txt
+    │    │   repositories.tar.gz
+    │
+    └───security-scans
+         │   aqua-summary.txt
+         └───1.6.0
+              │  [folders for each image bundled]
+              │  ...
+```
+
+* Deploy an EC2 instance with the k3s_udn_node AMI in the us-gov-east-1 region.
+```
+detailed instructions for ec2 deployment
+```
 
 ### Package Specific Prereqs
 
@@ -63,196 +115,457 @@ MIME-Version: 1.0
 ```
 
 
+## General Information:
+* If you modify the keys underneath the git server container, you must restart the git-server container for changes to appear. git-server only reads its files on startup.
 
-## Utility Server
+---
+## 1. Initial environment setup
+We'll need to perform some general environment setup first: configuring the git server we'll be using for our GitOps and a basic Docker registry to serve the Big Bang images we'll need. We'll use a simple standalone EC2 instance to serve these Docker containers (but any server accessible to your cluster and with the needed tools defined above should work).
 
-Utility Server is an internet-disconected server that will host the private registry and git server that are required to deploy bigbang. It should include these commandline tools below;
+>**These two containers are meant to be simple utilities only used for Big Bang deployment. Use beyond these purposes is as-is.**
 
-- `docker`: for running docker registry.
-  - `registry:2` image
-  - `openssl` for self-signed certificate.
-- `curl`: For troubleshooting registry.
-- `git`: for setup git server.
+#### 1.1. Configure your git server and mount repos/keys 
+1. Create an ssh keypair with no passphrase. Call it `identity`.
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ ssh-keygen -t rsa
+   ```
+
+2. Create a folder at `~/git-server`
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ mkdir ~/git-server
+   ```
+
+3. Extract repositories.tar.gz contents to `~/git-server/`. You should have a `repos` folder inside now.
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ tar -zxvf bundle/1.6.0/repositories.tar.gz -C ~/git-server/
+   ```
+
+4. Extract and move your `template` copy into `~/git-server/repos`
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ tar -zxvf bundle/template.tar.gz -C ~/git-server/repos/
+   ```
+
+5. Copy your ssh credentials into `~/git-server/keys`
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ mkdir ~/git-server/keys/
+   ec2-user@[standalone-ec2-instance]$ cp ~/.ssh/identity* ~/git-server/keys/
+   ```
+
+6. Add the git-server docker container to your local container registry
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ docker load < git-server.tar
+   ```
+
+7. Verify that the git-server docker image loaded correctly
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ docker images
+   ```
+
+8. Copy the git-server docker image name from above. Run the git-server docker container and mount the keys and repos directories into the container
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ docker run -d -p 2222:22 --restart=always -v ~/git-server/keys:/git-server/keys -v ~/git-server/repos:/git-server/repos [git-server docker image:tag]
+   ```
+
+#### 1.2 Pull down Git repositories for later use
+
+It's helpful to have the `bigbang` and `template` repositories cloned on your control plane node, and to use that area as your working area for the following steps. You should have added the `template` repository to your git server earlier. 
+
+1. Copy the identity files to your control plane node.
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ scp -i [AWS identity key file] ~/.ssh/identity* [control-plane-ip]:~/.ssh/
+   ```
+
+2. Then set up an ssh `config` file on the control plane node:
+   ```bash
+   ec2-user@[control-plane-node]$ touch ~/.ssh/config
+   ec2-user@[control-plane-node]$ chmod 600 ~/.ssh/config
+   ```
+
+   And the contents of the `config` file should be:
+
+   ```ssh
+   Host [standalone ec2 instance IP]
+     HostName [standalone ec2 instance IP]
+     IdentityFile ~/.ssh/identity
+   ```
+
+3. With your ssh keys configured, clone those repos with the following commands:
+
+   ```bash
+   ec2-user@[control-plane-node]$ git clone ssh://git@[git-server-ip]:2222/git-server/repos/bigbang/.git
+   ec2-user@[control-plane-node]$ git clone ssh://git@[git-server-ip]:2222/git-server/repos/template/.git
+   ```
+
+   We also need the SSH fingerprint of the git-server later as part of creating secrets, so this serves a dual purpose.
+
+#### 1.3. Configure your container registry
+
+1. Extract the images.tar.gz file
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ tar -zxvf bundle/1.6.0/images.tar.gz -C ~/
+   ```
+
+2. Load registry image into your local Docker (if you cannot access this directory, chmod +x the 1.6.0/var/lib/registry directory)
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ docker load < var/lib/registry/registry.tar
+   ```
+
+3. Create the SSL certificates we need for the Docker registry and start the registry container.
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ sudo ~/template/scripts/start-registry.sh
+   ```
+   The script will prompt you for several values. The defaults it suggests are mostly fine. You can customize the State and Location, following the pattern set by the prompt, for your specific scenario. For the Organization, put `ADP` and for the Common Name, put a throwaway but unique Fully Qualified Domain Name such as `bigbang.[project_name].udn.adp`. If you want to use the FQDN long-term instead of the registry instance's IP address for other things, this guide does not cover those steps.<br/>
+
+   For the Subject Alternative Names, enter `IP:[standalone-ec2-instance-ip]`
 
 
 
-## Git Server
+4. Verify functionality. You should see a listing of Big Bang and other container images.
+   ```bash
+   ec2-user@[standalone-ec2-instance]$ curl https://127.0.0.1:5000/v2/_catalog -k
+   ```
 
-As part of  BB release, we provide `repositories.tar.gz` which contains all the git repositories that BB depend on for deployment. You have two options for serving up these packages for Flux.
+---
+## 2. Configure your cluster before big bang deployment
+There are a few more steps to configure the cluster for our Big Bang deployment.
 
-### Option One
+_These instructions are written assuming you use the control plane node as your working environment._
 
-You can follow the process below to setup git with `repositories.tar.gz` on the Utility Server.
+#### 2.1. Update cluster nodes to trust container registry and add repo mirroring
+>**This section currently assumes you're using k3s or another k3s-based distribution.**
 
-- Create Git user and SSH key
+For mirroring steps in distributions other than k3s, please see the Mirroring section at the bottom of the readme.
 
-```bash
-$ sudo useradd --create-home --shell /bin/bash git
-$ ssh-keygen  -b 4096 -t rsa -f ~/.ssh/identity -q -N ""
+1. Create a `registries.yaml` file as below. You will need to insert the IP address of your Docker registry container's host (the standalone EC2 instance). <br/>
+Additionally, this uses the public .crt file generated by the certs step you created above as part of standing up the Docker registry container.
+   ```yaml
+   mirrors:
+     registry.dso.mil:
+       endpoint:
+         - https://[docker-registry-host-ip]:5000
+     registry1.dso.mil:
+       endpoint:
+         - https://[docker-registry-host-ip]:5000
+     docker.io:
+       endpoint:
+         - https://[docker-registry-host-ip]:5000
+   configs:
+     [docker-registry-host-ip]:5000:
+       tls:
+         ca_file: "/etc/ssl/certs/[cert-name].crt"
+   ```
+
+2. Place registries.yaml at /etc/rancher/k3s/ on every node in the cluster (workers and control plane(s))
+3. Place the `.crt` file from the previous registry x509 certificate generation step on each node matching location defined in `registries.yaml`
+4. Restart k3s processes (`systemctl restart k3s` on control plane, `systemctl restart k3s-agent` on workers)
+
+#### 2.2. Create ssh-credentials secret in k3s cluster in bigbang and flux-system namespace
+1. Run the following commands:
+   ```bash
+   ec2-user@[control-plane-node]$ cd ~/.ssh/
+   ec2-user@[control-plane-node]$ sudo kubectl create ns bigbang
+   ec2-user@[control-plane-node]$ sudo kubectl create ns flux-system
+   ec2-user@[control-plane-node]$ sudo kubectl create secret generic ssh-credentials -n bigbang --from-file=./identity --from-file=./identity.pub --from-file=./known_hosts
+   ec2-user@[control-plane-node]$ sudo kubectl create secret generic ssh-credentials -n flux-system --from-file=./identity --from-file=./identity.pub --from-file=./known_hosts
+   ```
+
+#### 2.3. Deploy flux to the cluster
+1. copy `bigbang/scripts/deploy/flux.yaml` to `template/flux/`
+   ```bash
+   ec2-user@[control-plane-node]$ cp bigbang/scripts/deploy/flux.yaml template/flux/
+   ```
+
+2. Update our copy of `flux.yaml` to add the following code snippets to kustomize-controller deployment pod spec.
+    * In the `volumeMounts` section, we want to add the following code:
+    ```yaml
+          volumeMounts:
+            ...
+            - mountPath: /home/controller
+              name: ssh
+            - mountPath: /keys
+              name: ssh-credentials
+          lifecycle:
+            postStart:
+                exec:
+                  command:
+                    - sh
+                    - "-c"
+                    - mkdir -p ~/.ssh && cat /keys/identity > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa && cat /keys/identity.pub > ~/.ssh/id_rsa.pub && cat /keys/known_hosts > ~/.ssh/known_hosts
+    ```
+    * In the `volumes` section, we want to add the following: 
+    ```yaml
+      - emptyDir: {}
+        name: ssh
+      - name: ssh-credentials
+        secret:
+          secretName: ssh-credentials
+          defaultMode: 0755
+    ```
+> The emptyDir above does matter. Without it, the flux pods don't seem to recognize that ssh credentials exist.
+
+The overall modified kustomize-controller deployment should similar to this:
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: flux-system
+    app.kubernetes.io/version: v0.10.0
+    control-plane: controller
+  name: kustomize-controller
+  namespace: flux-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kustomize-controller
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+      labels:
+        app: kustomize-controller
+    spec:
+      containers:
+      - args:
+        - --events-addr=http://notification-controller/
+        - --watch-all-namespaces=true
+        - --log-level=info
+        - --log-encoding=json
+        - --enable-leader-election
+        env:
+        - name: RUNTIME_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        image: registry1.dso.mil/ironbank/fluxcd/kustomize-controller:v0.9.3
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: healthz
+        name: manager
+        ports:
+        - containerPort: 9440
+          name: healthz
+          protocol: TCP
+        - containerPort: 8080
+          name: http-prom
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: healthz
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 1000m
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: temp
+        - mountPath: /home/controller
+          name: ssh
+        - mountPath: /keys
+          name: ssh-credentials
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - sh
+                - "-c"
+                - mkdir -p ~/.ssh && cat /keys/identity > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa && cat /keys/identity.pub > ~/.ssh/id_rsa.pub && cat /keys/known_hosts > ~/.ssh/known_hosts
+      imagePullSecrets:
+      - name: private-registry
+      nodeSelector:
+        kubernetes.io/os: linux
+      securityContext:
+        fsGroup: 1337
+      serviceAccountName: kustomize-controller
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - emptyDir: {}
+        name: temp
+      - emptyDir: {}
+        name: ssh
+      - name: ssh-credentials
+        secret:
+          secretName: ssh-credentials
+          defaultMode: 0755
 ```
 
-- Create .SSH folder for `git` user
 
-  ```bash
-  $ sudo su - git
-  $ mkdir -p .ssh && chmod 700 .ssh/
-  $ touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
-  $ exit
-  ```
-  
-- Add client ssh key to `git` user `authorized_keys`
+3. run kustomize on our newly modified `flux.yaml`
+   ```bash
+   ec2-user@[control-plane-node]$ cd template/flux
+   ec2-user@[control-plane-node]$ kustomize build . | sudo kubectl apply -f -
+   ```
 
-  ```bash
-  $ sudo su
-  $ cat /[client-public-key-path]/identity.pub >> /home/git/.ssh/authorized_keys
-  $ exit
-  ```
+4. You should see the flux deployment happen in the `flux-system` namespace.
+   ```bash
+   ec2-user@[control-plane-node]$ watch sudo kubectl get all -n flux-system
+   ```
 
-- Extract `repositories.tar.gz` to git user home directory
+#### 2.4. Create the SOPS secret Big Bang needs
+1. Run `bigbang/hack/sops-create.sh` from anywhere on the control plane node to create a SOPS secret for the cluster (needed by bigbang helm deploys later)
 
-  ```bash
-  $ sudo tar -xvf repositories.tar.gz --directory /home/git/
-  ```
+---
 
-- Add Hostname alias
+## 3. Deploy Big Bang
 
-  ```bash
-  PRIVATEIP=$( curl http://169.254.169.254/latest/meta-data/local-ipv4 )
-  sudo sed -i -e '1i'$PRIVATEIP'   'myhostname.com'\' /etc/hosts
-  sudo sed -i -e '1i'$PRIVATEIP'   'host.k3d.internal'\' /etc/hosts #only for k3d
-  ```
-  
-  
+1. Update `template/base/kustomization.yaml` to point at our local git server
+   ```yaml
+   bases:
+   - "git::ssh:://git@[git-server-ip]:2222/git-server/repos/bigbang/.git//base?ref=1.6.0"
+   ```
 
-- To test the client key;
+2. Update `template/base/lm-values.yaml` to point all git repo URLs at our local git server.
+   Also comment out all of the container image URLs; leaving the deployments to use the defaults will result in the repo mirroring we set up handling all the redirects we need.
+   > If your Kubernetes distribution does not have repo mirroring, you must update these container image URLs to point at our local Docker registry
+   ```yaml
+   istio:
+     git:
+       repo: ssh://git@[git-server-ip]:2222/git-server/repos/istio-controlplane/.git
+     values:
+       #hub: registry.us.lmco.com/istio
+       #proxy:
+         #image: registry.us.lmco.com/dcar-opensource/istio-1.7-proxyv2-1.7:1.7.7
+   ...
+   ```
 
-  ```bash
-  GIT_SSH_COMMAND='ssh -i /[client-private-key-path] -o IdentitiesOnly=yes' git clone git@[hostname/IP]:/home/git/repos/[sample-repo]
-  
-  #For example;
-  GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:/home/git/repos/bigbang 
-  #checkout release branch
-  git checkout 1.3.0
-  ```
-  
-### Option Two
+3. Update `set-lm-git-repo.yaml` to point at local network git repo host and add the ssh-credentials secretRef
+   ```yaml
+   ---
+   apiVersion: source.toolkit.fluxcd.io/v1beta1
+   kind: GitRepository
+   metadata:
+     name: bigbang
+   spec:
+     ref:
+       $patch: replace
+       semver: "1.6.0" #[replace with the current version of Big Bang being deployed]
+     url: "ssh://git@[git-server-ip]:2222/git-server/repos/bigbang/.git
+     secretRef:
+       name: "ssh-credentials"
+   ```
 
-There are some cases where you do not have access to or cannot create an ssh user on the utility server. It is possible to run an ssh git server on a non-standard port using Docker.
+4. Update `template/dev/bigbang.yaml` [THIS STEP TO BE MODIFIED WHEN WE HAVE AN AIRGAPPED ENTRY POINT TEMPLATE IN THE REPO]
+   ```yaml
+   apiVersion: v1
+   kind: Namespace
+   metadata:
+     name: bigbang
+   ---
+   apiVersion: source.toolkit.fluxcd.io/v1beta1
+   kind: GitRepository
+   metadata:
+     name: environment-repo
+     namespace: bigbang
+   spec:
+     interval: 1m
+     url: ssh://git@[git-server-ip]:2222/git-server/repos/template/.git
+     ref:
+       branch: udn-kustomization #use whatever branch you wind up putting your kustomizations in if they're not in the main branch
+     secretRef:
+       name: "ssh-credentials"
+   ---
+   apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+   kind: Kustomization
+   metadata:
+     name: environment
+     namespace: bigbang
+   spec:
+     interval: 1m
+     sourceRef:
+       kind: GitRepository
+       name: environment-repo
+     path: ./dev
+     prune: true
+     decryption:
+       provider: sops
+       secretRef:
+         name: sops-gpg
+   ```
 
-- Create an SSH key
+5. Update `template/dev/configmap.yaml` by appending to the bottom of the file the following:
+   ```yaml
+   git:
+     existingSecret: "ssh-credentials"
+   ```
 
-```bash
-$ ssh-keygen  -b 4096 -t rsa -f ./identity -q -N ""
-```
+6. Commit your changes to your local copy of `template`. After the objects are created, Flux will pull configuration and other data it needs from the git repositories, rather than using your local copies.
 
-- Extract `repositories.tar.gz` to your working directory
+7. Deploy `template` kustomizations to the cluster
+    ```bash
+    ec2-user@[control-plane-node]$ cd template/dev
+    ec2-user@[control-plane-node]$ sudo kubectl apply -f bigbang.yaml
+    ```
 
-```bash
-$ sudo tar -xvf repositories.tar.gz
-```
+8. Wait for the deployments to reconcile and finish (could take up to 10 minutes)
+   ```bash
+   ec2-user@[control-plane-node]$ sudo kubectl get gitrepositories,hr,ks,pods -A
+   ```
 
-- Start the provided Docker image (TODO: move this to an IB image when ready)
+---
 
-```bash
-docker run -d -p 4001:22 -v ${PWD}/identity.pub:/home/git/.ssh/authorized_keys -v ${PWD}/repos:/home/git servicesengineering/gitshim:0.0.1
-```
+## Using 3rd Party Packages
 
-You will now be able to test by checking out some of the code.
+The third party guide assumes that you already have or are planning to install Big Bang Core.
 
- ```bash
-  GIT_SSH_COMMAND='ssh -i /[client-private-key-path] -o IdentitiesOnly=yes' git clone git@[hostname/IP]:[PORT]/home/git/repos/[sample-repo]
-  
-  #For example;
-  GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:[PORT]/home/git/repos/bigbang 
-  #checkout release branch
-  git checkout 1.3.0
-  ```
+### Package your Git repository
 
-
-
-
-## Private Registry 
-
-Images needed to run BB in your cluster is packaged as part of the release in `images.tar.gz`. You can see the list of required images in `images.txt`. In our airgap environment, we need to setup a registry that our cluster can pull required images from or an existing cluster where we can copy images from `images.tar.gz` into.
-
-### Set Up
-
-To setup the registry, we will be using `registry:2` to run a  private registry with  self-signed certificate.
-
-- First, untar `images.tar.gz`;
-
-```bash
-tar -xvf images.tar.gz -C .
-```
-
-- SCP `registry:2` tar file
-
-  ```bash
-  docker save -o registry2.tar registry:2
-  docker save -o k3s.tar rancher/k3s:v1.20.5-rc1-k3s1 #check release matching version
-  scp registry2.tar k3s.tar ubuntu@hostname:~ #modify according to your environment
-  docker load -i registry2.tar #on your registry server
-  docker load -i k3s.tar
-  ```
-
-  
-
-- Use the script [registry.sh](./scripts/registry.sh) to create registry;
-
-```bash
-$ chmod +x registry.sh && sudo ./registry.sh
-
-Required information:
-Enter bit size for certs (Ex. 4096): 4096
-Enter number of days to sign the certs with (Ex. 3650): 3650
-Enter the 'Country' for the cert (Ex. US): US
-Enter the 'State' for the cert (Ex. CO): CO
-Enter the 'Location' for the cert (Ex. ColoradoSprings): ColoradoSprings
-Enter the 'Organization' for the cert (Ex. PlatformOne): PlatformOne
-Enter the 'Organizational Unit' for the cert (Ex. Bigbang): BigBang
-Enter the 'Common Name' for the cert (Must be a FQDN (at least one period character) E.g. myregistry.com): myregistry.com
-Enter the 'Subject Alternative Name' for the cert(E.g. 1.2.3.4): 10.0.52.144
-
-Generating certs ...
-mkdir: cannot create directory ‘certs’: File exists
-Generating RSA private key, 4096 bit long modulus
-.............................................................................................................++
-.....................................++
-e is 65537 (0x10001)
-Generating RSA private key, 4096 bit long modulus
-......................................................................................................................++
-.......................++
-e is 65537 (0x10001)
-Signature ok
-subject=/C=US/ST=CO/L=ColoradoSprings/O=PlatformOne/CN=myregistry.com
-Getting CA Private Key
-
-Launching our private registry ...
-def21e7025c7d4ea7bbb30603955e0b7da14d077592851b327e59d78a849cb7d
-
-Installation finished ...
-
-Notes
-=====
-
-To see images in the registry;
-
-=========================
-curl https://myhostname.com:5443/v2/_catalog -k
-=========================
+Packaging your repository from Git
 
 ```
-
-A folder is created with TLS certs that we are going to supply to our k8s cluster when pulling from the registry.
-
-You can ensure the images are now loaded in the registry;
-
-```bash
- curl -k https://myhostname.com:5443/v2/_catalog 
-{"repositories":["ironbank/anchore/engine/engine","ironbank/anchore/enterprise/enterprise","ironbank/anchore/enterpriseui/enterpriseui","ironbank/big-bang/argocd","ironbank/bitnami/analytics/redis-exporter","ironbank/elastic/eck-operator/eck-operator","ironbank/elastic/elasticsearch/elasticsearch","ironbank/elastic/kibana/kibana","ironbank/fluxcd/helm-controller","ironbank/fluxcd/kustomize-controller","ironbank/fluxcd/notification-controller","ironbank/fluxcd/source-controller","ironbank/gitlab/gitlab/alpine-certificates","ironbank/gitlab/gitlab/cfssl-self-sign","ironbank/gitlab/gitlab/gitaly",...]
+git clone --no-checkout https://repo1.dso.mil/platform-one/big-bang/apps/third-party/kafka.git && tar -zcvf kafka-repo.tar.gz kafka
 ```
 
+This creates a tar of a full git repo without a checkout. After you have placed this git repo in its destination you can get the files to view by doing.
 
+    git checkout
+
+### Package your registry images
+
+Package image 
+```
+docker save -o image-name.tar image-name:image-version
+```
+
+Unpack the image on your utility server
+```
+tar -xvf image-name.tar
+```
+
+Move the image to the location of your other images.
+
+Restart your local registry and it should pick up the new image.
+```
+cd ./var/lib/registry
+docker run -p 25000:5000 -v $(pwd):/var/lib/registry registry:2
+# verify the registry mounted correctly
+curl http://localhost:25000/v2/_catalog -k
+# a list of Big Bang images should be displayed, if not check the volume mount of the registry
+```
+Configure `./synker.yaml`
+
+Example
+```
+destination:
+  registry:
+    # Hostname of the destination registry to push to
+    hostname: 10.0.0.10
+    # Port of the destination registry to push to
+    port: 5000
+```
+If you are using runtime mirroring the new image should be available at the original location on your cluster.
+
+---
 
 ### Mirroring
 
@@ -319,189 +632,3 @@ configs:
     tls:
       ca_file: "/etc/ssl/certs/registry1.pem"
 ```
-
-
-
-## Installing Big Bang
-
-```bash
-$ cd bigbang
-```
-
-Install flux
-
-Install Flux 2 into the cluster using the provided artifacts. These are located in the scripts section of the Big Bang repository.
-
-    kubectl apply -f ./scripts/deploy/flux.yaml
-
-After Flux is up and running you are ready to deploy Big Bang. We will do this using Helm. To first check to see if Flux is ready you can do.
-
-You can watch to see if Flux is reconciling the projects by watching the progress.
-
-```bash
-watch kubectl get all -n flux-system
-```
-
-We need a namespace for our preparations and eventually for Big Bang to deploy into.
-
-    kubectl create ns bigbang
-
-Installing Big Bang in an air gap environment currently uses the Helm charts from the **[Big Bang Repo](https://repo1.dso.mil/platform-one/big-bang/bigbang)**.
-
-All changes are modified in the custom [values.yaml](./examples/values.yaml) file. Modify as needed and replace IP.
-
-Change the hostname for the installation. It is currently set to the development domain:
-
-    # -- Domain used for BigBang created exposed services, can be overridden by individual packages.
-    hostname: bigbang.dev
-
-Add your registry URL. This will be the IP address or URL of the utility server or the registry in which you have loaded all of the Big Bang images (note: it is possible that your registry doesn't have a username or password, there will be ignored for insecure registries.):
-
-    # -- Single set of registry credentials used to pull all images deployed by BigBang.
-    registryCredentials:
-      registry: 10.0.52.144
-      username: "asdfasdfasdf"
-      password: "asdfasdfasdfasdfasdf"
-      email: ""
-
-For your Git repository you have two options for setting up the credentials.
-
-Option 1: Use an existing secret.
-
-    cd ~/.ssh
-    ssh-keygen  -b 4096 -t rsa -f ~/.ssh/identity -q -N ""
-    ssh-keyscan  <YOUR GIT URL HERE> ./known_hosts
-    
-    kubectl create secret generic -n bigbang ssh-credentials \
-        --from-file=./identity \
-        --from-file=./identity.pub \
-        --from-file=./known_hosts
-
-In the above example we created a new set of keys to use, you could also use an existing set of keys. These are just SSH keys, so any SSH key pair should work. The second command is going to create a known hosts file. There is no way to answer yes to the unknown hosts prompt, this alleviates that neeed. 
-
-Once we have our private key, public key and the known hosts file, we place all of those into the secret using kubectl. This creates a BASE64 encoded secret of these values. !!! It is VERY important that the names of the files match above. So if you are using your own keypair change the names. Kubernetes uses the names of the files to create the keys inside of the secret.
-
-If you want to create your secret and store in the Kubernetes format you can add the -o yaml --dry-run to the above command to get that output.
-
-    kubectl create secret generic ssh-credentials \
-        --from-file=./identity \
-        --from-file=./identity.pub \
-        --from-file=./known_hosts \
-        -o yaml --dry-run
-
-Once your secret is created you can add that value to the values.yaml that we were modifing above.
-
-    git:
-      # -- Existing secret to use for git credentials, must be in the appropriate format: https://toolkit.fluxcd.io/components/source/gitrepositories/#https-authentication
-      existingSecret: "ssh-credentials"
-
-** Note that we substituted the name of the secret from the example to the secret created above. This value is arbitrary, so if you created your secret with a different name use that name instead.
-
-Option 2: Put the values of your ssh keys directly in the values.yaml file.
-
-You can also elect to just put the key values and the known hosts directly into the chart's values.yaml file.
-
-
-    ssh-keygen -q -N "" -f ./identity
-    ssh-keyscan <YOUR GIT URL HERE> ./known_hosts
-    
-    cat identity
-    cat identity.pub
-    cat known_hosts
-
-Take the values from each of these files and place in the correct fields in the values.yaml.
-
-    git:
-        # -- SSH git credentials, privateKey, publicKey, and knownHosts must be provided
-        privateKey: |
-          -----BEGIN RSA PRIVATE KEY-----
-          MIIEowIBAAKCAQEAwcG6YKsqDC6728XZ7/8oiqnQaw3OkQnvMBrzvZjxd//PsEog
-          xVc+F9YqW4FIeTH57wN6JXIC4iMbE0QGd6+1yOoYiXkhi66tuO5FN+n4PeMnvKcC
-          JXtFWme4W/9YnEk/3sbNOgAMPlhMhTsudzLiXtHd3g+xCmNs1pdEIInaNadrolWn
-          QTM0krUCcC6VLCri7ae/pDloglX4cBJ+EfqFC94T6wUICPd1P7zYsy8WwIQtPhLT
-          lbY8CHj9iMlxlUdwdiXTlifqHsPgTh3X5e9Vptd+wi0+vfjvrXd/8SuM1q8xdQvY
-          bZ27AlhgfQsVl9WQrk/47xd3g430G4cqSbyhLQIDAQABAoIBAFlSu153akIFhXtz
-          Ad7fbcxHLxs7WUCKKOevdTCyApgEqbWm5uazKqAIjqxytHuS65shqjz7C5M/Beti
-          z+x7Z73BFiDCZBgmLNZ1mhmF1niJcTdKcvXel4FvEZHv7OTX7AcC9XfIr9xKDrTZ
-          LLmtDqkR7UvDRiX44iMnxzOM+bkDsHVva00e3IoSiOsQ4DKQ1l/HFseVlPIaGzfZ
-          Z2q0myUrBzlOYE06VJluhexsrrVDi7KdIfR8UGpN4kC5R/vOnOi7ycd4tfsZe2Wb
-          CjbKMTNYRFnVTt6/SXAhhFu+kz0FftDXNTIOhikVB8ryZ5iyNXszYqiptUI9VUZB
-          mQLdPuECgYEA9odVxlPUgSMLhbE5vD57jbtB6Cswy5ztAuyCHMABM4U6pVvFDSNb
-          244y0ov0TzviaCZkb+0qrAM0ZSNItLQ1PmbeD0SnB4q/C8hDvVtpB+0SPBJMX8so
-          49n1Wr5dH0axGMLaZXGmQ4DPEW/t0dNbYpN1Sxgn6KZPprISXigBufkCgYEAyTNe
-          kY3vaJ6Nla1pBVUmiK7hu1G3Ddihy1w56upHbOnDvJySuVOM5HRPm2ISFwW38/b5
-          5+cGKWnmu7UhFi1d8Iz3Kmr6kpfRxEDtbrk5rkgKJmTtduxAzBH8CTZfxuYIC5xS
-          3fbcFpFYfrtE+3tjqlXJSOpLOuDqbA3uGwWFTdUCgYEAkSi9A8uGnAdDmJPzF/l+
-          jMTPGOKdl7auBAO41S7lRi3Ti1xO2d6RDuVa3YiU8TakqIi6qQDwGFrGtiqhe+2E
-          UFsHs9vLsfArb8eaw1uYq5c7HpHzsJASYp+LDcR7VpgsXRUWvZa+vI6S3oSWdu9J
-          pvCGpxHxJdcPnWrKz/AknBkCgYAnej/U+W9/LJUFSFgx5qo/6Wh7M6ZiPh5I45it
-          ojhPg3KXgHU9jco4TSYNi+mWwNV+NfiE6wyHdbMDI6ARVOd4uoAIv6M9NDLBeifc
-          MNXDf3kWXXlGe0afg+va9uNGCH6NoKeVy8kVWIFvpFj9qxE8K8bp2qbWL6lveDA+
-          9w9X3QKBgGtkQi9OI7TyrloZ5F6/0/LnOJMGd/+e2cJUN6Pa10ZAjQh12JZ5fK7i
-          Vwh5l0P5CGQsuC96n4xPELoBnbTdr+y17f0o+kAuSDAsXnDf/Jjr0y/+uzL6YYCg
-          VD1yNitgcQw6oHKdTbGn4jni3/VemzONOz0uTB+/K7WhW2J7faaJ
-          -----END RSA PRIVATE KEY-----
-        publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBwbpgqyoMLrvbxdnv/yiKqdBrDc6RCe8wGvO9mPF3/+wSiDFVz4X1ipbgUh3MfnvA2olcgLiIxsTRAZ8r7XI6hiJeSGLrq2123kU36fg94ye8pwIle0VaZ7hb/1icST/exs06AAw+WEyFOy53MuJe0d3e$"
-        knownHosts: "10.0.52.144 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPFZzQ6BmaswdhT8UWD5a/VYmZYrGv1qD3T+euf/gFjkPkeySYRIyM+Kg/UdHCHVBzc4aaFdBDmugHimZ4lbWpE="
-
-** Note the above values are all examples and are intentionally not operational keys.
-
-Then install Big Bang using Helm.
-
-    helm upgrade -i bigbang chart -n bigbang --create-namespace -f values.yaml
-    watch kubectl get gitrepositories,kustomizations,hr,po -A
-
-** Note that the --create-namespace isn't needed if you created it earlier, but it doesn't hurt anything.
-
-You should see the diffent projects configure working through their reconciliation starting with "gatekeeper".
-
-## Using 3rd Party Packages
-
-The third party guide assumes that you already have or are planning to install Big Bang Core.
-
-### Package your Git repository
-
-Packaging your repository from Git
-
-```
-git clone --no-checkout https://repo1.dso.mil/platform-one/big-bang/apps/third-party/kafka.git && tar -zcvf kafka-repo.tar.gz kafka
-```
-
-This creates a tar of a full git repo without a checkout. After you have placed this git repo in its destination you can get the files to view by doing.
-
-    git checkout
-
-### Package your registry images
-
-Package image 
-```
-docker save -o image-name.tar image-name:image-version
-```
-
-Unpack the image on your utility server
-```
-tar -xvf image-name.tar
-```
-
-Move the image to the location of your other images.
-
-Restart your local registry and it should pick up the new image.
-```
-cd ./var/lib/registry
-docker run -p 25000:5000 -v $(pwd):/var/lib/registry registry:2
-# verify the registry mounted correctly
-curl http://localhost:25000/v2/_catalog -k
-# a list of Big Bang images should be displayed, if not check the volume mount of the registry
-```
-Configure `./synker.yaml`
-
-Example
-```
-destination:
-  registry:
-    # Hostname of the destination registry to push to
-    hostname: 10.0.0.10
-    # Port of the destination registry to push to
-    port: 5000
-```
-If you are using runtime mirroring the new image should be available at the original location on your cluster.
