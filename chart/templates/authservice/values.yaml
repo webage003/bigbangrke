@@ -5,17 +5,17 @@
 {{- define "bigbang.defaults.authservice" -}}
 imagePullSecrets:
   - name: private-registry
-{{- if  and   .Values.addons.authservice.redis.host .Values.addons.authservice.redis.port  .Values.addons.authservice.redis.password }}
+{{- if  and   .Values.addons.authservice.redis.host .Values.addons.authservice.redis.port }}
 redis:
-   enabled: false
+  enabled: true
 {{- end }}
 
 global:
   oidc:
     host: {{ .Values.sso.oidc.host }}
     realm: {{ .Values.sso.oidc.realm }}
-  {{- if  and   .Values.addons.authservice.redis.host .Values.addons.authservice.redis.port  .Values.addons.authservice.redis.password }}
-  redis_server_uri:  tcp://{{ .Values.addons.authservice.redis.password }}@{{ .Values.addons.authservice.redis.host }}:{{ .Values.addons.authservice.redis.port  }}
+  {{- if  and   .Values.addons.authservice.redis.host .Values.addons.authservice.redis.port }}
+  redis_server_uri: "tcp://{{ .Values.addons.authservice.redis.host }}:{{ .Values.addons.authservice.redis.port }}"
   {{- end }}
   {{- if .Values.sso.jwks }}
   jwks: "{{ .Values.sso.jwks }}"
