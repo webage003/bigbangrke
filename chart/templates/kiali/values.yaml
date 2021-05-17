@@ -25,6 +25,7 @@ cr:
         - openid
         - email
         username_claim: email
+        insecure_skip_verify_tls: "{{ .Values.kiali.sso.insecure_skip_verify_tls.enabled }}"
       {{- else }}
       strategy: token
       {{- end }}

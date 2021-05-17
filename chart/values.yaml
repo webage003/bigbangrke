@@ -183,6 +183,9 @@ kiali:
     # -- OIDC Client Secret to use for Kiali
     client_secret: ""
 
+    # -- Skip OIDC TLS Verify Setting for Kiali
+    insecure_skip_verify_tls: false
+
   # -- Values to pass through to Kiali chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali
   values: {}
 
