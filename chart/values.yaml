@@ -616,6 +616,7 @@ addons:
         name: ""
         description: ""
 
+    # -- Flux reconciliation overrides specifically for the Nexus Repository Manager Package
     flux: {}
 
     # -- Values to passthrough to the nxrm chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/nexus.git
