@@ -115,3 +115,7 @@ addons:
     enabled: false
     git:
       repo: ssh://git@host.k3d.internal/home/git/repos/mattermost
+  nexusrepositorymanager:
+    enabled: false
+    git:
+      repo: ssh://git@host.k3d.internal/home/git/repos/nexus-repository-manager
