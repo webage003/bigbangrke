@@ -175,16 +175,16 @@ kiali:
 
   sso:
     # -- Toggle SSO for Kiali on and off
-    enabled: true
+    enabled: false
 
     # -- OIDC Client ID to use for Kiali
-    client_id: "platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-kiali"
+    client_id: ""
 
     # -- OIDC Client Secret to use for Kiali
-    client_secret: "sec"
+    client_secret: ""
 
     # -- Skip OIDC TLS Verify Setting for Kiali
-    skip_verify_tls: true
+    skip_verify_tls: false
 
   # -- Values to pass through to Kiali chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali
   values: {}
