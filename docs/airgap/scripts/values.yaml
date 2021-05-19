@@ -118,4 +118,4 @@ addons:
   nexus:
     enabled: false
     git:
-      repo: ssh://git@host.k3d.internal/home/git/repos/nexus-repository-manager
+      repo: ssh://git@host.k3d.internal/home/git/repos/nexus
