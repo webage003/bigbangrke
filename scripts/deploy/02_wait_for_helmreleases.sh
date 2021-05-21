@@ -48,7 +48,7 @@ function wait_sts() {
       fi
       sleep 5
       timeElapsed=$(($timeElapsed+5))
-      if [[ $timeElapsed -ge 600 ]]; then
+      if [[ $timeElapsed -ge 1500 ]]; then
          echo "Timed out while waiting for stateful sets to be ready."
          exit 1
       fi
