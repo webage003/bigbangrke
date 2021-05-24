@@ -1,0 +1,30 @@
+{{- if .Values.addons.jira.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jira
+---
+{{- if ( include "imagePullSecret" . ) }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: private-registry
+  namespace: jira
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "imagePullSecret" . }}
+{{- end }}
+---
+# create database secret
+{{- if and .Values.addons.jira.database.host .Values.addons.jira.database.username .Values.addons.jira.database.password .Values.addons.jira.database.database .Values.addons.jira.database.port }}
+apiVersion: v1
+kind: Secret
+metadata:
+    name: jira-db-secret
+    namespace: jira
+type: kubernetes.io/opaque
+stringData:
+    postgresql-username: {{ .Values.addons.jira.database.username}}
+    postgresql-password: {{ .Values.addons.jira.database.password }}
+{{- end }}
+{{- end }}

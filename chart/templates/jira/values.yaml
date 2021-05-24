@@ -1,0 +1,35 @@
+{{- if .Values.addons.jira.enabled }}
+{{- include "values-secret" (dict "root" $ "package" .Values.addons.jira "name" "jira" "defaults" (include "bigbang.defaults.jira" .)) }}
+{{- end }}
+
+{{- define "bigbang.defaults.jira" -}}
+hostname: {{ .Values.hostname }}
+
+istio:
+  enabled: {{ .Values.istio.enabled }}
+
+monitoring:
+  enabled: {{ .Values.monitoring.enabled }}
+
+image:
+  pullSecret: private-registry
+
+# External Postgres config
+{{- with .Values.addons.jira.database }}
+postgresql:
+  {{- if and .host .username .password .database .port }}
+  # Use external database
+  enabled: false
+  postgresqlServer: {{ .host }}
+  postgresqlDatabase: {{ .database }}
+  postgresqlUsername: {{ .username }}
+  existingSecret: jira-db-secret
+  service:
+    port: {{ .port }}
+  {{- else }}
+  # Use internal database, defaults are fine
+  enabled: true
+  {{- end }}
+{{- end }}
+
+{{- end -}}

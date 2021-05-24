@@ -701,3 +701,40 @@ addons:
   #
   # ----------------------------------------------------------------------------------------------------------------------
 
+  jira:
+    # -- Toggle deployment of Jira.
+    enabled: false
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
+      path: "./chart"
+      branch: "pb-jira"
+
+    database:
+      # -- Hostname of a pre-existing PostgreSQL database to use for Jira.
+      host: ""
+
+      # -- Port of a pre-existing PostgreSQL database to use for Jira.
+      port: 5432
+
+      # -- Database name to connect to on host.
+      database: ""
+
+      # -- Username to connect as to external database, the user must have all privileges on the database.
+      username: ""
+
+      # -- Database password for the username used to connect to the existing database.
+      password: ""
+
+    # -- Values to passthrough to the jira chart: https://repo1.dso.mil/platform-one/big-bang/apps/third-party/jira.git
+    values: {}
+
+    haproxy:
+      # -- Toggle deployment of HAProxy.
+      enabled: false
+      git:
+        repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/haproxy
+        path: "./chart"
+        tag: 1.1.2-bb.0
+
+      # -- Values to passthrough to the haproxy chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/haproxy.git
+      values: {}
