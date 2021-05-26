@@ -1,0 +1,6 @@
+Package Name:  MinIO
+Purpose:  Storage
+Free to use:  OSS version available for testing only, paid enterprise version available for commercial use.
+License Type:  GNU AGPL v3
+Product websites:   https://min.io/pricing	
+                    https://docs.min.io/docs/deploy-minio-on-kubernetes.html
