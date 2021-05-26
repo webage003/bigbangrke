@@ -1,0 +1,14 @@
+Package Name:  Anchore
+Purpose:  Container Security
+Free to use:  Yes, OSS with some features only available for paid enterprise version.
+License Type:  Apache License 2.0
+Product websites:   https://docs.anchore.com/current/docs/faq/
+Other info:
+
+The product is priced based on  the number of scanned images.  
+
+Anchore charges per container image tag representing  unique content. 
+
+The container image tag count is aggregated across all repos registered in a single instance across all instances of anchore. 
+
+Anchore Engine is an Apache v2-licensed open source project. Anchore Enterprise is a proprietary commercial product which adds additional functionality to Anchore Engine. Anchore Enterprise provides a GUI, enhanced vulnerability feed data, enterprise feed service (for running disconnected from the internet), enterprise reporting service (based on GraphQL) and integrations for popular workflow tools like Github, Jira and others, as well enterprise authentication systems like LDAP and SSO.
