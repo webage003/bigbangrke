@@ -1,0 +1,7 @@
+Package Name:  Vault
+Purpose:  Secrets Management
+Free to use:  Yes, OSS, but paid enterprise version is available.
+License Type:  Mozilla Public License 2.0
+Product websites:   https://www.vaultproject.io/
+                    https://www.hashicorp.com/products/vault/pricing
+                    https://www.vaultproject.io/docs/platform/k8s
