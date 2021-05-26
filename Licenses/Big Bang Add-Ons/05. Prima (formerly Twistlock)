@@ -1,0 +1,12 @@
+Package Name:  Prisma
+Purpose:  Container Security
+Free to use:  No
+License Type:  Prisma Cloud License
+Product websites:   https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin-compute/welcome/licensing
+                    https://docs.twistlock.com/docs/compute_edition/welcome/licensing.html
+                    https://docs.paloaltonetworks.com/prisma/prisma-cloud/20-09/prisma-cloud-compute-edition-admin/install/install_kubernetes.html
+Other info: 
+
+Prisma was formerly named Twistlock.
+
+Licenses are sold per node.  Each defender on a node  uses 7 credits and the credits are purchased in bundles of 100 credits. 
