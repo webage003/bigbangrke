@@ -1,0 +1,8 @@
+Package Name:  Nexus
+Purpose:  Artifact Repository
+Free to use:  Yes, OSS, but paid pro version is available.
+License Type:  GNU Lesser GPL License v3
+Product websites:   https://www.sonatype.com/product-nexus-repository
+                    https://help.sonatype.com/iqserver/product-information/licensing-and-features
+                    https://help.sonatype.com/iqserver/product-information/licensing-and-features
+                    https://blog.sonatype.com/how-to-use-nexus-repository-and-helm-for-ci/cd
