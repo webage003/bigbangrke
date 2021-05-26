@@ -1,0 +1,7 @@
+Package Name:  KeyCloak
+Purpose:  Centralized IDAM
+Free to use:  Yes, Open Source Software
+License Type:  Apache License 2.0
+Product websites:   https://www.keycloak.org/documentation
+                    https://github.com/keycloak/keycloak/blob/master/LICENSE.txt
+                    https://www.keycloak.org/getting-started/getting-started-kube
