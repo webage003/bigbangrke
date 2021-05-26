@@ -21,6 +21,7 @@ This work was quickly developed to entertain certain paths for image packaging a
     * This is due to the fact that `/var/lib/registry` is a docker volume
 
 `deploy_images.sh` - Proof of concept script for image deployment
+
 * Dependencies
   * `docker` - The docker CLI tool
   * `registry:package.tar.gz` - Modified `registry:2` container loaded with airgap images
@@ -32,9 +33,9 @@ Hack commands:
 * `curl -sX GET http://localhost:5000/v2/_catalog | jq -r .`
   * Verify the catalog of a local running registry container
 
-# Repository Packaging / Deployment
+## Repository Packaging / Deployment
 
-Airgap Deployment is a form of deployment which does not have any direct connection to the Internet or external network during cluster setup or runtime. During installation, bigbang requires certain images and git repos for installation. Since we will be installing in internet-disconnected environment, we need to perform extra steps to make sure these resources are available.
+Airgap Deployment is a form of deployment which does not have any direct connection to the Internet or external network during cluster setup or runtime. During installation, bigbang requires certain images and git repositories for installation. Since we will be installing in internet-disconnected environment, we need to perform extra steps to make sure these resources are available.
 
 ---
 
@@ -95,13 +96,13 @@ Extract the Big Bang bundle to your working area on the standalone instance you 
 detailed instructions for ec2 deployment
 ```
 
-### Package Specific Prereqs
+### Package Specific Prerequisites
 
 #### Elastic (Logging)
 
 Elastic requires a larger number of memory map areas than some OSes support by default. This can be change at startup with a cloud config or later using sysctl.
 
-```
+```shell
 MIME-Version: 1.0
     Content-Type: multipart/mixed; boundary="==MYBOUNDARY=="
     
@@ -569,9 +570,9 @@ If you are using runtime mirroring the new image should be available at the orig
 
 ### Mirroring
 
- 			The images specified as part of the helm charts in BB are expected to be sourced from `registry1.dso.mil` hence this registry needs to be mirrored to the one setup above. To reduce the amount of work needed on the developer part, we will be taking advantage of container mirroring which is supported by `containerd` as well as `cri-o`. Check if your container runtime supports this as it is required for smooth developer experience when deploying BB.  You should also check documentation on how your cluster supports passing these configuration to the runtime. For example, TKG and RKE2 support such configuration for `containerd` below to enable `registry.dso.mil` and `registry1.dso.mil` . 
+The images specified as part of the helm charts in BB are expected to be sourced from `registry1.dso.mil` hence this registry needs to be mirrored to the one setup above. To reduce the amount of work needed on the developer part, we will be taking advantage of container mirroring which is supported by `containerd` as well as `cri-o`. Check if your container runtime supports this as it is required for smooth developer experience when deploying BB.  You should also check documentation on how your cluster supports passing these configuration to the runtime. For example, TKG and RKE2 support such configuration for `containerd` below to enable `registry.dso.mil` and `registry1.dso.mil` .
 
-​			You need to also configure your cluster with appropriate registry TLS. Please consult your cluster documentation on how to configure this.
+​You need to also configure your cluster with appropriate registry TLS. Please consult your cluster documentation on how to configure this.
 
 If you need to handle mirroring manually, there is an example Ansible script provided that will update the containerd mirroring and restart the container runtimes for each node in your inventory. (copy-containerd-config.yaml)
 
