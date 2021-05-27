@@ -5,25 +5,6 @@ metadata:
   labels:
     app.kubernetes.io/name: logging
     app.kubernetes.io/component: "core"
-  name: allow-webhooks
-  namespace: {{ .Release.Namespace }}
-spec:
-  ingress:
-  - from:
-    - namespaceSelector: {}
-    ports:
-    - port: 9443
-      protocol: TCP
-  podSelector: {}
-  policyTypes:
-  - Ingress
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  labels:
-    app.kubernetes.io/name: logging
-    app.kubernetes.io/component: "core"
   name: kube-api-server
   namespace: {{ .Release.Namespace }}
 spec:
@@ -33,25 +14,6 @@ spec:
     ports:
     - port: 443
       protocol: TCP
-  podSelector: {}
-  policyTypes:
-  - Egress
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  labels:
-    app.kubernetes.io/name: logging
-    app.kubernetes.io/component: "core"
-  name: dns-lookups
-  namespace: {{ .Release.Namespace }}
-spec:
-  ingress:
-  - from:
-    - namespaceSelector: {}
-    ports:
-    - port: 53
-      protocol: UDP
   podSelector: {}
   policyTypes:
   - Egress
