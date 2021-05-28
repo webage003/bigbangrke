@@ -22,7 +22,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   labels:
-    pp.kubernetes.io/name: cluster-auditor
+    app.kubernetes.io/name: cluster-auditor
     app.kubernetes.io/component: "core"
   name: es-communication
   namespace: {{ .Release.Namespace }}
