@@ -972,7 +972,8 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/vault.git
       path: "./chart"
-      tag: "0.0.0-bb.0"
+      # tag: "0.0.0-bb.0"
+      branch: dev
 
     # -- Values to passthrough to the vault chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/vault.git
     values: {}
