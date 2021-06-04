@@ -962,3 +962,17 @@ addons:
 
     # -- Values to passthrough to the keycloak chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak.git
     values: {}
+
+  # ----------------------------------------------------------------------------------------------------------------------
+  # Vault
+  #
+  vault:
+    # -- Toggle deployment of Keycloak.
+    enabled: false
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/vault.git
+      path: "./chart"
+      tag: "0.0.0-bb.0"
+
+    # -- Values to passthrough to the vault chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/vault.git
+    values: {}

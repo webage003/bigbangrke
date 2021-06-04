@@ -1,0 +1,28 @@
+{{- if .Values.addons.vault.enabled }}
+{{- include "values-secret" (dict "root" $ "package" .Values.addons.vault "name" "vault" "defaults" (include "bigbang.defaults.vault" .)) }}
+{{- end }}
+
+{{- define "bigbang.defaults.vault" -}}
+hostname: {{ .Values.hostname }}
+
+istio:
+  enabled: {{ .Values.istio.enabled }}
+
+monitoring:
+  enabled: {{ .Values.monitoring.enabled }}
+
+networkPolicies:
+  enabled: {{ .Values.networkPolicies.enabled }}
+
+global:
+  imagePullSecrets:
+    - name: private-registry
+
+{{- with .Values.addons.vault.enterprise }}
+enterprise:
+  enabled: {{ .enabled }}
+  license: {{ .license }}
+{{- end }}
+
+
+{{- end -}}

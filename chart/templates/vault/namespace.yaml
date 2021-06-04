@@ -1,0 +1,11 @@
+{{- if .Values.addons.vault.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: {{ .Release.Name }}-vault
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/component: "application-utilities"
+    {{- include "commonLabels" . | nindent 4}}
+  name: vault
+{{- end }}
