@@ -22,9 +22,6 @@ monitoring:
 serviceMonitor:
   enabled: {{ .Values.monitoring.enabled }}
 
-networkPolicies:
-  enabled: {{ .Values.networkPolicies.enabled }}
-
 {{- if .Values.addons.keycloak.database.host }}
 postgresql:
   enabled: false
@@ -59,10 +56,10 @@ secrets:
 extraVolumes: |-
   - name: tlscert
     secret:
-      secretName: tlscert
+      secretName: keycloak-tlscert
   - name: tlskey
     secret:
-      secretName: tlskey
+      secretName: keycloak-tlskey
 
 extraVolumeMounts: |-
   - name: tlscert
