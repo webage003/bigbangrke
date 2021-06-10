@@ -92,7 +92,6 @@ addons:
             realm.json: |-
               {insert realm.json content}
       # Create volumes for each secret above
-      # NOTE: You **MUST** include the tlscert and tlskey volumes since you are overriding the entire key's value
       extraVolumes: |-
         - name: certauthority
           secret:
@@ -103,14 +102,7 @@ addons:
         - name: realm
           secret:
             secretName: {{ include "keycloak.fullname" . }}-realm
-        - name: tlscert
-          secret:
-            secretName: {{ include "keycloak.fullname" . }}-tlscert
-        - name: tlskey
-          secret:
-            secretName: {{ include "keycloak.fullname" . }}-tlskey
       # Volume mount each volume in the appropriate location
-      # NOTE: You **MUST** include the tlscert and tlskey volumes since you are overriding the entire key's value
       extraVolumeMounts: |-
         - name: certauthority
           mountPath: /etc/x509/https/cas.pem
@@ -124,15 +116,6 @@ addons:
           mountPath: /opt/jboss/keycloak/realm.json
           subPath: realm.json
           readOnly: true
-        - name: tlscert
-          mountPath: /etc/x509/https/tls.crt
-          subPath: tls.crt
-          readOnly: true
-        - name: tlskey
-          mountPath: /etc/x509/https/tls.key
-          subPath: tls.key
-          readOnly: true
-
 ```
 
 ### Keycloak Admin password

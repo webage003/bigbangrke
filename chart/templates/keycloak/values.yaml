@@ -53,7 +53,7 @@ secrets:
 {{- end }}
 
 {{- if and .Values.addons.keycloak.ingress.cert .Values.addons.keycloak.ingress.key }}
-extraVolumes: |-
+extraVolumesBigBang:
   - name: tlscert
     secret:
       secretName: keycloak-tlscert
@@ -61,7 +61,7 @@ extraVolumes: |-
     secret:
       secretName: keycloak-tlskey
 
-extraVolumeMounts: |-
+extraVolumeMountsBigBang:
   - name: tlscert
     mountPath: /etc/x509/https/tls.crt
     subPath: tls.crt
