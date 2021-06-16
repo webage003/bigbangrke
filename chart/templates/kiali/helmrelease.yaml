@@ -37,7 +37,7 @@ spec:
       kind: Secret
       valuesKey: "overlays"
 
-  {{ if or .Values.istio.enabled .Values.monitoring.enabled }}
+  {{ if or .Values.istio.enabled .Values.monitoring.enabled .Values.jaeger.enabled }}
   dependsOn:
   {{- if .Values.istio.enabled }}
     - name: istio
@@ -45,6 +45,10 @@ spec:
   {{- end }}
   {{- if .Values.monitoring.enabled }}
     - name: monitoring
+      namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- if .Values.jaeger.enabled }}
+    - name: jaeger
       namespace: {{ .Release.Namespace }}
   {{- end }}
   {{- end }}
