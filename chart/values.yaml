@@ -784,7 +784,7 @@ addons:
   # Mattermost Operator and Instance
   #
   mattermostoperator:
-    enabled: false
+    enabled: true
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator.git
       path: "./chart"
@@ -801,11 +801,12 @@ addons:
 
   mattermost:
     # -- Toggle deployment of Mattermost.
-    enabled: false
+    enabled: true
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost.git
       path: "./chart"
-      tag: "0.1.5-bb.0"
+      tag: "0.1.5-bb.1"
+      branch: "mm-upgrade-to-v5.36.0"
 
     # -- Flux reconciliation overrides specifically for the Mattermost Package
     flux: {}
