@@ -917,7 +917,7 @@ addons:
     # -- Flux reconciliation overrides specifically for the Velero Package
     flux: {}
 
-    # -- Plugin provider for Velero - requires at least one plugin installed. Current supported values: aws, azure 
+    # -- Plugin provider for Velero - requires at least one plugin installed. Current supported values: aws, azure
     plugins: []
     # - aws
 
@@ -970,4 +970,20 @@ addons:
     flux: {}
 
     # -- Values to passthrough to the keycloak chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak.git
+    values: {}
+  #
+  # ----------------------------------------------------------------------------------------------------------------------
+
+  # ----------------------------------------------------------------------------------------------------------------------
+  # Vault
+  #
+  vault:
+    enabled: false
+    git:
+      repo:
+      path:
+      tag:
+    ingress:
+      key:
+      cert:
     values: {}

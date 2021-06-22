@@ -1,26 +1,26 @@
 [Project Managers]
 # protect individual files in the root directory such as the CODEOWNERS file
-/*                              @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
+/*                              @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
 # Recursive protection for directories
-/.gitlab-ci/                    @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
-/.gitlab/                       @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
-/base/                          @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
-/chart/                         @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
-/charter/                       @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
-/hack/                          @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
-/scripts/                       @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
-/tests/                         @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
-/docs/                          @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
+/.gitlab-ci/                    @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
+/.gitlab/                       @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
+/base/                          @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
+/chart/                         @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
+/charter/                       @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
+/hack/                          @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
+/scripts/                       @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
+/tests/                         @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
+/docs/                          @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
 
 
 [Docs Owners]
-# Allow any one of the listed codeowners to approve merges to the documentation 
+# Allow any one of the listed codeowners to approve merges to the documentation
 # Does not allow the creator of the merge request to be the approver.
 /docs/                          @aaron.ruse @aaronbeger @barrywoodtetrate @brandencobb @cmcgrath @daryndecker @david.allen @dyoung @echuang @egoode @evan.rush @iahmad @jasonkrause @jay-rob @jennifer.kays @jcookehg @jdale @joshwolf @kavitha @kenna81 @kevin.wilder @kottoson @LynnStill @mark.sanchez @matthew.kaiser @mdutton @micah.nagel @michaelmartin @michaelmcleroy @msbrown47 @nick.kammerdiener @rkernick @runyontr @ryan.j.garcia @sean.deprefontaine @shouseba @thomas.burton @toladipupo @tsiddique1 @visuth.dy
 
 
 ################################################
-# The following entries are for optional approval. 
+# The following entries are for optional approval.
 # They are only included to document contacts and have no impact on approval requirements
 ################################################
 
@@ -36,12 +36,12 @@ scripts/                        @toladipupo @michaelmcleroy @egoode
 hack/                           @toladipupo @michaelmcleroy @egoode
 
 ^[Charter Owners]
-charter/                        @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia 
+charter/                        @gabe.scarberry @joshwolf @megamind @micah.nagel @michaelmcleroy @phillip.record @runyontr @ryan.j.garcia
 
 ^[Istio and Authservice]
 chart/Chart.yaml                @kenna81 @kavitha @cmcgrath @barrywoodtetrate
 chart/values.yaml               @kenna81 @kavitha @cmcgrath @barrywoodtetrate
-chart/templates/authservice     @kenna81 @kavitha @cmcgrath 
+chart/templates/authservice     @kenna81 @kavitha @cmcgrath
 chart/templates/istio           @kenna81 @kavitha @cmcgrath @barrywoodtetrate
 
 # ^[HAProxy]
@@ -66,7 +66,7 @@ chart/templates/clusterauditor  @echuang @egoode @toladipupo @michaelmcleroy
 
 # ^[Gatekeeper]
 chart/Chart.yaml                @echuang @egoode @toladipupo @michaelmcleroy
-chart/values.yaml               @echuang @egoode @toladipupo @michaelmcleroy   
+chart/values.yaml               @echuang @egoode @toladipupo @michaelmcleroy
 chart/templates/gatekeeper      @echuang @egoode @toladipupo @michaelmcleroy
 
 ^[Logging]
@@ -113,3 +113,8 @@ chart/templates/minio           @LynnStill @kevin.wilder @brandencobb
 chart/Chart.yaml                @tunde @adam.toy @micah.nagel @jcarnes
 chart/values.yaml               @tunde @adam.toy @micah.nagel @jcarnes
 chart/templates/velero          @tunde @adam.toy @micah.nagel @jcarnes
+
+^[Vault]
+chart/Chart.yaml                @cameron.banowsky @zacw @imorales @gabe.scarberry
+chart/values.yaml               @cameron.banowsky @zacw @imorales @gabe.scarberry
+chart/templates/vault           @cameron.banowsky @zacw @imorales @gabe.scarberry
