@@ -7,55 +7,55 @@ Before any Bigbang release is cut , the following steps listed below cover curre
 
 **Confirm app UIs are loading**
 
-- [x] anchore
-- [x] argocd
-- [x] gitlab
-- [x] tracing
-- [x] kiali
-- [x] kibana
-- [x] mattermost
-- [x] minio
-- [x] alertmanager
-- [x] grafana
-- [x] prometheus
-- [x] sonarqube
-- [x] twistlock
-- [x] nexus
-- [x] TLS/SSL certs are valid
+-  anchore
+- argocd
+- gitlab
+-  tracing
+-   kiali
+-  kibana
+-  mattermost
+-  minio
+- alertmanager
+-  grafana
+-  prometheus
+- sonarqube
+-  twistlock
+-  nexus
+-  TLS/SSL certs are valid
 
 **Logging**
 
-- [x] Login to kibana with SSO
-- [x] Kibana is actively indexing/logging.
+-  Login to kibana with SSO
+-  Kibana is actively indexing/logging.
 
 **Cluster Auditor**
 
-- [x] Login to kibana with SSO
-- [x] violations index is present and contains images that aren't from registry1
+-  Login to kibana with SSO
+-  violations index is present and contains images that aren't from registry1
 
 **Monitoring**
 
-- [x] Login to grafana  with SSO
-- [x] Contains Kubernetes Dashboards and metrics
-- [x] contains istio dashboards
-- [x] Login to prometheus
-- [x] All apps are being scraped, no errors
+-  Login to grafana  with SSO
+-  Contains Kubernetes Dashboards and metrics
+-  contains istio dashboards
+-  Login to prometheus
+-  All apps are being scraped, no errors
 
 **Kiali**
 
-- [x] Login to kiali with SSO
+-  Login to kiali with SSO
 
 **Sonarqube**
 
-- [x] Login to sonarqube with SSO
+-  Login to sonarqube with SSO
 
 **GitLab & Runners**
 
-- [x] Login to gitlab with SSO
-- [x] Create new public group with release name. Example `release-1-8-0`
-- [x] Create new public project with release name.  Example `release-1-8-0`
-- [x] git clone and git push to new project
-- [x] docker push and docker pull image to registry
+-  Login to gitlab with SSO
+-  Create new public group with release name. Example `release-1-8-0`
+-  Create new public project with release name.  Example `release-1-8-0`
+-  git clone and git push to new project
+-  docker push and docker pull image to registry
 
     ```
     docker pull alpine
@@ -64,19 +64,37 @@ Before any Bigbang release is cut , the following steps listed below cover curre
     docker push registry.dogfood.bigbang.dev/GROUPNAMEHERE/PROJECTNAMEHERE/alpine:latest
     ```
 
-- [x] Edit profile and change user avatar
-- [x] Test simple CI pipeline. [sample_ci.yaml](https://repo1.dso.mil/platform-one/big-bang/customers/bigbang/-/raw/master/docs/release/sample_ci.yaml)
+-  Edit profile and change user avatar
+-  Test simple CI pipeline.  `sample_ci.yaml` using the example content below.
+     <details>
+    <summary>Example</summary>
+
+    ```yaml
+    stages:
+    - test
+    dogfood:
+        stage: test
+        script:
+          - echo "dogfood" >> file.txt
+        artifacts:
+            paths:
+              - file.txt
+    cache:
+        paths:
+          - file.txt
+   ```
+    </details>
 
 **Anchore**
 
-- [x] Login to [anchore](https://anchore.dogfood.bigbang.dev) with SSO
-- [x] Scan image in dogfood registry, `registry.dogfood.bigbang.dev/GROUPNAMEHERE/PROJECTNAMEHERE/alpine:latest`
+-  Login to anchore with SSO
+-  Scan image in dogfood registry, i.e `registry.dogfood.bigbang.dev/GROUPNAMEHERE/PROJECTNAMEHERE/alpine:latest`
 
 **Argocd**
 
-- [x] Login to  argocd with SSO
-- [x] Logout and login with `admin`. [password reset](https://argoproj.github.io/argo-cd/faq/#i-forgot-the-admin-password-how-do-i-reset-it)
-- [x] Create application
+-  Login to  argocd with SSO
+-  Logout and login with `admin`. [password reset](https://argoproj.github.io/argo-cd/faq/#i-forgot-the-admin-password-how-do-i-reset-it)
+-  Create application
     ```
     *click* create application
     application name: argocd-test
@@ -91,24 +109,98 @@ Before any Bigbang release is cut , the following steps listed below cover curre
     Namespace: argocd-test
     *click* Create (top of page)
     ```
-- [x] Delete application
+-  Delete application
 
 **Minio**
 
-- [x] Create bucket
-- [x] Store file to bucket
-- [x] Download file from bucket
-- [x] Delete bucket and files
+-  Create bucket
+-  Store file to bucket
+-  Download file from bucket
+-  Delete bucket and files
 
 **Mattermost**
 
-- [x] Login to mattermost with SSO
-- [x] Elastic integration
+-  Login to mattermost with SSO
+-  Elastic integration
 
 **Velero**
 
-- [x] Backup PVCs
-    [velero_test.yaml](https://repo1.dso.mil/platform-one/big-bang/customers/bigbang/-/raw/master/docs/release/velero_test.yaml)
+-  Backup PVCs
+    * create a manifest file `velero_test.yaml` with the content below. 
+<details>
+<summary>Example</summary>
+
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: velero-test
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: velero-test
+  namespace: velero-test
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ebs
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: velero-test
+  namespace: velero-test
+  labels:
+    app: velero-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: velero-test
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: velero-test
+    spec:
+      containers:
+        - image: ubuntu:xenial
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args:
+            - sleep 30; touch /mnt/velero-test/test.log; while true; do date >> /mnt/velero-test/test.log; sleep 10; done;
+          name: velero-test
+          stdin: true
+          tty: true
+          livenessProbe:
+            exec:
+              command:
+                - timeout
+                - "10"
+                - ls
+                - /mnt/velero-test
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
+          volumeMounts:
+            - mountPath: /mnt/velero-test
+              name: velero-test
+      restartPolicy: Always
+      volumes:
+        - name: velero-test
+          persistentVolumeClaim:
+            claimName: velero-test
+```
+</details>
+
+Then run the following commands 
+
     ```
     kubectl apply -f ./velero_test.yaml
     # exec into velero_test container
@@ -124,7 +216,7 @@ Before any Bigbang release is cut , the following steps listed below cover curre
     kubectl delete pv INSERT-PV-ID
     ```
 
-- [x] Restore PVCs
+-  Restore PVCs
 
     ```
     velero restore create velero-test-restore-1-8-0 --from-backup velero-test-backup-1-8-0
