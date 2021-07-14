@@ -114,6 +114,8 @@ twistlock:
 
 # Explicitly enable all addons for CI
 addons:
+  allpackages:
+    enabled: false
   argocd:
     enabled: false
     values:

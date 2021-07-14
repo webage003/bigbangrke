@@ -11,7 +11,7 @@ if [[ "${CI_COMMIT_BRANCH}" == "${CI_DEFAULT_BRANCH}" ]] || [[ ! -z "$CI_COMMIT_
 else
   IFS=","
   for package in $CI_MERGE_REQUEST_LABELS; do
-    if [ "$(yq e ".addons.${package}.enabled" $CI_VALUES_FILE 2>/dev/null)" == "false" ]; then
+    if [ "$(yq e ".addons.${package}.enabled" $CI_VALUES_FILE 2>/dev/null)" == "false" ] || ([ "$(yq e ".addons.all-packages.enabled" $CI_VALUES_FILE 2>/dev/null)" == "false" ] && [ ${package} != "keycloak" ]); then
       echo "Identified \"$package\" from labels"
       yq e ".addons.${package}.enabled = "true"" $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE
     fi
