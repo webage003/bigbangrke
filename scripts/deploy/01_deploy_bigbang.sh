@@ -18,9 +18,6 @@ else
     if [ "$(yq e ".addons.${package}.enabled" $CI_VALUES_FILE 2>/dev/null)" == "false" ]; then
       echo "Identified \"$package\" from labels"
       yq e ".addons.${package}.enabled = "true"" $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE
-    else ([ "$(yq e ".addons.all-packages.enabled" $CI_VALUES_FILE 2>/dev/null)" == "false" ] && [ ${package} != "keycloak" ])
-      echo "Enabling  \"$package\" due to 'all-packages' label"
-      yq e ".addons.${package}.enabled = "true"" $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE
     fi
   done
 fi
