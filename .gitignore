@@ -31,3 +31,8 @@ notes
 
 # Local History for Visual Studio Code
 .history/
+
+# Testing Files
+/chart/istio.yaml
+/chart/istio-system.json
+/chart/my-values.yaml
