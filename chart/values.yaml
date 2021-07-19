@@ -106,7 +106,7 @@ networkPolicies:
 #
 istio:
   # -- Toggle deployment of Istio.
-  enabled:  false
+  enabled:  true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
@@ -129,7 +129,7 @@ istio:
 
 istiooperator:
   # -- Toggle deployment of Istio Operator.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
     path: "./chart"
