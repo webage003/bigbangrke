@@ -38,3 +38,5 @@ spec:
       name: environment-bb
     - kind: ConfigMap
       name: environment
+  valueFiles:
+    - values.yaml
