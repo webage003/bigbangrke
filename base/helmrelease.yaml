@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: GitRepository
         name: bigbang
-      valuesFile: values.yaml
+      valuesFile: chart/values.yaml
   test:
     enable: false
   install:
