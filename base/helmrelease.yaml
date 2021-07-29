@@ -12,6 +12,7 @@ spec:
       sourceRef:
         kind: GitRepository
         name: bigbang
+      valuesFile: values.yaml
   test:
     enable: false
   install:
@@ -38,5 +39,3 @@ spec:
       name: environment-bb
     - kind: ConfigMap
       name: environment
-  valuesFiles:
-    - values.yaml
