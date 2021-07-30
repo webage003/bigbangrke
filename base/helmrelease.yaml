@@ -7,13 +7,13 @@ spec:
   interval: 10m
   chart:
     spec:
-      chart: ./chart
+      chart: chart
       sourceRef:
         kind: GitRepository
         name: bigbang
       #valuesFile: chart/values.yaml
   test:
-    {}
+    enable: false
   install:
     remediation:
       retries: 5
