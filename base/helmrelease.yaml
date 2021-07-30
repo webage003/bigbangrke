@@ -4,6 +4,7 @@ metadata:
   name: bigbang
 spec:
   targetNamespace: bigbang
+  releaseName: bigbang
   interval: 10m
   chart:
     spec:
