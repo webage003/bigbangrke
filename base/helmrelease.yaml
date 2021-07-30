@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/name: bigbang
 spec:
   targetNamespace: bigbang
+  interval: 10m
   chart:
     spec:
       chart: ./chart
@@ -14,19 +15,19 @@ spec:
         kind: GitRepository
         name: bigbang
       #valuesFile: chart/values.yaml
+  test: 
+    {}
   install:
     remediation:
-      retries: 3
-  interval: 1m0s
-  rollback:
-    timeout: 10m0s
-  test: {}
-  timeout: 10m0s
+      retries: 5
   upgrade:
-    cleanupOnFail: true
     remediation:
       remediateLastFailure: true
-      retries: 3
+      retries: 5
+    cleanupOnFail: true
+  rollback:
+    timeout: 10m
+  timeout: 10m
   valuesFrom:
     # Optional secret injected with https://repo1.dso.mil/platform-one/big-bang/terraform-modules/big-bang-terraform-launcher
     - kind: Secret
