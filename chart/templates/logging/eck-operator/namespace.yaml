@@ -1,4 +1,4 @@
-{{- if or .Values.eckoperator.enabled .Values.logging.enabled .Values.clusterAuditor.enabled }}
+{{- if and (or .Values.eckoperator.enabled .Values.logging.enabled .Values.clusterAuditor.enabled) (not .Values.logging.loki) }}
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -7,5 +7,5 @@ metadata:
     app.kubernetes.io/name: eck-operator
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
-    istio-injection: enabled
+    istio-injection: disabled
 {{- end }}

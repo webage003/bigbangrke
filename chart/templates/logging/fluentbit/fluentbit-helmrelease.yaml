@@ -39,8 +39,11 @@ spec:
 
   {{/* ECK and Logging _always_ depend on .Values.logging being enabled, so can assume they exist here */}}
   dependsOn:
+    {{- if  and (.Values.logging.enabled) (not .Values.logging.loki) }}
     - name: ek
       namespace: {{ .Release.Namespace }}
+    {{- end }}
+
     {{- if  .Values.gatekeeper.enabled }}
     - name: gatekeeper
       namespace: {{ .Release.Namespace }}
