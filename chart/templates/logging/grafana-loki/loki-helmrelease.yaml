@@ -1,9 +1,9 @@
-{{- $fluxSettingsFluentbit := merge .Values.fluentbit.flux .Values.flux -}}
-{{- if .Values.fluentbit.enabled }}
+{{- $fluxSettingsLoki := merge .Values.logging.flux .Values.flux -}}
+{{- if and .Values.logging.enabled .Values.logging.loki }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: fluent-bit
+  name: loki
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: logging
@@ -13,37 +13,31 @@ spec:
   targetNamespace: logging
   chart:
     spec:
-      chart: {{ .Values.fluentbit.git.path }}
+      chart: {{ .Values.logging.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: fluentbit
+        name: grafana-loki
         namespace: {{ .Release.Namespace }}
 
-  {{- toYaml $fluxSettingsFluentbit | nindent 2 }}
+  {{- toYaml $fluxSettingsLoki | nindent 2 }}
 
-  {{- if .Values.fluentbit.postRenderers }}
+  {{- if .Values.logging.postRenderers }}
   postRenderers:
-  {{ toYaml .Values.fluentbit.postRenderers | nindent 4 }}
+  {{ toYaml .Values.logging.postRenderers | nindent 4 }}
   {{- end }}
   valuesFrom:
-    - name: {{ .Release.Name }}-fluentbit-values
+    - name: {{ .Release.Name }}-loki-values
       kind: Secret
       valuesKey: "common"
-    - name: {{ .Release.Name }}-fluentbit-values
+    - name: {{ .Release.Name }}-loki-values
       kind: Secret
       valuesKey: "defaults"
-    - name: {{ .Release.Name }}-fluentbit-values
+    - name: {{ .Release.Name }}-loki-values
       kind: Secret
       valuesKey: "overlays"
 
-  {{/* ECK and Logging _always_ depend on .Values.logging being enabled, so can assume they exist here */}}
   dependsOn:
-    {{- if  and (.Values.logging.enabled) (not .Values.logging.loki) }}
-    - name: ek
-      namespace: {{ .Release.Namespace }}
-    {{- end }}
-
     {{- if  .Values.gatekeeper.enabled }}
     - name: gatekeeper
       namespace: {{ .Release.Namespace }}
@@ -53,4 +47,4 @@ spec:
     - name: istio
       namespace: {{ .Release.Namespace }}
     {{- end }}
-  {{- end }}
+{{- end }}

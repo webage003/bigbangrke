@@ -1,5 +1,5 @@
-{{- if and (or .Values.logging.enabled .Values.clusterAuditor.enabled) (not .Values.logging.loki) }}
-{{- include "values-secret" (dict "root" $ "package" .Values.logging "name" "ek" "defaults" (include "bigbang.defaults.logging" .)) }}
+{{- if or .Values.logging.enabled .Values.logging.loki }}
+{{- include "values-secret" (dict "root" $ "package" .Values.logging "name" "loki" "defaults" (include "bigbang.defaults.logging" .)) }}
 {{- end }}
 
 {{- define "bigbang.defaults.logging" -}}
@@ -9,9 +9,6 @@ openshift: {{ .Values.openshift }}
 
 istio:
   enabled: {{ .Values.istio.enabled }}
-  kibana:
-    gateways:
-    - istio-system/{{ default "public" .Values.logging.ingress.gateway }}
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
@@ -51,11 +48,7 @@ sso:
 {{- end }}
 {{- end }}
 
-kibana:
-  imagePullSecrets:
-    - name: private-registry
-
-elasticsearch:
+loki:
   imagePullSecrets:
     - name: private-registry
 {{- end -}}
