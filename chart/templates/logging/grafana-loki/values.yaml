@@ -1,4 +1,4 @@
-{{- if or .Values.logging.enabled .Values.logging.loki }}
+{{- if and .Values.logging.enabled .Values.logging.loki }}
 {{- include "values-secret" (dict "root" $ "package" .Values.logging "name" "loki" "defaults" (include "bigbang.defaults.logging" .)) }}
 {{- end }}
 
