@@ -1,0 +1,22 @@
+
+{{- range $name, $spec := .Values.thirdparty }}
+---
+{{- if $spec.helmrepo }}
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/component: "thirdparty"
+    {{- include "commonLabels" $ | nindent 4}}
+spec:
+  {{- if $spec.flux }}
+  interval: {{ $spec.flux.interval }}
+  {{- else }}
+  interval: {{ $.Values.flux.interval }}
+  {{- end }}
+  url: {{ $spec.helmrepo.url }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,19 @@
+{{- range $name, $spec :=  .Values.thirdparty }}
+{{- include "values-secret" (dict "root" $ "package" $spec "name" $name "defaults" (include "bigbang.defaults.thidparty" $)) }}
+---
+{{- end }}
+
+
+{{- define "bigbang.defaults.thidparty" -}}
+
+hostname: {{ .Values.hostname }}
+
+istio:
+  enabled: {{ .Values.istio.enabled }}
+
+monitoring:
+  enabled: {{ $.Values.monitoring.enabled }}
+
+networkPolicies:
+  enabled: {{ .Values.networkPolicies.enabled }}
+{{- end }}

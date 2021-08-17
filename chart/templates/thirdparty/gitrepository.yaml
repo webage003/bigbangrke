@@ -1,0 +1,25 @@
+{{- range $name, $spec := .Values.thirdparty }}
+---
+{{- if $spec.git }}
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/component: "thirdparty"
+    {{- include "commonLabels" $ | nindent 4}}
+spec:
+  {{- if $spec.flux }}
+  interval: {{ $spec.flux.interval }}
+  {{- else }}
+  interval: {{ $.Values.flux.interval }}
+  {{- end }}
+  url: {{ $spec.git.repo }}
+  ref:
+    {{- include "validRef" $spec.git | nindent 4 }}
+  {{ include "gitIgnore" $ }}
+  {{- include "gitCreds" $ | nindent 2 }}
+{{- end }}
+{{- end }}

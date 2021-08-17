@@ -1,0 +1,19 @@
+thirdparty:
+  certmanager:
+    dependsOn:
+    - istio
+    - monitoring
+    helmrepo:
+      url: https://charts.jetstack.io
+      chart: cert-manager
+      version: 'v1.2.0'
+  podinfo:
+    dependsOn:
+    - certmanager
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/podinfo.git
+      path: "./chart" 
+      branch: master
+    values:
+      # pass through to the podinfo chart
+      foo: bar

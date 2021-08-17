@@ -1,0 +1,61 @@
+{{- range $name, $spec := .Values.thirdparty}}
+---
+{{- $fluxSettings := merge ($spec.flux | default dict) $.Values.flux -}}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/component: "thirdparty"
+    {{- include "commonLabels" $ | nindent 4}}
+spec:
+  releaseName: {{ $name }}
+  targetNamespace: {{ $name }}
+  chart:
+    spec:
+      {{- if $spec.git }}
+      chart: {{ $spec.git.path }}
+      {{- else if $spec.helmrepo }}
+      chart: {{ $spec.helmrepo.chart }}
+      {{- if $spec.helmrepo.version}}
+      version: {{ $spec.helmrepo.version}}
+      {{- end }}
+      {{- end }}
+      interval: {{ $fluxSettings.interval }}
+      sourceRef:
+        {{- if $spec.git }}
+        kind: GitRepository
+        {{- else if $spec.helmrepo }}
+        kind: HelmRepository
+        {{- end }}
+        name: {{ $name }}
+        namespace: {{ $.Release.Namespace }}
+
+  {{- toYaml $fluxSettings | nindent 2 }}
+
+  {{- if $spec.postRenderers }}
+  postRenderers:
+  {{ toYaml $spec.postRenderers | nindent 4 }}
+  {{- end }}
+
+  valuesFrom:
+    - name: {{ $.Release.Name }}-{{ $name }}-values
+      kind: Secret
+      valuesKey: "common"
+    - name: {{ $.Release.Name }}-{{ $name }}-values
+      kind: Secret
+      valuesKey: "defaults"
+    - name: {{ $.Release.Name }}-{{ $name }}-values
+      kind: Secret
+      valuesKey: "overlays"
+
+  {{- if $spec.dependsOn }}
+  dependsOn:   
+    {{- range $spec.dependsOn }}
+    - name: {{ . }}
+      namespace: {{ $.Release.Namespace }}
+    {{- end }}
+  {{- end }}
+{{- end }}

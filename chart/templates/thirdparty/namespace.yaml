@@ -1,0 +1,14 @@
+{{- range $name, $spec := .Values.thirdparty}}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/component: "thirdparty"
+    {{- include "commonLabels" $ | nindent 4}}
+    # What should we do here, and how should it be configurable?
+    istio-injection: enabled
+  # What should we do here, and how should it be configurable?
+  name: {{ $name }}
+{{- end }}
