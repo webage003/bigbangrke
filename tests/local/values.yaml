@@ -1,0 +1,22 @@
+# This file is meant to be used to override the values file located at tests/ci/k3d/values.yaml
+# to further decrease the cpu requests of some services so it fits on a standard quad core developer
+# laptop. CPU allocation on a local machine is a little weird, but if you have something like
+# an Intel i7 then you should hopefully see about '8000m' as the total available CPU in the k8s
+# cluster. For memory if you don't have 32GB or more you're not gonna have a fun day. The last
+# time this was looked at the total requests using this yaml and tests/ci/k3d/values.yaml were
+# 7360m CPU and 23008Mi memory. Those number will probably change as things are developed, so
+# don't take them at their word.
+
+# Fair warning, your machine will likely be chugging hard to keep up.
+
+logging:
+  values:
+    elasticsearch:
+      master:
+        resources:
+          requests:
+            cpu: 100m
+      data:
+        resources:
+          requests:
+            cpu: 100m
