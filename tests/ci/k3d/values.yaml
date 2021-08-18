@@ -276,6 +276,11 @@ addons:
             cpu: 100m
             memory: 200Mi
           limits: {}
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits: {}
       anchoreEnterpriseNotifications:
         resources:
           requests:
