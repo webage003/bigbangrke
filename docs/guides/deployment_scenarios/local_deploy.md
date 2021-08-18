@@ -1,4 +1,4 @@
-# Local deploy of Big Bang on k3d
+# Local deploy of BigBang on k3d
 
 ## Overview
 
