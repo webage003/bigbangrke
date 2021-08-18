@@ -1,10 +1,20 @@
 # Local deploy of Big Bang on k3d
 
-First make sure you have the tools you need installed locally: 
+## Overview
 
-- `k3d`
-- `helm`
-- (what else??? I already had a bunch of stuff installed so I'm not sure what was already there that this depends on)
+This guide is designed to offer an easy way to deploy BigBang locally, as an alternative to the [Quickstart](./quickstart.md) that calls for creating a Virtual Machine.
+
+## Prerequisites
+
+* A beefy developer machine running MacOS or Linux, with a quad core or better processor and 32GB of RAM or more.
+* Required tools installed:
+  * [docker](https://docs.docker.com/get-docker/)
+  * [k3d](https://k3d.io/)
+  * [helm](https://helm.sh/docs/intro/install/)
+  * [kubectl](https://kubernetes.io/docs/tasks/tools/)
+  * [kustomize](https://kustomize.io/)
+
+## Instructions
 
 ```shell
 # clone the repo

@@ -5,6 +5,8 @@
 This guide is designed to offer an easy to deploy preview of BigBang, so new users can get to a hands-on state as quickly as possible.
 Note: The current implementation of the Quick Start limits the ability to customize the BigBang Deployment. It is doing a GitOps defined deployment from a repository you don't control.
 
+If you don't have access to a beefy Virtual Machine, you can also try deploying BigBang to your local machine using [this guide](./local_deploy.md)
+
 ## Step 1. Provision a Virtual Machine
 
 The following requirements are recommended for Demo Purposes:
