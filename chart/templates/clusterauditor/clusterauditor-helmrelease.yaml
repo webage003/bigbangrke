@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: logging
+  targetNamespace: monitoring
   chart:
     spec:
       chart: {{ .Values.clusterAuditor.git.path }}
@@ -43,8 +43,6 @@ spec:
       - name: private-registry
 
   dependsOn:
-  - name: ek
+  - name: monitoring
     namespace: {{ .Release.Namespace }}
-  - name: gatekeeper
-    namespace: {{ .Release.Namespace}}
 {{- end }}

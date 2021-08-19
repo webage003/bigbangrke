@@ -3,9 +3,6 @@
 {{- end }}
 
 {{- define "bigbang.defaults.clusterauditor" -}}
-elasticsearch:
-  imagePullSecrets:
-    - name: private-registry
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}
