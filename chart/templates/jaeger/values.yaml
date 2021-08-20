@@ -16,6 +16,7 @@ monitoring:
   enabled: {{ .Values.monitoring.enabled }}
 elasticsearch:
   enabled: {{ .Values.logging.enabled }}
+
 jaeger:
   spec:
     allInOne:
@@ -24,6 +25,10 @@ jaeger:
     query:
       labels:
         protect: keycloak
+    {{- if .Values.istio.enabled }}
+    annotations:
+      proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+    {{- end }}
 openshift:
   enabled: {{ .Values.openshift }}
 networkPolicies:

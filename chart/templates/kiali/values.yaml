@@ -17,6 +17,12 @@ monitoring:
   enabled: {{ .Values.monitoring.enabled }}
 elasticsearch:
   enabled: {{ .Values.logging.enabled }}
+
+{{- if .Values.istio.enabled }}
+podAnnotations:
+  proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+{{- end }}
+
 cr:
   spec:
     server:
