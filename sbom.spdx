@@ -1,0 +1,59 @@
+
+
+#Document?
+
+
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+DocumentNamespace: https://repo1.dso.mil/platform-one/bigbang
+SPDXID: BigBang-DOCUMENT
+Creator: Platform One BigBang
+Relationship: BigBang-DOCUMENT DESCRIBES BigBang-1.14.1
+
+# Big Bang Package
+
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+SPDXID: BigBang-1.14.1
+PackageName: bigbang # chart name
+PackageOriginator: Platform One BigBang
+PackageVersion: 1.14.1 # Chart Version
+PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/bigbang
+PackageLicenseDeclared: APACHE-2.0 # License file
+Relationship: BigBang-1.14.1 CONTAINS BigBang-Gatekeeper-3.5.1-bb.13
+
+
+# dependencies
+
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+SPDXID: BigBang-gluon-0.2.2
+PackageName: gluon
+PackageOriginator: Platform One BigBang
+PackageVersion: 0.2.2 # Chart Version
+PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/apps/library-charts/gluon 
+PackageChecksum: SHA256: 0c0093b4aa2bf1f820c083ec90384490e48e98af37855feb717a123c5a8e84bf
+PackageDownloadLocation: oci://registry.dso.mil/platform-one/big-bang/apps/library-charts/gluon
+PackageLicenseDeclared: APACHE-2.0 # License file
+
+
+# Core
+
+## Gatekeeper
+
+PackageName: opa-gatekeer
+SPDXID: BigBang-Gatekeeper-3.5.1-bb.13
+PackageVersion: 3.5.1-bb.13 #
+PackageSupplier: Platform One BigBang
+PackageDownloadLocation: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy
+PackageChecksum: SHA256: de27e38b54e1a5d93a354c9db0501df282e9aab076bc8c99c54b8458f2e2d049
+Relationship: BigBang-Gatekeeper-3.5.1-bb.13 CONTAINS BigBang-gluon-0.2.2
+Relationship: BigBang-Gatekeeper-3.5.1-bb.13 CONTAINS IronBank-Gatekeeper-v3.5.1
+
+# image for gatekeeper: registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper:v3.5.1
+PackageName: gatekeeper
+SPDXID: IronBank-Gatekeeper-v3.5.1
+PackageVersion: v3.5.1
+PackageSupplier: Platform One IronBank
+PackageDownloadLocation: registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper
+PackageChecksum: SHA256: 3acc0a107a2de4ce916c983a1607c60aff539b780e12dfbdcf9e362173246a56
