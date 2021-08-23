@@ -16,9 +16,10 @@ SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 SPDXID: BigBang-1.14.1
 PackageName: bigbang # chart name
-PackageOriginator: Platform One BigBang
+PackageOriginator: Platform One BigBang # owning org
 PackageVersion: 1.14.1 # Chart Version
-PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/bigbang
+PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/bigbang # git repo for chart
+PackageChecksum: SHA256: e77e5bddbc2a6ac8b1a94a58e82dd7e67f1933875ca8ede1a62f1a03cd26ff0a # checksum of chart
 PackageLicenseDeclared: APACHE-2.0 # License file
 Relationship: BigBang-1.14.1 CONTAINS BigBang-Gatekeeper-3.5.1-bb.13
 
@@ -28,12 +29,12 @@ Relationship: BigBang-1.14.1 CONTAINS BigBang-Gatekeeper-3.5.1-bb.13
 SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 SPDXID: BigBang-gluon-0.2.2
-PackageName: gluon
+PackageName: gluon # library chart name
 PackageOriginator: Platform One BigBang
 PackageVersion: 0.2.2 # Chart Version
-PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/apps/library-charts/gluon 
-PackageChecksum: SHA256: 0c0093b4aa2bf1f820c083ec90384490e48e98af37855feb717a123c5a8e84bf
-PackageDownloadLocation: oci://registry.dso.mil/platform-one/big-bang/apps/library-charts/gluon
+PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/apps/library-charts/gluon  # git repo for chart
+PackageChecksum: SHA256: 0c0093b4aa2bf1f820c083ec90384490e48e98af37855feb717a123c5a8e84bf # checksum of library
+PackageDownloadLocation: oci://registry.dso.mil/platform-one/big-bang/apps/library-charts/gluon # oci location to pull down
 PackageLicenseDeclared: APACHE-2.0 # License file
 
 
