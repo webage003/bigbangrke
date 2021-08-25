@@ -1,60 +1,30 @@
-
-
-#Document?
-
-
 SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
+SPDXID: SPDXRef-DOCUMENT
+DocumentName: bigbang
 DocumentNamespace: https://repo1.dso.mil/platform-one/bigbang
-SPDXID: BigBang-DOCUMENT
-Creator: Platform One BigBang
-Relationship: BigBang-DOCUMENT DESCRIBES BigBang-1.14.1
+Creator: Person: Tom Runyon ()
+Creator: Organization: Platform One ()
+Creator: Tool: helm-spdx-generator # tool we'll build to do this all automagically
+Created: 2021-08-24T01:01:01Z
+ExternalDocumentRef:DocumentRef-Gatekeeper https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/raw/spdx/sbom.spdx SHA1: 33bcf4258e57162b99cdd73d66f337d792ff4e5f
+
 
 # Big Bang Package
 
-SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-SPDXID: BigBang-1.14.1
-PackageName: bigbang # chart name
+PackageName: bigbang-1.14.1 # chart name
+SPDXID: SPDXRef-Package-bigbang-1.14.1
 PackageOriginator: Platform One BigBang # owning org
 PackageVersion: 1.14.1 # Chart Version
 PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/bigbang # git repo for chart
 PackageChecksum: SHA256: e77e5bddbc2a6ac8b1a94a58e82dd7e67f1933875ca8ede1a62f1a03cd26ff0a # checksum of chart
 PackageLicenseDeclared: APACHE-2.0 # License file
-Relationship: BigBang-1.14.1 CONTAINS BigBang-Gatekeeper-3.5.1-bb.13
+# maybe contains, or maybe `RUNTIME_DEPENDENCY_OF`?
+Relationship: SPDXRef-Package-bigbang-1.14.1 CONTAINS DocumentRef-Gatekeeper:BigBang-Gatekeeper-3.5.1-bb.13
+PackageLicenseInfoFromFiles: NOASSERTION
+PackageCopyrightText: NOASSERTION
 
 
-# dependencies
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package-bigbang-1.14.1
+Relationship: SPDXRef-Package-bigbang-1.14.1 CONTAINS DocumentRef-Gatekeeper:BigBang-Gatekeeper-3.5.1-bb.13
 
-SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-SPDXID: BigBang-gluon-0.2.2
-PackageName: gluon # library chart name
-PackageOriginator: Platform One BigBang
-PackageVersion: 0.2.2 # Chart Version
-PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/apps/library-charts/gluon  # git repo for chart
-PackageChecksum: SHA256: 0c0093b4aa2bf1f820c083ec90384490e48e98af37855feb717a123c5a8e84bf # checksum of library
-PackageDownloadLocation: oci://registry.dso.mil/platform-one/big-bang/apps/library-charts/gluon # oci location to pull down
-PackageLicenseDeclared: APACHE-2.0 # License file
-
-
-# Core
-
-## Gatekeeper
-
-PackageName: opa-gatekeer
-SPDXID: BigBang-Gatekeeper-3.5.1-bb.13
-PackageVersion: 3.5.1-bb.13 #
-PackageSupplier: Platform One BigBang
-PackageDownloadLocation: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy
-PackageChecksum: SHA256: de27e38b54e1a5d93a354c9db0501df282e9aab076bc8c99c54b8458f2e2d049
-Relationship: BigBang-Gatekeeper-3.5.1-bb.13 CONTAINS BigBang-gluon-0.2.2
-Relationship: BigBang-Gatekeeper-3.5.1-bb.13 CONTAINS IronBank-Gatekeeper-v3.5.1
-
-# image for gatekeeper: registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper:v3.5.1
-PackageName: gatekeeper
-SPDXID: IronBank-Gatekeeper-v3.5.1
-PackageVersion: v3.5.1
-PackageSupplier: Platform One IronBank
-PackageDownloadLocation: registry1.dso.mil/ironbank/opensource/openpolicyagent/gatekeeper
-PackageChecksum: SHA256: 3acc0a107a2de4ce916c983a1607c60aff539b780e12dfbdcf9e362173246a56
