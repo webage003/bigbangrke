@@ -353,10 +353,10 @@ eckoperator:
   # -- Flux reconciliation overrides specifically for the ECK Operator Package
   flux: 
     forceUpgrade: true
-    install:
-      crds: CreateReplace
-    upgrade:
-      crds: CreateReplace
+    # install:
+    #   crds: CreateReplace
+    # upgrade:
+    #   crds: CreateReplace
 
   # -- Values to passthrough to the eck-operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
   values: {}
