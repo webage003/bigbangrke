@@ -347,10 +347,15 @@ eckoperator:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
-    tag: "1.6.0-bb.2"
+    # tag: "1.7.1-bb.0"
+    branch: "1.7.x-bump"
 
   # -- Flux reconciliation overrides specifically for the ECK Operator Package
-  flux: {}
+  flux: 
+    install:
+      crds: CreateReplace
+    upgrade:
+      crds: CreateReplace
 
   # -- Values to passthrough to the eck-operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
   values: {}
