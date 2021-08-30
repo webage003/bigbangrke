@@ -19,12 +19,71 @@ PackageVersion: 1.14.1 # Chart Version
 PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/bigbang # git repo for chart
 PackageChecksum: SHA256: e77e5bddbc2a6ac8b1a94a58e82dd7e67f1933875ca8ede1a62f1a03cd26ff0a # checksum of chart
 PackageLicenseDeclared: APACHE-2.0 # License file
-# maybe contains, or maybe `RUNTIME_DEPENDENCY_OF`?
-Relationship: SPDXRef-Package-bigbang-1.14.1 CONTAINS DocumentRef-Gatekeeper:BigBang-Gatekeeper-3.5.1-bb.13
 PackageLicenseInfoFromFiles: NOASSERTION
 PackageCopyrightText: NOASSERTION
 
 
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package-bigbang-1.14.1
+
+# maybe contains, or maybe `RUNTIME_DEPENDENCY_OF`?
 Relationship: SPDXRef-Package-bigbang-1.14.1 CONTAINS DocumentRef-Gatekeeper:BigBang-Gatekeeper-3.5.1-bb.13
 
+
+
+# Flux
+
+PackageName: flux
+SPDXID: SPDXRef-Package-flux-1.14.1
+PackageOriginator: Platform One BigBang # owning org
+PackageVersion: 1.14.1 # Chart Version for BB
+PackageHomePage: https://repo1.dso.mil/platform-one/big-bang/bigbang#/base/flux
+PackageLicenseDeclared: APACHE-2.0 # License file
+PackageLicenseInfoFromFiles: NOASSERTION
+PackageCopyrightText: NOASSERTION
+Relationship: SPDXRef-Package-bigbang-1.14.1 RUNTIME_DEPENDENCY_OF SPDXRef-Package-flux-1.14.1
+
+# Helm Controller
+
+Package: registry1.dso.mil/ironbank/fluxcd/helm-controller:v0.11.0
+SPDXID: SPDXRef-Package-registry1.dso.mil/ironbank/fluxcd/helm-controller:v0.11.0
+PackageDownloadLocation: registry1.dso.mil/ironbank/fluxcd/helm-controller:v0.11.0
+FilesAnalyzed: false
+PackageLicenseConcludedNOASSERTION
+PackageLicenseDeclared: Apache 2
+PackageCopyrightText: NOASSERTION
+Relationship: SPDXRef-Package-flux-1.14.1 CONTAINS registry1.dso.mil/ironbank/fluxcd/helm-controller:v0.11.0
+
+# Kustomize Controller
+
+Package: registry1.dso.mil/ironbank/fluxcd/kustomize-controller:v0.13.0
+SPDXID: SPDXRef-Package-registry1.dso.mil/ironbank/fluxcd/kustomize-controller:v0.13.0
+PackageDownloadLocation: registry1.dso.mil/ironbank/fluxcd/kustomize-controller:v0.13.0
+FilesAnalyzed: false
+PackageLicenseConcludedNOASSERTION
+PackageLicenseDeclared: Apache 2
+PackageCopyrightText: NOASSERTION
+Relationship: SPDXRef-Package-flux-1.14.1 CONTAINS registry1.dso.mil/ironbank/fluxcd/kustomize-controller:v0.13.0
+
+
+# Notification Controller
+
+Package: registry1.dso.mil/ironbank/fluxcd/notification-controller:v0.15.0
+SPDXID: SPDXRef-Package-registry1.dso.mil/ironbank/notification-controller:v0.15.0
+PackageDownloadLocation: registry1.dso.mil/ironbank/fluxcd/notification-controller:v0.15.0
+FilesAnalyzed: false
+PackageLicenseConcludedNOASSERTION
+PackageLicenseDeclared: Apache 2
+PackageCopyrightText: NOASSERTION
+Relationship: SPDXRef-Package-flux-1.14.1 CONTAINS registry1.dso.mil/ironbank/fluxcd/notification-controller:v0.15.0
+
+
+# Soure Controller
+
+Package: registry1.dso.mil/ironbank/fluxcd/source-controller:v0.14.0
+SPDXID: SPDXRef-Package-registry1.dso.mil/ironbank/fluxcd/source-controller:v0.14.0
+PackageDownloadLocation: registry1.dso.mil/ironbank/fluxcd/source-controller:v0.14.0
+FilesAnalyzed: false
+PackageLicenseConcludedNOASSERTION
+PackageLicenseDeclared: Apache 2
+PackageCopyrightText: NOASSERTION
+Relationship: SPDXRef-Package-flux-1.14.1 CONTAINS registry1.dso.mil/ironbank/fluxcd/source-controller:v0.14.0
