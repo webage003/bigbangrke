@@ -352,6 +352,7 @@ eckoperator:
 
   # -- Flux reconciliation overrides specifically for the ECK Operator Package
   flux: 
+    forceUpgrade: true
     install:
       crds: CreateReplace
     upgrade:
