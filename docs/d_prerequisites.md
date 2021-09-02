@@ -186,7 +186,7 @@ logging:
     elasticsearch:
       data:
         count: 3
-        initCointainers:
+        initContainers:
         - command:
           - sh
           - -c
