@@ -359,7 +359,13 @@ addons:
     values:
       plugins:
         install: []
-      jvmOpts: "-Xmx1G -Xms1G"
+      resources:
+        requests:
+          cpu: 1
+          memory: 4Gi
+        limits:
+          cpu: 1
+          memory: 4Gi
       persistence:
         enabled: false
         size: 5Gi
