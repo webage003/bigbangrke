@@ -362,8 +362,10 @@ addons:
       resources:
         requests:
           cpu: 100m
-          memory: 200Mi
-        limits: {}
+          memory: 2Gi
+        limits:
+          cpu: 100m
+          memory: 2Gi
       persistence:
         enabled: false
         size: 5Gi
