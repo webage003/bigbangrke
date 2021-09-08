@@ -5,6 +5,8 @@
 #   * grafana - https://grafana.com/docs/grafana/latest/auth/google/
 #   * kibana/es - https://www.elastic.co/guide/en/elasticsearch/reference/7.12/oidc-guide-stack.html
 #               - https://www.elastic.co/guide/en/kibana/current/kibana-authentication.html#oidc
+#   * authservice - https://github.com/istio-ecosystem/authservice/blob/master/bookinfo-example/README.md  (includes an example on how to build the JWKS string)
+#                 - https://github.com/istio-ecosystem/authservice/blob/master/bookinfo-example/authservice/templates/config.yaml
 #
 
 monitoring:
@@ -18,6 +20,7 @@ monitoring:
       auth_url: https://accounts.google.com/o/oauth2/auth
       token_url: https://oauth2.googleapis.com/token
       signout_redirect_url: https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://grafana.bigbang.dev
+
 logging:
   sso:
     enabled: true
@@ -43,3 +46,34 @@ logging:
     claims_mail: ""
   license:
     trial: true
+
+jaeger: 
+  sso:
+    enabled: true
+    client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-jaeger
+
+istio:
+  values:
+    authservice:
+      enabled: true
+
+addons:
+  authservice:
+    values:
+      issuer_uri: "https://accounts.google.com"
+      jwks_uri: "https://www.googleapis.com/oauth2/v3/certs"
+    chains:
+      google-jaeger:
+        match:
+          header: ":authority"
+          prefix: "google-tracing" # NOTE - In order to test locally, you need to update the virtual service definition to use a matching hostname (ex. `google-tracing.bigbang.dev`)
+        authorization_uri: "https://accounts.google.com/o/oauth2/v2/auth"
+        token_uri: "https://oauth2.googleapis.com/token"
+        client_secret: "<client_secret>"
+        client_id: "<client_id>"
+        callback_uri: https://google-tracing.bigbang.dev/oauth/callback
+        id_token:
+          preamble: "Bearer"
+          header: "Authorization"        
+        jwks: "{\"keys\":[{\"n\":\"r3WAFM8oV43b_koyZLa-d5kemU23ILQ1O3iOPTlnHu8lCppG7SiThA6tS7zu_hhyi2-PEKmrR-WMu9_Ydgp7umgMkfeyHV8u5uQ0h1TKQz-Sq3b68A7vYGDmnwOl3-N8RBSzluN9oRbFD3hWoS8kuzYtNvHvPo2hECibD1_EOeeP21W2uOWPlEOrZj7WFENhAPqfKJaFRyvVfSbGwlTzls5FsHSXR5CZVr3wGKLqlAqpX516OFrRE8KpVJQiw1HxwP4v6CIzRdxdMwF9IwQpNlRsEFJowxK5LwNL07uZsbwxxzPxpIJJSqUL_YzfRAa7tlprghDaPckNm74FAkTGMw\",\"e\":\"AQAB\",\"use\":\"sig\",\"alg\":\"RS256\",\"kty\":\"RSA\",\"kid\":\"991b0636aada341c5a08e0d8f2406972064dc8ed\"},{\"kty\":\"RSA\",\"use\":\"sig\",\"kid\":\"74217b8dadbb365783580f9e92487d701cd38fe6\",\"n\":\"tl4kqh0Zndh6d-hecGhq6BAMUoOi_bO9zp1Bl9IN56OXD2q0Mt1xzeG05joHGn8lcSRx8t8obDWefmS-Em9OCy9p-IWeRWFsAmS50PAkt9FbOg-Rmkp0ueADHFR9U_tmCX6dTyUkWbEXLD8eAI-9-Upu2iwN_R_fmBiIMlldkOTdS8T0wSgxeRQjWedZeB8eYS_yGtCvmM4bvRZE9a5qBl3qyhg9jRyNPWurHvtQP5db2rX1UkgPc6BIgAfwoUIvnR4i-Xu7A649QL4bZP-dDbQ3BMefqafduyDpHFCBe3Vgoj0o8_fpl5k3-CNBWAc0r6ppzuRSYnveLwOELKaDWQ\",\"alg\":\"RS256\",\"e\":\"AQAB\"},{\"kty\":\"RSA\",\"n\":\"xY7GmPnwTKNKU4DaUtCWeUBSjS9uBmRCQYehgObaA126KD1cgcmJUZ6O_6l4-_pFY49qXFpnkl1uiVndWbCyR-3OzGvFEm4JXOKwcb6uGw-B_u7Pm1hZd3QGHfDaG6c0z5mAg2IS_5aUzHwKLfD29eXLqYHziTLMDL5jwejWZBQ2gmvqPo98hpypJ0TBBQaE63S6hywCXGZV8CYi8XUKe8uD0RqmMnvWXw8Og7s4J5s0ENErjt595q3-e-5639-cqiX2FlsYKg7RrZiKE2_MLknoEDEPhlQIa15wXiQIwmYPFI0V3ZPKiSHOEEEENoA8rgVs9Ay4sjwWP3hP3ghS_w\",\"alg\":\"RS256\",\"use\":\"sig\",\"e\":\"AQAB\",\"kid\":\"d66ad870ac3e79c77da53d51493187dec2d29edd\"},{\"e\":\"AQAB\",\"alg\":\"RS256\",\"n\":\"qfR12Bcs_hSL0Y1fN5TYZeUQIFmuVRYa210na81BFj91xxwtICJY6ckZCI3Jf0v2tPLOT_iKVk4WBCZ7AVJVvZqHuttkyrdFROMVTe6DwmcjbbkgACMVildTnHy9xy2KuX-OZsEYzgHuRgfe_Y-JN6LoxBYZx6VoBLpgK-F0Q-0O_bRgZhHifVG4ZzARjhgz0PvBb700GtOTHS6mQIfToPErbgqcowKN9k-mJqJr8xpXSHils-Yw97LHjICZmvA5B8EPNW28DwFOE5JrsPcyrFKOAYl4NcSYQgjl-17TWE5_tFdZ8Lz-srjiPMoHlBjZD1C7aO03LI-_9u8lVsktMw\",\"use\":\"sig\",\"kty\":\"RSA\",\"kid\":\"819d1e61429dd3d3caef129c0ac2bae8c6d46fbc\"}]}"
+   
