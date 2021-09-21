@@ -314,7 +314,8 @@ logging:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
-    tag: "0.1.21-bb.0"
+    #tag: "0.1.21-bb.0"
+    branch: "rgarcia-helm-tests-test"
 
   # -- Flux reconciliation overrides specifically for the Logging (EFK) Package
   flux:
