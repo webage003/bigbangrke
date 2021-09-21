@@ -4,15 +4,6 @@
 
 ### Core
 
-| Policy Name             | Description                                                | Implementation                            |
-| ----------------------- | ---------------------------------------------------------- | ----------------------------------------- |
-| [No Root](#no-root)     | STIG                                                       | Pods should not be allowed to Run as root |
-| No Host Mounts          | Pods should not be allowed to mount underlying file system |                                           |
-| No Host Networking      | Pods should not be allowed to mount the host network       | l                                         |
-| No PrivilegedContainers | Pods should not have access to additional Kernel functions |                                           |
-
-## Core
-
 | Name                                                              | Gatekeeper | Istio | EK Operator | Elasticsearch Kibana | Fluentbit                                                  | Monitoring | Twistlock |
 | ----------------------------------------------------------------- | ---------- | ----- | ----------- | -------------------- | ---------------------------------------------------------- | ---------- | --------- |
 | [No Root](#no-root)                                               | Yes        | Yes   | Yes         | Yes                  | Yes                                                        | yes        |
