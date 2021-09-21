@@ -19,11 +19,10 @@
 | [suppliementalGroups](#suppliementalGroups)                       |
 | [fsGroups](#fsGroups)                                             |
 | [allowedPrivilegeEscalation](#allowedPrivilegeEscalation)         |
-
-| [ App Armor Annotations](#app-armor-annotations)
-| [ selinux ](#seLinux)
-| [ hostMounts](#hostMounts)
-| [Seccomp Annotations](#app-armor-annotations)
+| [ App Armor Annotations](#app-armor-annotations)                  |
+| [ selinux ](#seLinux)                                             |
+| [ hostMounts](#hostMounts)                                        |
+| [Seccomp Annotations](#app-armor-annotations)                     |
 
 ### Requirements
 
