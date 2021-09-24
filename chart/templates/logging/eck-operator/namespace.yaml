@@ -1,4 +1,4 @@
-{{- if and (or .Values.eckoperator.enabled .Values.logging.enabled .Values.clusterAuditor.enabled) (not .Values.logging.loki) }}
+{{- if and (or .Values.eckoperator.enabled .Values.logging.enabled .Values.clusterAuditor.enabled) (eq .Values.logging.engine "efk") }}
 apiVersion: v1
 kind: Namespace
 metadata:
