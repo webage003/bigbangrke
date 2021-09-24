@@ -98,8 +98,8 @@ flux:
 
 # -- Global NetworkPolicies settings
 networkPolicies:
-  # -- Toggle all package NetworkPolicies, can disable specific packages with `package.values.networkPolicies.enabled`
-  enabled: true
+  # -- Toggle all package NetworkPolicies, can disable specific packages with `package.networkPolicies.enabled`
+  enabled: false
   # -- Control Plane CIDR, defaults to 0.0.0.0/0, use `kubectl get endpoints -n default kubernetes` to get the CIDR range needed for your cluster
   # Must be an IP CIDR range (x.x.x.x/x - ideally with /32 for the specific IP of a single endpoint, broader range for multiple masters/endpoints)
   # Used by package NetworkPolicies to allow Kube API access
@@ -114,7 +114,7 @@ networkPolicies:
 #
 istio:
   # -- Toggle deployment of Istio.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
@@ -185,7 +185,7 @@ istio:
 
 istiooperator:
   # -- Toggle deployment of Istio Operator.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
     path: "./chart"
@@ -202,7 +202,7 @@ istiooperator:
 
 jaeger:
   # -- Toggle deployment of Jaeger.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
     path: "./chart"
@@ -237,7 +237,7 @@ jaeger:
 
 kiali:
   # -- Toggle deployment of Kiali.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
     path: "./chart"
@@ -273,7 +273,7 @@ kiali:
 #
 clusterAuditor:
   # -- Toggle deployment of Cluster Auditor.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
     path: "./chart"
@@ -294,7 +294,7 @@ clusterAuditor:
 #
 gatekeeper:
   # -- Toggle deployment of OPA Gatekeeper.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
@@ -317,15 +317,21 @@ gatekeeper:
 # ----------------------------------------------------------------------------------------------------------------------
 # Logging
 #
+# efk stack depends on ek, eckoperator, and fluentbit packages
+# plg stack depends on promtail, loki, and monitoring packages
 logging:
-  # -- Toggle deployment of Logging (EFK).
   enabled: true
+  engine: plg # value can be either 'plg' or 'efk'
+
+ek:
+  # -- Toggle deployment of Elasticsearch-Kibana logging stack.
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
     tag: "0.1.21-bb.2"
 
-  # -- Flux reconciliation overrides specifically for the Logging (EFK) Package
+  # -- Flux reconciliation overrides specifically for the elasticsearch-kibana Package
   flux:
     timeout: 20m
 
@@ -359,7 +365,7 @@ logging:
 
 eckoperator:
   # -- Toggle deployment of ECK Operator.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
@@ -373,7 +379,7 @@ eckoperator:
 
 fluentbit:
   # -- Toggle deployment of Fluent-Bit.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
@@ -390,7 +396,7 @@ fluentbit:
 
 loki:
   # -- Toggle deployment of Loki.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
     path: "./chart"
@@ -473,7 +479,7 @@ monitoring:
 #
 twistlock:
   # -- Toggle deployment of Twistlock.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
