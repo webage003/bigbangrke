@@ -1,5 +1,5 @@
-{{- $fluxSettingsEk := merge .Values.logging.flux .Values.flux -}}
-{{- if and (or .Values.logging.enabled .Values.clusterAuditor.enabled) (not .Values.logging.loki) }}
+{{- $fluxSettingsEk := merge .Values.ek.flux .Values.flux -}}
+{{- if and (or .Values.logging.enabled .Values.clusterAuditor.enabled) (eq .Values.logging.engine "efk") }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -13,7 +13,7 @@ spec:
   targetNamespace: logging
   chart:
     spec:
-      chart: {{ .Values.logging.git.path }}
+      chart: {{ .Values.ek.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
@@ -22,9 +22,9 @@ spec:
 
   {{- toYaml $fluxSettingsEk | nindent 2 }}
 
-  {{- if .Values.logging.postRenderers }}
+  {{- if .Values.ek.postRenderers }}
   postRenderers:
-  {{ toYaml .Values.logging.postRenderers | nindent 4 }}
+  {{ toYaml .Values.ek.postRenderers | nindent 4 }}
   {{- end }}
   valuesFrom:
     - name: {{ .Release.Name }}-ek-values

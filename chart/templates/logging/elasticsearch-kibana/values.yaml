@@ -1,4 +1,4 @@
-{{- if and (or .Values.logging.enabled .Values.clusterAuditor.enabled) (not .Values.logging.loki) }}
+{{- if and (or .Values.logging.enabled .Values.clusterAuditor.enabled) (eq .Values.logging.engine "efk") }}
 {{- include "values-secret" (dict "root" $ "package" .Values.logging "name" "ek" "defaults" (include "bigbang.defaults.logging" .)) }}
 {{- end }}
 
@@ -14,23 +14,23 @@ istio:
   enabled: {{ .Values.istio.enabled }}
   kibana:
     gateways:
-    - istio-system/{{ default "public" .Values.logging.ingress.gateway }}
+    - istio-system/{{ default "public" .Values.ek.ingress.gateway }}
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   ingressLabels:
-    {{- $gateway := default "public" .Values.logging.ingress.gateway }}
+    {{- $gateway := default "public" .Values.ek.ingress.gateway }}
     {{- $default := dict "app" (dig "gateways" $gateway "ingressGateway" nil .Values.istio) "istio" nil }}
     {{- toYaml (dig "values" "gateways" $gateway "selector" $default .Values.istio) | nindent 4 }}
 
-{{- with .Values.logging.sso }}
+{{- with .Values.ek.sso }}
 {{- if .enabled }}
 sso:
   enabled: {{ .enabled }}
   client_id: {{ .client_id | quote }}
   client_secret: {{ .client_secret | default "no-secret" }}
   oidc:
-    {{- if $.Values.logging.sso.oidc }}
+    {{- if $.Values.ek.sso.oidc }}
     host: {{ .oidc.host | default $.Values.sso.oidc.host | quote }}
     realm: {{ .oidc.realm | default $.Values.sso.oidc.realm | quote }}
     {{- else }}

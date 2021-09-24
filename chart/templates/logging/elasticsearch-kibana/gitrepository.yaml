@@ -1,4 +1,4 @@
-{{- if and (and (not .Values.offline) (or .Values.logging.enabled .Values.clusterAuditor.enabled)) (not .Values.logging.loki) }}
+{{- if and (and (not .Values.offline) (or .Values.logging.enabled .Values.clusterAuditor.enabled)) (eq .Values.logging.engine "efk") }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
@@ -10,9 +10,9 @@ metadata:
     {{- include "commonLabels" . | nindent 4}}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.logging.git.repo }}
+  url: {{ .Values.ek.git.repo }}
   ref:
-    {{- include "validRef" .Values.logging.git | nindent 4 }}
+    {{- include "validRef" .Values.ek.git | nindent 4 }}
   {{ include "gitIgnore" . }}
   {{- include "gitCreds" . | nindent 2 }}
 {{- end }}
