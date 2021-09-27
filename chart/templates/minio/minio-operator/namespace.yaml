@@ -1,10 +1,14 @@
 {{- if or .Values.addons.minioOperator.enabled .Values.addons.minio.enabled }}
+{{- $istioEnabled := .Values.istio.enabled | default false }}
+{{- range $name, $values := .Values.istio.controlplanes }}
+{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
+{{- end }}
 apiVersion: v1
 kind: Namespace
 metadata:
   name: minio-operator
   labels:
-    istio-injection: enabled
+    {{- if $istioEnabled }}{{- include "istioInjectionLabel" .  | nindent 4 }}{{- end }}
     app.kubernetes.io/name: minioOperator
     app.kubernetes.io/component: "application-utilities"
     {{- include "commonLabels" . | nindent 4}}
