@@ -3,7 +3,9 @@
 {{- end }}
 
 {{- define "bigbang.defaults.istio" -}}
-hostname: {{ .Values.hostname }}
+# hostname is deprecated and replaced with domain. But if hostname exists then use it.
+{{- $domainName := default .Values.domain .Values.hostname }}
+domain: {{ $domainName }}
 
 tracing:
   enabled:  {{ .Values.jaeger.enabled }}
@@ -12,6 +14,9 @@ imagePullSecrets:
   - private-registry
 
 openshift: {{ .Values.openshift }}
+
+authservice:
+  enabled: {{ .Values.addons.authservice.enabled }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}
@@ -29,6 +34,9 @@ ingressGateways:
 {{- range $name, $values := .Values.istio.ingressGateways }}
   {{ $name | nindent 2 }}:
     {{- toYaml (merge (dict "k8s" $values.kubernetesResourceSpec) (fromYaml (include "istio.ingressgateway.k8s" $values))) | nindent 4 }}
+    {{- if $values.extraLabels }} 
+    {{- toYaml (dict "extraLabels" $values.extraLabels) | nindent 4 }}
+    {{- end}}
 {{- end }}
 
 {{- if .Values.istio.gateways }}

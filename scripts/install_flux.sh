@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+trap 'echo exit at ${0}:${LINENO}, command was: ${BASH_COMMAND} 1>&2' ERR
 
 #
 # global defaults
@@ -9,7 +10,7 @@ set -e
 REGISTRY_URL=registry1.dso.mil
 FLUX_KUSTOMIZATION=base/flux
 FLUX_SECRET=private-registry
-WAIT_TIMEOUT=120
+WAIT_TIMEOUT=300
 
 
 #
@@ -21,6 +22,7 @@ function help {
   cat << EOF
 usage: $(basename "$0") <arguments>
 -h|--help              - print this help message and exit
+-r|--registry-url      - (optional, default: registry1.dso.mil) registry url to use for flux installation
 -u|--registry-username - (required) registry username to use for flux installation
 -p|--registry-password - (required) registry password to use for flux installation
 -w|--wait-timeout      - (optional, default: 120) how long to wait; in seconds, for each key flux resource component
@@ -33,7 +35,7 @@ EOF
 
 PARAMS=""
 while (( "$#" )); do
-  case "$1" in
+  case "$1" in  
     # registry username required argument
     -u|--registry-username)
       if [ -n "$2" ] && [ "${2:0:1}" != "-" ]; then
@@ -58,6 +60,16 @@ while (( "$#" )); do
     -e|--registry-email)
       if [ -n "$2" ] && [ "${2:0:1}" != "-" ]; then
         REGISTRY_EMAIL=$2
+        shift 2
+      else
+        echo "Error: Argument for $1 is missing" >&2
+        help; exit 1
+      fi
+      ;;
+    # registry url optional argument
+    -r|--registry-url)
+      if [ -n "$2" ] && [ "${2:0:1}" != "-" ]; then
+        REGISTRY_URL=$2
         shift 2
       else
         echo "Error: Argument for $1 is missing" >&2
@@ -117,7 +129,7 @@ kubectl create secret docker-registry "$FLUX_SECRET" -n flux-system \
   --dry-run=client -o yaml | kubectl apply -n flux-system -f -
 
 echo "Installing flux from kustomization"
-kustomize build "$FLUX_KUSTOMIZATION" | kubectl apply -f -
+kustomize build "$FLUX_KUSTOMIZATION" | sed "s/registry1.dso.mil/${REGISTRY_URL}/g" | kubectl apply -f -
 
 #
 # verify flux

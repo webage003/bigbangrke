@@ -3,7 +3,10 @@
 {{- end }}
 
 {{- define "bigbang.defaults.twistlock" -}}
-hostname: {{ .Values.hostname }}
+# hostname is deprecated and replaced with domain. But if hostname exists then use it.
+{{- $domainName := default .Values.domain .Values.hostname }}
+hostname: {{ $domainName }}
+domain: {{ $domainName }}
 
 openshift: {{ .Values.openshift }}
 
@@ -20,6 +23,7 @@ networkPolicies:
     {{- $gateway := default "public" .Values.twistlock.ingress.gateway }}
     {{- $default := dict "app" (dig "gateways" $gateway "ingressGateway" nil .Values.istio) "istio" nil }}
     {{- toYaml (dig "values" "gateways" $gateway "selector" $default .Values.istio) | nindent 4 }}
+  nodeCidr: {{ .Values.networkPolicies.nodeCidr }}
 
 istio:
   enabled: {{ .Values.istio.enabled }}

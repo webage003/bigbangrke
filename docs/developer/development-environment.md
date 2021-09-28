@@ -2,7 +2,7 @@
 
 [[_TOC_]]
 
-BigBang developers use [k3d](https://k3d.io/), a lightweight wrapper to run [k3s](https://github.com/rancher/k3s) (Rancher Lab’s minimal Kubernetes distribution) in docker.  
+BigBang developers use [k3d](https://k3d.io/), a lightweight wrapper to run [k3s](https://github.com/rancher/k3s) (Rancher Lab’s minimal Kubernetes distribution) in docker.
 
 It is not recommend to run k3d with BigBang on your local computer. BigBang can be quite resource-intensive and it requires a huge download bandwidth for the images. It is best to use a remote k3d cluster running on an AWS EC2 instance. If you do insist on running k3d locally you should disable certain packages before deploying. You can do this in the values.yaml file by setting the package deploy to false. One of the packages that is most resource-intensive is the logging package. And you should create a local image registry cache to minimize the amount of image downloading. A script that shows how to create a local image cache is in the [BigBang Quick Start](https://repo1.dso.mil/platform-one/quick-start/big-bang/)
 
@@ -19,7 +19,7 @@ This page contains the manual steps to create your k3d dev environment. Various 
 ### Local Utilities
 
 - [Helm](https://helm.sh/docs/intro/install/)
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)  
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 ## Manual Creation of a Development Environment
 
@@ -37,12 +37,12 @@ Create an Ubuntu EC2 instance using the AWS console with the following attribute
 ```shell
 MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="==MYBOUNDARY=="
-    
+
 --==MYBOUNDARY==
 Content-Type: text/x-shellscript; charset="us-ascii"
 
 #!/bin/bash
-# Set the vm.max_map_count to 262144. 
+# Set the vm.max_map_count to 262144.
 # Required for Elastic to run correctly without OOM errors.
 echo 'vm.max_map_count=524288' > /etc/sysctl.d/vm-max_map_count.conf
 echo 'fs.file-max=131072' > /etc/sysctl.d/fs-file-max.conf
@@ -57,7 +57,7 @@ modprobe xt_statistic
 - 50 Gigs of disk space
 - Tags:  ```Name: <firstname.lastname>```
 - Security Group: All TCP limited to your local IP address. If you already have a security group, select it.  Otherwise create a new one. See addendum for more secure way with only port 22 for ssh traffic using sshuttle.
-- If you have created an existing key pair that you still have access to, select it. If not, create a new key pair. Be sure to save the pem file.  
+- If you have created an existing key pair that you still have access to, select it. If not, create a new key pair. Be sure to save the pem file.
 
 ### Step 2
 
@@ -204,17 +204,77 @@ cd ./bigbang
 ./scripts/install_flux.sh -u your-user-name -p your-pull-secret
 ```
 
-**Note:** When deploying to k3d, istio-system should be added from `excludedNamespaces` under the `allowedDockerRegistries` violations for gatekeeper. This can be done by modifying `chart/values.yaml` file or passing an override file with the values set as seen below. This is for development purposes only: production should not allow containers in the `istio-system` namespace to be pulled from outside of Registry1. 
+**Note1:** When deploying to k3d, the load balancer must be added to `excludedResources` under several violations for gatekeeper. This can be done by modifying `chart/values.yaml` file or passing an override file (e.g. `chart/k3d-dev-values.yaml`) with the values set below.  This is for development purposes only.
 
 ```yaml
 gatekeeper:
   values:
     violations:
+      allowedCapabilities:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to not drop capabilities
+          - istio-system/lb-port-.*
       allowedDockerRegistries:
-        match:
-          excludedNamespaces: 
-            - istio-system # allows creation for loadbalancer pods for various ports and various vendor loadbalancers
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to pull from public repos
+          - istio-system/lb-port-.*
+      allowedSecCompProfiles:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to have an undefined defined seccomp
+          - istio-system/lb-port-.*
+      allowedUsers:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to run as any user/group
+          - istio-system/lb-port-.*
+      containerRatio:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to have undefined limits/requests
+          - istio-system/lb-port-.*
+      hostNetworking:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to mount host ports
+          - istio-system/lb-port-.*
+      noBigContainers:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to have undefined limits/requests
+          - istio-system/lb-port-.*
+      noPrivilegedEscalation:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to have undefined security context
+          - istio-system/lb-port-.*
+      readOnlyRoot:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to mount filesystems read/write
+          - istio-system/lb-port-.*
+      requiredLabels:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer pods to not have required labels
+          - istio-system/svclb-.*
+      requiredProbes:
+        parameters:
+          excludedResources:
+          # Allows k3d load balancer containers to not have readiness/liveness probes
+          - istio-system/lb-port-.*
 ```
+
+**Note2:** The information in this note is simply to give you awareness in advance. You should create local directory on your workstation where you store your helm values override files. Development changes made in the code for testing could accidentally be committed. That is why you should create a separate local directory to hold your override values for testing. The location can be anywhere on your workstation but it is most convenient to place them in a sibling directory next to the BigBang repos. Below is an example directory structure. The directory names are fake (for example only). Other documents will give more specific detail as needed.
+  ```text
+  ├── BigBangCodeRepo/
+  └── overrides/
+      ├── override-values-1.yaml
+      ├── override-values-2.yaml
+      └── override-values-3.yaml
+  ```
 
 ## Addendum
 
@@ -260,7 +320,7 @@ If the hosts shown in the HOSTS column from `kubectl get vs -A` don't resolve to
 <IP of the EC2 instance> kibana.bigbang.dev prometheus.bigbang.dev grafana.bigbang.dev alertmanager.bigbang.dev kiali.bigbang.dev tracing.bigbang.dev
 ```
 
-It is important to use hostnames when accessing cluster apps in a browser instead of IPs as the hostname sent by the browser in its HTTP GET request is used by the load balancers (see: kubectl get svc -n istio-system) to direct the traffic to the correct app. 
+It is important to use hostnames when accessing cluster apps in a browser instead of IPs as the hostname sent by the browser in its HTTP GET request is used by the load balancers (see: kubectl get svc -n istio-system) to direct the traffic to the correct app.
 
 ### Multi Ingress-gateway Support with MetalLB and K3D
 
@@ -301,18 +361,18 @@ docker network inspect k3d-k3s-default | jq .[0].IPAM.Config[0]
   - If my output looks like:
   ```json
   {
-    "Subnet": "172.21.0.0/16",
-    "Gateway": "172.21.0.1"
+    "Subnet": "172.18.0.0/16",
+    "Gateway": "172.18.0.1"
   }
   ```
-  - Then the addresses I want to input for metallb would be `172.21.1.240-172.21.1.243` so that I can reserve 4 IP addresses within the subnet of the Docker Network.
+  - Then the addresses I want to input for metallb would be `172.18.1.240-172.18.1.243` so that I can reserve 4 IP addresses within the subnet of the Docker Network.
 
 3. Before installing BigBang we will need to install and configure [metallb](https://metallb.universe.tf/concepts/)
 
 ```shell
 kubectl create -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
 kubectl create -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
-cat <<EOF | > metallb-config.yaml
+cat << EOF > metallb-config.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -324,14 +384,16 @@ data:
     - name: default
       protocol: layer2
       addresses:
-      - 172.21.1.240-172.21.1.243
+      - 172.18.1.240-172.18.1.243
 EOF
 kubectl create -f metallb-config.yaml
 ```
 
   - The commands will create a metallb install and configure it to assign LoadBalancer IPs within the range `172.18.1.240-172.18.1.243` which is within the standard Docker Bridge Network CIDR meaning that the linux network stack will have a route to this network already.
 
-4. Verify LoadBalancers
+4. Deploy BigBang with istio ingress gateways configured.
+
+5. Verify LoadBalancers
 
 ```shell
 kubectl get svc -n istio-system
@@ -348,7 +410,7 @@ passthrough-ingressgateway   LoadBalancer   10.43.173.31   172.18.1.242   15021:
 
   - With the key information here being the assigned `EXTERNAL-IP` sections for the ingressgateways.
 
-5. Update Hosts file on ec2 instance with IPs above
+6. Update Hosts file on ec2 instance with IPs above
 
 ```shell
 sudo vim /etc/hosts
@@ -381,7 +443,21 @@ sudo vim /etc/hosts
     ```
   - With these DNS settings in place you will now be able to reach the external *.bigbang.dev URLs from this EC2 instance.
 
-  - To reach outside the EC2 instance use either SSH or SSHUTTLE commands to specify a local port for Dynamic application-level port forwarding (ssh -D) and utilize Firefox's built in SOCKS proxy configuration to route DNS and web traffic through the application-level port forward from the SSH command.
+  - To reach outside the EC2 instance use either SSH or SSHUTTLE commands to specify a local port for Dynamic application-level port forwarding (ssh -D). Example
+      ```shell
+      sshuttle --dns -vr ubuntu@$EC2_PRIVATE_IP 172.31.0.0/16 --ssh-cmd 'ssh -i ~/.ssh/your.pem -D 127.0.0.1:12345'
+      ```
+   - and utilize Firefox's built in SOCKS proxy configuration to route DNS and web traffic through the application-level port forward from the SSH command.
+      1. Open Firefox browser
+      1. Click on hamburger menu in upper right corner and select ```Settings```
+      1. At the bottom of ```Settings``` page in the ```Network Settings``` section select ```Settings```
+      1. Select ```Manual proxy configuration``` and the following values
+          ```
+          SOCKS Host:  localhost
+          Port:  12345
+          ```
+          and select SOCKS v5
+      1. Select ```Proxy DNS when using SOCKS v5```
 
 ### Amazon Linux 2
 

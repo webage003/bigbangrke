@@ -3,7 +3,6 @@
 {{- end }}
 
 {{- define "bigbang.defaults.velero" -}}
-hostname: {{ .Values.hostname }}
 
 istio:
   enabled: {{ .Values.istio.enabled }}
@@ -28,6 +27,13 @@ initContainers:
     volumeMounts:
       - mountPath: /target
         name: plugins
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 100m
 {{- end }}
 {{- if eq . "azure" }}
   - name: velero-plugin-for-azure
@@ -36,6 +42,13 @@ initContainers:
     volumeMounts:
       - mountPath: /target
         name: plugins
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 100m
 {{- end }}
 {{- if eq . "csi" }}
   - name: velero-plugin-for-csi
@@ -44,6 +57,13 @@ initContainers:
     volumeMounts:
       - mountPath: /target
         name: plugins
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 100m
 configuration:
   features: EnableCSI
 {{- end }}
