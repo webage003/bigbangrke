@@ -58,6 +58,14 @@ grafana:
     pullSecrets:
     - private-registry
 
+  additionalDataSources:
+  {{- if and (.Values.logging.enabled) (eq .Values.logging.engine "plg") }}
+  - name: Loki
+    type: loki
+    url: http://logging-loki.logging.svc.cluster.local:3100
+    access: proxy
+  {{- end }}
+
   grafana.ini:
     {{- if .Values.istio.enabled }}
     server:
