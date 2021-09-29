@@ -18,34 +18,33 @@ Evaluated against [Kubernetes Hardening Guidance S/N U/OO/168286-21 PP-21-1104 V
 | [allowedHostPaths](#allowed-host-paths)                           |
 | [runAsUser](#runAsUser)                                           |
 | [runAsGroup](#runAsGroup)                                         |
-| [suppliementalGroups](#suppliementalGroups)                       |
+| [supplementalGroups](#suppliementalGroups)                       |
 | [fsGroups](#fsGroups)                                             |
 | [allowedPrivilegeEscalation](#allowedPrivilegeEscalation)         |
-| [ App Armor Annotations](#app-armor-annotations)                  |
-| [ selinux ](#seLinux)                                             |
-| [ hostMounts](#hostMounts)                                        |
+| [App Armor Annotations](#app-armor-annotations)                  |
+| [selinux](#seLinux)                                             |
+| [hostMounts](#hostMounts)                                        |
 | [Seccomp Annotations](#app-armor-annotations)                     |
 
 ### Requirements
 
+---
+
 #### No Root (p.7)
 
-container engines allow containers to run applications as a
-non-root user with non-root group membership. Typically, this non-default setting is
-configured when the container image is built. Alternatively, Kubernetes can load containers into a Pod with
-SecurityContext:runAsUser specifying a non-zero user. While the runAsUser
-directive effectively forces non-root execution at deployment, NSA and CISA
-encourage developers to build container applications to execute as a non-root user.
-Having non-root execution integrated at build time provides better assurance that
-applications will function correctly without root privileges. From: [Kubernetes Hardening Guide](https://media.defense.gov/2021/Aug/03/2002820425/-1/-1/1/CTR_KUBERNETES%20HARDENING%20GUIDANCE.PDF)
+**Discussion**: container engines allow containers to run applications as a non-root user with non-root group membership. Typically, this non-default setting is configured when the container image is built. Alternatively, Kubernetes can load containers into a Pod with SecurityContext:runAsUser specifying a non-zero user. While the runAsUser directive effectively forces non-root execution at deployment, NSA and CISA encourage developers to build container applications to execute as a non-root user. Having non-root execution integrated at build time provides better assurance that applications will function correctly without root privileges. From: [Kubernetes Hardening Guide](https://media.defense.gov/2021/Aug/03/2002820425/-1/-1/1/CTR_KUBERNETES%20HARDENING%20GUIDANCE.PDF)
 
-How we check
+**Check**: How we do this and how to check
 
+**Fix**: How to fix it if we are in violation
 
+**References**: Cross-references (if any) to other "guides"
+
+---
 
 #### Immutable Container Filesystem (p.8)
 
-By default, containers are permitted mostly unrestricted execution within their own
+**Discussion**: By default, containers are permitted mostly unrestricted execution within their own
 context. A cyber actor who has gained execution in a container can create files,
 download scripts, and modify the application within the container. Kubernetes can lock
 down a container’s file system, thereby preventing many post-exploitation activities.
@@ -54,11 +53,19 @@ potentially result in crashes or anomalous behavior. To prevent damaging legitim
 applications, Kubernetes administrators can mount secondary read/write file systems for
 specific directories where applications require write access. From: [Kubernetes Hardening Guide](https://media.defense.gov/2021/Aug/03/2002820425/-1/-1/1/CTR_KUBERNETES%20HARDENING%20GUIDANCE.PDF)
 
-BigBang valides this at runtime with the Gatekeeper policy here: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/blob/main/chart/templates/constraints/readOnlyRoot.yaml
+**Check**: BigBang validates this at runtime with the Gatekeeper policy here: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/blob/main/chart/templates/constraints/readOnlyRoot.yaml
+
+TODO: How do we verify this?
+
+**Fix**: How to fix it if we are in violation
+
+**References**: Cross-references (if any) to other "guides"
+
+---
 
 #### Secure Images (p.8)
 
-Building secure container images
+**Discussion:** Building secure container images
 Container images are usually created by either building a container from scratch or by
 building on top of an existing image pulled from a repository. In addition to using trusted
 repositories to build containers, image scanning is key to ensuring deployed containers
@@ -66,19 +73,35 @@ are secure. Throughout the container build workflow, images should be scanned to
 identify outdated libraries, known vulnerabilities, or misconfigurations, such as insecure
 ports or permissions. From: [Kubernetes Hardening Guide](https://media.defense.gov/2021/Aug/03/2002820425/-1/-1/1/CTR_KUBERNETES%20HARDENING%20GUIDANCE.PDF)
 
-How we check: IronBank images are built with the best practices of the DoD and hardening guide. By
+**Check**: IronBank images are built with the best practices of the DoD and hardening guide. By
 ensuring that the BigBang components deploy only IronBank images, as currently identified by their registry,
 we're able to ensure that BigBang uses Secure Images. Future work will confirm this cryptographically.
 
+**Fix**:
+
+**References**:
+
+---
+
 #### Pod Security Policies (p.10)
 
-[Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) were deprecated in Kubernetes v1.21 and will be removed in Kubernetes v1.25.  Instead of implementing deprecated PSPs, Big Bang is using an external admission controller, OPA Gatekeeper, to enforce the policies listed in this section.
+**Discussion**: [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/) were deprecated in Kubernetes v1.21 and will be removed in Kubernetes v1.25.  Instead of implementing deprecated PSPs, Big Bang is using an external admission controller, OPA Gatekeeper, to enforce the policies listed in this section.
 
-#### No Privileged Containers (p.10, table 1)
+**Check**:
 
-Controls whether Pods can run privileged Containers which have increased access to kernel calls.
+**Fix**:
 
-BigBang validates this at runtime with the Gatekeeper policy here: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/blob/main/chart/templates/constraints/noPrivilegedContainers.yaml
+**References**:
+
+##### No Privileged Containers (p.10, table 1)
+
+**Discussion**: Controls whether Pods can run privileged Containers which have increased access to kernel calls.
+
+**Check**: BigBang validates this at runtime with the Gatekeeper policy here: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/blob/main/chart/templates/constraints/noPrivilegedContainers.yaml
+
+**Fix**:
+
+**References**:
 
 ##### HostPID (p.10, table 1)
 
@@ -108,16 +131,27 @@ https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/blob/main/chart/t
 
 ##### seccomp Annotations (p.11, table 1)
 
+---
+
 #### Service Account Tokens (p.11)
+
+---
 
 #### Hardened Container Engines (p.12)
 
-Big Bang's scope does not include deploying the Kubernetes cluster or container engine.  It relies on the cluster administrator to deploy a secure configuration using best practices.
+**Check**: Big Bang's scope does not include deploying the Kubernetes cluster or container engine.  It relies on the cluster administrator to deploy a secure configuration using best practices.
+
+---
+
 #### hostMounts
 
 https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/blob/main/chart/templates/constraints/allowedHostFilesystem.yaml
 
+---
+
 #### Network/Namespace Isolation (p.13)
+
+---
 
 #### Network Policies (p.14)
 
@@ -127,27 +161,45 @@ https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/blob/main/chart/t
 
 ##### External IPs (p.14)
 
+---
+
 #### Resource Policies (p.14)
+
+---
 
 #### Control Plane (p.15)
 
-Big Bang's scope does not include deploying the Kubernetes cluster or container engine.  It relies on the cluster administrator to deploy a secure configuration using best practices.
+**Check**: Big Bang's scope does not include deploying the Kubernetes cluster or container engine.  It relies on the cluster administrator to deploy a secure configuration using best practices.
+
+---
 
 #### Worker Node Segmentation (p.16)
 
-Big Bang's scope does not include deploying the Kubernetes cluster or container engine.  It relies on the cluster administrator to deploy a secure configuration using best practices.
+**Check**: Big Bang's scope does not include deploying the Kubernetes cluster or container engine.  It relies on the cluster administrator to deploy a secure configuration using best practices.
+
+---
 
 #### Encryption (p.17)
 
+---
+
 #### Secrets (p.17)
+
+---
 
 #### Sensitive Cloud Infrastructure (p.18)
 
-Big Bang's scope does not include deploying the Kubernetes cluster or container engine.  It relies on the cluster administrator to deploy a secure configuration using best practices.
+**Check**: Big Bang's scope does not include deploying the Kubernetes cluster or container engine.  It relies on the cluster administrator to deploy a secure configuration using best practices.
+
+---
 
 #### Authentication (p.19)
 
+---
+
 #### Role-Based Access Control (p.20)
+
+---
 
 #### Logging (p.21)
 
@@ -171,7 +223,7 @@ Big Bang's scope does not include deploying the Kubernetes cluster or container 
 
 ##### Audits (p.23)
 
-Big Bang's scope does not include auditing RBAC or logs.  It relies on the cluster administrator to conduct these audits.
+**Check**: Big Bang's scope does not include auditing RBAC or logs.  It relies on the cluster administrator to conduct these audits.
 
 ##### External Logging Service (SIEM) (p.23/p.27)
 
@@ -183,9 +235,13 @@ Big Bang's scope does not include auditing RBAC or logs.  It relies on the clust
 
 ##### SysLog (p.27)
 
+---
+
 #### SIEM (p.27)
 
 See External Logging Service above.
+
+---
 
 #### Alerting (p.28)
 
@@ -213,12 +269,18 @@ See External Logging Service above.
 
 ##### Deviation from Standard Metrics (p.28)
 
+---
+
 #### Service Mesh (p.29)
+
+---
 
 #### Fault Tolerance (p.30)
 
+---
+
 #### Tools (p.31)
 
+---
+
 #### Upgrading and Application Security Practices (p.32)
-
-
