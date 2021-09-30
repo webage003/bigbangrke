@@ -377,6 +377,24 @@ fluentbit:
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
 
+promtail:
+  # -- Toggle deployment of Promtail.
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail.git
+    path: "./chart"
+    tag: "0.16.1-bb.0"
+    branch: "initial-work"
+
+  # -- Flux reconciliation overrides specifically for the Promtail Package
+  flux: {}
+
+  # -- Values to passthrough to the promtail chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
+  values: {}
+
+  # -- Post Renderers.  See docs/postrenders.md
+  postRenderers: []
+
 loki:
   # -- Toggle deployment of Loki.
   enabled: true
