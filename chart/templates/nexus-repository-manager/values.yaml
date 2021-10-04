@@ -47,13 +47,13 @@ sso:
     - "NexusAuthenticatingRealm"
     - "NexusAuthorizingRealm"
     - "SamlRealm"
-  role:
-    id: "keycloak"
-    name: "keycloak"
-    description: "all keycloak users as admins"
-    privileges:
-      - "nx-all"
-    roles:
-      - "nx-admin"
+  # role:
+  #   id: "keycloak"
+  #   name: "keycloak"
+  #   description: "all keycloak users as admins"
+  #   privileges:
+  #     - "nx-all"
+  #   roles:
+  #     - "nx-admin"
 {{- end }}
 {{- end -}}
