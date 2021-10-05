@@ -47,5 +47,13 @@ sso:
     - "NexusAuthenticatingRealm"
     - "NexusAuthorizingRealm"
     - "SamlRealm"
+  role:
+    id: "{{ .Values.addons.nexus.sso.role.id }}"
+    name: "{{ .Values.addons.nexus.sso.role.name }}"
+    description: "{{ .Values.addons.nexus.sso.role.description }}"
+    privileges:
+      - "{{ .Values.addons.nexus.sso.role.privileges }}"
+    roles:
+      - "{{ .Values.addons.nexus.sso.role.roles }}"
 {{- end }}
 {{- end -}}
