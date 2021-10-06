@@ -48,8 +48,7 @@ sso:
     - "NexusAuthorizingRealm"
     - "SamlRealm"
   role: 
-  {{- range .Values.addons.nexus.sso.role }}
-    - {{ . | indent 4 }}
-  {{- end }}
+    {{- printf "\n" }}
+    {{- .Values.addons.nexus.sso.role | toYaml | indent 2 }}
 {{- end }}
 {{- end -}}
