@@ -725,9 +725,9 @@ addons:
 
       # -- NXRM Role
       role:
-        id: ""
-        name: ""
-        description: ""
+        - id: ""
+          name: ""
+          description: ""
 
     # -- Flux reconciliation overrides specifically for the Nexus Repository Manager Package
     flux: {}
