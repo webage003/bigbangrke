@@ -105,7 +105,8 @@ k3d version
 ```
 
 - Start our dev cluster on the EC2 instance using K3D. See addendum for more secure way with only port 22 exposed using private ip and sshuttle & section to have support for multi istio ingressgateways with a K3D cluster using MetalLB.
-
+> [!NOTE]
+> Newer versions of k3d may have issues that doesn't allow the logging namespace to deploy correctly. If you experience issues, add --image docker.io/rancher/k3s:v1.21.4-k3s1 to the cluster create command to ensure that a compatable image is used.
 ```shell
 EC2_PUBLIC_IP=$( curl https://ipinfo.io/ip )
 echo $EC2_PUBLIC_IP
