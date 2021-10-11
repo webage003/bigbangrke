@@ -47,21 +47,24 @@ sso:
     - "NexusAuthenticatingRealm"
     - "NexusAuthorizingRealm"
     - "SamlRealm"
-  role: 
-    {{- range .Values.addons.nexus.sso.role }}
-    - id: {{ .id | quote }}
-      name: {{ .name | quote }}
-      description: {{ .description | quote }}
-      privileges: 
-        {{- range .privileges }}
-        - {{ . | quote }}
-        {{- else }} []
-        {{- end }}
-      roles: 
-        {{- range .roles }}
-        - {{ . | quote }}
-        {{- else }} []
-        {{- end }}
-    {{- end }}
+{{- end }}
+
+{{- if .Values.addons.nexus.role.enabled }}
+role: 
+  {{- range .Values.addons.nexus.role }}
+  - id: {{ .id | quote }}
+    name: {{ .name | quote }}
+    description: {{ .description | quote }}
+    privileges: 
+      {{- range .privileges }}
+      - {{ . | quote }}
+      {{- else }} []
+      {{- end }}
+    roles: 
+      {{- range .roles }}
+      - {{ . | quote }}
+      {{- else }} []
+      {{- end }}
+  {{- end }}
 {{- end }}
 {{- end -}}
