@@ -255,7 +255,7 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.nexus.sso.idp_data.email | string | `""` | NXRM email attribute (optional) |
 | addons.nexus.sso.idp_data.groups | string | `""` | NXRM groups attribute (optional) |
 | addons.nexus.sso.idp_data.idpMetadata | string | `""` | IDP SAML Metadata XML as a single line string in single quotes -- this information is public and does not require a secret |
-| addons.nexus.role | object | `{"description":"","id":"","name":"","privileges":"","roles":""}` | NXRM Role |
+| addons.nexus.sso.role | object | `{"description":"","id":"","name":""}` | NXRM Role |
 | addons.nexus.flux | object | `{}` | Flux reconciliation overrides specifically for the Nexus Repository Manager Package |
 | addons.nexus.values | object | `{}` | Values to passthrough to the nxrm chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/nexus.git |
 | addons.nexus.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
