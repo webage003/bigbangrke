@@ -726,7 +726,7 @@ addons:
     role:
       # -- Toggle Role creation for NXRM.
       enabled: false
-      roles:
+      role_definitions:
         - id: ""
           name: ""
           description: ""

@@ -51,7 +51,7 @@ sso:
 
 {{- if .Values.addons.nexus.role.enabled }}
 role: 
-  {{- range .Values.addons.nexus.role.roles }}
+  {{- range .Values.addons.nexus.role.role_definitions }}
   - id: {{ .id | quote }}
     name: {{ .name | quote }}
     description: {{ .description | quote }}
