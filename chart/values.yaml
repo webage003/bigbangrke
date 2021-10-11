@@ -730,10 +730,6 @@ addons:
         - id: ""
           name: ""
           description: ""
-          privileges: 
-            - ""
-          roles:
-            - ""
 
     # -- Flux reconciliation overrides specifically for the Nexus Repository Manager Package
     flux: {}
