@@ -726,9 +726,14 @@ addons:
     role:
       # -- Toggle Role creation for NXRM.
       enabled: false
-      - id: ""
-        name: ""
-        description: ""
+      roles:
+        - id: ""
+          name: ""
+          description: ""
+          privileges: 
+            - ""
+          roles:
+            - ""
 
     # -- Flux reconciliation overrides specifically for the Nexus Repository Manager Package
     flux: {}
