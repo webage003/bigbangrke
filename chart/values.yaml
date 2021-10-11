@@ -723,10 +723,8 @@ addons:
         # -- this information is public and does not require a secret
         idpMetadata: ''
 
-    role:
-      # -- Toggle Role creation for NXRM.
-      enabled: false
-      role_definitions:
+      # -- NXRM Role
+      role:
         - id: ""
           name: ""
           description: ""
