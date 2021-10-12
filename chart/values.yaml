@@ -725,9 +725,28 @@ addons:
 
       # -- NXRM Role
       role:
-        - id: ""
-          name: ""
-          description: ""
+        - id: "test"
+          name: "Test 1"
+          description: "test role 1"
+          privileges: 
+            - "nx-all"
+            - "nx-repository-view-apt-*-read"
+          roles: 
+            - "nx-admin"
+        - id: "test2"
+          name: "Test 2"
+          description: "test role 2"
+          privileges: 
+            - "nx-all"
+          roles: 
+            - "nx-admin"
+        - id: "test3"
+          name: "Test 3"
+          description: "test role 3"
+          privileges: 
+            - "nx-all"
+          roles: 
+            - "nx-admin"
 
     # -- Flux reconciliation overrides specifically for the Nexus Repository Manager Package
     flux: {}
