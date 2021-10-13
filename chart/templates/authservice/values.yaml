@@ -18,6 +18,9 @@ networkPolicies:
     {{- $default := dict "app" (dig "gateways" $gateway "ingressGateway" nil .Values.istio) "istio" nil }}
     {{- toYaml (dig "values" "gateways" $gateway "selector" $default .Values.istio) | nindent 4 }}
 
+domains: {{ .Values.addons.authservice.domains }}
+gateways: {{ .Values.addons.authservice.gateways }}
+
 global:
   oidc:
     host: {{ .Values.sso.oidc.host }}
