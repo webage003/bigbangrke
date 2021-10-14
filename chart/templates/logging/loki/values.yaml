@@ -1,8 +1,8 @@
 {{- if and .Values.logging.enabled .Values.loki.enabled (eq .Values.logging.engine "plg") }}
-{{- include "values-secret" (dict "root" $ "package" .Values.logging "name" "loki" "defaults" (include "bigbang.defaults.logging" .)) }}
+{{- include "values-secret" (dict "root" $ "package" .Values.loki "name" "loki" "defaults" (include "bigbang.defaults.loki" .)) }}
 {{- end }}
 
-{{- define "bigbang.defaults.logging" -}}
+{{- define "bigbang.defaults.loki" -}}
 hostname: {{ .Values.hostname }}
 
 openshift: {{ .Values.openshift }}
@@ -10,7 +10,6 @@ openshift: {{ .Values.openshift }}
 istio:
   enabled: {{ .Values.istio.enabled }}
 
-loki:
-  imagePullSecrets:
-    - name: private-registry
+imagePullSecrets:
+  - name: private-registry
 {{- end -}}
