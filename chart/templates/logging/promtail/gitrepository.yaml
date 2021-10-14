@@ -2,7 +2,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: grafana-promtail
+  name: logging-promtail
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: logging

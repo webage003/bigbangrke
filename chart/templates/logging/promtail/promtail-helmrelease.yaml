@@ -17,7 +17,7 @@ spec:
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: grafana-promtail
+        name: logging-promtail
         namespace: {{ .Release.Namespace }}
 
   {{- toYaml $fluxSettingsPromtail | nindent 2 }}
