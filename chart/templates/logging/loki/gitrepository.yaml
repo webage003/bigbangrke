@@ -2,7 +2,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: grafana-loki
+  name: logging-loki
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: logging
