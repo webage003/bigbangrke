@@ -236,7 +236,7 @@ Security Tools are hosted here: [Security Tools](https://repo1.dso.mil/platform-
 graph TB  
 
   subgraph "Package Utilities"
-    Postgres
+    Postgres(DB)
   end
 
   subgraph "Security"
@@ -288,9 +288,9 @@ Developer Tools are hosted here: [Developer Tools](https://repo1.dso.mil/platfor
 graph TB
 
   subgraph "Application Utilities"
-    Postgres
+    Postgres(DB)
     MinIO(S3 Compatible Storage)
-    Redis
+    Redis(Cache Server)
   end
 
 
@@ -395,13 +395,11 @@ Collaboration tools are hosted here: [Collaboration Tools](https://repo1.dso.mil
 ```mermaid
 graph TB
   subgraph "Package Utilities"
-    Postgres
+    Postgres(DB)
     MinIO(S3 Compatible Storage)
   end
 
   subgraph "Collaboration Tools"
-    Jira --> Postgres
-    Confluence --> Postgres
     MatterMost --> MinIO
   end
 
@@ -480,29 +478,12 @@ A clear an obvious example of this is PostgreSQL.
 ```mermaid
 graph TB
   subgraph "Package Utilities"
-    Postgres
+    Postgres(DB)
     MinIO(S3 Compatible Storage)
-    Redis
-    MySQL
-    MongoDB
+    Redis(Cache Server)
   end
 
 ```
-
-#### PostgreSQL
-
-Product:
-
-* [PostgreSQL](https://www.postgresql.org/)
-
-Repository:
-
-* TBD
-
-Owners:
-
-* TBD
-* TBD
 
 #### Minio
 
@@ -521,50 +502,6 @@ Dependencies: None
 Owners:
 
 * [CODEOWNERS](https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio/-/blob/main/CODEOWNERS)
-
-#### MySQL
-
-Product:
-
-* [MySQL](https://www.mysql.com/)
-
-Repository:
-
-* TBD
-
-Owners:
-
-* TBD
-* TBD
-
-#### MongoDB
-
-Product:
-
-* [MongoDB](https://www.mongodb.com/)
-
-Repository:
-
-* TBD
-
-Owners:
-
-* TBD
-* TBD
-
-#### Redis
-
-Redis is an open source, in-memory data structure store, used as a database, cache, and message broker.
-
-* [Redis](https://redis.io/)
-
-Repository:
-
-* [Redis Package](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/redis)
-
-Owners:
-
-* [CODEOWNERS](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/redis/-/blob/main/CODEOWNERS)
 
 ### Cluster Utilities
 
