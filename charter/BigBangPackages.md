@@ -31,9 +31,9 @@ graph TB
   end      
 
   subgraph "Package Utilities"
-    Postgres
+    Postgres(DB)
     MinIO(S3 Compatible Storage)
-    Redis
+    Redis(Cache Server)
   end
 
   subgraph "Security"
@@ -604,10 +604,3 @@ Owners:
 ### BB Technical Oversight Committee (BB TOC) 
 
 [Process](https://repo1.dso.mil/platform-one/bbtoc/-/tree/master/process)
-
-#### BB TOC Repos
-[Graduated](https://repo1.dso.mil/platform-one/big-bang/apps/graduated)
-
-[Incubating](https://repo1.dso.mil/platform-one/big-bang/apps/incubating)
-
-[Sandbox](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox)
