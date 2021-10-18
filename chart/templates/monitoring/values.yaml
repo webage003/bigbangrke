@@ -88,6 +88,10 @@ grafana:
       {{- list "tls_client_key" .tls_client_key | include "bigbang.addValueIfSet" | indent 6 }}
     {{- end }}
 
+  
+kiali:
+  enabled: {{ .Values.kiali.enabled }}
+
 prometheus-node-exporter:
   serviceAccount:
     imagePullSecrets:
