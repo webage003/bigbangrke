@@ -6,7 +6,6 @@ trap 'echo exit at ${0}:${LINENO}, command was: ${BASH_COMMAND} 1>&2' ERR
 if [[ "${CI_COMMIT_BRANCH}" == "${CI_DEFAULT_BRANCH}" ]] || [[ ! -z "$CI_COMMIT_TAG" ]] || [[ $CI_MERGE_REQUEST_LABELS =~ "all-packages" ]]; then
   echo "all-packages label enabled, or on default branch or tag, enabling all addons"
   yq e ".addons.*.enabled = "true"" $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE
-  yq e ".addons.nexus.enabled = "false"" $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE
 else
   IFS=","
   for package in $CI_MERGE_REQUEST_LABELS; do
@@ -38,6 +37,9 @@ helm upgrade -i bigbang chart -n bigbang --create-namespace \
   --set registryCredentials[0].username='robot$bb-dev-imagepullonly' \
   --set registryCredentials[0].password="${REGISTRY1_PASSWORD}" \
   --set registryCredentials[0].registry=registry1.dso.mil \
+  --set registryCredentials[1].username="${DOCKER_USER}" \
+  --set registryCredentials[1].password="${DOCKER_PASSWORD}" \
+  --set registryCredentials[1].registry=docker.io \
   -f ${CI_VALUES_FILE}
 
 # apply secrets kustomization pointing to current branch or master if an upgrade job
