@@ -67,6 +67,7 @@ fluentbit:
     securityContext:
       privileged: true
     bbtests:
+      enabled: true
       # TODO: Connection refused on the test currently
       # https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit/-/issues/18
       scripts:
