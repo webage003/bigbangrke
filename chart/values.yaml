@@ -106,11 +106,11 @@ networkPolicies:
 #
 istio:
   # -- Toggle deployment of Istio.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    tag: "1.8.4-bb.6"
+    tag: "1.11.2-bb.1"
 
   # Ingress gateways are created based on the key name.  Adding more keys will add ingress gateways.
   # Ingress gateways are setup in a Horizontal Pod Autoscaler with 1 to 5 replicas
@@ -168,7 +168,7 @@ istio:
 
 istiooperator:
   # -- Toggle deployment of Istio Operator.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
     path: "./chart"
