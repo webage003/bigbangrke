@@ -20,7 +20,7 @@ istio:
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}
 elasticsearch:
-  enabled: {{ .Values.logging.enabled }}
+  enabled: {{ and .Values.logging.enabled (eq .Values.logging.engine "efk") }}
 
 sso:
   enabled: {{ .Values.jaeger.sso.enabled }}

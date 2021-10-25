@@ -1,9 +1,9 @@
-{{- $fluxSettingsEk := merge .Values.ek.flux .Values.flux -}}
-{{- if and (or .Values.logging.enabled .Values.clusterAuditor.enabled) (eq .Values.logging.engine "efk") }}
+{{- $fluxSettingsLoki := merge .Values.loki.flux .Values.flux -}}
+{{- if and .Values.logging.enabled .Values.loki.enabled (eq .Values.logging.engine "plg") }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: ek
+  name: loki
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: logging
@@ -13,37 +13,38 @@ spec:
   targetNamespace: logging
   chart:
     spec:
-      chart: {{ .Values.ek.git.path }}
+      chart: {{ .Values.loki.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: elasticsearch-kibana
+        name: logging-loki
         namespace: {{ .Release.Namespace }}
 
-  {{- toYaml $fluxSettingsEk | nindent 2 }}
+  {{- toYaml $fluxSettingsLoki | nindent 2 }}
 
-  {{- if .Values.ek.postRenderers }}
+  {{- if .Values.loki.postRenderers }}
   postRenderers:
-  {{ toYaml .Values.ek.postRenderers | nindent 4 }}
+  {{ toYaml .Values.loki.postRenderers | nindent 4 }}
   {{- end }}
   valuesFrom:
-    - name: {{ .Release.Name }}-ek-values
+    - name: {{ .Release.Name }}-loki-values
       kind: Secret
       valuesKey: "common"
-    - name: {{ .Release.Name }}-ek-values
+    - name: {{ .Release.Name }}-loki-values
       kind: Secret
       valuesKey: "defaults"
-    - name: {{ .Release.Name }}-ek-values
+    - name: {{ .Release.Name }}-loki-values
       kind: Secret
       valuesKey: "overlays"
 
-  {{/* ECK and Logging _always_ depend on .Values.logging being enabled, so can assume they exist here */}}
   dependsOn:
-    - name: eck-operator
-      namespace: {{ .Release.Namespace }}
-
     {{- if  .Values.gatekeeper.enabled }}
     - name: gatekeeper
+      namespace: {{ .Release.Namespace }}
+    {{- end }}
+
+    {{- if .Values.istio.enabled }}
+    - name: istio
       namespace: {{ .Release.Namespace }}
     {{- end }}
 {{- end }}
