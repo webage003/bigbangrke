@@ -98,8 +98,8 @@ flux:
 
 # -- Global NetworkPolicies settings
 networkPolicies:
-  # -- Toggle all package NetworkPolicies, can disable specific packages with `package.networkPolicies.enabled`
-  enabled: false
+  # -- Toggle all package NetworkPolicies, can disable specific packages with `package.values.networkPolicies.enabled`
+  enabled: true
   # -- Control Plane CIDR, defaults to 0.0.0.0/0, use `kubectl get endpoints -n default kubernetes` to get the CIDR range needed for your cluster
   # Must be an IP CIDR range (x.x.x.x/x - ideally with /32 for the specific IP of a single endpoint, broader range for multiple masters/endpoints)
   # Used by package NetworkPolicies to allow Kube API access
@@ -118,7 +118,7 @@ istio:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    tag: "1.11.2-bb.2"
+    tag: "1.11.3-bb.0"
 
   # Ingress gateways are created based on the key name.  Adding more keys will add ingress gateways.
   # Ingress gateways are setup in a Horizontal Pod Autoscaler with 1 to 5 replicas
@@ -189,7 +189,7 @@ istiooperator:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
     path: "./chart"
-    tag: "1.11.2-bb.0"
+    tag: "1.11.3-bb.0"
 
   # -- Flux reconciliation overrides specifically for the Istio Operator Package
   flux: {}
@@ -202,7 +202,7 @@ istiooperator:
 
 jaeger:
   # -- Toggle deployment of Jaeger.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
     path: "./chart"
@@ -237,7 +237,7 @@ jaeger:
 
 kiali:
   # -- Toggle deployment of Kiali.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
     path: "./chart"
@@ -273,7 +273,7 @@ kiali:
 #
 clusterAuditor:
   # -- Toggle deployment of Cluster Auditor.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
     path: "./chart"
@@ -294,7 +294,7 @@ clusterAuditor:
 #
 gatekeeper:
   # -- Toggle deployment of OPA Gatekeeper.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
@@ -497,7 +497,7 @@ monitoring:
 #
 twistlock:
   # -- Toggle deployment of Twistlock.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
