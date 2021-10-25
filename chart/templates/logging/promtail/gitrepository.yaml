@@ -1,8 +1,8 @@
-{{- if and (and (not .Values.offline) (or .Values.logging.enabled .Values.clusterAuditor.enabled)) (eq .Values.logging.engine "efk") }}
+{{- if and (not .Values.offline) (and .Values.logging.enabled .Values.promtail.enabled (eq .Values.logging.engine "plg")) }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: elasticsearch-kibana
+  name: logging-promtail
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: logging
@@ -10,9 +10,9 @@ metadata:
     {{- include "commonLabels" . | nindent 4}}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.ek.git.repo }}
+  url: {{ .Values.promtail.git.repo }}
   ref:
-    {{- include "validRef" .Values.ek.git | nindent 4 }}
+    {{- include "validRef" .Values.promtail.git | nindent 4 }}
   {{ include "gitIgnore" . }}
   {{- include "gitCreds" . | nindent 2 }}
 {{- end }}

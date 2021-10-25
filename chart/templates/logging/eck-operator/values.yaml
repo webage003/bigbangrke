@@ -1,12 +1,12 @@
-{{- if or .Values.eckoperator.enabled .Values.logging.enabled .Values.clusterAuditor.enabled }}
+{{- if and (or .Values.eckoperator.enabled .Values.logging.enabled .Values.clusterAuditor.enabled) (eq .Values.logging.engine "efk") }}
 {{- include "values-secret" (dict "root" $ "package" .Values.eckoperator "name" "eck-operator" "defaults" (include "bigbang.defaults.eck-operator" .)) }}
 {{- end }}
 
 {{- define "bigbang.defaults.eck-operator" -}}
 license:
-  trial: {{ .Values.logging.license.trial }}
+  trial: {{ .Values.ek.license.trial }}
   keyJSON: |
-    {{ .Values.logging.license.keyJSON | nindent 4 }}
+    {{ .Values.ek.license.keyJSON | nindent 4 }}
 
 podAnnotations:
   sidecar.istio.io/inject: "true"

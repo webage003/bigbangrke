@@ -317,15 +317,21 @@ gatekeeper:
 # ----------------------------------------------------------------------------------------------------------------------
 # Logging
 #
+# efk stack depends on ek, eckoperator, and fluentbit packages
+# plg stack depends on promtail, loki, and monitoring packages
 logging:
-  # -- Toggle deployment of Logging (EFK).
   enabled: true
+  engine: plg # value can be either 'plg' or 'efk'
+
+ek:
+  # -- Toggle deployment of Elasticsearch-Kibana logging stack.
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
     tag: "0.1.21-bb.2"
 
-  # -- Flux reconciliation overrides specifically for the Logging (EFK) Package
+  # -- Flux reconciliation overrides specifically for the elasticsearch-kibana Package
   flux:
     timeout: 20m
 
@@ -359,7 +365,7 @@ logging:
 
 eckoperator:
   # -- Toggle deployment of ECK Operator.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
@@ -373,7 +379,7 @@ eckoperator:
 
 fluentbit:
   # -- Toggle deployment of Fluent-Bit.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
@@ -383,6 +389,42 @@ fluentbit:
   flux: {}
 
   # -- Values to passthrough to the fluentbit chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
+  values: {}
+
+  # -- Post Renderers.  See docs/postrenders.md
+  postRenderers: []
+
+promtail:
+  # -- Toggle deployment of Promtail.
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail.git
+    path: "./chart"
+    tag: ""
+    branch: "initial-work"
+
+  # -- Flux reconciliation overrides specifically for the Promtail Package
+  flux: {}
+
+  # -- Values to passthrough to the promtail chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
+  values: {}
+
+  # -- Post Renderers.  See docs/postrenders.md
+  postRenderers: []
+
+loki:
+  # -- Toggle deployment of Loki.
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
+    path: "./chart"
+    tag: ""
+    branch: "initial-work"
+
+  # -- Flux reconciliation overrides specifically for the Loki Package
+  flux: {}
+
+  # -- Values to passthrough to the Loki chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
   values: {}
 
   # -- Post Renderers.  See docs/postrenders.md
