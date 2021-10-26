@@ -67,8 +67,8 @@ sso:
 
 {{- if .Values.addons.nexus.repository.enabled }}
 repository:
-	enabled: {{ .Values.addons.nexus.repository.enabled }}
-	repo:
+  enabled: {{ .Values.addons.nexus.repository.enabled }}
+  repo:
     {{- range .Values.addons.nexus.repository.repo }}
     - name: {{- .name | quote }}
       format: {{- .format | quote }}
