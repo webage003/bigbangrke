@@ -117,6 +117,11 @@ grafana:
       {{- list "tls_client_cert" .tls_client_cert | include "bigbang.addValueIfSet" | indent 6 }}
       {{- list "tls_client_key" .tls_client_key | include "bigbang.addValueIfSet" | indent 6 }}
     {{- end }}
+    
+  {{- if and (.Values.logging.enabled) (eq .Values.logging.engine "plg") }}    
+  plugins:
+    - grafana-piechart-panel
+  {{- end }}
 
 prometheus-node-exporter:
   serviceAccount:
