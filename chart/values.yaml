@@ -143,11 +143,12 @@ istio:
     #   # Node port base should be in the range from 30000 to 32764
     #   nodePortBase: 32000  # Alternatively, the kubernetesResourceSpec can be used to configure all port parameters
 
-  # TODO: Update tag and remove branch before cutting BB release.
+  # TODO: Update to a release tag when https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/istio-gateways/-/merge_requests/3 is merged.
   gatewayGit:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/istio-gateways.git
     path: "./chart"
-    tag: "1.12.0-bb.0"
+    tag: null
+    branch: redirect
 
   gateways:
     public:
@@ -179,17 +180,15 @@ istio:
     #     enabled: true
     #   tls:
     #     mode: "PASSTHROUGH"
+      # -- Flux reconciliation overrides specifically for the Istio Gateways Package
+      flux: {}
+      # -- Values to passthrough to the istio-gateways chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/istio-gateways.git
+      values: {}
+      # -- Post Renderers.  See docs/postrenders.md
+      postRenderers: []
 
-  # -- Flux reconciliation overrides specifically for the Istio Package
-  flux: {}
-
-  # -- Values to passthrough to the istio-controlplane chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
-  values: {}
-
-  # -- Post Renderers.  See docs/postrenders.md
-  postRenderers: []
-
-  # Interface for managing multiple Istio operators.
+  # Interface for managing multiple Istio operators and is currently used for canary upgrades.
+  # For additional information on canary upgrades: https://istio.io/latest/docs/setup/upgrade/canary/
   operators:
     default:
       # -- Toggle deployment of Istio Operator.
@@ -198,17 +197,15 @@ istio:
         repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
         path: "./chart"
         tag: "1.11.3-bb.0"
-
       # -- Flux reconciliation overrides specifically for the Istio Operator Package
       flux: { }
-
       # -- Values to passthrough to the istio-operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
       values: { }
-
       # -- Post Renderers.  See docs/postrenders.md
       postRenderers: [ ]
 
-  # Interface for managing multiple Istio control planes.
+  # Interface for managing multiple Istio operators and is currently used for canary upgrades.
+  # For additional information on canary upgrades: https://istio.io/latest/docs/setup/upgrade/canary/
   controlplanes:
     default:
       # -- Toggle deployment of Istio.
@@ -243,6 +240,12 @@ istio:
       values: { }
       # -- Post Renderers.  See docs/postrenders.md
       postRenderers: [ ]
+  # -- Flux reconciliation overrides specifically for the Istio Package
+  flux: { }
+  # -- Values to passthrough to the istio-controlplane chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
+  values: { }
+  # -- Post Renderers.  See docs/postrenders.md
+  postRenderers: [ ]
 
 istiooperator:
   # -- Toggle deployment of Istio Operator.
@@ -254,10 +257,8 @@ istiooperator:
 
   # -- Flux reconciliation overrides specifically for the Istio Operator Package
   flux: {}
-
   # -- Values to passthrough to the istio-operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
   values: {}
-
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
 

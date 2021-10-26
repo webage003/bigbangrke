@@ -1,7 +1,10 @@
 {{- if .Values.addons.sonarqube.enabled }}
 {{- $istioEnabled := .Values.istio.enabled | default false }}
+{{ $injection := dig "istio" "injection" "enabled" .Values.addons.sonarqube }}
+{{- if eq $injection "disabled" }}{{- $istioEnabled = false }}{{- else }}
 {{- range $name, $values := .Values.istio.controlplanes }}
 {{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
+{{- end }}
 {{- end }}
 apiVersion: v1
 kind: Namespace
@@ -11,5 +14,7 @@ metadata:
     app.kubernetes.io/name: sonarqube
     app.kubernetes.io/component: "developer-tools"
     {{- include "commonLabels" . | nindent 4}}
-    {{- if $istioEnabled }}{{- include "istioInjectionLabel" .  | nindent 4 }}{{- end }}
+    {{- if $istioEnabled }}{{- include "istioInjectionLabel" .  | nindent 4 }}{{- else }}
+    istio-injection: disabled
+    {{- end }}
 {{- end }}
