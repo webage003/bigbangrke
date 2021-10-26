@@ -5,6 +5,14 @@
 {{- if and $enabled (ne $name "default") (ne $name "deprecated") }}{{- $controlplane = printf "%s-%s" $controlplane $name }}{{- end }}
 {{- end }}
 
+{{- $postRenderersEnabled := false }}
+{{- $postRenderers := dict }}
+{{- range $name, $values := .Values.istio.gateways }}
+{{- if $values.postRenderers }}{{- $_ := set $postRenderers $name $values.postRenderers }}
+{{- if not $postRenderersEnabled }}{{ $postRenderersEnabled = true }}{{- end }}
+{{- end }}
+{{- end }}
+
 {{- if and $enabled (not .Values.istio.enabled) }}
 {{- $fluxSettingsIstioGw := .Values.flux -}}
 {{- if hasKey .Values.istio "flux" }}{{- $fluxSettingsIstioGw = merge .Values.istio.flux .Values.flux -}}{{- end }}
@@ -30,9 +38,9 @@ spec:
 
   {{- toYaml $fluxSettingsIstioGw | nindent 2 }}
 
-  {{- if .Values.istio.postRenderers }}
+  {{- if $postRenderersEnabled }}
   postRenderers:
-  {{ toYaml .Values.istio.postRenderers | nindent 4 }}
+  {{- range $name, $values := $postRenderers }}{{ toYaml $values | nindent 4 }}{{- end }}
   {{- end }}
   valuesFrom:
     - name: {{ .Release.Name }}-istio-gateway-values
