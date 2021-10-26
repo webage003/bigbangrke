@@ -738,6 +738,15 @@ addons:
           name: ""
           description: ""
 
+    repository:
+      enabled: false
+      repo:
+        - name: ""
+          format: ""
+          type: ""
+          repo_data:
+            # - 
+            
     # -- Flux reconciliation overrides specifically for the Nexus Repository Manager Package
     flux: {}
 
