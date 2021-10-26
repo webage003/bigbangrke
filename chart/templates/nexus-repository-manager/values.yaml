@@ -70,26 +70,26 @@ repository:
   enabled: {{ .Values.addons.nexus.repository.enabled }}
   repo:
     {{- range .Values.addons.nexus.repository.repo }}
-    - name: {{- .name | quote }}
-    format: {{- .format | quote }}
-    type: {{- .type | quote }}
+    - name: {{ .name | quote }}
+    format: {{ .format | quote }}
+    type: {{ .type | quote }}
     repo_data:
-      name: {{- .repo_data.name | quote }}
-      online: {{- .repo_data.online | quote }}
+      name: {{ .repo_data.name | quote }}
+      online: {{ .repo_data.online | quote }}
       storage:
-        blobStoreName: {{- .repo_data.storage.blobStoreName | quote }}
-        strictContentTypeValidation: {{- .repo_data.storage.strictContentTypeValidation | quote }}
-        writePolicy: {{- .repo_data.storage.writePolicy | quote }}
+        blobStoreName: {{ .repo_data.storage.blobStoreName | quote }}
+        strictContentTypeValidation: {{ .repo_data.storage.strictContentTypeValidation | quote }}
+        writePolicy: {{ .repo_data.storage.writePolicy | quote }}
       cleanup:
         policyNames:
           {{- range .repo_data.cleanup.policyNames }}
           - {{ . | quote }}
           {{- else }} []
           {{- end }}
-        component:
-          proprietaryComponents: {{- .repo_data.component.proprietaryComponents | quote }}
-        raw:
-          contentDisposition: {{- .repo_data.raw.contentDisposition | quote }}
+      component:
+        proprietaryComponents: {{ .repo_data.component.proprietaryComponents | quote }}
+      raw:
+        contentDisposition: {{ .repo_data.raw.contentDisposition | quote }}
     {{- end }}
 {{- end }}
 {{- end -}}
