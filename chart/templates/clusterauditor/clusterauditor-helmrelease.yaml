@@ -45,4 +45,6 @@ spec:
   dependsOn:
   - name: gatekeeper
     namespace: {{ .Release.Namespace}}
+  - name: monitoring
+    namespace: {{ .Release.Namespace}}
 {{- end }}
