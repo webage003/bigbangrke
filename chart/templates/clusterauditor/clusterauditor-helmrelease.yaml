@@ -43,8 +43,6 @@ spec:
       - name: private-registry
 
   dependsOn:
-  - name: gatekeeper
-    namespace: {{ .Release.Namespace}}
-    name: monitoring
+  - name: monitoring
     namespace: {{ .Release.Namespace}}
 {{- end }}
