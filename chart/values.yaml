@@ -590,6 +590,8 @@ addons:
     # -- Post Renderers.  See docs/postrenders.md
     postRenderers: []
 
+    foo: "bar"
+
   gitlab:
     # -- Toggle deployment of Gitlab
     enabled: false
