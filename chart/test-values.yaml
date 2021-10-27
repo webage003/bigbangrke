@@ -127,13 +127,8 @@ istio:
   ingressGateways:
     public-ingressgateway:
       type: "LoadBalancer" # or "NodePort"
-      kubernetesResourceSpec: {}
-        #serviceAnnotations: {}
-          # Example for AWS internal load balancer
-         # service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-          #service.beta.kubernetes.io/aws-load-balancer-type: "external"
-          #service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
-         # https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#KubernetesResourcesSpec
+      kubernetesResourceSpec: {} # https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#KubernetesResourcesSpec
+
     # private-ingressgateway:
     #   type: "LoadBalancer" # or "NodePort"
     #   kubernetesResourceSpec: # https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#KubernetesResourcesSpec
@@ -237,7 +232,7 @@ kiali:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
     path: "./chart"
-    tag: "1.39.0-bb.2"
+    tag: "1.39.0-bb.3"
 
   # -- Flux reconciliation overrides specifically for the Kiali Package
   flux: {}
@@ -294,8 +289,8 @@ gatekeeper:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
-    tag: "3.6.0-bb.0"
-    #branch: issue-685-opa-gatekeeper
+    #tag: "3.6.0-bb.2"
+    branch: issue-685-opa-gatekeeper
 
   # -- Flux reconciliation overrides specifically for the OPA Gatekeeper Package
   flux:
@@ -306,7 +301,6 @@ gatekeeper:
 
   # -- Values to passthrough to the gatekeeper chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
   values: {}
-    
 
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
@@ -317,7 +311,7 @@ gatekeeper:
 #
 logging:
   # -- Toggle deployment of Logging (EFK).
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
@@ -396,18 +390,7 @@ monitoring:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
-    branch: "issue-685-service-monitor-gatekeeper"
-
-  prometheus:
-    prometheusSpec:
-      additionalScrapeConfigs: 
-      - job_name: opa-exporter
-        kubernetes_sd_configs:
-        - role: service
-
-  grafana:
-    plugins:
-      - grafana-piechart-panel
+    tag: "14.0.0-bb.10"
 
   # -- Flux reconciliation overrides specifically for the Monitoring Package
   flux:
@@ -561,7 +544,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git
       path: "./chart"
-      tag: "4.2.3-bb.1"
+      tag: "4.2.3-bb.2"
 
     # -- Flux reconciliation overrides specifically for the Minio Operator Package
     flux: {}
@@ -578,7 +561,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git
       path: "./chart"
-      tag: "4.2.3-bb.1"
+      tag: "4.2.3-bb.2"
 
     # -- Flux reconciliation overrides specifically for the Minio Package
     flux: {}
@@ -950,7 +933,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost.git
       path: "./chart"
-      tag: "0.2.0-bb.2"
+      tag: "0.2.1-bb.0"
 
     # -- Flux reconciliation overrides specifically for the Mattermost Package
     flux: {}
