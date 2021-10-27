@@ -1,24 +1,19 @@
-{{- $operators := dict "deprecated" .Values.istiooperator }}
-{{- range $name, $values := .Values.istio.operators }}{{- $_ := set $operators $name $values }}{{- end }}
-{{- range $name, $values := $operators }}
-{{- if or (eq $name "default") (eq $name "deprecated") }}{{- $name = "istio-operator" }}{{- else }}{{- $name = printf "istio-operator-%s" $name }}{{- end }}
-{{- if and (not $.Values.offline) $values.enabled }}
----
+{{- if and (not .Values.offline) .Values.istiooperator.enabled }}
+{{- $name := include "bigbang.tagname" (merge .Values.istiooperator (dict "name" "istio-operator")) }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
   name: {{ $name }}
-  namespace: {{ $.Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: istio-operator
     app.kubernetes.io/component: "core"
-    {{- include "commonLabels" $ | nindent 4}}
+    {{- include "commonLabels" . | nindent 4}}
 spec:
-  interval: {{ $.Values.flux.interval }}
-  url: {{ $values.git.repo }}
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.istiooperator.git.repo }}
   ref:
-    {{- include "validRef" $values.git | nindent 4 }}
-  {{ include "gitIgnore" $ }}
-  {{- include "gitCreds" $ | nindent 2 }}
-{{- end }}
+    {{- include "validRef" .Values.istiooperator.git | nindent 4 }}
+  {{ include "gitIgnore" . }}
+  {{- include "gitCreds" . | nindent 2 }}
 {{- end }}

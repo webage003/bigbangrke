@@ -212,3 +212,21 @@ istio-injection: enabled
 istio.io/rev: {{ $version | replace "." "-"  }}
   {{- end }}
 {{- end -}}
+
+{{/*
+Tagged name will generate a resource name in the format of name-tag
+Usage: include "bigbang.tagname" (merge .Values.mypackage (dict "name" "mypackagename"))
+*/}}
+{{- define "bigbang.tagname" -}}
+{{- $name := .name | trunc 54 | trimSuffix "-" }}
+{{- printf "%s-%s" $name ( include "bigbang.tag" . ) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Tag will generate a tag based on .tag.git
+If the .git.tag is missing, "dev" is used as you would be using an unreleased version
+Usage: include "bigbang.tag" .Values.mypackage
+*/}}
+{{- define "bigbang.tag" -}}
+{{- regexReplaceAll "-.*" (dig "tag" "dev" .git) "" | replace "." "-" }}
+{{- end }}
