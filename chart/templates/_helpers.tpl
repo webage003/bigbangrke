@@ -150,22 +150,14 @@ bigbang.addValueIfSet can be used to nil check parameters before adding them to 
 Check if Istio is enabled.
 */}}
 {{- define "istioEnabled" -}}
-  {{- $istioEnabled := .Values.istio.enabled | default false }}
-  {{- range $name, $values := .Values.istio.controlplanes }}
-    {{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-  {{- end -}}
-enabled: {{ $istioEnabled }}
+enabled: {{ .Values.istio.enabled }}
 {{- end -}}
 
 {{/*
 Compose ingress gateway labels used for network policies.
 */}}
 {{- define "ingressLabels" -}}
-  {{- $enabled := .root.Values.istio.enabled | default false }}
-  {{- range $name, $values := .root.Values.istio.controlplanes }}
-    {{- if and ($values.enabled) (not $enabled) }}{{- $enabled = true }}{{- end }}
-  {{- end }}
-  {{- if $enabled }}ingressLabels:
+  {{- if .root.Values.istio.enabled }}ingressLabels:
       {{- $appGw := default "public" .gateway }}
       {{- $default := dict "app" (dig "gateways" $appGw "ingressGateway" nil .root.Values.istio) "istio" nil }}
       {{- toYaml (dig "values" "gateways" $appGw "selector" $default .root.Values.istio) | nindent 4 }}
@@ -175,18 +167,8 @@ Compose ingress gateway labels used for network policies.
 {{/*
 Compose HelmRepository dependsOn for Istio.
 */}}
-{{- define "istioDependsOn" -}}
-  {{- $controlplane := "istio" }}
-  {{- $found := false }}
-  {{- $controlplanes := dict "deprecated" .Values.istio }}
-  {{- range $name, $values := .Values.istio.controlplanes }}{{- $_ := set $controlplanes $name $values }}{{- end }}
-  {{- range $name, $values := $controlplanes }}
-    {{- if and (ne $name "default") (ne $name "deprecated") ($values.enabled) (not $found) }}
-      {{- $found = true }}
-      {{- $controlplane = printf "%s-%s" $controlplane $name }}
-    {{- end }}
-  {{- end }}
-    - name: {{ $controlplane }}
+{{- define "istioDependsOn" }}
+    - name: {{ include "bigbang.tagname" (merge .Values.istio (dict "name" "istio")) }}
       namespace: {{ .Release.Namespace }}
 {{- end -}}
 
@@ -194,23 +176,8 @@ Compose HelmRepository dependsOn for Istio.
 Set Istio sidecar injection namespace label.
 */}}
 {{- define "istioInjectionLabel" -}}
-  {{- $version := "0" }}
-  {{- $controlplanes := dict "deprecated" .Values.istio }}
-  {{- range $name, $values := .Values.istio.controlplanes }}{{- $_ := set $controlplanes $name $values }}{{- end }}
-  {{- range $name, $values := $controlplanes }}
-    {{- if and ($values.enabled) (hasKey $values "revision") }}
-      {{- $dotRev := $values.revision | replace "-" "." }}
-      {{- if eq 1 (semver $version | (semver $dotRev).Compare) }}
-        {{- $version = $dotRev }}
-      {{- end }}
-    {{- end }}
-  {{- end }}
-
-  {{- if eq $version "0" }}
-istio-injection: enabled
-  {{- else }}
-istio.io/rev: {{ $version | replace "." "-"  }}
-  {{- end }}
+{{- $version := (include "bigbang.tag" .Values.istio) -}}
+istio.io/rev: {{ $version }}
 {{- end -}}
 
 {{/*
