@@ -4,7 +4,7 @@ kind: Namespace
 metadata:
   name: nexus-repository-manager
   labels:
-    {{- if .Values.istio.enabled }}{{- include "bigbang.istioInjectionLabel" .  | nindent 4}}{{- end }}
+    {{- include "bigbang.istioInjectionLabel" . | nindent 4 }}
     app.kubernetes.io/name: "nexus-repository-manager"
     app.kubernetes.io/component: "developer-tools"
     {{- include "commonLabels" . | nindent 4}}

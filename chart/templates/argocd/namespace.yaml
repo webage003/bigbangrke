@@ -6,7 +6,9 @@ metadata:
     app.kubernetes.io/name: argocd
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
-    {{- if .Values.istio.enabled }}{{- include "bigbang.istioInjectionLabel" .  | nindent 4 }}{{- else }}
+    {{- if eq (dig "istio" "injection" "enabled" .Values.addons.argocd) "enabled" }}
+    {{- include "bigbang.istioInjectionLabel" . | nindent 4 }}
+    {{- else }}
     istio-injection: disabled
     {{- end }}
   name: argocd

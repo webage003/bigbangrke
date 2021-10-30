@@ -7,7 +7,9 @@ metadata:
     app.kubernetes.io/name: monitoring
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
-    {{- if .Values.istio.enabled }}{{- include "bigbang.istioInjectionLabel" .  | nindent 4 }}{{- else }}
+    {{- if eq (dig "istio" "injection" "enabled" .Values.monitoring) "enabled" }}
+    {{- include "bigbang.istioInjectionLabel" . | nindent 4 }}
+    {{- else }}
     istio-injection: disabled
     {{- end }}
 {{- end }}

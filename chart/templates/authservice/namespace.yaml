@@ -4,7 +4,7 @@ kind: Namespace
 metadata:
   name: authservice
   labels:
-    {{- if .Values.istio.enabled }}{{- include "bigbang.istioInjectionLabel" .  | nindent 4}}{{- end }}
+    {{- include "bigbang.istioInjectionLabel" . | nindent 4 }}
     app.kubernetes.io/name: authservice
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
