@@ -129,7 +129,7 @@ bigbang.addValueIfSet can be used to nil check parameters before adding them to 
     {{- /*Handle strings*/}}
     {{- if kindIs "string" $value }}
       {{- printf "\n%s" $key }}: {{ $value | quote }}
-    {{- /*Hanldle slices*/}}
+    {{- /*Handle slices*/}}
     {{- else if kindIs "slice" $value }}
       {{- printf "\n%s" $key }}:
         {{- range $value }}
@@ -148,32 +148,35 @@ bigbang.addValueIfSet can be used to nil check parameters before adding them to 
 
 {{/*
 Compose ingress gateway labels used for network policies.
+Usage: include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.myapp.ingress.gateway))
 */}}
 {{- define "bigbang.ingressLabels" -}}
-{{- if and .Values.istio.enabled (dig "gateways" nil .Values.istio) -}}
+  {{- if and .Values.istio.enabled (dig "gateways" nil .Values.istio) -}}
 ingressLabels:
-{{- $appGw := default "public" .gateway }}
-{{- $default := dict "app" (dig "gateways" $appGw "ingressGateway" nil .Values.istio) "istio" nil }}
-{{- toYaml (dig "values" "gateways" $appGw "selector" $default .Values.istio) | nindent 2 }}
-{{- end }}
+    {{- $appGw := default "public" .gateway -}}
+    {{- $default := dict "app" (dig "gateways" $appGw "ingressGateway" nil .Values.istio) "istio" nil -}}
+    {{- toYaml (dig "values" "gateways" $appGw "selector" $default .Values.istio) | nindent 2 -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*
 Compose HelmRepository dependsOn for Istio.
+Usage: include "bigbang.istioDependsOn" . | nindent 4
 */}}
-{{- define "bigbang.istioDependsOn" }}
-    - name: {{ include "bigbang.tagname" (merge .Values.istio (dict "name" "istio")) }}
-      namespace: {{ .Release.Namespace }}
+{{- define "bigbang.istioDependsOn" -}}
+  {{- if .Values.istio.enabled -}}
+- name: {{ include "bigbang.tagname" (merge .Values.istio (dict "name" "istio")) }}
+  namespace: {{ .Release.Namespace }}
+  {{- end -}}
 {{- end -}}
 
 {{/*
 Set Istio sidecar injection namespace label.
 */}}
 {{- define "bigbang.istioInjectionLabel" -}}
-{{- if .Values.istio.enabled }}
-{{- $version := (include "bigbang.tag" .Values.istio) -}}
-istio.io/rev: {{ $version }}
-{{- end }}
+  {{- if .Values.istio.enabled -}}
+istio.io/rev: {{ (include "bigbang.tag" .Values.istio) }}
+  {{- end -}}
 {{- end -}}
 
 {{/*
@@ -181,9 +184,9 @@ Tagged name will generate a resource name in the format of name-tag
 Usage: include "bigbang.tagname" (merge .Values.mypackage (dict "name" "mypackagename"))
 */}}
 {{- define "bigbang.tagname" -}}
-{{- $name := .name | trunc 54 | trimSuffix "-" }}
-{{- printf "%s-%s" $name ( include "bigbang.tag" . ) | trunc 63 | trimSuffix "-" }}
-{{- end }}
+  {{- $name := .name | trunc 54 | trimSuffix "-" -}}
+  {{- printf "%s-%s" $name ( include "bigbang.tag" . ) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
 {{/*
 Tag will generate a tag based on .tag.git
@@ -191,5 +194,5 @@ If the .git.tag is missing, "dev" is used as you would be using an unreleased ve
 Usage: include "bigbang.tag" .Values.mypackage
 */}}
 {{- define "bigbang.tag" -}}
-{{- regexReplaceAll "-.*" (dig "tag" "dev" .git) "" | replace "." "-" }}
+  {{- regexReplaceAll "-.*" (dig "tag" "dev" .git) "" | replace "." "-" -}}
 {{- end }}

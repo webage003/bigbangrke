@@ -35,7 +35,7 @@ spec:
 
   {{- if or .Values.istio.enabled .Values.monitoring.enabled }}
   dependsOn:
-    {{- if .Values.istio.enabled }}{{ include "bigbang.istioDependsOn" . }}{{- end }}
+    {{- include "bigbang.istioDependsOn" . | nindent 4 }}
     {{- if .Values.monitoring.enabled }}
     - name: monitoring
       namespace: {{ .Release.Namespace }}

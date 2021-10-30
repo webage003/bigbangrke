@@ -38,7 +38,7 @@ spec:
   {{- toYaml $fluxSettingsHaProxy | nindent 2 }}
 
   dependsOn:
-    {{ include "bigbang.istioDependsOn" . }}
+    {{- include "bigbang.istioDependsOn" . | nindent 4 }}
     {{- if .Values.monitoring.enabled }}
     - name: monitoring
       namespace: {{ .Release.Namespace }}

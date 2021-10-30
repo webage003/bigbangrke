@@ -43,7 +43,7 @@ spec:
     - name: gatekeeper
       namespace: {{ .Release.Namespace }}
     {{- end }}
-    {{- if .Values.istio.enabled }}{{ include "bigbang.istioDependsOn" . }}{{- end }}
+    {{- include "bigbang.istioDependsOn" . | nindent 4 }}
     {{- if .Values.monitoring.enabled }}
     - name: monitoring
       namespace: {{ .Release.Namespace }}

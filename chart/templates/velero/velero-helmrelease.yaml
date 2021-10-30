@@ -21,7 +21,7 @@ spec:
         namespace: {{ .Release.Namespace }}
 
   {{- toYaml $fluxSettingsVelero | nindent 2 }}
-  
+
   {{- if .Values.addons.velero.postRenderers }}
   postRenderers:
   {{ toYaml .Values.addons.velero.postRenderers | nindent 4 }}
@@ -38,6 +38,6 @@ spec:
       valuesKey: "overlays"
   {{- if .Values.istio.enabled }}
   dependsOn:
-    {{ include "bigbang.istioDependsOn" . }}
+    {{- include "bigbang.istioDependsOn" . | nindent 4 }}
   {{- end }}
 {{- end }}

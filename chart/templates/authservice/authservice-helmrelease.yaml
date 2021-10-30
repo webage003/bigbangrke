@@ -39,5 +39,5 @@ spec:
       valuesKey: "overlays"
 
   dependsOn:
-  {{- include "bigbang.istioDependsOn" . }}
+  {{- include "bigbang.istioDependsOn" . | nindent 4 }}
 {{- end }}
