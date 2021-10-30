@@ -4,7 +4,7 @@ kind: Namespace
 metadata:
   name: minio
   labels:
-    {{- if .Values.istio.enabled }}{{- include "bigbang.istioInjectionLabel" .  | nindent 4 }}{{- end }}
+    {{- include "bigbang.istioInjectionLabel" .  | nindent 4 }}
     app.kubernetes.io/name: minio
     app.kubernetes.io/component: "application-utilities"
     {{- include "commonLabels" . | nindent 4}}
