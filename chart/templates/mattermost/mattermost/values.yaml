@@ -31,7 +31,7 @@ sso:
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.mattermost.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.addons.mattermost.ingress.gateway)) | nindent 2 }}
 
 global:
   imagePullSecrets:

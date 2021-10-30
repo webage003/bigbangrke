@@ -24,7 +24,7 @@ monitoring:
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.gitlab.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.addons.gitlab.ingress.gateway)) | nindent 2 }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
 
 {{- if .Values.addons.gitlab.database.host }}

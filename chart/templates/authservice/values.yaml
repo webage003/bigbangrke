@@ -13,7 +13,7 @@ openshift: {{ .Values.openshift }}
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.haproxy.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.addons.haproxy.ingress.gateway)) | nindent 2 }}
 
 global:
   oidc:

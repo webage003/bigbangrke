@@ -25,7 +25,7 @@ istio:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.keycloak.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.addons.keycloak.ingress.gateway)) | nindent 2 }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}

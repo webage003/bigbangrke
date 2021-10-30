@@ -18,7 +18,7 @@ istio:
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.logging.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.logging.ingress.gateway)) | nindent 2 }}
 
 {{- with .Values.logging.sso }}
 {{- if .enabled }}

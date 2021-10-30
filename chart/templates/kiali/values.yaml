@@ -73,7 +73,7 @@ cr:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.kiali.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.kiali.ingress.gateway)) | nindent 2 }}
 {{- end -}}
 
 {{- define "istio.component.labels" -}}

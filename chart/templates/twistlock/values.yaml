@@ -19,7 +19,7 @@ imagePullSecrets:
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.twistlock.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.twistlock.ingress.gateway)) | nindent 2 }}
   nodeCidr: {{ .Values.networkPolicies.nodeCidr }}
 
 istio:

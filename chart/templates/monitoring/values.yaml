@@ -13,7 +13,7 @@ flux:
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.monitoring.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.monitoring.ingress.gateway)) | nindent 2 }}
 
 minioOperator:
   enabled: {{ .Values.addons.minioOperator.enabled }}

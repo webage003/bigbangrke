@@ -150,11 +150,12 @@ bigbang.addValueIfSet can be used to nil check parameters before adding them to 
 Compose ingress gateway labels used for network policies.
 */}}
 {{- define "bigbang.ingressLabels" -}}
-  {{- if .root.Values.istio.enabled }}ingressLabels:
-      {{- $appGw := default "public" .gateway }}
-      {{- $default := dict "app" (dig "gateways" $appGw "ingressGateway" nil .root.Values.istio) "istio" nil }}
-      {{- toYaml (dig "values" "gateways" $appGw "selector" $default .root.Values.istio) | nindent 4 }}
-  {{- end }}
+{{- if and .Values.istio.enabled (dig "gateways" nil .Values.istio) -}}
+ingressLabels:
+{{- $appGw := default "public" .gateway }}
+{{- $default := dict "app" (dig "gateways" $appGw "ingressGateway" nil .Values.istio) "istio" nil }}
+{{- toYaml (dig "values" "gateways" $appGw "selector" $default .Values.istio) | nindent 2 }}
+{{- end }}
 {{- end -}}
 
 {{/*

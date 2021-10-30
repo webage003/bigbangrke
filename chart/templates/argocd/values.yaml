@@ -39,7 +39,7 @@ monitoring:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.argocd.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.addons.argocd.ingress.gateway)) | nindent 2 }}
 
 {{- if .Values.addons.argocd.sso.enabled }}
 sso:

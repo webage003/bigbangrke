@@ -22,7 +22,7 @@ monitoring:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
-  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.minio.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (merge . (dict "gateway" .Values.addons.minio.ingress.gateway)) | nindent 2 }}
 
 podAnnotations:
   sidecar.istio.io/inject: "true"
