@@ -1,10 +1,6 @@
 {{- $fluxSettingsHaProxy := merge .Values.addons.haproxy.flux .Values.flux -}}
 {{- $monitoringInjection := dig "istio" "injection" "enabled" .Values.monitoring }}
-{{- $istioEnabled := .Values.istio.enabled | default false }}
-{{- range $name, $values := .Values.istio.controlplanes }}
-{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-{{- end }}
-{{- if and $istioEnabled .Values.monitoring.sso.enabled (eq $monitoringInjection "disabled") }}
+{{- if and .Values.istio.enabled .Values.monitoring.sso.enabled (eq $monitoringInjection "disabled") }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -42,7 +38,7 @@ spec:
   {{- toYaml $fluxSettingsHaProxy | nindent 2 }}
 
   dependsOn:
-    {{ include "istioDependsOn" . }}
+    {{ include "bigbang.istioDependsOn" . }}
     {{- if .Values.monitoring.enabled }}
     - name: monitoring
       namespace: {{ .Release.Namespace }}

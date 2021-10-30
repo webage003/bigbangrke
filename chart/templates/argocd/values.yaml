@@ -28,7 +28,7 @@ redis-bb:
     enabled: false
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
   argocd:
     gateways:
     - istio-system/{{ default "public" .Values.addons.argocd.ingress.gateway }}
@@ -39,7 +39,7 @@ monitoring:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
-  {{ include "ingressLabels" (dict "root" . "gateway" .Values.addons.argocd.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.argocd.ingress.gateway) }}
 
 {{- if .Values.addons.argocd.sso.enabled }}
 sso:

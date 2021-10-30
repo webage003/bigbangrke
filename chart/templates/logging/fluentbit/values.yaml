@@ -3,10 +3,6 @@
 {{- end }}
 
 {{- define "bigbang.defaults.fluentbit" -}}
-{{- $istioEnabled := .Values.istio.enabled | default false }}
-{{- range $name, $values := .Values.istio.controlplanes }}
-{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-{{- end -}}
 elasticsearch:
   host: "logging-ek-es-http"
   password:
@@ -20,7 +16,7 @@ networkPolicies:
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
 
 istio:
-  enabled: {{ $istioEnabled }}
+  enabled: {{ .Values.istio.enabled }}
 
 {{- if .Values.monitoring.enabled }}
 serviceMonitor:
@@ -37,7 +33,7 @@ dashboards:
   namespace: monitoring
 {{- end }}
 
-{{- if $istioEnabled }}
+{{- if .Values.istio.enabled }}
 podLabels:
   traffic.sidecar.istio.io/excludeOutboundPorts: "443"
 {{- end }}

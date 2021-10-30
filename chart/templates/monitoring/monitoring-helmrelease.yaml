@@ -1,9 +1,5 @@
 {{- $fluxSettingsMonitoring := merge .Values.monitoring.flux .Values.flux -}}
 {{- if .Values.monitoring.enabled }}
-{{- $istioEnabled := .Values.istio.enabled | default false }}
-{{- range $name, $values := .Values.istio.controlplanes }}
-{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-{{- end }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -42,9 +38,9 @@ spec:
       valuesKey: "overlays"
 
   # TODO: DRY this up
-  {{- if or .Values.gatekeeper.enabled $istioEnabled .Values.monitoring.sso.enabled }}
+  {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.monitoring.sso.enabled }}
   dependsOn:
-  {{- if $istioEnabled }}{{ include "istioDependsOn" . }}{{- end }}
+  {{- if .Values.istio.enabled }}{{ include "bigbang.istioDependsOn" . }}{{- end }}
   {{- if .Values.gatekeeper.enabled }}
     - name: gatekeeper
       namespace: {{ .Release.Namespace }}

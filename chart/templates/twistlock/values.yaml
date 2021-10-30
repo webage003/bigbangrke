@@ -19,11 +19,11 @@ imagePullSecrets:
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "ingressLabels" (dict "root" . "gateway" .Values.twistlock.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.twistlock.ingress.gateway) }}
   nodeCidr: {{ .Values.networkPolicies.nodeCidr }}
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
   console:
     gateways:
     - istio-system/{{ default "public" .Values.twistlock.ingress.gateway }}

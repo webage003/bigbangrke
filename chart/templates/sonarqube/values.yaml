@@ -9,7 +9,7 @@ hostname: {{ $domainName }}
 domain: {{ $domainName }}
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
   sonarqube:
     gateways:
     - istio-system/{{ default "public" .Values.addons.sonarqube.ingress.gateway }}
@@ -20,7 +20,7 @@ monitoring:
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "ingressLabels" (dict "root" . "gateway" .Values.addons.sonarqube.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.sonarqube.ingress.gateway) }}
 
 image:
   pullSecret: private-registry

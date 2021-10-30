@@ -147,16 +147,9 @@ bigbang.addValueIfSet can be used to nil check parameters before adding them to 
 {{- end -}}
 
 {{/*
-Check if Istio is enabled.
-*/}}
-{{- define "istioEnabled" -}}
-enabled: {{ .Values.istio.enabled }}
-{{- end -}}
-
-{{/*
 Compose ingress gateway labels used for network policies.
 */}}
-{{- define "ingressLabels" -}}
+{{- define "bigbang.ingressLabels" -}}
   {{- if .root.Values.istio.enabled }}ingressLabels:
       {{- $appGw := default "public" .gateway }}
       {{- $default := dict "app" (dig "gateways" $appGw "ingressGateway" nil .root.Values.istio) "istio" nil }}
@@ -167,7 +160,7 @@ Compose ingress gateway labels used for network policies.
 {{/*
 Compose HelmRepository dependsOn for Istio.
 */}}
-{{- define "istioDependsOn" }}
+{{- define "bigbang.istioDependsOn" }}
     - name: {{ include "bigbang.tagname" (merge .Values.istio (dict "name" "istio")) }}
       namespace: {{ .Release.Namespace }}
 {{- end -}}
@@ -175,7 +168,7 @@ Compose HelmRepository dependsOn for Istio.
 {{/*
 Set Istio sidecar injection namespace label.
 */}}
-{{- define "istioInjectionLabel" -}}
+{{- define "bigbang.istioInjectionLabel" -}}
 {{- $version := (include "bigbang.tag" .Values.istio) -}}
 istio.io/rev: {{ $version }}
 {{- end -}}

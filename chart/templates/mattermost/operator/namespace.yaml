@@ -1,14 +1,10 @@
 {{- if or .Values.addons.mattermostoperator.enabled .Values.addons.mattermost.enabled }}
-{{- $istioEnabled := .Values.istio.enabled | default false }}
-{{- range $name, $values := .Values.istio.controlplanes }}
-{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-{{- end }}
 apiVersion: v1
 kind: Namespace
 metadata:
   name: mattermost-operator
   labels:
-    {{- if $istioEnabled }}{{- include "istioInjectionLabel" .  | nindent 4 }}{{- end }}
+    {{- if .Values.istio.enabled }}{{- include "bigbang.istioInjectionLabel" .  | nindent 4 }}{{- end }}
     app.kubernetes.io/name: mattermost-operator
     app.kubernetes.io/component: "collaboration-tools"
     {{- include "commonLabels" . | nindent 4}}

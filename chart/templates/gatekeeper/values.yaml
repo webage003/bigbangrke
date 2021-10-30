@@ -79,7 +79,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
     enabled: false
 
   namespacesHaveIstio:
-    {{ include "istioEnabled" . }}
+    enabled: {{ .Values.istio.enabled }}
 
 
   {{- if .Values.fluentbit.enabled }}
@@ -91,7 +91,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
   {{- end }}
 
   podsHaveIstio:
-    {{ include "istioEnabled" . }}
+    enabled: {{ .Values.istio.enabled }}
     match:
       excludedNamespaces:
         # Istio does not inject sidecars in itself

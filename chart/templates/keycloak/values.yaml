@@ -16,7 +16,7 @@ domain: {{ $domainName }}
 openshift: {{ .Values.openshift }}
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
   keycloak:
     enabled: true
     gateways:
@@ -25,7 +25,7 @@ istio:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
-  {{ include "ingressLabels" (dict "root" . "gateway" .Values.addons.keycloak.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.keycloak.ingress.gateway) }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}

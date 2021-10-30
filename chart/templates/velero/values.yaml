@@ -5,7 +5,7 @@
 {{- define "bigbang.defaults.velero" -}}
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}

@@ -15,7 +15,7 @@ networkPolicies:
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
 
 openshift: {{ .Values.openshift }}
 {{- end -}}

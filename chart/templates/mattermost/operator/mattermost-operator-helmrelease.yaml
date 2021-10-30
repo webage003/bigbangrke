@@ -1,9 +1,5 @@
 {{- $fluxSettingsMattermostOperator := merge .Values.addons.mattermostoperator.flux .Values.flux -}}
 {{- if or .Values.addons.mattermostoperator.enabled .Values.addons.mattermost.enabled }}
-{{- $istioEnabled := .Values.istio.enabled | default false }}
-{{- range $name, $values := .Values.istio.controlplanes }}
-{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-{{- end }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -41,7 +37,7 @@ spec:
       kind: Secret
       valuesKey: "overlays"
 
-  {{- if or .Values.gatekeeper.enabled .Values.monitoring.enabled $istioEnabled }}
+  {{- if or .Values.gatekeeper.enabled .Values.monitoring.enabled .Values.istio.enabled }}
   dependsOn:
     {{- if .Values.gatekeeper.enabled }}
     - name: gatekeeper
@@ -51,6 +47,6 @@ spec:
     - name: monitoring
       namespace: {{ .Release.Namespace }}
     {{- end }}
-    {{- if $istioEnabled }}{{ include "istioDependsOn" . }}{{- end }}
+    {{- if .Values.istio.enabled }}{{ include "bigbang.istioDependsOn" . }}{{- end }}
   {{- end }}
 {{- end }}

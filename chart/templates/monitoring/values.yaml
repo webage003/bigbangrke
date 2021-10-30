@@ -13,18 +13,14 @@ flux:
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "ingressLabels" (dict "root" . "gateway" .Values.monitoring.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.monitoring.ingress.gateway) }}
 
 minioOperator:
   enabled: {{ .Values.addons.minioOperator.enabled }}
 
-{{- $istioEnabled := .Values.istio.enabled | default false }}
-{{- range $name, $values := .Values.istio.controlplanes }}
-{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-{{- end }}
 istio:
   {{- $monitoringInjection := dig "istio" "injection" "enabled" .Values.monitoring }}
-  enabled: {{ $istioEnabled }}
+  enabled: {{ .Values.istio.enabled }}
   prometheus:
     enabled: true
     {{- if and .Values.monitoring.sso.enabled (eq $monitoringInjection "disabled") }}
@@ -85,7 +81,7 @@ grafana:
     - private-registry
 
   grafana.ini:
-    {{- if $istioEnabled }}
+    {{- if .Values.istio.enabled }}
     server:
       root_url: https://grafana.{{ $domainName }}/
     {{- end }}

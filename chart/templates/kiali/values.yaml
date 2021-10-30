@@ -11,7 +11,7 @@ domain: {{ $domainName }}
 openshift: {{ .Values.openshift}}
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
   kiali:
     gateways:
     - istio-system/{{ default "public" .Values.kiali.ingress.gateway }}
@@ -73,7 +73,7 @@ cr:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
-  {{ include "ingressLabels" (dict "root" . "gateway" .Values.kiali.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.kiali.ingress.gateway) }}
 {{- end -}}
 
 {{- define "istio.component.labels" -}}

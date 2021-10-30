@@ -16,7 +16,7 @@ networkPolicies:
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}

@@ -9,7 +9,7 @@ hostname: {{ $domainName }}
 domain: {{ $domainName }}
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
   virtualService:  # this key is non-standard and needs to be fixed in the package
     gateways:
     - istio-system/{{ default "public" .Values.addons.minio.ingress.gateway }}
@@ -22,7 +22,7 @@ monitoring:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
-  {{ include "ingressLabels" (dict "root" . "gateway" .Values.addons.minio.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.minio.ingress.gateway) }}
 
 podAnnotations:
   sidecar.istio.io/inject: "true"

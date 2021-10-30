@@ -1,8 +1,4 @@
-{{- $istioEnabled := .Values.istio.enabled | default false }}
-{{- range $name, $values := .Values.istio.controlplanes }}
-{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-{{- end }}
-{{- if and $istioEnabled ( or .Values.addons.authservice.enabled .Values.monitoring.sso.enabled .Values.jaeger.sso.enabled ) }}
+{{- if and .Values.istio.enabled ( or .Values.addons.authservice.enabled .Values.monitoring.sso.enabled .Values.jaeger.sso.enabled ) }}
 {{- include "values-secret" (dict "root" $ "package" .Values.addons.authservice "name" "authservice" "defaults" (include "bigbang.defaults.authservice" .)) }}
 {{- end }}
 
@@ -17,7 +13,7 @@ openshift: {{ .Values.openshift }}
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
-  {{ include "ingressLabels" (dict "root" . "gateway" .Values.addons.haproxy.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.addons.haproxy.ingress.gateway) }}
 
 global:
   oidc:

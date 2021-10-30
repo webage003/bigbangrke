@@ -1,11 +1,4 @@
 {{- if .Values.addons.argocd.enabled }}
-{{- $istioEnabled := .Values.istio.enabled | default false }}
-{{- $injection := dig "istio" "injection" "enabled" .Values.addons.argocd }}
-{{- if eq $injection "disabled" }}{{- $istioEnabled = false }}{{- else }}
-{{- range $name, $values := .Values.istio.controlplanes }}
-{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-{{- end }}
-{{- end }}
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -13,7 +6,7 @@ metadata:
     app.kubernetes.io/name: argocd
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
-    {{- if $istioEnabled }}{{- include "istioInjectionLabel" .  | nindent 4 }}{{- else }}
+    {{- if .Values.istio.enabled }}{{- include "bigbang.istioInjectionLabel" .  | nindent 4 }}{{- else }}
     istio-injection: disabled
     {{- end }}
   name: argocd

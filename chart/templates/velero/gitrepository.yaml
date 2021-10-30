@@ -1,9 +1,4 @@
-{{- $istioEnabled := .Values.istio.enabled | default false }}
-{{- range $name, $values := .Values.istio.controlplanes }}
-{{- if and $values.enabled (not $istioEnabled) }}{{ $istioEnabled = true }}{{- end }}
-{{- end }}
-
-{{- if and $istioEnabled .Values.addons.velero.enabled  }}
+{{- if and .Values.istio.enabled .Values.addons.velero.enabled  }}
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:

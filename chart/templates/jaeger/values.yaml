@@ -12,7 +12,7 @@ hostname: {{ $domainName }}
 domain: {{ $domainName }}
 
 istio:
-  {{ include "istioEnabled" . }}
+  enabled: {{ .Values.istio.enabled }}
   jaeger:
     gateways:
     - istio-system/{{ default "public" .Values.jaeger.ingress.gateway }}
@@ -42,5 +42,5 @@ openshift:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
-  {{ include "ingressLabels" (dict "root" . "gateway" .Values.jaeger.ingress.gateway) }}
+  {{ include "bigbang.ingressLabels" (dict "root" . "gateway" .Values.jaeger.ingress.gateway) }}
 {{- end -}}
