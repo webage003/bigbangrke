@@ -176,6 +176,7 @@ Set Istio sidecar injection namespace label.
 {{- define "bigbang.istioInjectionLabel" -}}
   {{- if .Values.istio.enabled -}}
 istio.io/rev: {{ (include "bigbang.tag" .Values.istio) }}
+istio-injection: null
   {{- end -}}
 {{- end -}}
 
