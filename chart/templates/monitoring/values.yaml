@@ -17,7 +17,7 @@ networkPolicies:
 
 minioOperator:
   enabled: {{ .Values.addons.minioOperator.enabled }}
-
+  
 istio:
   {{- $monitoringInjection := dig "istio" "injection" "enabled" .Values.monitoring }}
   enabled: {{ .Values.istio.enabled }}

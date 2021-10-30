@@ -8,5 +8,5 @@ metadata:
     istio-injection: disabled
     app.kubernetes.io/name: istio-operator
     app.kubernetes.io/component: "core"
-    {{- include "commonLabels" $ | nindent 4}}
+    {{- include "commonLabels" . | nindent 4}}
 {{- end }}

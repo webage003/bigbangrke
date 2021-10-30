@@ -21,7 +21,7 @@ spec:
         namespace: {{ .Release.Namespace }}
 
   {{- toYaml $fluxSettingsVelero | nindent 2 }}
-
+  
   {{- if .Values.addons.velero.postRenderers }}
   postRenderers:
   {{ toYaml .Values.addons.velero.postRenderers | nindent 4 }}

@@ -38,16 +38,16 @@ spec:
       kind: Secret
       valuesKey: "overlays"
 
-  {{- if or .Values.istio.enabled .Values.gatekeeper.enabled .Values.monitoring.enabled }}
+  {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.monitoring.enabled }}
   dependsOn:
-    {{- if .Values.gatekeeper.enabled }}
-    - name: gatekeeper
-      namespace: {{ .Release.Namespace }}
-    {{- end }}
-    {{- include "bigbang.istioDependsOn" . | nindent 4 }}
-    {{- if .Values.monitoring.enabled }}
-    - name: monitoring
-      namespace: {{ .Release.Namespace }}
-    {{- end }}
+  {{- if .Values.gatekeeper.enabled }}
+  - name: gatekeeper
+    namespace: {{ .Release.Namespace }}
   {{- end }}
+  {{- include "bigbang.istioDependsOn" . | nindent 2 }}
+  {{- if .Values.monitoring.enabled }}
+  - name: monitoring
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+{{- end }}
 {{- end }}

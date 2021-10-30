@@ -15,6 +15,7 @@ networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
 
+
 istio:
   enabled: {{ .Values.istio.enabled }}
 

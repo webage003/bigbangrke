@@ -38,6 +38,8 @@ spec:
       kind: Secret
       valuesKey: "overlays"
 
+  {{- if .Values.istio.enabled }}
   dependsOn:
   {{- include "bigbang.istioDependsOn" . | nindent 4 }}
+  {{- end }}
 {{- end }}

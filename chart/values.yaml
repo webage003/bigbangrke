@@ -154,7 +154,6 @@ istio:
       tls:
         key: ""
         cert: ""
-
     # private:
     #   ingressGateway: "private-ingressgateway"
     #   hosts:
@@ -165,7 +164,6 @@ istio:
     #   tls:
     #     key: ""
     #     cert: ""
-
     # passthrough:
     #   ingressGateway: "passthrough-ingressgateway"
     #   hosts:
@@ -177,11 +175,13 @@ istio:
     #     mode: "PASSTHROUGH"
 
   # -- Flux reconciliation overrides specifically for the Istio Package
-  flux: { }
+  flux: {}
+
   # -- Values to passthrough to the istio-controlplane chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
-  values: { }
+  values: {}
+
   # -- Post Renderers.  See docs/postrenders.md
-  postRenderers: [ ]
+  postRenderers: []
 
 istiooperator:
   # -- Toggle deployment of Istio Operator.
@@ -193,8 +193,10 @@ istiooperator:
 
   # -- Flux reconciliation overrides specifically for the Istio Operator Package
   flux: {}
+
   # -- Values to passthrough to the istio-operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
   values: {}
+
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
 
