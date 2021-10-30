@@ -35,10 +35,10 @@ spec:
 
   {{- if or .Values.monitoring.enabled .Values.istio.enabled }}
   dependsOn:
-    {{- include "bigbang.istioDependsOn" . | nindent 4 }}
-    {{- if .Values.monitoring.enabled }}
-    - name: monitoring
-      namespace: {{ .Release.Namespace }}
-    {{- end }}
+  {{- include "bigbang.istioDependsOn" . | nindent 2 }}
+  {{- if .Values.monitoring.enabled }}
+  - name: monitoring
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
   {{- end }}
 {{- end }}
