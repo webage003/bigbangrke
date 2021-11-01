@@ -109,6 +109,7 @@ logging:
                 key: elastic
 
 fluentbit:
+  enabled: true
   values:
     securityContext:
       privileged: true
