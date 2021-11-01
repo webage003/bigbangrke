@@ -7,8 +7,7 @@ flux:
     cleanupOnFail: false
 
 networkPolicies:
-  #controlPlaneCidr: 172.16.0.0/12
-  controlPlaneCidr: 0.0.0.0/0
+  controlPlaneCidr: 172.16.0.0/12
 
 sso:
   # LetsEncrypt certificate authority
