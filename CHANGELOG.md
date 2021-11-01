@@ -4,10 +4,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [1.19.0]
+
+- [!1.19.0](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&milestone_title=1.19.0); List of merge requests in this release.
+
+## [1.18.0]
+
+- [!1.18.0](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&milestone_title=1.18.0); List of merge requests in this release.
+
 ## [1.17.0]
 
 - [!1.17.0](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&milestone_title=1.17.0); List of merge requests in this release.
-- [!56](https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor/-/merge_requests/56) adding cluster auditor namespace.
 
 ## [1.16.2]
 
