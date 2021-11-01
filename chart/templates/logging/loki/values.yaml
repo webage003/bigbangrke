@@ -15,4 +15,7 @@ imagePullSecrets:
   
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}  
+  
+monitoring:
+  enabled: {{ .Values.monitoring.enabled }}   
 {{- end -}}
