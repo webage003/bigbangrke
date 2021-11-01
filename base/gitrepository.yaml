@@ -11,4 +11,5 @@ spec:
   interval: 10m
   url: https://repo1.dso.mil/platform-one/big-bang/bigbang.git
   ref:
-    tag: 1.19.0
+    tag: null
+    branch: issue_587_redux
