@@ -418,8 +418,7 @@ loki:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
     path: "./chart"
-    tag: ""
-    branch: "initial-work"
+    tag: "2.5.1-bb.0"
 
   # -- Flux reconciliation overrides specifically for the Loki Package
   flux: {}
