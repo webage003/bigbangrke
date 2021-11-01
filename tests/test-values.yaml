@@ -270,9 +270,9 @@ istio:
 
 jaeger:
   enabled: true
-  sso:
-    enabled: false
-    client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-jaeger
+  #sso:
+  #  enabled: false
+  #  client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-jaeger
   values:
     bbtests:
       enabled: true
@@ -283,9 +283,9 @@ jaeger:
 
 kiali:
   enabled: true
-  sso:
-    enabled: false
-    client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-kiali
+  #sso:
+  #  enabled: false
+  #  client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-kiali
   values:
     cr:
       spec:
