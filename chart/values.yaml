@@ -126,8 +126,29 @@ istio:
   # Ingress gateways that require more configuration can be completed using `istio.values`
   ingressGateways:
     public-ingressgateway:
-      type: "LoadBalancer" # or "NodePort"
-      kubernetesResourceSpec: {} # https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#KubernetesResourcesSpec
+      type: "NodePort" # or "NodePort"
+      nodePortBase: 30000
+      kubernetesResourceSpec: {}
+        #service:
+        #  ports:
+        #    - name: http2
+        #      port: 80
+        #      targetPort: 8080
+        #      nodePort: 30001       # Port configured in terraform ELB
+        #    - name: https
+        #      port: 443
+        #      targetPort: 8443
+        #      nodePort: 30002       # Port configured in terraform ELB
+        #    - name: sni             # Istio's SNI Routing port
+        #      port: 15443
+        #      targetPort: 15443
+        #      nodePort: 30003       # Port configured in terraform ELB
+    private-ingressgateway:
+      type: "LoadBalancer"
+      kubernetesResourceSpec:
+        serviceAnnotations:
+          service.beta.kubernetes.io/aws-load-balancer-type: nlb
+          service.beta.kubernetes.io/aws-load-balancer-internal: "true"
 
     # private-ingressgateway:
     #   type: "LoadBalancer" # or "NodePort"
@@ -154,16 +175,16 @@ istio:
       tls:
         key: ""
         cert: ""
-    # private:
-    #   ingressGateway: "private-ingressgateway"
-    #   hosts:
-    #   - "*.{{ .Values.domain }}"
-    #   # -- Controls default HTTP/8080 server entry with HTTP to HTTPS Redirect.
-    #   autoHttpRedirect:
-    #     enabled: true
-    #   tls:
-    #     key: ""
-    #     cert: ""
+    private:
+      ingressGateway: "private-ingressgateway"
+      hosts:
+      - "*.{{ .Values.domain }}"
+      # -- Controls default HTTP/8080 server entry with HTTP to HTTPS Redirect.
+      autoHttpRedirect:
+        enabled: true
+      tls:
+        key: ""
+        cert: ""
     # passthrough:
     #   ingressGateway: "passthrough-ingressgateway"
     #   hosts:
@@ -179,6 +200,26 @@ istio:
 
   # -- Values to passthrough to the istio-controlplane chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
   values: {}
+  #  ingressGateway:
+  #    # Use Node Ports instead of creating a load balancer
+  #    type: NodePort
+  #    ports:
+  #      - name: status          # Istio's default health check port
+  #        port: 15021
+  #        targetPort: 15021
+  #        nodePort: 32021       # Port configured in terraform ELB
+  #      - name: http2
+  #        port: 80
+  #        targetPort: 8080
+  #        nodePort: 30080       # Port configured in terraform ELB
+  #      - name: https
+  #        port: 443
+  #        targetPort: 8443
+  #        nodePort: 30443       # Port configured in terraform ELB
+  #      - name: sni             # Istio's SNI Routing port
+  #        port: 15443
+  #        targetPort: 15443
+  #        nodePort: 32443       # Port configured in terraform ELB
 
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
@@ -202,7 +243,7 @@ istiooperator:
 
 jaeger:
   # -- Toggle deployment of Jaeger.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
     path: "./chart"
@@ -273,7 +314,7 @@ kiali:
 #
 clusterAuditor:
   # -- Toggle deployment of Cluster Auditor.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
     path: "./chart"
@@ -294,7 +335,7 @@ clusterAuditor:
 #
 gatekeeper:
   # -- Toggle deployment of OPA Gatekeeper.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
@@ -444,7 +485,14 @@ monitoring:
       # -- Other options available, see package Documentation.
 
   # -- Values to passthrough to the monitoring chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
-  values: {}
+  values:
+    prometheusOperator:
+      tls:
+        enabled: false
+      admissionWebhooks:
+        enabled: false
+        patch:
+          enabled: false
 
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
@@ -592,7 +640,7 @@ addons:
 
   gitlab:
     # -- Toggle deployment of Gitlab
-    enabled: false
+    enabled: true
 
     hostnames:
       # host name only without the domain
@@ -602,25 +650,26 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
-      tag: "5.3.1-bb.2"
+      #tag: "5.3.1-bb.2"
+      branch: "833-gitlab-iam-role"
 
     # -- Flux reconciliation overrides specifically for the Gitlab Package
     flux: {}
 
     # Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public".
     ingress:
-      gateway: ""
+      gateway: "private"
 
     sso:
       # -- Toggle OIDC SSO for Gitlab on and off.
       # Enabling this option will auto-create any required secrets.
-      enabled: false
+      enabled: true
 
       # -- Gitlab OIDC client ID
-      client_id: ""
+      client_id: "platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-gitlab"
 
       # -- Gitlab OIDC client secret
-      client_secret: ""
+      client_secret: "sec"
 
       # -- Gitlab SSO login button label
       label: ""
@@ -628,31 +677,31 @@ addons:
     database:
       # -- Hostname of a pre-existing PostgreSQL database to use for Gitlab.
       # Entering connection info will disable the deployment of an internal database and will auto-create any required secrets.
-      host: ""
+      host: "postgres-postgresql.postgres.svc"
 
       # -- Port of a pre-existing PostgreSQL database to use for Gitlab.
       port: 5432
 
       # -- Database name to connect to on host.
-      database: "" # example: gitlab
+      database: "postgres" # example: gitlab
 
       # -- Username to connect as to external database, the user must have all privileges on the database.
-      username: ""
+      username: "postgres"
 
       # -- Database password for the username used to connect to the existing database.
-      password: ""
+      password: "postgres"
 
     objectStorage:
       # -- Type of object storage to use for Gitlab, setting to s3 will assume an external, pre-existing object storage is to be used.
       # Entering connection info will enable this option and will auto-create any required secrets
-      type: "" # supported types are "s3" or "minio"
+      type: "s3" # supported types are "s3" or "minio"
 
       # -- S3 compatible endpoint to use for connection information.
       # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
-      endpoint: ""
+      endpoint: "https://s3.us-gov-west-1.amazonaws.com"
 
       # -- S3 compatible region to use for connection information.
-      region: ""
+      region: "us-gov-west-1"
 
       # -- Access key for connecting to object storage endpoint.
       # -- If using accessKey and accessSecret, the iamProfile must be left as an empty string: ""
@@ -664,21 +713,25 @@ addons:
 
       # -- Bucket prefix to use for identifying buckets.
       # Example: "prod" will produce "prod-gitlab-bucket"
-      bucketPrefix: ""
+      bucketPrefix: "833-bb"
 
       # -- Name of AWS IAM profile to use.
       # -- If using an AWS IAM profile, the accessKey and accessSecret values must be left as empty strings eg: ""
-      iamProfile: ""
+      iamProfile: "rgarcia-bb-dev-gs2-generic-rke2-agent"
 
     # -- Values to passthrough to the gitlab chart: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
     values: {}
+      #gitlab:
+      #  webservice:
+      #    annotations:
+      #      iam\.amazonaws\.com/role=arn:aws-us-gov:iam::927962728993:role/InstanceOpsRole
 
     # -- Post Renderers.  See docs/postrenders.md
     postRenderers: []
 
   gitlabRunner:
     # -- Toggle deployment of Gitlab Runner
-    enabled: false
+    enabled: true
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git
       path: "./chart"

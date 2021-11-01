@@ -22,6 +22,8 @@ istio:
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}
 
+use_iam_profile: true
+
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   ingressLabels:
@@ -99,7 +101,7 @@ global:
   {{- if .Values.addons.gitlab.objectStorage.endpoint }}
   registry:
     {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-    bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-registry
+    bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
     {{- else }}
     bucket: gitlab-registry
     {{- end }}
@@ -134,7 +136,7 @@ global:
     {{- if .Values.addons.gitlab.objectStorage.endpoint }}
     lfs:
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-lfs
+      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
       bucket: gitlab-lfs
       {{- end }}
@@ -145,7 +147,7 @@ global:
 
     artifacts:
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-artifacts
+      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
       bucket: gitlab-artifacts
       {{- end }}
@@ -155,7 +157,7 @@ global:
 
     uploads:
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-uploads
+      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
       bucket: gitlab-uploads
       {{- end }}
@@ -165,7 +167,7 @@ global:
 
     packages:
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-packages
+      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
       bucket: gitlab-packages
       {{- end }}
@@ -176,7 +178,7 @@ global:
 
     externalDiffs:
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-mr-diffs
+      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
       bucket: gitlab-mr-diffs
       {{- end }}
@@ -186,7 +188,7 @@ global:
 
     terraformState:
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-terraform-state
+      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
       bucket: gitlab-terraform-state
       {{- end }}
@@ -196,7 +198,7 @@ global:
 
     dependencyProxy:
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-dependency-proxy
+      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
       bucket: gitlab-dependency-proxy
       {{- end }}
@@ -206,7 +208,7 @@ global:
 
     pseudonymizer:
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-pseudo
+      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
       bucket: gitlab-pseudo
       {{- end }}
@@ -216,13 +218,14 @@ global:
 
     backups:
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-backup
+      bucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
       bucket: gitlab-backup
       {{- end }}
       {{- if .Values.addons.gitlab.objectStorage.bucketPrefix }}
-      tmpBucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-backup-tmp
+      tmpBucket: {{ .Values.addons.gitlab.objectStorage.bucketPrefix }}-gitlab-test-rgarcia
       {{- else }}
+
       tmpBucket: gitlab-backup-tmp
     {{- end }}
   {{- end }}
