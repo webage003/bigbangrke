@@ -43,8 +43,10 @@ spec:
       - name: private-registry
 
   dependsOn:
+  {{- if and .Values.logging.enabled (eq .Values.logging.engine "efk") }}
   - name: ek
     namespace: {{ .Release.Namespace }}
+      {{- end }}
   - name: gatekeeper
     namespace: {{ .Release.Namespace}}
 {{- end }}
