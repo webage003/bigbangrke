@@ -206,7 +206,7 @@ jaeger:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
     path: "./chart"
-    tag: "2.23.0-bb.5"
+    tag: "2.26.0-bb.0"
 
   # -- Flux reconciliation overrides specifically for the Jaeger Package
   flux:
@@ -329,7 +329,7 @@ ek:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
-    tag: "0.1.21-bb.2"
+    tag: "0.1.21-bb.3"
 
   # -- Flux reconciliation overrides specifically for the elasticsearch-kibana Package
   flux:
@@ -383,7 +383,7 @@ fluentbit:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
-    tag: "0.16.6-bb.0"
+    tag: "0.16.6-bb.1"
 
   # -- Flux reconciliation overrides specifically for the Fluent-Bit Package
   flux: {}
@@ -611,7 +611,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git
       path: "./chart"
-      tag: "4.2.3-bb.5"
+      tag: "4.2.3-bb.6"
 
     # -- Flux reconciliation overrides specifically for the Minio Package
     flux: {}
@@ -719,7 +719,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git
       path: "./chart"
-      tag: "0.33.1-bb.2"
+      tag: "0.33.1-bb.3"
 
     # -- Flux reconciliation overrides specifically for the Gitlab Runner Package
     flux: {}
@@ -736,7 +736,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git
       path: "./chart"
-      tag: "34.1.0-bb.2"
+      tag: "34.1.0-bb.4"
 
     # -- Base64 encoded license file.
     license_key: ""
@@ -754,6 +754,9 @@ addons:
 
       # -- NXRM SAML SSO Integration data
       idp_data:
+        # Nexus saml URL. example: "https://nexus.example.mil/service/rest/v1/security/saml/metadata"
+        entityId: ""
+
         # -- IdP Field Mappings
         # -- NXRM username attribute
         username: ""
@@ -776,9 +779,12 @@ addons:
 
       # -- NXRM Role
       role:
-        id: ""
-        name: ""
-        description: ""
+        # the id must match the Keycloak group name (case sensitive)
+        - id: ""
+          name: ""
+          description: ""
+          privileges: []
+          roles: []
 
     # -- Flux reconciliation overrides specifically for the Nexus Repository Manager Package
     flux: {}
@@ -795,7 +801,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube.git
       path: "./chart"
-      tag: "9.6.3-bb.8"
+      tag: "9.6.3-bb.9"
 
     # -- Flux reconciliation overrides specifically for the Sonarqube Package
     flux: {}
@@ -983,7 +989,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost.git
       path: "./chart"
-      tag: "0.2.2-bb.0"
+      tag: "0.2.3-bb.0"
 
     # -- Flux reconciliation overrides specifically for the Mattermost Package
     flux: {}
@@ -1110,7 +1116,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak.git
       path: "./chart"
-      tag: "11.0.1-bb.8"
+      tag: "11.0.1-bb.9"
 
     database:
       # -- Hostname of a pre-existing database to use for Keycloak.
