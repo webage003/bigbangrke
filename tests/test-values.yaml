@@ -1,4 +1,5 @@
 domain: bigbang.dev
+hostname: bigbang.dev
 
 flux:
   interval: 1m
@@ -6,7 +7,8 @@ flux:
     cleanupOnFail: false
 
 networkPolicies:
-  controlPlaneCidr: 172.16.0.0/12
+  #controlPlaneCidr: 172.16.0.0/12
+  controlPlaneCidr: 0.0.0.0/0
 
 sso:
   # LetsEncrypt certificate authority
