@@ -223,7 +223,7 @@ kiali:
           cypress_url: 'https://kiali.bigbang.dev'
 
 clusterAuditor:
-  enabled: false
+  enabled: true
   values:
     resources:
       requests:
@@ -232,7 +232,7 @@ clusterAuditor:
       limits: {}
 
 gatekeeper:
-  enabled: false
+  enabled: true
   values:
     replicas: 1
     resources:
@@ -315,7 +315,7 @@ gatekeeper:
             emptyDir: {}
 
 logging:
-  enabled: false
+  enabled: true
   sso:
     enabled: false
     client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-kibana
@@ -372,7 +372,7 @@ logging:
                 key: elastic
 
 fluentbit:
-  enabled: false
+  enabled: true
   values:
     securityContext:
       privileged: true
@@ -385,7 +385,7 @@ fluentbit:
           desired_version: "{{ .Values.image.tag }}"
 
 monitoring:
-  enabled: false
+  enabled: true
   sso:
     enabled: false
     prometheus: 
@@ -454,7 +454,7 @@ monitoring:
           cypress_alertmanager_url: 'https://alertmanager.bigbang.dev'
 
 twistlock:
-  enabled: false
+  enabled: true
   sso:
     enabled: false
     client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-twistlock
