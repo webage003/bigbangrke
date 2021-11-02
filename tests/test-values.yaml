@@ -49,8 +49,10 @@ flux:
     cleanupOnFail: false
 
 networkPolicies:
-  enabled: false
-  controlPlaneCidr: 172.16.0.0/12
+  enabled: true
+  #controlPlaneCidr: 172.16.0.0/12
+  controlPlaneCidr: 0.0.0.0/0
+  nodeCidr: "0.0.0.0/0"
 
 istio:
   enabled: true
