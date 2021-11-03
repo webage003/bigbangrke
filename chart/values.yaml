@@ -643,7 +643,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
-      tag: "5.3.1-bb.3"
+      tag: "5.3.1-bb.5"
 
     # -- Flux reconciliation overrides specifically for the Gitlab Package
     flux: {}
@@ -696,6 +696,7 @@ addons:
       region: ""
 
       # -- Access key for connecting to object storage endpoint.
+      # -- If using accessKey and accessSecret, the iamProfile must be left as an empty string: ""
       accessKey: ""
 
       # -- Secret key for connecting to object storage endpoint.
@@ -705,6 +706,11 @@ addons:
       # -- Bucket prefix to use for identifying buckets.
       # Example: "prod" will produce "prod-gitlab-bucket"
       bucketPrefix: ""
+
+      # -- NOTE: Current bug with AWS IAM Profiles and Object Storage where only artifacts are stored. Fixed in Gitlab 14.5
+      # -- Name of AWS IAM profile to use.
+      # -- If using an AWS IAM profile, the accessKey and accessSecret values must be left as empty strings eg: ""
+      iamProfile: ""
 
     # -- Values to passthrough to the gitlab chart: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
     values: {}
@@ -971,7 +977,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator.git
       path: "./chart"
-      tag: "1.15.0-bb.0"
+      tag: "1.16.0-bb.0"
 
     # -- Flux reconciliation overrides specifically for the Mattermost Operator Package
     flux: {}
