@@ -40,7 +40,7 @@
     - FAILED_PODS=$(kubectl get pods -A | awk '$4!="Running"')
     - echo $FAILED_PODS
     - |
-      if [ -n $FAILED_PODS ];then
+      if [ -n "$FAILED_PODS" ]; then
         echo -e "\e[31mWARNING: The following pods are not running:\e[31m"
         echo $FAILED_PODS
       fi
