@@ -41,7 +41,7 @@
     - echo $FAILED_PODS
     - |
       if [ -n "$FAILED_PODS" ]; then
-        echo -e "\e[31mWARNING: The following pods are not running:\e[31m"
+        echo -e "\e[31mWARNING: The following pods are not running: 😓\e[31m"
         echo $FAILED_PODS
       fi
     - echo -e "\e[0Ksection_start:`date +%s`:k3d_down[collapsed=true]\r\e[0K\e[33;1mK3D Cluster Delete\e[37m"  
