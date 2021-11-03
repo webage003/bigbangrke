@@ -17,7 +17,7 @@ spec:
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: logging-promtail
+        name: promtail
         namespace: {{ .Release.Namespace }}
 
   {{- toYaml $fluxSettingsPromtail | nindent 2 }}

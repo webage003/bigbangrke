@@ -17,7 +17,7 @@ spec:
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: logging-loki
+        name: loki
         namespace: {{ .Release.Namespace }}
 
   {{- toYaml $fluxSettingsLoki | nindent 2 }}
