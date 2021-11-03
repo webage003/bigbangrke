@@ -38,11 +38,11 @@
     - echo -e "\e[0Ksection_end:`date +%s`:k3d_up\r\e[0K"    
   after_script:
     - FAILED_PODS=$(kubectl get pods -A | awk '$4!="Running"')
+    - echo $FAILED_PODS
     - |
       if [ -n $FAILED_PODS ];then
         echo -e "\e[31mWARNING: The following pods are not running:\e[31m"
         echo $FAILED_PODS
-        echo "test"
       fi
     - echo -e "\e[0Ksection_start:`date +%s`:k3d_down[collapsed=true]\r\e[0K\e[33;1mK3D Cluster Delete\e[37m"  
     - kubectl get all -A
