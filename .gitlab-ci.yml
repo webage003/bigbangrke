@@ -46,6 +46,7 @@ stages:
 variables:
   RELEASE_BUCKET: umbrella-bigbang-releases
   IMAGE_LIST: images.txt
+  PACKAGE_IMAGE_LIST: package_images.yaml
   IMAGE_PKG: images.tar.gz
   REPOS_PKG: repositories.tar.gz
   VALUES_FILE: chart/values.yaml
@@ -453,6 +454,10 @@ package:
     - yq e '.source.images | .[] | ... comments=""' "./synker.yaml" > images.txt
     # Tar up synker as well?
     - cp /usr/local/bin/synker synker.yaml /var/lib/registry/
+    # Generate the list of packages and the images they contain
+    - echo -e "\e[0Ksection_start:`date +%s`:get package list list[collapsed=true]\r\e[0K\e[33;1mPackage Images\e[37m"
+    - ./scripts/package/get_package_images.sh > $PACKAGE_IMAGES
+    - cat package_images.yaml
     # Grab the registry image
     - crane pull registry:2 registry.tar
     - mv registry.tar /var/lib/registry/
@@ -466,7 +471,7 @@ package:
     - echo -e "\e[0Ksection_end:`date +%s`:package_repos\r\e[0K"
     # Prep release
     - mkdir -p release
-    - mv $IMAGE_LIST $IMAGE_PKG $REPOS_PKG release/
+    - mv $IMAGE_LIST $PACKAGE_IMAGES $IMAGE_PKG $REPOS_PKG release/
     # Publish packages to s3 release
     - |
       if [ -z $CI_COMMIT_TAG ]; then
