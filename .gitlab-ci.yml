@@ -507,12 +507,14 @@ release:
           release-cli create --name \"Big Bang \${CI_COMMIT_TAG}\" --tag-name \${CI_COMMIT_TAG} \n\
           --description \"Automated release notes are a WIP.\" \n\
           --assets-link \"{\"name\":\"${IMAGE_LIST}\",\"url\":\"${RELEASE_ENDPOINT}/${IMAGE_LIST}\"}\" \n\
+          --assets-link \"{\"name\":\"${PACKAGE_iMAGE_LIST}\",\"url\":\"${RELEASE_ENDPOINT}/${PACKAGE_IMAGE_LIST}\"}\" \n\
           --assets-link \"{\"name\":\"${IMAGE_PKG}\",\"url\":\"${RELEASE_ENDPOINT}/${IMAGE_PKG}\"}\" \n\
           --assets-link \"{\"name\":\"${REPOS_PKG}\",\"url\":\"${RELEASE_ENDPOINT}/${REPOS_PKG}\"}\"\n"
       else
         release-cli create --name "Big Bang ${CI_COMMIT_TAG}" --tag-name ${CI_COMMIT_TAG} \
           --description "Automated release notes are a WIP." \
           --assets-link "{\"name\":\"${IMAGE_LIST}\",\"url\":\"${RELEASE_ENDPOINT}/${IMAGE_LIST}\"}" \
+          --assets-link "{\"name\":\"${PACKAGE_IMAGE_LIST}\",\"url\":\"${RELEASE_ENDPOINT}/${PACKAGE_IMAGE_LIST}\"}" \
           --assets-link "{\"name\":\"${IMAGE_PKG}\",\"url\":\"${RELEASE_ENDPOINT}/${IMAGE_PKG}\"}" \
           --assets-link "{\"name\":\"${REPOS_PKG}\",\"url\":\"${RELEASE_ENDPOINT}/${REPOS_PKG}\"}"
       fi
