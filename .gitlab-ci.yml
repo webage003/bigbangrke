@@ -4,4 +4,4 @@ include:
     file: '/pipelines/bigbang.yaml' 
 variables:
   PIPELINE_REPO_BRANCH: refactor-pipelines
-  DEBUG_ENABLED: "true"
+  #DEBUG_ENABLED: "true"
