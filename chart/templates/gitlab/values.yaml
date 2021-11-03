@@ -46,11 +46,11 @@ registry:
   {{- end }}
 {{- end }}
 
-{{- if .Values.istio.enabled }}
-shared-secrets:
-  annotations:
-    sidecar.istio.io/inject: "false"
-{{- end }}
+# {{- if .Values.istio.enabled }}
+# shared-secrets:
+#   annotations:
+#     sidecar.istio.io/inject: "false"
+# {{- end }}
 
 gitlab:
   {{- if .Values.addons.gitlab.objectStorage.endpoint }}
