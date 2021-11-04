@@ -4,12 +4,16 @@ set -e
 trap 'echo ❌ exit at ${0}:${LINENO}, command was: ${BASH_COMMAND} 1>&2' ERR
 
 ## Array of core HRs
-#TODO add logic to toggle between efk/plg
-#CORE_HELMRELEASES=("gatekeeper" "istio-operator" "istio" "monitoring" "eck-operator" "ek" "fluent-bit" "twistlock" "cluster-auditor" "jaeger" "kiali")
-CORE_HELMRELEASES=("gatekeeper" "istio-operator" "istio" "monitoring" "promtail" "loki" "twistlock" "jaeger" "kiali")
+CORE_HELMRELEASES=$CORE_HELMRELEASES_EFK
+if [[ "$LOGGING_ENGINE" == "PLG" ]]; then
+  CORE_HELMRELEASES=$CORE_HELMRELEASES_PLG
+fi
 
 ## Array of addon HRs
-ADD_ON_HELMRELEASES=("argocd" "authservice" "gitlab" "gitlab-runner" "anchore" "sonarqube" "minio-operator" "minio" "mattermost-operator" "mattermost" "nexus-repository-manager" "velero")
+ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_EFK
+if [[ "$LOGGING_ENGINE" == "PLG" ]]; then
+  ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_PLG
+fi
 
 ## Map of values-keys/labels to HRs: Only needed if HR name =/= label name
 declare -A ADD_ON_HELMRELEASES_MAP
