@@ -5,15 +5,9 @@ trap 'echo ❌ exit at ${0}:${LINENO}, command was: ${BASH_COMMAND} 1>&2' ERR
 
 ## Array of core HRs
 CORE_HELMRELEASES=$CORE_HELMRELEASES_EFK
-if [[ "$LOGGING_ENGINE" == "PLG" ]]; then
-  CORE_HELMRELEASES=$CORE_HELMRELEASES_PLG
-fi
 
 ## Array of addon HRs
 ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_EFK
-if [[ "$LOGGING_ENGINE" == "PLG" ]]; then
-  ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_PLG
-fi
 
 ## Map of values-keys/labels to HRs: Only needed if HR name =/= label name
 declare -A ADD_ON_HELMRELEASES_MAP
@@ -163,6 +157,15 @@ function wait_crd(){
   done
 }
 
+if [[ "$LOGGING_ENGINE" == "PLG" ]]; then
+  CORE_HELMRELEASES=$CORE_HELMRELEASES_PLG
+fi
+
+if [[ "$LOGGING_ENGINE" == "PLG" ]]; then
+  ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_PLG
+fi
+
+echo "Using LOGGING_ENGINE: $LOGGING_ENGINE"
 
 ## Append all add-ons to hr list if "all-packages" or default branch/tag. Else, add specific ci labels to hr list.
 HELMRELEASES=(${CORE_HELMRELEASES[@]})
