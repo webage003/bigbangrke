@@ -51,7 +51,6 @@ flux:
 networkPolicies:
   enabled: true
   controlPlaneCidr: 0.0.0.0/0
-  nodeCidr: "0.0.0.0/0"
 
 istio:
   enabled: true
