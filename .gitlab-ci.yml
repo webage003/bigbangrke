@@ -51,7 +51,7 @@ variables:
   VALUES_FILE: chart/values.yaml
   CI_VALUES_FILE: tests/ci/k3d/values.yaml
   REGISTRY1_USER: $REGISTRY1_USER
-  ANCHORE_TEST: true
+  ANCHORE_TEST: value.true
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Pre Stage Jobs.   This execute before any job is run.
