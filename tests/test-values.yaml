@@ -44,6 +44,7 @@ sso:
     realm: baby-yoda
 
 flux:
+  timeout: 20m
   interval: 1m
   rollback:
     cleanupOnFail: false
