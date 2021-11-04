@@ -52,9 +52,11 @@ addons:
 
       key: |
         -----BEGIN PRIVATE KEY-----
+        INSERT KEY HERE
         -----END PRIVATE KEY-----
       cert: |
         -----BEGIN CERTIFICATE-----
+        INSERT CERT HERE
         -----END CERTIFICATE-----
 
     values:
