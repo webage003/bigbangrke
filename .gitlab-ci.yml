@@ -1,7 +1,4 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: mods-for-bb
+    ref: master
     file: '/pipelines/bigbang.yaml' 
-variables:
-  PIPELINE_REPO_BRANCH: mods-for-bb
-  DEBUG_ENABLED: "true"
