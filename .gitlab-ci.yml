@@ -1,4 +1,8 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: master
+    ref: cidr-test
     file: '/pipelines/bigbang.yaml'
+variables:
+  PIPELINE_REPO_BRANCH: cidr-test
+
+
