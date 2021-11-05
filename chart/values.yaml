@@ -206,7 +206,6 @@ jaeger:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
     path: "./chart"
-    tag: "null"
     branch: "micah.nagel-main-patch-15889"
 
   # -- Flux reconciliation overrides specifically for the Jaeger Package
@@ -242,7 +241,6 @@ kiali:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
     path: "./chart"
-    tag: "null"
     branch: "micah.nagel-main-patch-60315"
 
   # -- Flux reconciliation overrides specifically for the Kiali Package
