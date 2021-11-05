@@ -321,11 +321,10 @@ gatekeeper:
 # plg stack depends on promtail, loki, and monitoring packages
 logging:
   enabled: true
-  engine: efk # value can be either 'plg' or 'efk'
+  # -- Logging engine of choice. Supported values are 'efk' or 'plg'. Elasticsearch Fluentbit Kibana or Promtail Loki Grafana respectively.
+  # -- Setting to 'plg' will auto disable EFK packages and settings.
+  engine: efk
 
-ek:
-  # -- Toggle deployment of Elasticsearch-Kibana logging stack.
-  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"

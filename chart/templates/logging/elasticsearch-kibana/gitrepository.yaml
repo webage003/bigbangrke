@@ -10,9 +10,9 @@ metadata:
     {{- include "commonLabels" . | nindent 4}}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.ek.git.repo }}
+  url: {{ .Values.logging.git.repo }}
   ref:
-    {{- include "validRef" .Values.ek.git | nindent 4 }}
+    {{- include "validRef" .Values.logging.git | nindent 4 }}
   {{ include "gitIgnore" . }}
   {{- include "gitCreds" . | nindent 2 }}
 {{- end }}
