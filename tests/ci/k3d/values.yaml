@@ -13,8 +13,6 @@ eckoperator:
 logging:
   enabled: true
   engine: efk
-ek:
-  enabled: true
   values:
     elasticsearch:
       master:
