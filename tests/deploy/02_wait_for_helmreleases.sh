@@ -136,24 +136,23 @@ function wait_daemonset(){
 
 # Check for and run the wait_project function within <repo>/tests/wait.sh to wait for custom resources
 function wait_crd(){
-  yq e '(.,.addons) | .[] | ... comments="" | (path | join("."))' "${CI_VALUES_FILE}" | while IFS= read -r package; do
-    if [[ "$(yq e ".${package}.enabled" "${CI_VALUES_FILE}")" == "true" ]]; then
-      gitrepo=$(yq e ".${package}.git.repo" "${VALUES_FILE}")
-      version=$(yq e ".${package}.git.tag" "${VALUES_FILE}")
-      if [[ -z "$version" || "$version" == "null" ]]; then
-        version=$(yq e ".${package}.git.branch" "${VALUES_FILE}")
-      fi
-      if [[ -z "$version" || "$version" == "null" ]]; then
-        continue
-      fi
-      printf "Checking for tests/wait.sh in %s:%s... " ${package} ${version}
-      if curl -f "${gitrepo%.git}/-/raw/${version}/tests/wait.sh?inline=false" 1>${package}.wait.sh 2>/dev/null; then
-        printf "found, running\n"
-        . ./${package}.wait.sh
-        wait_project
-      else
-        printf "not found\n"
-      fi
+  for gitrepo in $(kubectl get gitrepository -n bigbang); do
+    repourl=$(kubectl get gitrepository ${gitrepo} -n bigbang -o jsonpath='{.spec.url}')
+    version=$(kubectl get gitrepository ${gitrepo} -n bigbang -o jsonpath='{.spec.ref.tag}')
+    package=$(kubectl get gitrepository ${gitrepo} -n bigbang -o jsonpath='{.metadata.name}')
+    if [[ -z "$version" || "$version" == "null" ]]; then
+      version=$(kubectl get gitrepository ${gitrepo} -n bigbang -o jsonpath='{.spec.ref.branch}')
+    fi
+    if [[ -z "$version" || "$version" == "null" ]]; then
+      continue
+    fi
+    printf "Checking for tests/wait.sh in %s:%s... " ${package} ${version}
+    if curl -f "${repourl%.git}/-/raw/${version}/tests/wait.sh?inline=false" 1>${package}.wait.sh 2>/dev/null; then
+      printf "found, running\n"
+      . ./${package}.wait.sh
+      wait_project
+    else
+      printf "not found\n"
     fi
   done
 }
