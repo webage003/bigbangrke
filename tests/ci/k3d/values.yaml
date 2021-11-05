@@ -8,7 +8,12 @@ flux:
 networkPolicies:
   controlPlaneCidr: 172.16.0.0/12
 
+eckoperator:
+  enabled: true
 logging:
+  enabled: true
+  engine: efk
+ek:
   enabled: true
   values:
     elasticsearch:
@@ -61,6 +66,7 @@ logging:
                 key: elastic
 
 fluentbit:
+  enabled: true
   values:
     securityContext:
       privileged: true
@@ -71,6 +77,12 @@ fluentbit:
         envs:
           fluent_host: "http://{{ include \"fluent-bit.fullname\" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}"
           desired_version: "{{ .Values.image.tag }}"
+
+promtail:
+  enabled: false
+
+loki:
+  enabled: false
 
 istio:
   enabled: true
