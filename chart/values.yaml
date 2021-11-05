@@ -321,11 +321,11 @@ gatekeeper:
 # plg stack depends on promtail, loki, and monitoring packages
 logging:
   enabled: true
-  engine: plg # value can be either 'plg' or 'efk'
+  engine: efk # value can be either 'plg' or 'efk'
 
 ek:
   # -- Toggle deployment of Elasticsearch-Kibana logging stack.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
@@ -365,7 +365,7 @@ ek:
 
 eckoperator:
   # -- Toggle deployment of ECK Operator.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
@@ -379,7 +379,7 @@ eckoperator:
 
 fluentbit:
   # -- Toggle deployment of Fluent-Bit.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
@@ -396,7 +396,7 @@ fluentbit:
 
 promtail:
   # -- Toggle deployment of Promtail.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail.git
     path: "./chart"
@@ -413,7 +413,7 @@ promtail:
 
 loki:
   # -- Toggle deployment of Loki.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
     path: "./chart"
