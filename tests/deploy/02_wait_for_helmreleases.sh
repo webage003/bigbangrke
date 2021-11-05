@@ -9,6 +9,13 @@ CORE_HELMRELEASES=$CORE_HELMRELEASES_EFK
 ## Array of addon HRs
 ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_EFK
 
+#Conditionally set core and add-on list depending on logging engine
+if [[ "$CI_MERGE_REQUEST_LABELS" = *"PLG"* ]]; then
+  export LOGGING_ENGINE="PLG"
+  CORE_HELMRELEASES=$CORE_HELMRELEASES_PLG
+  ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_PLG
+fi
+
 ## Map of values-keys/labels to HRs: Only needed if HR name =/= label name
 declare -A ADD_ON_HELMRELEASES_MAP
 ADD_ON_HELMRELEASES_MAP["haproxy"]="haproxy-sso"

@@ -52,7 +52,7 @@ variables:
   CI_VALUES_FILE: tests/ci/k3d/values.yaml
   REGISTRY1_USER: $REGISTRY1_USER
   # Supported values for LOGGING_ENGINE are EFK|PLG
-  LOGGING_ENGINE: PLG 
+  LOGGING_ENGINE: EFK
   CORE_HELMRELEASES_EFK:
     gatekeeper
     istio-operator
