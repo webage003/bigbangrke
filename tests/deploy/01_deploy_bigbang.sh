@@ -20,7 +20,7 @@ fi
 #If PLG Label set, adjust logging engine packages
 if [[ "$CI_MERGE_REQUEST_LABELS" = *"PLG"* ]]; then
   echo "Setting Logging Engine to PLG"
-  yq e ".logging.engine = "plg"" $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE
+  yq e '.logging.engine = "plg"' $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE
   yq e ".ek.enabled = "false"" $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE
   yq e ".clusterAuditor.enabled = "false"" $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE
   yq e ".eck-operator.enabled = "false"" $CI_VALUES_FILE > tmpfile && mv tmpfile $CI_VALUES_FILE

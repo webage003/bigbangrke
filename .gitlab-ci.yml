@@ -51,56 +51,6 @@ variables:
   VALUES_FILE: chart/values.yaml
   CI_VALUES_FILE: tests/ci/k3d/values.yaml
   REGISTRY1_USER: $REGISTRY1_USER
-  # Supported values for LOGGING_ENGINE are EFK|PLG
-  LOGGING_ENGINE: EFK
-  CORE_HELMRELEASES_EFK:
-    gatekeeper
-    istio-operator
-    istio
-    monitoring
-    eck-operator
-    ek
-    fluent-bit
-    twistlock
-    cluster-auditor
-    jaeger
-    kiali
-  CORE_HELMRELEASES_PLG:
-    gatekeeper
-    istio-operator
-    istio
-    monitoring
-    promtail
-    loki
-    twistlock
-    jaeger
-    kiali
-  ADD_ON_HELMRELEASES_EFK:
-    argocd
-    authservice
-    gitlab
-    gitlab-runner
-    anchore
-    sonarqube
-    minio-operator
-    minio
-    mattermost-operator
-    mattermost
-    nexus-repository-manager
-    velero
-  ADD_ON_HELMRELEASES_PLG:
-    argocd
-    authservice
-    gitlab
-    gitlab-runner
-    anchore
-    sonarqube
-    minio-operator
-    minio
-    mattermost-operator
-    mattermost
-    nexus-repository-manager
-    velero
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Pre Stage Jobs.   This execute before any job is run.

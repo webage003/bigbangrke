@@ -4,17 +4,11 @@ set -e
 trap 'echo ❌ exit at ${0}:${LINENO}, command was: ${BASH_COMMAND} 1>&2' ERR
 
 ## Array of core HRs
-CORE_HELMRELEASES=$CORE_HELMRELEASES_EFK
-
+CORE_HELMRELEASES=("gatekeeper" "istio-operator" "istio" "monitoring" "twistlock" "jaeger" "kiali")
+EFK_ENGINE_HELMRELEASES=("eck-operator" "fluentbit" "ek" "cluster-auditor")
+PLG_ENGINE_HELMRELEASES=("loki" "promtail")
 ## Array of addon HRs
-ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_EFK
-
-#Conditionally set core and add-on list depending on logging engine
-if [[ "$CI_MERGE_REQUEST_LABELS" = *"PLG"* ]]; then
-  export LOGGING_ENGINE="PLG"
-  CORE_HELMRELEASES=$CORE_HELMRELEASES_PLG
-  ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_PLG
-fi
+ADD_ON_HELMRELEASES=("argocd" "authservice" "gitlab" "gitlab-runner" "anchore" "sonarqube" "minio-operator" "minio" "mattermost-operator" "mattermost" "nexus-repository-manager" "velero")
 
 ## Map of values-keys/labels to HRs: Only needed if HR name =/= label name
 declare -A ADD_ON_HELMRELEASES_MAP
@@ -164,15 +158,6 @@ function wait_crd(){
   done
 }
 
-if [[ "$LOGGING_ENGINE" == "PLG" ]]; then
-  CORE_HELMRELEASES=$CORE_HELMRELEASES_PLG
-fi
-
-if [[ "$LOGGING_ENGINE" == "PLG" ]]; then
-  ADD_ON_HELMRELEASES=$ADD_ON_HELMRELEASES_PLG
-fi
-
-echo "Using LOGGING_ENGINE: $LOGGING_ENGINE"
 
 ## Append all add-ons to hr list if "all-packages" or default branch/tag. Else, add specific ci labels to hr list.
 HELMRELEASES=(${CORE_HELMRELEASES[@]})
@@ -195,6 +180,13 @@ elif [[ ! -z "$CI_MERGE_REQUEST_LABELS" ]]; then
         fi
     done
     echo "✅ Found enabled helmreleases: ${HELMRELEASES[@]}"
+fi
+
+#Conditionally set helmrelease list depending on logging engine
+if [[ "$CI_MERGE_REQUEST_LABELS" = *"PLG"* ]]; then
+  HELMRELEASES+=(${PLG_ENGINE_HELMRELEASES[@]})
+else
+  HELMRELEASES+=(${EFL_ENGINE_HELMRELEASES[@]})
 fi
 
 echo "⏳ Waiting on GitRepositories"
