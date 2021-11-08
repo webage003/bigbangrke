@@ -8,7 +8,7 @@ CORE_HELMRELEASES=("gatekeeper" "istio-operator" "istio" "monitoring" "twistlock
 EFK_ENGINE_HELMRELEASES=("eck-operator" "fluentbit" "ek" "cluster-auditor")
 PLG_ENGINE_HELMRELEASES=("loki" "promtail")
 ## Array of addon HRs
-ADD_ON_HELMRELEASES=("argocd" "authservice" "gitlab" "gitlab-runner" "anchore" "sonarqube" "minio-operator" "minio" "mattermost-operator" "mattermost" "nexus-repository-manager" "velero")
+#ADD_ON_HELMRELEASES=("argocd" "authservice" "gitlab" "gitlab-runner" "anchore" "sonarqube" "minio-operator" "minio" "mattermost-operator" "mattermost" "nexus-repository-manager" "velero")
 
 ## Map of values-keys/labels to HRs: Only needed if HR name =/= label name
 declare -A ADD_ON_HELMRELEASES_MAP
@@ -141,7 +141,7 @@ function wait_crd(){
     version=$(kubectl get "${gitrepo}" -n bigbang -o jsonpath='{.spec.ref.tag}')
     package=$(kubectl get "${gitrepo}" -n bigbang -o jsonpath='{.metadata.name}')
     if [[ -z "$version" || "$version" == "null" ]]; then
-      version=$(kubectl get gitrepository ${gitrepo} -n bigbang -o jsonpath='{.spec.ref.branch}')
+      version=$(kubectl get "${gitrepo}" -n bigbang -o jsonpath='{.spec.ref.branch}')
     fi
     if [[ -z "$version" || "$version" == "null" ]]; then
       continue
