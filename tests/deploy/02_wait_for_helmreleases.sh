@@ -137,11 +137,11 @@ function wait_daemonset(){
 # Check for and run the wait_project function within <repo>/tests/wait.sh to wait for custom resources
 function wait_crd(){
   for gitrepo in $(kubectl get gitrepository -n bigbang -o name); do
-    repourl=$(kubectl get "${gitrepo}" -n bigbang -o jsonpath='{.spec.url}')
-    version=$(kubectl get "${gitrepo}" -n bigbang -o jsonpath='{.spec.ref.tag}')
-    package=$(kubectl get "${gitrepo}" -n bigbang -o jsonpath='{.metadata.name}')
+    repourl=$(kubectl get $gitrepo -n bigbang -o jsonpath='{.spec.url}')
+    version=$(kubectl get $gitrepo -n bigbang -o jsonpath='{.spec.ref.tag}')
+    package=$(kubectl get $gitrepo -n bigbang -o jsonpath='{.metadata.name}')
     if [[ -z "$version" || "$version" == "null" ]]; then
-      version=$(kubectl get "${gitrepo}" -n bigbang -o jsonpath='{.spec.ref.branch}')
+      version=$(kubectl get $gitrepo -n bigbang -o jsonpath='{.spec.ref.branch}')
     fi
     if [[ -z "$version" || "$version" == "null" ]]; then
       continue
