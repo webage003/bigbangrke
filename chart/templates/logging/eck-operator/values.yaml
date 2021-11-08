@@ -4,9 +4,9 @@
 
 {{- define "bigbang.defaults.eck-operator" -}}
 license:
-  trial: {{ .Values.ek.license.trial }}
+  trial: {{ .Values.logging.license.trial }}
   keyJSON: |
-    {{ .Values.ek.license.keyJSON | nindent 4 }}
+    {{ .Values.logging.license.keyJSON | nindent 4 }}
 
 podAnnotations:
   sidecar.istio.io/inject: "true"
