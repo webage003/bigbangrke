@@ -1,10 +1,14 @@
 # Pipeline has the var, just added for testing
 VALUES_FILE='chart/values.yaml'
+IMAGE_FILE="images.txt"
+RESULTS="package-images.yaml"
+header_done=0
 
 # Start output header
 echo "---"
 echo "package-image-list:"
 
+# Generate a list of all images in all Big Bang Packages
 yq e '(.,.addons) | ... comments="" | .[] | (path | join(".")) ' "${VALUES_FILE}" | while IFS= read -r package; do
     gitrepo=$(yq e ".${package}.git.repo" "${VALUES_FILE}")
     version=$(yq e ".${package}.git.tag" "${VALUES_FILE}")
@@ -28,12 +32,20 @@ yq e '(.,.addons) | ... comments="" | .[] | (path | join(".")) ' "${VALUES_FILE}
 
     # Generate the output in JSON format
     #echo "Images for $package:"
-    echo "  ${package}: "
-    echo "    version: \"${version}\""
-    echo "    images:"
+    header_done=0
     for image in $images
     do
-    echo "      - \"${image}\""
+      if [ -n "$(grep ${image} $IMAGE_FILE)" ]
+      then
+        if [ ${header_done} == 0 ] ; then
+          echo "  ${package}: "
+          echo "    version: \"${version}\""
+          echo "    images:"
+          header_done=1
+        fi
+        echo "      - \"${image}\""
+      fi
     done
 done
+
 

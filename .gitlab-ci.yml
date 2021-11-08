@@ -456,6 +456,7 @@ package:
     - cp /usr/local/bin/synker synker.yaml /var/lib/registry/
     # Generate the list of packages and the images they contain
     - echo -e "\e[0Ksection_start:`date +%s`:package_image_list[collapsed=true]\r\e[0K\e[33;1mPackage Image List\e[37m"
+    - cat images.txt
     - ./scripts/package/get_package_images.sh > $PACKAGE_IMAGE_LIST
     - cat package_images.yaml
     - echo -e "\e[0Ksection_end:`date +%s`:package_image_list\r\e[0K"
