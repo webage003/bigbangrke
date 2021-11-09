@@ -2,4 +2,5 @@ include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
     ref: PLG-bb-pipeline-changes
     file: '/pipelines/bigbang.yaml'
-  
+variables:
+  PIPELINE_REPO_BRANCH: PLG-bb-pipeline-changes
