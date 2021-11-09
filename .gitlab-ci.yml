@@ -1,4 +1,5 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: master
+    ref: PLG-bb-pipeline-changes
     file: '/pipelines/bigbang.yaml'
+  
