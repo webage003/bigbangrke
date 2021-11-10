@@ -982,7 +982,7 @@ addons:
             region: velero
             insecureSkipTLSVerify: "true"
             s3ForcePathStyle: "true"
-            s3Url: &minio-address https://minio.bigbang.dev
+            s3Url: &minio-address http://minio.minio.svc
         volumeSnapshotLocation:
           provider: aws
           config:
