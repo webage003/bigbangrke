@@ -995,9 +995,7 @@ addons:
             aws_access_key_id = minio
             aws_secret_access_key = minio123
       bbtests:
-        # TODO: Velero test is messy and times out running in BB CI
-        # https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/-/issues/9
-        enabled: false
+        enabled: true
         scripts:
           image: registry1.dso.mil/ironbank/opensource/velero/velero:v1.6.3
           additionalVolumes:
