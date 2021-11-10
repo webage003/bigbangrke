@@ -1015,11 +1015,7 @@ addons:
             TEST_YAML_DIR: *yamlMountPath
             MINIO_USER: minio
             MINIO_PASS: minio123
-          secretEnvs:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+            NAMESPACE: velero
 
   keycloak:
     enabled: false
