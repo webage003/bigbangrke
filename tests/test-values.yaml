@@ -963,6 +963,9 @@ addons:
                   key: admin.password
 
   velero:
+    git:
+      tag: null
+      branch: "test-fix"
     enabled: false
     plugins:
     - aws
@@ -996,7 +999,7 @@ addons:
         # https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/-/issues/9
         enabled: false
         scripts:
-          image: registry1.dso.mil/ironbank/opensource/velero/velero:v1.6.0
+          image: registry1.dso.mil/ironbank/opensource/velero/velero:v1.6.3
           additionalVolumes:
             - name: transfer-kubectl
               emptyDir: {}
