@@ -60,7 +60,7 @@ Package is the term we use for an application that has been prepared to be deplo
 
 1. Add a VirtualService if your application has a back-end API or a front-end GUI. Create the VirtualService in the sub-directory  "chart/templates/bigbang/VirtualService.yaml". You will need to manually create the "bigbang" directory. It is convenient to copy VirtualService code from one of the other Packages and then modify it. You should be able to load the application in your browser if all the configuration is correct.
 
-1. Add NetworkPolices templates in the sub-directory "chart/templates/bigbang/networkpolicies/*.yaml". The intent is to lock down all ingress and egress traffic except for what is required for the application to function properly. Start with a deny-all policy and then add additionl policies to open traffic as needed. Refer to the other Packages code for examples. The [Gitlab package](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab/-/tree/main/chart/templates/bigbang/networkpolicies) is a good/complete example.
+1. Add NetworkPolices templates in the sub-directory "chart/templates/bigbang/networkpolicies/*.yaml". The intent is to lock down all ingress and egress traffic except for what is required for the application to function properly. Start with a deny-all policy and then add additional policies to open traffic as needed. Refer to the other Packages code for examples. The [Gitlab package](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab/-/tree/main/chart/templates/bigbang/networkpolicies) is a good/complete example.
 
 1. Add a continuous integration (CI) pipeline to the Package. A Package should be able to be deployed by itself, independently from the BigBang chart. The Package pipeline takes advantage of this to run a Package pipeline test. The package testing is done with a helm test library. Reference the [pipeline documentation](https://repo1.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates#using-the-infrastructure-in-your-package-ci-gitlab-pipeline) for how to create a pipeline and also [detailed instructions](https://repo1.dso.mil/platform-one/big-bang/apps/library-charts/gluon/-/blob/master/docs/bb-tests.md) in the gluon library. Instructions are not repeated here.
 
@@ -169,3 +169,27 @@ Under Settings → Repository → Default Branch, ensure that main is selected.
 
 1. After the merge create a git tag following the charter convention of {UpstreamChartVersion}-bb.{BigBangVersion}. The tag should exactly match the chart version in the Chart.yaml.
 example:    1.2.3-bb.0
+
+### Private registry secret creation
+In some instances you may wish to manually create a private-registry secret in the namespace or during a helm deployment.  There are a couple of ways to do this:
+
+1. The first way is to add the secret manually using kubectl. This method is useful for standalone package testing/development.
+
+   ```shell
+   kubectl create secret docker-registry private-registry --docker-server="https://registry1.dso.mil" --docker-username='Username' --docker-password="CLI secret" --docker-email=<your-email> --namespace=<package-namespace>
+   ```
+2. The second is to create a yaml file containing the secret and apply it during a helm install. This method is applicable when installing your new package as part of the Big Bang chart. In this example the file name is "reg-creds.yaml":
+
+Create the file with the secret contents:
+   ```yaml
+   registryCredentials:
+     registry: registry1.dso.mil
+     username: ""
+     password: ""
+     email: ""
+   ```
+
+Then include a reference to your file during your helm install command by adding the below `-f` to your Big Bang install command:
+   ```shell
+   -f reg-creds.yaml
+   ```
