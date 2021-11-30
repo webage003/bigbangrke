@@ -1023,6 +1023,7 @@ addons:
 
   keycloak:
   ### extra line to push test deleteme
+  ### one more time
     enabled: false
     ingress:
       gateway: "passthrough"
