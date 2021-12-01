@@ -117,6 +117,7 @@ clusterAuditor:
 gatekeeper:
   enabled: true
   values:
+    disableValidatingWebhook: true
     replicas: 1
     resources:
       requests:
