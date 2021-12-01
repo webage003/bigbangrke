@@ -1038,6 +1038,7 @@ addons:
                   fieldPath: metadata.namespace
 
   keycloak:
+  # just for a change
     enabled: false
     ingress:
       gateway: "passthrough"
