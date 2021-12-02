@@ -19,7 +19,7 @@ serviceMonitor:
   enabled: {{ .Values.monitoring.enabled }}
   dashboards:
     namespace: monitoring
-    label: {{ dig "values" "sidecar" "dashboards" "label" "grafana_dashboards" .Values.monitoring }}
+    label: {{ dig "values" "grafana" "sidecar" "dashboards" "label" "grafana_dashboard" .Values.monitoring }}
 
 istio:
   enabled: {{ .Values.istio.enabled }}
