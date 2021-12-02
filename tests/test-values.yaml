@@ -200,6 +200,22 @@ gatekeeper:
           - name: "{{ .Chart.Name }}-kube-cache"
             emptyDir: {}
 
+kyverno:
+  enabled: false
+  values:
+    replicas: 1
+    bbtests:
+      enabled: true
+      scripts:
+        image: registry1.dso.mil/ironbank/opensource/kubernetes-1.21/kubectl:v1.21.1
+        additionalVolumeMounts:
+          - name: "{{ .Chart.Name }}-test-config"
+            mountPath: /yaml
+        additionalVolumes:
+          - name: "{{ .Chart.Name }}-test-config"
+            configMap:
+              name: "{{ .Chart.Name }}-test-config"
+
 logging:
   enabled: true
   sso:
@@ -808,7 +824,7 @@ addons:
         cypress:
           artifacts: true
           envs:
-            cypress_url: 'http://minio.bigbang.dev/login'
+            cypress_url: 'https://minio.bigbang.dev/login'
           secretEnvs:
             - name: cypress_secretkey
               valueFrom:
@@ -823,8 +839,8 @@ addons:
         scripts:
           image: registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2021-09-02T09-21-27Z
           envs:
-            MINIO_PORT: '80'
-            MINIO_HOST: 'http://minio'
+            MINIO_PORT: ''
+            MINIO_HOST: 'https://minio-api.bigbang.dev'
           secretEnvs:
             - name: SECRET_KEY
               valueFrom:
