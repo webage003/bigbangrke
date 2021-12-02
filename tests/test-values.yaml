@@ -1039,7 +1039,7 @@ addons:
                   fieldPath: metadata.namespace
 
   keycloak:
-  # just for a change and one more push
+  # just for a change and one more push again
     enabled: false
     ingress:
       gateway: "passthrough"
