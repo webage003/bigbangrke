@@ -247,7 +247,7 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.nexus.enabled | bool | `false` | Toggle deployment of Nexus. |
 | addons.nexus.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git"` |  |
 | addons.nexus.git.path | string | `"./chart"` |  |
-| addons.nexus.git.tag | string | `"36.0.0-bb.0"` |  |
+| addons.nexus.git.tag | string | `"34.1.0-bb.4"` |  |
 | addons.nexus.license_key | string | `""` | Base64 encoded license file. |
 | addons.nexus.ingress.gateway | string | `""` |  |
 | addons.nexus.sso.enabled | bool | `false` | Toggle SAML SSO for NXRM. -- handles SAML SSO, a Client must be configured in Keycloak or IdP -- to complete setup. -- https://support.sonatype.com/hc/en-us/articles/1500000976522-SAML-integration-for-Nexus-Repository-Manager-Pro-3-and-Nexus-IQ-Server-with-Keycloak#h_01EV7CWCYH3YKAPMAHG8XMQ599 |
