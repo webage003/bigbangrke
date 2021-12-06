@@ -4,17 +4,20 @@
 
 {{- define "bigbang.defaults.gatekeeper" -}}
 image:
+  pullPolicy: {{ .Values.imagePullPolicy }}
   pullSecrets:
   - name: private-registry
 postInstall:
   labelNamespace:
     enabled: false
     image:
+      pullPolicy: {{ .Values.imagePullPolicy }}
       pullSecrets:
       - name: private-registry
 postUpgrade:
   cleanupCRD:
     image:
+      pullPolicy: {{ .Values.imagePullPolicy }}
       pullSecrets:
       - name: private-registry
 
@@ -101,7 +104,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
       {{- end }}
   {{- end }}
 
-  {{- if or .Values.fluentbit.enabled .Values.twistlock.enabled }}
+  {{- if or .Values.fluentbit.enabled .Values.twistlock.enabled .Values.promtail.enabled }}
   selinuxPolicy:
     parameters:
       excludedResources:
@@ -112,6 +115,10 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
       {{- if .Values.twistlock.enabled }}
       # Twistlock Defenders need selinux option type spc_t
       - twistlock/twistlock-defender
+      {{- end }}
+      {{- if .Values.promtail.enabled }}
+      # Promtail needs selinux option type spc_t
+      - logging/promtail
       {{- end }}
   {{- end }}
 
