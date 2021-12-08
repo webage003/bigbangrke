@@ -126,6 +126,8 @@ gatekeeper:
       limits: {}
 
     violations:
+      volumeTypes:
+        enabled: false
       allowedCapabilities:
         parameters:
           excludedResources:
