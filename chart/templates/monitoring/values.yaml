@@ -25,7 +25,7 @@ istio:
     {{- if .Values.monitoring.sso.enabled }}
     service: authservice-haproxy-sso
     port: 8080
-    namespace: authservice
+    namespace: jcn1-authservice
     {{- end }}
     gateways:
     - istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}
@@ -34,7 +34,7 @@ istio:
     {{- if .Values.monitoring.sso.enabled }}
     service: authservice-haproxy-sso
     port: 8080
-    namespace: authservice
+    namespace: jcn1-authservice
     {{- end }}
     gateways:
     - istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}

@@ -22,7 +22,7 @@ istio:
 {{- if .Values.monitoring.enabled }}
 serviceMonitor:
   enabled: true
-  namespace: monitoring
+  namespace: jcn1-monitoring
   interval: 10s
   scrapeTimeout: 10s
   selector:
@@ -31,7 +31,7 @@ serviceMonitor:
 dashboards:
   enabled: true
   labelKey: grafana_dashboard
-  namespace: monitoring
+  namespace: jcn1-monitoring
 {{- end }}
 
 {{- if .Values.istio.enabled }}
