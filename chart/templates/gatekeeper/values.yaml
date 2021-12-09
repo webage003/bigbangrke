@@ -40,7 +40,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
     match:
       excludedNamespaces:
         # Prometheus-node-exporter needs access to host to get node metrics
-        - monitoring
+        - jcn1-monitoring
     {{- end }}
     {{- if .Values.fluentbit.enabled }}
     parameters:
@@ -56,7 +56,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
       excludedNamespaces:
         # Mattermost currently does not useIngressTLS hence Ingress is created without TLS field by the operator.
         # Adding exemption, pending https://github.com/mattermost/mattermost-operator/issues/235
-        - mattermost
+        - jcn1-mattermost
   {{- end }}
 
   namespacesHaveIstio:
@@ -67,7 +67,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
     match:
       excludedNamespaces:
         # Fluentbit needs privileged to read and store the buffer for tailing logs from the nodes
-        - logging
+        - jcn1-logging
   {{- end }}
 
   podsHaveIstio:
@@ -75,15 +75,15 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
     match:
       excludedNamespaces:
         # Istio does not inject sidecars in itself
-        - istio-operator
-        - istio-system
+        - jcn1-istio-operator
+        - jcn1-istio-system
 
   {{- if .Values.monitoring.enabled }}
   restrictedTaint:
     match:
       excludedNamespaces:
         # Prometheus Node Exporter needs to be able to run on all nodes, regardless of taint, to gather node metrics
-        - monitoring
+        - jcn1-monitoring
   {{- end }}
 
   {{- if .Values.logging.enabled }}
@@ -91,7 +91,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
     match:
       excludedNamespaces:
         # FluentBit needs selinux option type spc_t
-        - logging
+        - jcn1-logging
   {{- end }}
 
   {{- if or .Values.fluentbit.enabled (or .Values.twistlock.enabled .Values.monitoring.enabled) }}
@@ -101,17 +101,17 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
        {{- if .Values.fluentbit.enabled }}
         # fluent-bit container requires certain host level access to ship logs and for keep track of state
         # https://docs.fluentbit.io/manual/pipeline/filters/kubernetes#workflow-of-tail-kubernetes-filter
-        - logging
+        - jcn1-logging
        {{- end }}
        {{- if .Values.twistlock.enabled }}
         # Twistlock requires /dev/log for its syslog daemon.
         # https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin-compute/audit/logging.html#
-        - twistlock
+        - jcn1-twistlock
        {{- end }}
        {{- if .Values.monitoring.enabled }}
         # Prometheus node exported requires hostpath hardcoded in upstream chart on which monitoring pkg has a direct dependency
         # https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus-node-exporter/templates/daemonset.yaml#L150
-        - monitoring
+        - jcn1-monitoring
        {{- end }}
   {{- end }}
 {{- end -}}
