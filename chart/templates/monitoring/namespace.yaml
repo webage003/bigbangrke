@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: monitoring
+  name: jcn1-monitoring
   labels:
     app.kubernetes.io/name: monitoring
     app.kubernetes.io/component: "core"

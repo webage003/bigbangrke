@@ -10,5 +10,5 @@ metadata:
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
     istio-injection: disabled
-  name: gatekeeper-system
+  name: jcn1-gatekeeper-system
 {{- end }}

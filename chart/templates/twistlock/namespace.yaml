@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: twistlock
+  name: jcn1-twistlock
   labels:
     app.kubernetes.io/name: twistlock
     app.kubernetes.io/component: "security"

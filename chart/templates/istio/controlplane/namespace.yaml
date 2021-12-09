@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: istio-system
+  name: jcn1-istio-system
   labels:
     app.kubernetes.io/name: istio-controlplane
     app.kubernetes.io/component: "core"

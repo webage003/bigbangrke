@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: jaeger
+  name: jcn1-jaeger
   labels:
     istio-injection: enabled
     app.kubernetes.io/name: jaeger

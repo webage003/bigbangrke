@@ -7,5 +7,5 @@ metadata:
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
     istio-injection: disabled
-  name: argocd
+  name: jcn1-argocd
 {{- end }}

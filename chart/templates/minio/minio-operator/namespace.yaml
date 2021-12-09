@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: minio-operator
+  name: jcn1-minio-operator
   labels:
     istio-injection: enabled
     app.kubernetes.io/name: minioOperator
