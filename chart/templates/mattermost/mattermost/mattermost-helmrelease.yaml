@@ -11,7 +11,7 @@ metadata:
     {{- include "commonLabels" . | nindent 4}}
 spec:
   releaseName: mattermost
-  targetNamespace: mattermost
+  targetNamespace: jcn1-mattermost
   chart:
     spec:
       chart: {{ .Values.addons.mattermost.git.path }}

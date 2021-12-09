@@ -13,7 +13,7 @@ metadata:
     {{- include "commonLabels" . | nindent 4}}
 spec:
   releaseName: {{ $name }}
-  targetNamespace: {{ $name }}
+  targetNamespace: jcn1-{{ $name }}
   chart:
     spec:
       chart: {{ .Values.addons.keycloak.git.path }}

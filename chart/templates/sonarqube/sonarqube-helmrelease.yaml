@@ -12,7 +12,7 @@ metadata:
 
 spec:
   releaseName: sonarqube
-  targetNamespace: sonarqube
+  targetNamespace: jcn1-sonarqube
   chart:
     spec:
       chart: {{ .Values.addons.sonarqube.git.path }}

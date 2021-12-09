@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "security"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: twistlock
+  targetNamespace: jcn1-twistlock
   chart:
     spec:
       chart: {{ .Values.twistlock.git.path }}

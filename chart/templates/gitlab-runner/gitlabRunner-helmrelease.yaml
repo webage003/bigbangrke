@@ -6,7 +6,7 @@ metadata:
   name: gitlab-runner
   namespace: {{ .Release.Namespace }}
 spec:
-  targetNamespace: gitlab
+  targetNamespace: jcn1-gitlab
   releaseName: gitlab-runner
   chart:
     spec:

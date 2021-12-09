@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "collaboration-tools"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: mattermost-operator
+  targetNamespace: jcn1-mattermost-operator
   chart:
     spec:
       chart: {{ .Values.addons.mattermostoperator.git.path }}

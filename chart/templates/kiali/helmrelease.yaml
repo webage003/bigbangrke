@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: kiali
+  targetNamespace: jcn1-kiali
   chart:
     spec:
       chart: {{ .Values.kiali.git.path }}

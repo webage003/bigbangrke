@@ -6,7 +6,7 @@ metadata:
   name: minio
   namespace: {{ .Release.Namespace }}
 spec:
-  targetNamespace: minio
+  targetNamespace: jcn1-minio
   chart:
     spec:
       chart: {{ .Values.addons.minio.git.path }}

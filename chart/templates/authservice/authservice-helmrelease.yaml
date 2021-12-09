@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: authservice
+  targetNamespace: jcn1-authservice
   chart:
     spec:
       chart: {{ .Values.addons.authservice.git.path }}

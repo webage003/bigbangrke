@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: istio-operator
+  targetNamespace: jcn1-istio-operator
   chart:
     spec:
       chart: {{ .Values.istiooperator.git.path }}

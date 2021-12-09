@@ -3,7 +3,7 @@ kind: HelmRelease
 metadata:
   name: bigbang
 spec:
-  targetNamespace: bigbang
+  targetNamespace: jcn1-bigbang
   releaseName: bigbang
   interval: 10m
   chart:

@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: istio-system
+  targetNamespace: jcn1-istio-system
   chart:
     spec:
       chart: {{ .Values.istio.git.path }}

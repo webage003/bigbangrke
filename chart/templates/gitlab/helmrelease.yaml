@@ -11,7 +11,7 @@ metadata:
     {{- include "commonLabels" . | nindent 4}}
 spec:
   releaseName: gitlab
-  targetNamespace: gitlab
+  targetNamespace: jcn1-gitlab
   chart:
     spec:
       chart: {{ .Values.addons.gitlab.git.path }}

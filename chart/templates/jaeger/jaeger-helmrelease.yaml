@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: jaeger
+  targetNamespace: jcn1-jaeger
   chart:
     spec:
       chart: {{ .Values.jaeger.git.path }}

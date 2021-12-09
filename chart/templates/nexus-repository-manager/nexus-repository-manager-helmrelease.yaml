@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "developer-tools"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: nexus-repository-manager
+  targetNamespace: jcn1-nexus-repository-manager
   releaseName: nexus-repository-manager
   chart:
     spec:

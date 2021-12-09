@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: argocd
+  targetNamespace: jcn1-argocd
   chart:
     spec:
       chart: {{ .Values.addons.argocd.git.path }}

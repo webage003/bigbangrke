@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: "cluster-utilities"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: velero
+  targetNamespace: jcn1-velero
   chart:
     spec:
       chart: {{ .Values.addons.velero.git.path }}
