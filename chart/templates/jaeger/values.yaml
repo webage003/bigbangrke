@@ -10,7 +10,7 @@ istio:
   enabled: {{ .Values.istio.enabled }}
   jaeger:
     gateways:
-    - istio-system/{{ default "public" .Values.jaeger.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.jaeger.ingress.gateway }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}

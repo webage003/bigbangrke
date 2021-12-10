@@ -11,10 +11,10 @@ istio:
   enabled: {{ .Values.istio.enabled }}
   gitlab:
     gateways:
-    - istio-system/{{ default "public" .Values.addons.gitlab.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.addons.gitlab.ingress.gateway }}
   registry:
     gateways:
-    - istio-system/{{ default "public" .Values.addons.gitlab.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.addons.gitlab.ingress.gateway }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}

@@ -28,7 +28,7 @@ istio:
   enabled: {{ .Values.istio.enabled }}
   argocd:
     gateways:
-    - istio-system/{{ default "public" .Values.addons.argocd.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.addons.argocd.ingress.gateway }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}

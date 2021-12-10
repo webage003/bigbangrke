@@ -9,10 +9,10 @@ istio:
   enabled: {{ .Values.istio.enabled }}
   ui:
     gateways:
-    - istio-system/{{ default "public" .Values.addons.anchore.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.addons.anchore.ingress.gateway }}
   api:
     gateways:
-    - istio-system/{{ default "public" .Values.addons.anchore.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.addons.anchore.ingress.gateway }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}

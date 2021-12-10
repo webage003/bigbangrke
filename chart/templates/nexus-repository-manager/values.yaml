@@ -9,7 +9,7 @@ istio:
   enabled: {{ .Values.istio.enabled }}
   nexus:
     gateways:
-    - istio-system/{{ default "public" .Values.addons.nexus.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.addons.nexus.ingress.gateway }}
 
 openshift: {{ .Values.openshift }}
 

@@ -9,7 +9,7 @@ istio:
   enabled: {{ .Values.istio.enabled }}
   sonarqube:
     gateways:
-    - istio-system/{{ default "public" .Values.addons.sonarqube.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.addons.sonarqube.ingress.gateway }}
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}

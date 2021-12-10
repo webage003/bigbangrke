@@ -28,7 +28,7 @@ istio:
     namespace: jcn1-authservice
     {{- end }}
     gateways:
-    - istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}
   alertmanager:
     enabled: true
     {{- if .Values.monitoring.sso.enabled }}
@@ -37,11 +37,11 @@ istio:
     namespace: jcn1-authservice
     {{- end }}
     gateways:
-    - istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}
   grafana:
     enabled: true
     gateways:
-    - istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}
 
 anchore:
   enabled: {{ .Values.addons.anchore.enabled }}

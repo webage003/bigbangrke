@@ -17,7 +17,7 @@ istio:
   keycloak:
     enabled: true
     gateways:
-    - istio-system/{{ default "public" .Values.addons.keycloak.ingress.gateway }}
+    - jcn1-istio-system/{{ default "public" .Values.addons.keycloak.ingress.gateway }}
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
