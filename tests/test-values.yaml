@@ -123,6 +123,7 @@ gatekeeper:
         cpu: 100m
         memory: 256Mi
       limits: {}
+
     violations:
       allowedCapabilities:
         parameters:
@@ -134,6 +135,8 @@ gatekeeper:
           excludedResources:
           # Allows k3d load balancer containers to pull from public repos
           - istio-system/lb-port-.*
+          # Allow argocd to deploy a test app in its cypress test
+          - argocd/guestbook-ui.*
       allowedSecCompProfiles:
         parameters:
           excludedResources:
@@ -196,6 +199,22 @@ gatekeeper:
               name: "{{ .Chart.Name }}-test-config"
           - name: "{{ .Chart.Name }}-kube-cache"
             emptyDir: {}
+
+kyverno:
+  enabled: false
+  values:
+    replicas: 1
+    bbtests:
+      enabled: true
+      scripts:
+        image: registry1.dso.mil/ironbank/opensource/kubernetes-1.21/kubectl:v1.21.1
+        additionalVolumeMounts:
+          - name: "{{ .Chart.Name }}-test-config"
+            mountPath: /yaml
+        additionalVolumes:
+          - name: "{{ .Chart.Name }}-test-config"
+            configMap:
+              name: "{{ .Chart.Name }}-test-config"
 
 logging:
   enabled: true
@@ -271,7 +290,7 @@ monitoring:
   enabled: true
   sso:
     enabled: false
-    prometheus: 
+    prometheus:
       client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-prometheus
     alertmanager:
       client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-alertmanager
@@ -308,7 +327,7 @@ monitoring:
             revision: 1
             datasource: Prometheus
       downloadDashboards:
-        resources: 
+        resources:
           limits:
             cpu: 20m
             memory: 20Mi
@@ -384,15 +403,15 @@ addons:
       redis-bb:
         master:
           persistence:
-            size: 256Mi
+            size: 512Mi
         replica:
           persistence:
-            size: 256Mi
+            size: 512Mi
       redis:
         resources:
           requests:
             cpu: 50m
-            memory: 64Mi
+            memory: 256Mi
           limits: {}
       server:
         resources:
@@ -410,9 +429,7 @@ addons:
         secret:
           argocdServerAdminPassword: '$2a$10$rUDZDckdDZ2TEwk9PDs3QuqjkL58qR1IHE1Kj4MwDx.7/m5dytZJm'
       bbtests:
-        # TODO: Disabled pending resolution of some "timing?" issues
-        # https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd/-/issues/17
-        enabled: false
+        enabled: true
         cypress:
           artifacts: true
           envs:
@@ -807,7 +824,7 @@ addons:
         cypress:
           artifacts: true
           envs:
-            cypress_url: 'http://minio.bigbang.dev/login'
+            cypress_url: 'https://minio.bigbang.dev/login'
           secretEnvs:
             - name: cypress_secretkey
               valueFrom:
@@ -822,8 +839,8 @@ addons:
         scripts:
           image: registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2021-09-02T09-21-27Z
           envs:
-            MINIO_PORT: '80'
-            MINIO_HOST: 'http://minio'
+            MINIO_PORT: ''
+            MINIO_HOST: 'https://minio-api.bigbang.dev'
           secretEnvs:
             - name: SECRET_KEY
               valueFrom:
@@ -1033,49 +1050,38 @@ addons:
           cpu: 10m
           memory: 16Mi
         limits: {}
+      # Disabling helm tests for keycloak until they are working on rke2
       bbtests:
-        enabled: true
+        enabled: false
         cypress:
           artifacts: true
           envs:
             cypress_url: "https://keycloak.bigbang.dev"
             cypress_username: "admin"
             cypress_password: "password"
-      secrets:
-        env:
-          stringData:
-            CUSTOM_REGISTRATION_CONFIG: /opt/jboss/keycloak/customreg.yaml
-            KEYCLOAK_IMPORT: /opt/jboss/keycloak/realm.json
-            X509_CA_BUNDLE: /etc/x509/https/cas.pem
-        certauthority:
-          stringData:
-            cas.pem: '{{ .Files.Get "resources/dev/dod_cas.pem" }}'
-        customreg:
-          stringData:
-            customreg.yaml: '{{ .Files.Get "resources/dev/baby-yoda.yaml" }}'
-        realm:
-          stringData:
-            realm.json: '{{ .Files.Get "resources/dev/baby-yoda.json" }}'
-      extraVolumes: |-              
-        - name: certauthority
-          secret:
-            secretName: {{ include "keycloak.fullname" . }}-certauthority
-        - name: customreg
-          secret:
-            secretName: {{ include "keycloak.fullname" . }}-customreg
-        - name: realm
-          secret:
-            secretName: {{ include "keycloak.fullname" . }}-realm
-      extraVolumeMounts: |-
-        - name: certauthority
-          mountPath: /etc/x509/https/cas.pem
-          subPath: cas.pem
-          readOnly: true
-        - name: customreg
-          mountPath: /opt/jboss/keycloak/customreg.yaml
-          subPath: customreg.yaml
-          readOnly: true
-        - name: realm
-          mountPath: /opt/jboss/keycloak/realm.json
-          subPath: realm.json
-          readOnly: true
+
+  vault:
+    enabled: false
+    values:
+      server:
+        dataStorage:
+          enabled: true
+      injector:
+        affinity: |
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: {{ template "vault.name" . }}-agent-injector
+                      app.kubernetes.io/instance: "{{ .Release.Name }}"
+                      component: webhook
+                  topologyKey: kubernetes.io/hostname
+ 
+      bbtests:
+        enabled: true
+        cypress:
+          artifacts: true
+          envs:
+            cypress_vault_url: "https://vault.bigbang.dev"
