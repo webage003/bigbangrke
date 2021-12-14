@@ -31,10 +31,10 @@ istio:
     gateways:
     - istio-system/{{ default "public" .Values.twistlock.ingress.gateway }}
   {{- if .Values.istio.git.semver }}
-  {{- $istioVersionSuffix := .Values.istio.git.semver | regexFind "-bb.*" -}}
+  {{- $istioVersionSuffix := .Values.istio.git.semver | regexFind "-bb.*" }}
   version: {{ .Values.istio.git.semver | trimSuffix $istioVersionSuffix }}
   {{- else if .Values.istio.git.tag }}
-  {{- $istioVersionSuffix := .Values.istio.git.tag | regexFind "-bb.*" -}}
+  {{- $istioVersionSuffix := .Values.istio.git.tag | regexFind "-bb.*" }}
   version: {{ .Values.istio.git.tag | trimSuffix $istioVersionSuffix }}
   {{- else if .Values.istio.git.branch }}
   version: {{ .Values.istio.git.branch }}
