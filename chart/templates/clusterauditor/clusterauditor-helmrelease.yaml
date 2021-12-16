@@ -43,10 +43,6 @@ spec:
   dependsOn:
   {{- if .Values.monitoring.enabled }}
   - name: monitoring
-  {{- end }}
     namespace: {{ .Release.Namespace}}
-  {{- if .Values.gatekeeper.enabled }}
-  - name: gatekeeper
-    namespace: {{ .Release.Namespace }}
-  {{- end }}  
+  {{- end }}
 {{- end }}
