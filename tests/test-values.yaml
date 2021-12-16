@@ -987,7 +987,7 @@ addons:
             region: velero
             insecureSkipTLSVerify: "true"
             s3ForcePathStyle: "true"
-            s3Url: &minio-address https://minio.bigbang.dev
+            s3Url: &minio-address https://minio.minio.svc
         volumeSnapshotLocation:
           provider: aws
           config:
@@ -1022,11 +1022,11 @@ addons:
             TEST_YAML_DIR: *yamlMountPath
             MINIO_USER: minio
             MINIO_PASS: minio123
-          #secretEnvs:
-          #  - name: NAMESPACE
-          #    valueFrom:
-          #      fieldRef:
-          #        fieldPath: metadata.namespace
+          secretEnvs:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
 
   keycloak:
     enabled: false
