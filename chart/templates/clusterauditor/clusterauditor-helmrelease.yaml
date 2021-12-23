@@ -39,9 +39,8 @@ spec:
     elasticsearch:
       imagePullSecrets:
       - name: private-registry
-
-  dependsOn:
   {{- if .Values.monitoring.enabled }}
+  dependsOn:
   - name: monitoring
     namespace: {{ .Release.Namespace}}
   {{- end }}

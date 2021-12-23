@@ -353,7 +353,7 @@ kyverno:
 #
 logging:
   # -- Toggle deployment of Logging (EFK).
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
@@ -393,7 +393,7 @@ logging:
 
 eckoperator:
   # -- Toggle deployment of ECK Operator.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
