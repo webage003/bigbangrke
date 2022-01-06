@@ -8,6 +8,6 @@ metadata:
     app.kubernetes.io/name: cluster-auditor
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
-    istio-injection: disabled
+    istio-injection: enabled
   name: cluster-auditor
 {{- end }}
