@@ -34,7 +34,6 @@ spec:
       kind: Secret
       valuesKey: "overlays"
 
-
   values:
     elasticsearch:
       imagePullSecrets:
