@@ -1,6 +1,5 @@
 domain: bigbang.dev
 
-
 sso:
   # LetsEncrypt certificate authority
   certificate_authority: |
