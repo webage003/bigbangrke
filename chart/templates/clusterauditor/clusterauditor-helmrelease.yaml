@@ -32,7 +32,7 @@ spec:
       valuesKey: "common"
     - name: {{ .Release.Name }}-cluster-auditor-values
       kind: Secret
-      valuesKey: "overlays"
+      valuesKey: "defaults"
 
   values:
     elasticsearch:

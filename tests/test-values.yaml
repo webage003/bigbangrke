@@ -113,6 +113,13 @@ clusterAuditor:
         cpu: 100m
         memory: 256Mi
       limits: {}
+    bbtests:
+      enabled: true
+      cypress:
+        artifacts: true
+        envs:
+          cypress_url: 'https://grafana.bigbang.dev/d/YBgRZG6Mz/opa-violations?orgId=1'
+
 
 gatekeeper:
   enabled: true
