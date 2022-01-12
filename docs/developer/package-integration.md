@@ -14,4 +14,4 @@ The following documents should be followed, in order, to fully integrate a new p
 1. [Network Policies](./package-integration/package-integration-network-policies.md): Add ingress/egress policies to restrict network traffic for security
 1. [Policy Enforcement](./package-integration/package-integration-policy-enforcement.md): Update package to comply with default security and governance policies in Big Bang
 1. [Supported Package](./package-integration/package-integration-supported.md): Migrate package into the Big Bang repo as a supported package
-1. [Final Documentation](./package-integration/package-integration-documentation.md): Add additional Big Bang documentation for final release
+1. [Final Documentation](./package-integration/product-integration-documentation.md): Add additional Big Bang documentation for final release
