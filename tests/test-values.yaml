@@ -84,7 +84,6 @@ jaeger:
     bbtests:
       enabled: true
       cypress:
-        artifacts: true
         envs:
           cypress_url: "https://tracing.bigbang.dev"
 
@@ -116,10 +115,8 @@ clusterAuditor:
     bbtests:
       enabled: true
       cypress:
-        artifacts: true
         envs:
           cypress_url: 'https://grafana.bigbang.dev/d/YBgRZG6Mz/opa-violations?orgId=1'
-
 
 gatekeeper:
   enabled: true
@@ -190,9 +187,7 @@ gatekeeper:
           # Allows k3d load balancer containers to not have readiness/liveness probes
           - istio-system/lb-port-.*
     bbtests:
-      # TODO: Test will need to be refactored at BB level to properly run since we can't turn everything to deny
-      # https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/issues/133
-      enabled: false
+      enabled: true
       scripts:
         image: registry1.dso.mil/ironbank/opensource/kubernetes-1.21/kubectl:v1.21.1
         additionalVolumeMounts:
@@ -335,6 +330,7 @@ monitoring:
           cypress_prometheus_url: 'https://prometheus.bigbang.dev'
           cypress_grafana_url: 'https://grafana.bigbang.dev'
           cypress_alertmanager_url: 'https://alertmanager.bigbang.dev'
+          cypress_check_istio_dashboards: 'true'
 
 twistlock:
   enabled: true
@@ -993,24 +989,6 @@ addons:
         # https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/-/issues/9
         enabled: false
         scripts:
-          image: registry1.dso.mil/ironbank/opensource/velero/velero:v1.6.0
-          additionalVolumes:
-            - name: transfer-kubectl
-              emptyDir: {}
-            - name: &yamlVolName yaml-configs
-              configMap:
-                name: "{{ .Chart.Name }}-backup-restore-files-config"
-          additionalVolumeMounts:
-            - name: transfer-kubectl
-              mountPath: /usr/local/bin/kubectl
-              subPath: kubectl
-            - name: *yamlVolName
-              mountPath: &yamlMountPath /yaml
-          envs:
-            MINIO_HOST: *minio-address
-            TEST_YAML_DIR: *yamlMountPath
-            MINIO_USER: minio
-            MINIO_PASS: minio123
           secretEnvs:
             - name: NAMESPACE
               valueFrom:
