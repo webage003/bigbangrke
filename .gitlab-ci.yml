@@ -1,7 +1,7 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: 19-add-label-checks-for-packages-with-dependencies
+    ref: tempo-pipelines
     file: '/pipelines/bigbang.yaml'
 variables:
-  PIPELINE_REPO_BRANCH: '19-add-label-checks-for-packages-with-dependencies'
+  PIPELINE_REPO_BRANCH: 'tempo-pipelines'
 
