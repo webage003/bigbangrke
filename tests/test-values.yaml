@@ -185,6 +185,10 @@ gatekeeper:
           excludedResources:
           # Allows k3d load balancer containers to not have readiness/liveness probes
           - istio-system/lb-port-.*
+      volumeTypes:
+        parameters:
+          excludedResources:
+            - logging/.*-cypress-test
     bbtests:
       enabled: true
 
