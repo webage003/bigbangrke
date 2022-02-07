@@ -1,4 +1,7 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: master
+    ref: cypress_video_fix
     file: '/pipelines/bigbang.yaml'
+variables:
+  PIPELINE_REPO_BRANCH: cypress_video_fix
+  DEBUG_ENABLED: "true"

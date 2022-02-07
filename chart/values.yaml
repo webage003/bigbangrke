@@ -360,7 +360,7 @@ logging:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
-    tag: "0.6.0-bb.2"
+    branch: "helm-test"
 
   # -- Flux reconciliation overrides specifically for the Logging (EFK) Package
   flux:
@@ -414,7 +414,7 @@ fluentbit:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
-    tag: "0.19.16-bb.5"
+    branch: "helm-test"
 
   # -- Flux reconciliation overrides specifically for the Fluent-Bit Package
   flux: {}
