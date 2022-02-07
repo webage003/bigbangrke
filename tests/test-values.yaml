@@ -185,7 +185,12 @@ gatekeeper:
           excludedResources:
           # Allows k3d load balancer containers to not have readiness/liveness probes
           - istio-system/lb-port-.*
+      # Add all cypress test pods here to allow hostpath cypress mount
       volumeTypes:
+        parameters:
+          excludedResources:
+          - logging/logging-cypress-test
+      allowedHostFilesystem:
         parameters:
           excludedResources:
           - logging/logging-cypress-test
