@@ -188,7 +188,7 @@ gatekeeper:
       volumeTypes:
         parameters:
           excludedResources:
-            - logging/.*-cypress-test
+          - logging/logging-cypress-test
     bbtests:
       enabled: true
 
