@@ -2,3 +2,6 @@ include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
     ref: 28-kubectl-cluster-info-dump
     file: '/pipelines/bigbang.yaml'
+variables:
+  PIPELINE_REPO_BRANCH: 28-kubectl-cluster-info-dump
+  DEBUG_ENABLED: "true"
