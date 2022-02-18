@@ -143,7 +143,9 @@ gatekeeper:
       allowedHostFilesystem:
         parameters:
           excludedResources:
+          # Add all cypress test pods here to allow artifacts to be shared with the host
           - nexus-repository-manager/nexus-repository-manager-cypress-test
+          - mattermost/mattermost-cypress-test
       allowedSecCompProfiles:
         parameters:
           excludedResources:
@@ -192,7 +194,9 @@ gatekeeper:
       volumeTypes:
         parameters:
           excludedResources:
+          # Add all cypress test pods here to allow artifacts to be shared with the host
           - nexus-repository-manager/nexus-repository-manager-cypress-test
+          - mattermost/mattermost-cypress-test
     bbtests:
       enabled: true
 
