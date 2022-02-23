@@ -1,6 +1,4 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: new-image-packaging
+    ref: master
     file: '/pipelines/bigbang.yaml'
-variables:
-  PIPELINE_REPO_BRANCH: new-image-packaging
