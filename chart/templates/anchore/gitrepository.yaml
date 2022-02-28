@@ -2,7 +2,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: anchore
+  name: anchore-test
   namespace: {{ .Release.Namespace }}
 spec:
   interval: {{ .Values.flux.interval }}

@@ -1,4 +1,9 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: master
+    ref: enable-changed-packages
     file: '/pipelines/bigbang.yaml'
+
+variables:
+  PIPELINE_REPO_BRANCH: enable-changed-packages
+  BB_REPO: https://repo1.dso.mil/platform-one/big-bang/bigbang.git
+  BB_REPO_DESTINATION: "./bigbang-repo"
