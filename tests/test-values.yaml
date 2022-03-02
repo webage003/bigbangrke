@@ -529,6 +529,11 @@ addons:
           minReplicas: 1
           maxReplicas: 1
       postgresql:
+        postgresqlExtendedConf:
+          passwordEncryption: "scram-sha-256"
+        pgHbaConfiguration: |-
+          local all all scram-sha-256
+          host all all all scram-sha-256
         persistence:
           size: 256Mi
         metrics:
