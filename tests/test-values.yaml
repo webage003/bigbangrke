@@ -532,8 +532,8 @@ addons:
         postgresqlExtendedConf:
           passwordEncryption: "scram-sha-256"
         pgHbaConfiguration: |-
-          local all all scram-sha-256
-          host all all all scram-sha-256
+          local all all md5
+          host all all all md5
         persistence:
           size: 256Mi
         metrics:
