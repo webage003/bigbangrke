@@ -1,4 +1,4 @@
-{{- if .Values.neuvector.enabled }}
+{{- if .Values.addons.neuvector.enabled }}
 {{- include "values-secret" (dict "root" $ "package" .Values.neuvector "name" "neuvector" "defaults" (include "bigbang.defaults.neuvector" .)) }}
 {{- end }}
 
@@ -14,8 +14,7 @@ prometheus:
   servicemonitor:
     enabled: {{ .Values.monitoring.enabled }}
 
-imagePullSecrets:
-- name: private-registry
+imagePullSecrets: private-registry
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
@@ -35,9 +34,5 @@ istio:
 annotations:
   {{ include "istioAnnotation" . }}
 {{- end }}
-
-console:
-  image:
-    imagePullPolicy: {{ .Values.imagePullPolicy }}
 
 {{- end -}}

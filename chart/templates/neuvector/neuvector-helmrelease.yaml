@@ -20,7 +20,7 @@ spec:
         name: neuvector
         namespace: {{ .Release.Namespace }}
 
-  {{- toYaml $fluxSettingsTwistlock | nindent 2 }}
+  {{- toYaml $fluxSettingsNeuvector | nindent 2 }}
   
   {{- if .Values.neuvector.postRenderers }}
   postRenderers:
