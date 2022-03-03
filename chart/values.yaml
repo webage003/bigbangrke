@@ -256,7 +256,9 @@ jaeger:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
     path: "./chart"
-    tag: "2.27.1-bb.4"
+    branch: "23-update"
+    tag: null
+    #tag: "2.27.1-bb.4"
 
   # -- Flux reconciliation overrides specifically for the Jaeger Package
   flux:
