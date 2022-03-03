@@ -258,7 +258,7 @@ jaeger:
     path: "./chart"
     branch: "23-update2"
     tag: null
-    #tag: "2.27.1-bb.4"
+    #tag: "2.27.1-bb.4" 
 
   # -- Flux reconciliation overrides specifically for the Jaeger Package
   flux:
