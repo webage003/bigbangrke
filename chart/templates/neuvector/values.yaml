@@ -17,7 +17,8 @@ prometheus:
 imagePullSecrets: private-registry
 
 networkPolicies:
-  enabled: {{ .Values.networkPolicies.enabled }}
+  # enabled: {{ .Values.networkPolicies.enabled }}
+  enabled: false
   ingressLabels:
     {{- $gateway := default "public" .Values.neuvector.ingress.gateway }}
     {{- $default := dict "app" (dig "gateways" $gateway "ingressGateway" nil .Values.istio) "istio" nil }}
