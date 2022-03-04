@@ -256,7 +256,7 @@ jaeger:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
     path: "./chart"
-    branch: "23-update"
+    branch: "23-update2"
     tag: null
     #tag: "2.27.1-bb.4"
 
