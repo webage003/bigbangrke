@@ -26,7 +26,7 @@ Each package will work with any cluster under the following criteria.
 
 Big Bang Package shall be configured to use Iron Bank images.  The images used from Iron Bank __must__ be _fully_ approved and _functional_ to be in compliance with the Big Bang baseline security posture.
 
-Please see [New Package Requests](NewPackageRequests.md) and the [BBTOC process](https://repo1.dso.mil/platform-one/bbtoc/-/tree/master/process) for additional pre-requisites. 
+Please see [New Package Requests](NewPackageRequests.md) and the [BBTOC process](https://repo1.dso.mil/platform-one/bbtoc/-/tree/master/process) for additional pre-requisites.
 
 ## PR-X. Packages are Helm Charts
 

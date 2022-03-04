@@ -3,13 +3,13 @@
 ## Core
 
 Columns:
+
 * Logging - fluentbit configurations for standardized logging
 * Telemetry - Integration with Prometheus and dedicated Grafana dashboards as appropriate
 * Tracing - Insertion of Tracing data for application traffic
-* Network Policies - Network Policies for L2 connectivity, 
+* Network Policies - Network Policies for L2 connectivity,
 * mTLS -mTLS for application traffic, e.g. implemented by Istio
 * Behavior Detection - Twistlock Policies for applications
-
 
 | Package | Status | Logging | Telemetry | Tracing | Network Policies | mTLS | Behavior Detection |
 | ----    | ---  | ---|---|---|---|---|---|
@@ -30,6 +30,7 @@ Columns:
 | [Tempo](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/tempo) ![BETA](https://img.shields.io/badge/BETA-purple?style=flat-square) | ![Tempo Build](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/tempo/badges/main/pipeline.svg) | No | Yes | Yes | No | Yes (PERMISSIVE) | No |
 
 ## Security
+
 | Package | Status | Logging | Telemetry | Tracing | Network Policies | mTLS | Behavior Detection |
 | ----    | ---  | ---|---|---|---|---|---|
 | [Keycloak](https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak) |  ![Keycloak Build](https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/badges/main/pipeline.svg) | No | No | No | [Yes](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/536) | No | No |
@@ -38,9 +39,7 @@ Columns:
 | [Authservice](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice) | ![Authservice Build](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice/badges/main/pipeline.svg) | No | Yes | Yes | [Yes](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/511) | [Yes (STRICT)](https://repo1.dso.mil/platform-one/big-bang/apps/core/authservice/-/merge_requests/66) | No |
 | [Vault](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/vault) ![BETA](https://img.shields.io/badge/BETA-purple?style=flat-square) | ![Vault Build](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/vault/badges/main/pipeline.svg) |  No | No | No | Yes | Yes (PERMISSIVE) | No |
 
-
 ## Development Tools
-
 
 | Package | Status | Logging | Telemetry | Tracing | Network Policies | mTLS | Behavior Detection |
 | ----    | ---  | ---|---|---|---|---|---|
@@ -48,7 +47,6 @@ Columns:
 | [Gitlab Runner](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner) |  ![Gitlab Runner Build](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner/badges/main/pipeline.svg) | No | No | No | [Yes](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/522) | Yes (PERMISSIVE) | No |
 | [Nexus](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus) |  ![Nexus](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus/badges/main/pipeline.svg) | No | No | No | [Yes](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/544) | Yes (PERMISSIVE) | No |
 | [Sonarqube](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube) |  ![Sonarqube](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube/badges/main/pipeline.svg) | No | No | No | [Yes](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/503) | Yes (PERMISSIVE) | No |
- 
 
 ## Collaboration Tools
 
@@ -69,4 +67,3 @@ Columns:
 | Package | Status | Logging | Telemetry | Tracing | Network Policies | mTLS | Behavior Detection |
 | ----    | ---  | ---|---|---|---|---|---|
 | [Velero](https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero)  | ![Velero Build](https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/badges/main/pipeline.svg) | No | No | No | [Yes](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/552) | Yes (PERMISSIVE) | No |
-

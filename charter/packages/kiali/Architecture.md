@@ -74,7 +74,7 @@ kiali:
 
 Since both Prometheus and Jaeger are open to Kiali via the service address there is no authentication needed for them. Grafana authentication will be set up automatically using the admin account for Grafana.
 
-Important note: If you modify the Grafana admin username/password via the UI or another method besides Helm values (`monitoring.values.grafana.adminPassword` or `monitoring.values.grafana.admin.existingSecret`), Kiali will not be autoconfigured with this knowledge. This is due to limitations in where/how Grafana stores the "live" password. If you do modify your Grafana username/password in one of thse ways, it is recommended to pass these values to your Grafana install via one of the below methods where they will also be picked up by Kiali:
+Important note: If you modify the Grafana admin username/password via the UI or another method besides Helm values (`monitoring.values.grafana.adminPassword` or `monitoring.values.grafana.admin.existingSecret`), Kiali will not be autoconfigured with this knowledge. This is due to limitations in where/how Grafana stores the "live" password. If you do modify your Grafana username/password in one of these ways, it is recommended to pass these values to your Grafana install via one of the below methods where they will also be picked up by Kiali:
 
 ```yaml
 monitoring:
@@ -95,6 +95,7 @@ monitoring:
 HA can be accomplished for Kiali via two methods. You can directly control the replicas required or have Kiali create and use a horizontal pod autoscaler and set a min/max number of replicas for the deployment. Both methods are shown below:
 
 - Specific number of replicas
+
 ```yaml
 kiali:
   values:
@@ -105,6 +106,7 @@ kiali:
 ```
 
 - HPA with min/max replicas
+
 ```yaml
 kiali:
   values:
@@ -147,6 +149,7 @@ If you do not configure Kiali with SSO you will have [4 options](https://kiali.i
 - Anonymous: No authentication, Kiali is open to whoever can access the URL.
 
 Example of how to override the authentication method:
+
 ```yaml
 kiali:
   values:

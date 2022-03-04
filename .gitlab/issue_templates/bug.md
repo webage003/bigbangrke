@@ -12,7 +12,7 @@ What version of BigBang were you running?
 
 This can be retrieved multiple ways:
 
-```bash
+```shell
 # via helm
 helm ls -n bigbang
 

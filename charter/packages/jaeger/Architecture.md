@@ -51,7 +51,7 @@ Istio is configured with knowledge of the jaeger ingest service so istio sidecar
 
 ## High Availability
 
-Jaeger is deployed with HorizonalPodAutoscalers for the collector and the querying pods.  Use the below yaml to update the `maxReplicas` on the HPA:
+Jaeger is deployed with HorizontalPodAutoscalers for the collector and the querying pods.  Use the below yaml to update the `maxReplicas` on the HPA:
 
 ```yaml
 jaeger:
@@ -96,9 +96,9 @@ end
 
 ```
 
-## Licencing
+## Licensing
 
-Jaeger has no licencing options nor requirements.
+Jaeger has no licensing options nor requirements.
 
 For production workloads, Jaeger uses Elasticsearch to store and query for traces.  
 

@@ -1,0 +1,24 @@
+{
+    "cSpell.words": [
+        "Anchore",
+        "CNAME",
+        "CNAP",
+        "crds",
+        "FIPS",
+        "fluxcd",
+        "hashicorp",
+        "istiooperator",
+        "JWKS",
+        "Konvoy",
+        "Kustomization",
+        "kustomize",
+        "kyverno",
+        "Minio",
+        "Nagel",
+        "oidc",
+        "sonarqube",
+        "swappable",
+        "synker",
+        "velero"
+    ]
+}

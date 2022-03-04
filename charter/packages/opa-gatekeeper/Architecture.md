@@ -37,7 +37,7 @@ Gatekeeper doesn't have a database.
 
 ### Istio Configuration
 
-When deploying to k3d, istio-system should be added from `excludedNamespaces` under the `allowedDockerRegistries` violations. This can be done by modifying `chart/values.yaml` file or passing an override file with the values set as seen below. This is for development purposes only: production should not allow containers in the `istio-system` namespace to be pulled from outside of Registry1. 
+When deploying to k3d, istio-system should be added from `excludedNamespaces` under the `allowedDockerRegistries` violations. This can be done by modifying `chart/values.yaml` file or passing an override file with the values set as seen below. This is for development purposes only: production should not allow containers in the `istio-system` namespace to be pulled from outside of Registry1.
 
 ```yaml
 gatekeeper:
@@ -57,7 +57,7 @@ High availability is accomplished by increasing the replicas in the values file 
 
 None. This service doesn't have a web interface.
 
-## Licencing
+## Licensing
 
 [Apache License](https://github.com/open-policy-agent/gatekeeper/blob/master/LICENSE)
 

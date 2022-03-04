@@ -2,25 +2,9 @@
 
 Thanks for taking the time to contribute to BigBang!
 
-Table of Contents:
+[[_TOC_]]
 
-- [Contributing to Big Bang](#contributing-to-big-bang)
-  - [Developers Guide](#developers-guide)
-  - [Local Git Setup](#local-git-setup)
-    - [Pre-commit hooks](#pre-commit-hooks)
-      - [Local Setup](#local-setup)
-        - [Prereqs](#prereqs)
-        - [Steps](#steps)
-      - [Combining Multiple Commits](#combining-multiple-commits)
-  - [Iron Bank Images](#iron-bank-images)
-  - [Local Kubernetes cluster](#local-kubernetes-cluster)
-  - [Deploying Big Bang (Quick Start)](#deploying-big-bang-quick-start)
-  - [Testing Big Bang Development Changes](#testing-big-bang-development-changes)
-  - [DNS](#dns)
-  - [Secrets & Certificates](#secrets--certificates)
-  - [Merge requests process](#merge-requests-process)
-
-## Developers Guide 
+## Developers Guide
 
 Big Bang is designed in such a way as to be as easily deployed locally as it is in production.  In fact, most contributions begin locally.
 
@@ -29,14 +13,14 @@ Big Bang is designed in such a way as to be as easily deployed locally as it is 
 Per the [charter](https://repo1.dso.mil/platform-one/big-bang/charter), all Big Bang packages will leverage container images from [IronBank](https://ironbank.dso.mil/).  In order to pull these images, ImagePullSecrets must be provided to BigBang.  To obtain access to these images, follow the guides below.  These steps should NOT be used for production since the API keys for a user are only valid when the user is logged into [Registry1](https://registry1.dso.mil)
 
 1) Register for a free Ironbank account [Here](https://sso-info.il2.dso.mil/new_account.html)
-1) Log into the [Iron Bank Registry](https://registry1.dso.mil), in the top right click your *Username* and then *User Profile* to get access to your *CLI secret*/API keys.
+1) Log into the [Iron Bank Registry](https://registry1.dso.mil), in the top right click your _Username_ and then _User Profile_ to get access to your _CLI secret_/API keys.
 1) When installing BigBang, set the Helm Values `registryCredentials.username` and `registryCredentials.password` to match your Registry1 username and API token
 
 ## Local Kubernetes cluster
 
 Follow the steps below to get a local Kubernetes cluster for Big Bang  using [k3d](https://k3d.io/).
 
-```bash
+```shell
 # Create a local k3d cluster with the appropriate port forwards
 k3d cluster create --k3s-server-arg "--disable=traefik" --k3s-server-arg "--disable=metrics-server" -p 80:80@loadbalancer -p 443:443@loadbalancer
 ```
@@ -49,8 +33,8 @@ Start by creating `myvalues.yaml` to configure your local Big Bang.  Big Bang's 
 
 Configure `myvalues.yaml` to suit your needs.
 
-```bash
-# Deploy the latest fluxv2 with Iron Bank images
+```shell
+# Deploy the latest flux v2 with Iron Bank images
 # For development, you can use flux from the internet using 'flux install`
 # Be aware, the internet version is likely newer than the Iron Bank version
 ./scripts/install_flux.sh
@@ -88,4 +72,3 @@ Follow instructions in the [Big Bang encryption guide](./docs/encryption.md) for
 The merge request process is provided as an overview of the pipeline stages required to get a commit merged.
 
 Follow instruction in [CI-Workflow](./docs/developer/ci-workflow.md) for specific details on the pipeline stages.
-

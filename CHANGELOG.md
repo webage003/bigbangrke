@@ -3,6 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+
 ## [1.28.0]
 
 - [!1.28.0](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&milestone_title=1.27.0); List of merge requests in this release.
@@ -13,11 +14,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [1.27.0]
 
-- [!1.27.0](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&milestone_title=1.27.0); List of merge requests in this release. 
+- [!1.27.0](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&milestone_title=1.27.0); List of merge requests in this release.
 
 ## [1.26.0]
 
-- [!1.26.0](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&milestone_title=1.26.0); List of merge requests in this release. 
+- [!1.26.0](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests?scope=all&utf8=%E2%9C%93&state=merged&milestone_title=1.26.0); List of merge requests in this release.
 
 ## [1.25.1]
 
@@ -156,7 +157,7 @@ This update includes network policies for multiple packages, please refer to eac
 
 - If the following error is seen on any helm releases `scheme "" not supported` try updating flux to latest ib images. A simple way to do this is by adding registry credentials to the flux-system namespace and applying the flux.yaml:
 
-```bash
+```shell
 kubectl create secret docker-registry private-registry --docker-server=registry1.dso.mil --docker-username=<Your IronBank Username> --docker-password=<Your IronBank Personal Access Token> --docker-email=<Your E-mail Address> -n flux-system
 curl https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/scripts/deploy/flux.yaml | kubectl apply -f -
 ```
@@ -181,7 +182,7 @@ curl https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/scripts/de
 - [!430](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/430): Charter update for istio architecture
 - [!451](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/451),[!481](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/481),[!482](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/482): Breakout secrets into individual files in Package templates
 - [!417](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/417): update Kibana
-- [!350](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/350): Authservice Redirect URLs dont respect virtual service name overrides
+- [!350](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/350): Authservice Redirect URLs do not respect virtual service name overrides
 - [!485](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/485): ArgoCD upgrade app version 1.8.4 chart version 2.14.7-bb.5
 - [!476](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/476): Charter documentation updates
 - [!134](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/134),[!489](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/489): BETA release of Keycloak app version 13.0.0 helm chart version 11.0.0
@@ -196,7 +197,7 @@ curl https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/scripts/de
 
 - If the following error is seen on any helm releases `scheme "" not supported` try updating flux to latest ib images. A simple way to do this is by adding registry credentials to the flux-system namespace and applying the flux.yaml:
 
-```bash
+```shell
 kubectl create secret docker-registry private-registry --docker-server=registry1.dso.mil --docker-username=<Your IronBank Username> --docker-password=<Your IronBank Personal Access Token> --docker-email=<Your E-mail Address> -n flux-system
 curl https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/scripts/deploy/flux.yaml | kubectl apply -f -
 ```
@@ -229,7 +230,7 @@ curl https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/scripts/de
 
 This release comes with a new version of Sonarqube which requires a manual database upgrade that can be easily done through the web interface. If you see a message stating Sonarqube is under maintenance go to the following url and click update database:
 
-```
+```plaintext
 https://sonarqube.your.url/setup
 ```
 
@@ -239,7 +240,7 @@ After a few minutes you should be able to log back in.
 
 If the following error is seen on any helm releases `scheme "" not supported` try updating flux to latest ib images. A simple way to do this is by adding registry credentials to the flux-system namespace and applying the flux.yaml:
 
-```bash
+```shell
 kubectl create -n flux-system secret docker-registry private-registry --docker-server="https://registry1.dso.mil" --docker-username='<IB_Username>' --docker-password="<CLI_TOKEN>"
 kubectl apply -f scripts/deploy/flux.yaml
 ```
@@ -261,7 +262,7 @@ This update includes several major changes to istio. Kiali and Jaeger are now se
 
 A manual cleanup task is required to delete the previous Kiali and Jaeger deployments post upgrade:
 
-```bash
+```shell
 kubectl delete deploy -n istio-system -l app=kiali
 kubectl delete deploy -n istio-system -l app=jaeger
 ```
@@ -326,11 +327,11 @@ This update includes updated `EnvoyFilters` for `authservice` to fix #65 and is 
 
 **After upgrading BigBang to this version, you must follow the steps below to ensure apps protected by `authservice` are still protected.**
 
-In order to ensure sso for all services protected by `authservice` remain functional (`kiali`, `jaeger`, `prometheus`, and `alertmanager`), the `istio-proxy` sidecar attached to the `haproxy` infront of the services must be updated to `1.7.7`.
+In order to ensure sso for all services protected by `authservice` remain functional (`kiali`, `jaeger`, `prometheus`, and `alertmanager`), the `istio-proxy` sidecar attached to the `haproxy` in front of the services must be updated to `1.7.7`.
 
 The easiest way to do this is to cycle the pod:
 
-```bash
+```shell
 kubectl delete po -n authservice -l app.kubernetes.io/instance=authservice-haproxy-sso
 ```
 
@@ -370,7 +371,7 @@ In addition, [Big Bang Pre-requisites](https://repo1.dso.mil/platform-one/big-ba
 - [!249](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/249): image for gatekeeper is set in the chart and should not be hardcoded in the HelmRelease
 - [!202](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/202): add initial support for openshift (ocp)
 - [!272](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/272): upgrade argocd helm chart to 2.14.7-bb.0
-- [!232](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/232): Twistlock IB image and VirtualServcie customization
+- [!232](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/232): Twistlock IB image and VirtualService customization
 - [!210](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/210): only run cluster tests when chart contents have changed
 - [!279](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/279): remove hardcoded ArgoCD server url config, allow users to set their own sso url
 - [!215](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/merge_requests/215): add sample sso values
@@ -412,7 +413,7 @@ In addition, [Big Bang Pre-requisites](https://repo1.dso.mil/platform-one/big-ba
 - Added [HAProxy Addon](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/haproxy)
 - Added support for automatically populating configs and settings for the following placing SSO in front of apps without support:
 
-```
+```yaml
 istio:
   sso:
     enabled: true
@@ -437,7 +438,7 @@ monitoring:
 - Added authservice namespace where authservice addon and haproxy deployment will be created.
 - Added global sso options for umbrella which will be applied to all configured authservice chains:
 
-```
+```yaml
 sso:
   oidc:
     host: login.dso.mil
@@ -456,14 +457,14 @@ sso:
 
 ## [1.0.4]
 
-- Bug fix where argocd's VirtualService wouldn't recieve the top level hostname value.
+- Bug fix where argocd's VirtualService wouldn't receive the top level hostname value.
 
 ## [1.0.3]
 
 - Added [Gitlab](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab)
 - Added ability to provide multiple registry credentials while maintaining current capabilities:
 
-```
+```yaml
 registryCredentials:
   username: registry1user
   password: somesecretpassword
@@ -471,7 +472,7 @@ registryCredentials:
 
 or
 
-```
+```yaml
 registryCredentials:
 - registry: registry1.dso.mil
   username: registry1user
@@ -521,7 +522,7 @@ will correctly create the ImagePullSecrets for all those registries
 ### Changed
 
 - Updated Argo to [2.9.5-bb.1](https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd/-/merge_requests/10) for Iron Bank images
-- Updated Authservice to [0.1.3-bb.0](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice/-/blob/master/CHANGELOG.md#013-bb0) for authservice secret generation: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice/-/blob/master/CHANGELOG.md#013-bb0
+- Updated Authservice to [0.1.3-bb.0](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice/-/blob/master/CHANGELOG.md#013-bb0) for authservice secret generation: <https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/authservice/-/blob/master/CHANGELOG.md#013-bb0>
 - Updated ECK-Operator to [1.3.1-bb.1](https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator/-/tags/1.3.0-bb.1)
 - Updated Twistlock to [0.0.2-bb.0](https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock/-/tags/0.0.2-bb.0) to add istio.enabled flag
 - Updated Elasticsearch Kibana to [0.1.2-bb.0](https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana/-/tags/0.1.2-bb.0) and Pass istio.enabled to Elasticsearch Kibana

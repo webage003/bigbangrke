@@ -96,7 +96,7 @@ After the load balancer is created, you will need to setup DNS entries (e.g. Rou
 ### Ingress Gateways
 
 Istio's Ingress Gateways are services that sit on the edge of the Kubernetes cluster and listen for incoming traffic.  In Big Bang, the Ingress Gateways are either setup as Node Port or Load Balancer services.  As a Node Port type, ports on the node are bound to the service and incoming traffic is routed to the nodes on those ports.  As a Load Balancer type, a load balancer is automatically created and configured to communicate to the service.
-> In some cases, automatic load balancer creating oand configuration is not supported and a Node Port service must be used.
+> In some cases, automatic load balancer creating and configuration is not supported and a Node Port service must be used.
 
 Ingress Gateways will listen for incoming traffic on their assigned ports and forward that traffic to attached Gateways on the appropriate port.  For example, traffic may be received on port 30002 and forwarded to all attached Gateways on port 8443.
 
@@ -163,7 +163,7 @@ Big Bang will automatically create a secret with the TLS key and cert provided f
 
 ### Virtual Services
 
-Virtual services use full URL host and path information to route incoming traffic to a Service.  Each package in Big Bang manages its own Virtual Services since the paths and ports vary for each package.  However, in order to receive traffic at the Virtual Service, it must be connected to a Gateway.  In Big Bang we configure this under each package.  The followng is an example of this configuration that matches the architecture diagram above.
+Virtual services use full URL host and path information to route incoming traffic to a Service.  Each package in Big Bang manages its own Virtual Services since the paths and ports vary for each package.  However, in order to receive traffic at the Virtual Service, it must be connected to a Gateway.  In Big Bang we configure this under each package.  The following is an example of this configuration that matches the architecture diagram above.
 
 ```yaml
 monitoring:

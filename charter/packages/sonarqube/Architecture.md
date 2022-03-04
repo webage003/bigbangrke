@@ -122,7 +122,7 @@ subgraph "Sonarqube namespace"
 end  
 ```
 
-## Licencing
+## Licensing
 
 Sonarqube is released under the [Lesser GNU General Public License](https://en.wikipedia.org/wiki/Lesser_GNU_General_Public_License). The Bigbang chart utilizes the community edition of Sonarqube, but there are are also paid supported versions. Upgrades from community edition to enterprise or developer editions are possible via the [upgrade path](https://docs.sonarqube.org/latest/setup/upgrading/). Here is a link to their [Feature Comparison](https://www.sonarsource.com/plans-and-pricing/)
 

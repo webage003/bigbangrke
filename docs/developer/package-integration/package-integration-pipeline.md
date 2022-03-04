@@ -52,14 +52,19 @@ Pipelines provide rapid feedback to changes in our Helm chart as we develop and 
 1. Update the repo's CI/CD settings to call the pipeline (`Settings > CI/CD > General pipelines > Expand > CI/CD configuration file`).
 
     For Bigbang
+
    ```text
    pipelines/bigbang-package.yaml@platform-one/big-bang/pipeline-templates/pipeline-templates:master
    ```
+
     For Third party
+
    ```text
    pipelines/third-party.yaml@platform-one/big-bang/pipeline-templates/pipeline-templates:master
    ```
+
     For Sandbox
+
    ```text
    pipelines/sandbox.yaml@platform-one/big-bang/pipeline-templates/pipeline-templates:master
    ```

@@ -15,11 +15,12 @@ This quick start guide explains in beginner-friendly terminology how to complete
 
 ## Important Security Notice
 
-All Developer and Quick Start Guides in this repo are intended to deploy environments for development, demo, and learning purposes. There are practices that are bad for security, but make perfect sense for these use cases: using of default values, minimal configuration, tinkering with new functionality that could introduce a security misconfiguration, and even purposefully using insecure passwords and disabling security measures like Open Policy Agent Gatekeeper for convenience. Many applications have default username and passwords combinations stored in the public git repo, these insecure default credentials and configurations are intended to be overridden during production deployments. 
+All Developer and Quick Start Guides in this repo are intended to deploy environments for development, demo, and learning purposes. There are practices that are bad for security, but make perfect sense for these use cases: using of default values, minimal configuration, tinkering with new functionality that could introduce a security misconfiguration, and even purposefully using insecure passwords and disabling security measures like Open Policy Agent Gatekeeper for convenience. Many applications have default username and passwords combinations stored in the public git repo, these insecure default credentials and configurations are intended to be overridden during production deployments.
 
 When deploying a dev / demo environment there is a high chance of deploying Big Bang in an insecure configuration. Such deployments should be treated as if they could become easily compromised if made publicly accessible.
 
 ### Recommended Security Guidelines for dev / demo deployments
+
 * IDEALLY these environments should be spun up on VMs with private IP addresses that are not publicly accessible. Local network access or an authenticated remote network access solution like a VPN or [sshuttle](https://github.com/sshuttle/sshuttle#readme) should be used to reach the private network.
 * DO NOT deploy publicly routable dev / demo clusters into shared VPCs (like a shared dev environment VPCs) or on VMs with IAM Roles attached. If the demo cluster were compromised, an adversary might be able to use it as a stepping stone to move deeper into an environment.
 * If you want to safely demo on Cloud Provider VMs with public IPs you must follow these guidelines:
@@ -33,7 +34,8 @@ When deploying a dev / demo environment there is a high chance of deploying Big 
 
 `BLUF:` This quick start guide optimizes the speed at which a demonstrable and tinker-able deployment of Big Bang can be achieved by minimizing prerequisite dependencies and substituting them with quickly implementable alternatives. Refer to the [Customer Template Repo](https://repo1.dso.mil/platform-one/big-bang/customers/template) for guidance on production deployments.
 
-`Details of how each prerequisite/dependency is quickly satisfied:`    
+`Details of how each prerequisite/dependency is quickly satisfied:`
+
 * Operating System Prerequisite: Any Linux distribution that supports Docker should work.
 * Operating System Pre-configuration: This quick start includes easy paste-able commands to quickly satisfy this prerequisite.
 * Kubernetes Cluster Prerequisite: is implemented using k3d (k3s in Docker)
@@ -48,7 +50,7 @@ Important limitations of this quick start guide's implementation of k3d to be aw
 * Customer Controlled Private Git Repo Prerequisite isn't required due to substituting declarative git ops installation of the Big Bang Helm chart with an imperative helm cli based installation.
 * Encrypting Secrets as code Prerequisite is substituted with clear text secrets on your local machine.
 * Installing and Configuring Flux Prerequisite: Not using GitOps for the quick start eliminates the need to configure flux, and installation is covered within this guide.
-* HTTPS Certificate and hostname configuration Prerequisites: Are satisfied by leveraging default hostname values and the demo HTTPS wildcard certificate that's uploaded to the Big Bang repo, which is valid for *.bigbang.dev,*.admin.bigbang.dev, and a few others. The demo HTTPS wildcard certificate is signed by the Lets Encrypt Free, a Certificate Authority trusted on the public internet, so demo sites like grafana.bigbang.dev will show a trusted HTTPS certificate.
+* HTTPS Certificate and hostname configuration Prerequisites: Are satisfied by leveraging default hostname values and the demo HTTPS wildcard certificate that's uploaded to the Big Bang repo, which is valid for _.bigbang.dev,_.admin.bigbang.dev, and a few others. The demo HTTPS wildcard certificate is signed by the Lets Encrypt Free, a Certificate Authority trusted on the public internet, so demo sites like grafana.bigbang.dev will show a trusted HTTPS certificate.
 * DNS Prerequisite: is substituted by making use of your workstation's Hosts file.
 
 ## Step 1: Provision a Virtual Machine
@@ -61,15 +63,19 @@ The following requirements are recommended for Demonstration Purposes:
   * Steps for configuring passwordless sudo: [(source)](https://unix.stackexchange.com/questions/468416/setting-up-passwordless-sudo-on-linux-distributions)
     1. `sudo visudo`
     1. Change:
+
        ```text
        # Allow members of group sudo to execute any command
        %sudo   ALL=(ALL:ALL) ALL
        ```
+
        To:
+
        ```text
        # Allow members of group sudo to execute any command, no password
        %sudo   ALL=(ALL:ALL) NOPASSWD:ALL
        ```
+
 * Network connectivity to Virtual Machine (provisioning with a public IP and a security group locked down to your IP should work. Otherwise a Bare Metal server or even a Vagrant Box Virtual Machine configured for remote ssh works fine.)
 
 > Note: If your workstation has Docker, sufficient compute, and has ports 80, 443, and 6443 free, you can use your workstation in place of a remote virtual machine and do local development.
@@ -320,8 +326,8 @@ After reading the notes on the purpose of k3d's command flags, you will be able 
 
 ### Explanation of k3d Command Flags, Relevant to the Quick Start
 
-* `SERVER_IP="10.10.16.11"` and `--k3s-server-arg "--tls-san=$SERVER_IP"`:    
-  These associate an extra IP to the Kubernetes API server's generated HTTPS certificate.    
+* `SERVER_IP="10.10.16.11"` and `--k3s-server-arg "--tls-san=$SERVER_IP"`:
+  These associate an extra IP to the Kubernetes API server's generated HTTPS certificate.
 
   **Explanation of the effect:**
 
@@ -331,24 +337,24 @@ After reading the notes on the purpose of k3d's command flags, you will be able 
 
   **Tips for looking up the value to plug into SERVER_IP:**
 
-  * Method 1: If your k3d server is a remote box, then run the following command from your workstation.    
+  * Method 1: If your k3d server is a remote box, then run the following command from your workstation.
     `cat ~/.ssh/config | grep k3d -A 6`
-  * Method 2: If the remote server was provisioned with a Public IP, then run the following command from the server hosting k3d.    
+  * Method 2: If the remote server was provisioned with a Public IP, then run the following command from the server hosting k3d.
     `curl ifconfig.me --ipv4`
-  * Method 3: If the server hosting k3d only has a Private IP, then run the following command from the server hosting k3d    
-    `ip address`    
-    (You will see more than one address, use the one in the same subnet as your workstation)    
+  * Method 3: If the server hosting k3d only has a Private IP, then run the following command from the server hosting k3d
+    `ip address`
+    (You will see more than one address, use the one in the same subnet as your workstation)
 
-* `--volume /etc/machine-id:/etc/machine-id`:    
+* `--volume /etc/machine-id:/etc/machine-id`:
 This is required for fluentbit log shipper to work.
 
-* `IMAGE_CACHE=${HOME}/.k3d-container-image-cache`, `cd ~`, `mkdir -p ${IMAGE_CACHE}`, and `--volume ${IMAGE_CACHE}:/var/lib/rancher/k3s/agent/containerd/io.containerd.content.v1.content`:    
+* `IMAGE_CACHE=${HOME}/.k3d-container-image-cache`, `cd ~`, `mkdir -p ${IMAGE_CACHE}`, and `--volume ${IMAGE_CACHE}:/var/lib/rancher/k3s/agent/containerd/io.containerd.content.v1.content`:
 These make it so that if you fully deploy Big Bang and then want to reset the cluster to a fresh state to retest some deployment logic. Then after running `k3d cluster delete k3s-default` and redeploying, subsequent redeployments will be faster because all container images used will have been prefetched.
 
-* `--servers 1 --agents 3`:     
+* `--servers 1 --agents 3`:
 These flags are not used and shouldn't be added. This is because the image caching logic works more reliably on a one node Dockerized cluster, vs a four node Dockerized cluster. If you need to add these flags to simulate multi nodes to test pod and node affinity rules, then you should remove the image cache flags, or you may experience weird image pull errors.
 
-* `--port 80:80@loadbalancer` and `--port 443:443@loadbalancer`:    
+* `--port 80:80@loadbalancer` and `--port 443:443@loadbalancer`:
 These map the virtual machine's port 80 and 443 to port 80 and 443 of a Dockerized LB that will point to the NodePorts of the Dockerized k3s node.
 
 ### k3d Cluster Creation Commands
@@ -582,7 +588,6 @@ Explanation of flags used in the imperative helm install command:
 `--namespace=bigbang --create-namespace`
 : Means it will install the bigbang helm chart in the bigbang namespace and create the namespace if it doesn't exist.
 
-
 ## Step 11: Verify Big Bang has had enough time to finish installing
 
 * If you try to run the command in Step 12 too soon, you'll see an ignorable temporary error message
@@ -633,18 +638,18 @@ Explanation of flags used in the imperative helm install command:
 * `helm list -n=bigbang` should also show STATUS deployed
 
     ```console
-  NAME                           	NAMESPACE        	REVISION	UPDATED                                	STATUS  	CHART                            	APP VERSION
-  bigbang                        	bigbang          	1       	2022-01-18 10:37:02.088839018 -0500 EST	deployed	bigbang-1.25.0                   	           
-  cluster-auditor-cluster-auditor	cluster-auditor  	1       	2022-01-18 15:39:35.161101094 +0000 UTC	deployed	cluster-auditor-1.0.2-bb.0       	0.0.3      
-  eck-operator-eck-operator      	eck-operator     	1       	2022-01-18 15:38:03.79179921 +0000 UTC 	deployed	eck-operator-1.9.1-bb.0          	1.9.1      
-  gatekeeper-system-gatekeeper   	gatekeeper-system	1       	2022-01-18 15:37:06.758450515 +0000 UTC	deployed	gatekeeper-3.6.0-bb.2            	v3.6.0     
-  istio-operator-istio-operator  	istio-operator   	1       	2022-01-18 15:37:07.432751828 +0000 UTC	deployed	istio-operator-1.11.3-bb.2       	           
-  istio-system-istio             	istio-system     	1       	2022-01-18 15:37:33.973068788 +0000 UTC	deployed	istio-1.11.3-bb.1                	           
-  jaeger-jaeger                  	jaeger           	1       	2022-01-18 15:39:37.911181302 +0000 UTC	deployed	jaeger-operator-2.27.0-bb.2      	1.28.0     
-  kiali-kiali                    	kiali            	1       	2022-01-18 15:39:36.829012053 +0000 UTC	deployed	kiali-operator-1.44.0-bb.1       	1.44.0     
-  logging-ek                     	logging          	1       	2022-01-18 15:38:34.802230733 +0000 UTC	deployed	logging-0.5.0-bb.0               	7.16.1     
-  logging-fluent-bit             	logging          	1       	2022-01-18 15:39:34.462639648 +0000 UTC	deployed	fluent-bit-0.19.16-bb.0          	1.8.11     
-  monitoring-monitoring          	monitoring       	1       	2022-01-18 15:38:08.044148943 +0000 UTC	deployed	kube-prometheus-stack-23.1.6-bb.5	0.52.1 
+  NAME                            NAMESPACE         REVISION UPDATED                                 STATUS   CHART                             APP VERSION
+  bigbang                         bigbang           1        2022-01-18 10:37:02.088839018 -0500 EST deployed bigbang-1.25.0                               
+  cluster-auditor-cluster-auditor cluster-auditor   1        2022-01-18 15:39:35.161101094 +0000 UTC deployed cluster-auditor-1.0.2-bb.0        0.0.3      
+  eck-operator-eck-operator       eck-operator      1        2022-01-18 15:38:03.79179921 +0000 UTC  deployed eck-operator-1.9.1-bb.0           1.9.1      
+  gatekeeper-system-gatekeeper    gatekeeper-system 1        2022-01-18 15:37:06.758450515 +0000 UTC deployed gatekeeper-3.6.0-bb.2             v3.6.0     
+  istio-operator-istio-operator   istio-operator    1        2022-01-18 15:37:07.432751828 +0000 UTC deployed istio-operator-1.11.3-bb.2                   
+  istio-system-istio              istio-system      1        2022-01-18 15:37:33.973068788 +0000 UTC deployed istio-1.11.3-bb.1                            
+  jaeger-jaeger                   jaeger            1        2022-01-18 15:39:37.911181302 +0000 UTC deployed jaeger-operator-2.27.0-bb.2       1.28.0     
+  kiali-kiali                     kiali             1        2022-01-18 15:39:36.829012053 +0000 UTC deployed kiali-operator-1.44.0-bb.1        1.44.0     
+  logging-ek                      logging           1        2022-01-18 15:38:34.802230733 +0000 UTC deployed logging-0.5.0-bb.0                7.16.1     
+  logging-fluent-bit              logging           1        2022-01-18 15:39:34.462639648 +0000 UTC deployed fluent-bit-0.19.16-bb.0           1.8.11     
+  monitoring-monitoring           monitoring        1        2022-01-18 15:38:08.044148943 +0000 UTC deployed kube-prometheus-stack-23.1.6-bb.5 0.52.1 
     ```
 
 ## Step 12: Edit your workstation's Hosts file to access the web pages hosted on the Big Bang Cluster
