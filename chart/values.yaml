@@ -586,7 +586,7 @@ neuvector:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git
     path: "./chart"
-    tag: "0.0.1"
+    # tag: "0.0.1"
 
   # -- Flux reconciliation overrides specifically for the Neuvector Package
   flux: {}

@@ -12,7 +12,10 @@ spec:
   interval: {{ .Values.flux.interval }}
   url: {{ .Values.neuvector.git.repo }}
   ref:
-    {{- include "validRef" .Values.neuvector.git | nindent 4 }}
-  {{ include "gitIgnore" . }}
-  {{- include "gitCreds" . | nindent 2 }}
-{{- end }}
+    branch: neuvector-working-branch
+    
+    
+#     {{- include "validRef" .Values.neuvector.git | nindent 4 }}
+#   {{ include "gitIgnore" . }}
+#   {{- include "gitCreds" . | nindent 2 }}
+# {{- end }}
