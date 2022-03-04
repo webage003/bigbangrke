@@ -1,4 +1,4 @@
-{{- if .Values.addons.neuvector.enabled }}
+{{- if .Values.neuvector.enabled }}
 {{- include "values-secret" (dict "root" $ "package" .Values.neuvector "name" "neuvector" "defaults" (include "bigbang.defaults.neuvector" .)) }}
 {{- end }}
 
