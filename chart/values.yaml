@@ -595,7 +595,7 @@ neuvector:
   ingress:
     gateway: ""
 
-  # -- Values to passthrough to the twistlock chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
+  # -- Values to passthrough to the neuvector chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git
   values: {}
 
   # -- Post Renderers.  See docs/postrenders.md
