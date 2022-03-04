@@ -26,7 +26,7 @@ networkPolicies:
 
 istio:
   enabled: {{ .Values.istio.enabled }}
-  console:
+  neuvector:
     gateways:
     - istio-system/{{ default "public" .Values.neuvector.ingress.gateway }}
 
