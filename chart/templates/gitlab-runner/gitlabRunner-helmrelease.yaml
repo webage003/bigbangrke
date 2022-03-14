@@ -1,4 +1,3 @@
-## I need this file to be different than the one on the master branch
 {{- $fluxSettingsGitlabRunner := merge .Values.addons.gitlabRunner.flux .Values.flux -}}
 {{- if .Values.addons.gitlabRunner.enabled }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
