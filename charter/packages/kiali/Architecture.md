@@ -95,6 +95,7 @@ monitoring:
 HA can be accomplished for Kiali via two methods. You can directly control the replicas required or have Kiali create and use a horizontal pod autoscaler and set a min/max number of replicas for the deployment. Both methods are shown below:
 
 - Specific number of replicas
+
 ```yaml
 kiali:
   values:
@@ -105,6 +106,7 @@ kiali:
 ```
 
 - HPA with min/max replicas
+
 ```yaml
 kiali:
   values:
@@ -147,6 +149,7 @@ If you do not configure Kiali with SSO you will have [4 options](https://kiali.i
 - Anonymous: No authentication, Kiali is open to whoever can access the URL.
 
 Example of how to override the authentication method:
+
 ```yaml
 kiali:
   values:

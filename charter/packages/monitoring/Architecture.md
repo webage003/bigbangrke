@@ -1,6 +1,7 @@
-# Monitioring
+# Monitoring
 
 ## Overview
+
 Monitoring in Bigbang is deployed using the upstream chart  [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack)
 
 Installs the kube-prometheus stack, a collection of Kubernetes manifests, Grafana dashboards, and Prometheus rules combined with documentation and scripts to provide easy to operate end-to-end Kubernetes cluster monitoring with Prometheus using the Prometheus Operator.
@@ -43,12 +44,15 @@ graph LR
 ```
 
 ## Big Bang Touchpoints
+
 ### UI
 
 Alertmanager, Prometheus and Grafana within the monitoring Package have UIs that are accessible and configurable. By default they are externally available behind an Istio installation.
 
 ### Storage
+
 #### Alertmanager
+
 Persistent storage values for Alert Manager can be set/modified in the Big Bang chart:
 
 ```yaml
@@ -68,6 +72,7 @@ monitoring:
 ```
 
 #### Prometheus-Operator
+
 Persistent storage values for Prometheus-Operator can be set/modified in the Big Bang chart:
 
 ```yaml
@@ -87,6 +92,7 @@ monitoring:
 ```
 
 #### Grafana
+
 Persistent storage values for Grafana can be set/modified in the Big Bang chart:
 
 ```yaml
@@ -114,7 +120,9 @@ Within the kube-prometheus-stack chart, you can customize both the LogFormat and
 Note: within Big Bang, logs are captured by fluentbit and shipped to elastic by default.
 
 #### Prometheus-Operator
+
 LogFormat and LogLevel can be set for Prometheus-Operator via the following values in the Big Bang chart:
+
 ```yaml
 monitoring:
   values:
@@ -124,7 +132,9 @@ monitoring:
 ```
 
 #### Prometheus
+
 LogFormat and LogLevel can be set for Prometheus via the following values in the Big Bang chart:
+
 ```yaml
 monitoring:
   values:
@@ -135,7 +145,9 @@ monitoring:
 ```
 
 #### Alertmanager
+
 LogFormat and LogLevel can be set for Alertmanager via the following values in the Big Bang chart:
+
 ```yaml
 monitoring:
   values:
@@ -146,7 +158,9 @@ monitoring:
 ```
 
 #### Grafana
+
 LogLevel can be set for Grafana via the following values in the Big Bang chart:
+
 ```yaml
 monitoring:
   values:
@@ -162,7 +176,9 @@ SSO can be configured for monitoring through Authservice, more info is included 
 [Monitoring SSO Integration](https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring/-/blob/main/docs/KEYCLOAK.md)
 
 ## Monitoring
+
 Monitoring deployment has serviceMonitors enabled for
+
 * core-dns
 * kube-api-server
 * kube-controller-manager
@@ -202,7 +218,7 @@ monitoring:
 
 When deploying BigBang, monitoring depends on gatekeeper and istio being installed prior.
 
-```
+```yaml
   {{- if or .Values.gatekeeper.enabled .Values.istio.enabled }}
   dependsOn:
   {{- if .Values.istio.enabled }}
@@ -215,5 +231,3 @@ When deploying BigBang, monitoring depends on gatekeeper and istio being install
   {{- end }}
   {{- end }}
 ```
-
-

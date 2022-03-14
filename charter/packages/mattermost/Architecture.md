@@ -114,7 +114,6 @@ addons:
       users: 1000
 ```
 
-
 ## Single Sign On (SSO)
 
 SSO is built in for Mattermost and Big Bang uses the [Gitlab SSO integration](https://docs.mattermost.com/deployment/sso-gitlab.html) as its implementation since this option is available at the free tier. Mattermost also provides OAuth and SAML integration as paid features for its [enterprise tiers](#licensing) if you wish to use those.

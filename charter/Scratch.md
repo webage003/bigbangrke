@@ -4,7 +4,7 @@ Comments from meetings
 
 ## Apps
 
-* Should any product need to be licence (e.g. why Anchore Enterprise and not Anchore)
+* Should any product need to be license (e.g. why Anchore Enterprise and not Anchore)
 * Should everything used by apps be internal?  E.g. Postgres required for Keycloak
 * Which of Anchore vs Anchore Enterprise
 

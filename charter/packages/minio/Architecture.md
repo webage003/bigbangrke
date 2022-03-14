@@ -7,7 +7,7 @@ built for the demands of the hybrid cloud.
 
 The package is offered up as three individual packages that make up the MinIO ecosystem.
 
-Big Bang's implementation uses the [MinIO operator](https://github.com/minio/operator) to provide custom resources and manage the different tenents of MinIO. The official package for MinIO Operator can be found [here](https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator)
+Big Bang's implementation uses the [MinIO operator](https://github.com/minio/operator) to provide custom resources and manage the different tenants of MinIO. The official package for MinIO Operator can be found [here](https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator)
 
 The MinIO tenants are created using the [MinIO package](https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio). This package is used to set up individual MinIO instances for applications to use (e.g. Gitlab).
 
@@ -21,8 +21,7 @@ Note: The Minio Operator needs to be able to reach out to the minio instances. T
 
 ### UI
 
-The MinIO Console UI is the primary way of interacting with a MinIO tenant. The UI is accessible via a web browser. The UI provides access to all of a tenants features. This includes access to features very similar to what you would see in AWS S3, setting up buckets, controlling access, etc. 
-
+The MinIO Console UI is the primary way of interacting with a MinIO tenant. The UI is accessible via a web browser. The UI provides access to all of a tenants features. This includes access to features very similar to what you would see in AWS S3, setting up buckets, controlling access, etc.
 
 ### Logging
 
@@ -34,7 +33,7 @@ By default logs are also shipped to Elastic via Fluentbit for advanced searching
 
 Monitoring is provided via a Prometheus capable endpoint. MinIO also provides a Grafana dashboard for use in viewing metrics. Monitoring in the Big Bang config can be enabled using the following format.
 
-```
+```yaml
 monitoring:
   enabled: false
   namespace: monitoring
@@ -44,12 +43,11 @@ monitoring:
 
 MinIO server exposes three un-authenticated, healthcheck endpoints [liveness probe](https://github.com/minio/minio/blob/master/docs/metrics/healthcheck/README.md#liveness-probe) and a [cluster probe](https://github.com/minio/minio/blob/master/docs/metrics/healthcheck/README.md#cluster-probe) at /minio/health/live and /minio/health/cluster respectively.
 
-
 ## High Availability
 
-The default is to run in high availability. The default number of servers is 4, but can be changed by changing the values in the base Big Bang cofiguration.
+The default is to run in high availability. The default number of servers is 4, but can be changed by changing the values in the base Big Bang configuration.
 
-```
+```yaml
 addons:
   minio:
     values:
@@ -77,19 +75,18 @@ You can also set things like the number of volumes per server and affinity rules
 
 ## Single Sign On (SSO)
 
-No current SSO is avaiable via Keycloak.
+No current SSO is available via Keycloak.
 
 ## Configuring access to Minio without SSO
 
 Initial access to the MinIO server is via the minioRootCreds. These can be auto generated for you by adding the accesskey and secret key in your Big Bang config.
 
-```
+```yaml
 addons:
   minio:
     accesskey: "myaccesskey"
     secretkey: "mysecretkey"
 ```
-
 
 ## Licensing
 
@@ -101,8 +98,7 @@ License can be found [here](https://github.com/minio/minio/blob/master/LICENSE)
 
 ### File Storage
 
-MinIO is dependent on a default storage class being configured. This is a core prereq for Big Bang itself so this should already in place when starting up the Big Bang framework. The MinIO process will need to create PersistentVolumes and PersistentVolumeClaims for its storage. The requirment for these are that they have a volumeBindingMode: WaitForFirstConsumer. The MinIO operator should take care of creating these at tenant start up.
-
+MinIO is dependent on a default storage class being configured. This is a core prereq for Big Bang itself so this should already in place when starting up the Big Bang framework. The MinIO process will need to create PersistentVolumes and PersistentVolumeClaims for its storage. The requirement for these are that they have a volumeBindingMode: WaitForFirstConsumer. The MinIO operator should take care of creating these at tenant start up.
 
 ## Dependencies
 

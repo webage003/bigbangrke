@@ -1,16 +1,16 @@
 # New Epic Checklist Template
 
-# Feature Request
+## Feature Request
 
-## Why
+### Why
 
 > Insert the purpose of the Epic or sub-epic here
 
-## Proposed Solution
+### Proposed Solution
 
 > Insert proposed solution, with relevant links here
 
-## Definition of Done Checklist
+### Definition of Done Checklist
 
 **Package:**
 
@@ -75,6 +75,6 @@
 - [ ] Have you verified the application has database connectivity to the external database (if applicable)?
 - [ ] Have you verified the application has storage connectivity to the external storage (if applicable)?
 
-## Future Work (as separate issues)
+### Future Work (as separate issues)
 
 - [ ] SSO is integrated as BigBang values

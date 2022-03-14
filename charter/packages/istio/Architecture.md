@@ -68,7 +68,7 @@ istio:
 
 ### UI
 
-Big Bang can be configured to deploy [Kiali](https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali) (a management console that provides dashboards, observability, and other robust capabilities) and [Jaeger](https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger) (an end-to-end distributed tracing system), both of which include UI features to help you visualize your Istio mesh. To enable Kialia and Jaeger, simply update the Big Bang values.yaml:
+Big Bang can be configured to deploy [Kiali](https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali) (a management console that provides dashboards, observability, and other robust capabilities) and [Jaeger](https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger) (an end-to-end distributed tracing system), both of which include UI features to help you visualize your Istio mesh. To enable Kiali and Jaeger, simply update the Big Bang values.yaml:
 
 ```yaml
 istio:
@@ -93,7 +93,7 @@ Grafana (part of the monitoring packages) is a standalone component of Big Bang 
 
 There are standard readiness probes built into the envoy sidecars and istio containers. See [here](https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#ReadinessProbe) for more info.
 
-You can get events in an istio-injected naemspace to see if your sidecars are unhealthy or having issues. To check the health/status of the istio installation, run `kubectl get istiooperators -n istio-system`.
+You can get events in an istio-injected namespace to see if your sidecars are unhealthy or having issues. To check the health/status of the istio installation, run `kubectl get istiooperators -n istio-system`.
 
 ### Dependant Packages
 
