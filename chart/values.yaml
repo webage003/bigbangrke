@@ -507,7 +507,7 @@ loki:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
     path: "./chart"
-    tag: "2.10.1-bb.4"
+    branch: "gel"
 
   # -- Flux reconciliation overrides specifically for the Loki Package
   flux: {}
@@ -517,6 +517,17 @@ loki:
 
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
+
+  # -- Loki architecture.  Options are monolith | scalable | distributed
+  strategy: monolith
+
+  # -- Grafana Enterprise Logging functionality.
+  enterprise:
+    enabled: false
+
+
+    licenseContents: |
+      FULL LICENSE
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -565,6 +576,12 @@ monitoring:
   # -- Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public".
   ingress:
     gateway: ""
+
+  grafana:
+    enterprise:
+      enabled: false
+      licenseContents: |
+        FULL LICENSE
 
   sso:
     # -- Toggle SSO for monitoring components on and off
