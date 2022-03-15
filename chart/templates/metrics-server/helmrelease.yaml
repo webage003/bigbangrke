@@ -1,0 +1,49 @@
+{{- $fluxSettingsMetrics := merge .Values.metrics.flux .Values.flux -}}
+{{- if .Values.metrics.enabled }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: metrics
+  namespace: {{ .Release.Namespace }}
+spec:
+  releaseName: metrics
+  targetNamespace: metrics
+  chart:
+    spec:
+      chart: {{ .Values.metrics.git.path }}
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: metrics
+        namespace: {{ .Release.Namespace }}
+
+  {{- toYaml $fluxSettingsMetrics | nindent 2 }}
+
+  {{- if .Values.metrics.postRenderers }}
+  postRenderers:
+  {{ toYaml .Values.metrics.postRenderers | nindent 4 }}
+  {{- end }}
+
+  valuesFrom:
+    - name: {{ .Release.Name }}-metrics-values
+      kind: Secret
+      valuesKey: "common"
+    - name: {{ .Release.Name }}-metrics-values
+      kind: Secret
+      valuesKey: "defaults"
+    - name: {{ .Release.Name }}-metrics-values
+      kind: Secret
+      valuesKey: "overlays"
+
+  {{- if or .Values.istio.enabled .Values.monitoring.enabled }}
+  dependsOn:
+    {{- if .Values.istio.enabled }}
+    - name: istio
+      namespace: {{ .Release.Namespace }}
+    {{- end }}
+    {{- if .Values.monitoring.enabled }}
+    - name: monitoring
+      namespace: {{ .Release.Namespace }}
+    {{- end }}
+  {{- end }}
+{{- end }}

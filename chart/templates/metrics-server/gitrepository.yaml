@@ -1,0 +1,14 @@
+{{- if .Values.metrics.enabled  }}
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: metrics
+  namespace: {{ .Release.Namespace }}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.metrics.git.repo }}
+  ref:
+    {{- include "validRef" .Values.metrics.git | nindent 4 }}
+  {{ include "gitIgnore" . }}
+  {{- include "gitCreds" . | nindent 2 }}
+{{- end }}
