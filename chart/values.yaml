@@ -378,7 +378,7 @@ kyverno:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno.git
     path: "./chart"
-    tag: "2.2.0-bb.1"
+    tag: "2.2.0-bb.3"
 
   # -- Flux reconciliation overrides specifically for the Kyverno Package
   flux: {}
@@ -502,7 +502,6 @@ promtail:
   postRenderers: []
 
 loki:
-  # -- Change this section to test whether the pipeline automatically enables it.
   # -- Toggle deployment of Loki.
   enabled: false
   git:
@@ -636,7 +635,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd.git
       path: "./chart"
-      tag: "3.33.5-bb.2" # different from master branch for testing
+      tag: "3.33.5-bb.8" 
 
     # -- Flux reconciliation overrides specifically for the ArgoCD Package
     flux: {}

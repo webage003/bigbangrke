@@ -1,5 +1,5 @@
+## Testing
 {{- if and (not .Values.offline) (or .Values.addons.mattermostoperator.enabled .Values.addons.mattermost.enabled) }}
-## I need this file to be different than the one on the master branch
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:

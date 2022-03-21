@@ -1,4 +1,3 @@
-## I need this file to be different than the one on the master branch
 {{- $fluxSettingsAnchore := merge .Values.addons.anchore.flux .Values.flux -}}
 {{- if .Values.addons.anchore.enabled }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
