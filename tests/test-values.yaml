@@ -351,6 +351,7 @@ kyvernopolicies:
               - nexus-repository-manager
               - keycloak
               - jaeger
+              - argocd
               names:
               - "*-cypress-test*"
         parameters:
@@ -367,6 +368,7 @@ kyvernopolicies:
               - nexus-repository-manager
               - keycloak
               - jaeger
+              - argocd
               names:
               - "*-cypress-test*"
         parameters:
@@ -398,6 +400,7 @@ kyvernopolicies:
               - nexus-repository-manager
               - keycloak
               - jaeger
+              - argocd
               names:
               - "*-cypress-test*"
       update-image-pull-policy:
