@@ -36,24 +36,24 @@ logging:
       master:
         count: 1
         persistence:
-          size: 5Gi
+          size: 256Mi
         resources:
           requests:
             cpu: .5
           limits: {}
         heap:
-          min: 2g
+          min: 1g
           max: 2g
       data:
         count: 2
         persistence:
-          size: 100Gi
+          size: 256Mi
         resources:
           requests:
             cpu: 1
           limits: {}
         heap:
-          min: 2g
+          min: 1g
           max: 2g
 
 tempo:
@@ -64,7 +64,7 @@ tempo:
         cpu: 500m
         memory: 1024Mi
     persistence:
-      size: 15Gi
+      size: 5Gi
     tempoQuery:
       resources:
         limits: {}
@@ -111,7 +111,7 @@ twistlock:
   values:
     console:
       persistence:
-        size: 100Gi
+        size: 256Mi
 
 # Addons are toggled based on labels in CI
 addons:
