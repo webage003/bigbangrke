@@ -21,6 +21,15 @@ gatekeeper:
           cpu: 175m
           memory: 512Mi
 
+kyverno:
+  values:
+    replicaCount: 3
+    resources:
+      limits: {}
+      requests:
+        cpu: 500m
+        memory: 384Mi
+
 logging:
   values:
     elasticsearch:
