@@ -1254,6 +1254,9 @@ addons:
       server:
         dataStorage:
           enabled: true
+          size: 256Mi
+        auditStorage:
+          size: 256Mi
       injector:
         affinity: |
           podAntiAffinity:
@@ -1266,7 +1269,6 @@ addons:
                       app.kubernetes.io/instance: "{{ .Release.Name }}"
                       component: webhook
                   topologyKey: kubernetes.io/hostname
-
       bbtests:
         enabled: true
         cypress:
