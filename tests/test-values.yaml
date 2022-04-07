@@ -471,13 +471,14 @@ tempo:
       tempoQuery:
         hosts:
           - "tempo.{{ .Values.domain }}"
-    resources:
-      limits:
-        cpu: 200m
-        memory: 128Mi
-      requests:
-        cpu: 200m
-        memory: 128Mi
+    tempo:
+      resources:
+        limits:
+          cpu: 200m
+          memory: 128Mi
+        requests:
+          cpu: 200m
+          memory: 128Mi
 
     persistence:
       enabled: true
