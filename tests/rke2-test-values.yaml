@@ -23,7 +23,7 @@ gatekeeper:
 
 kyverno:
   values:
-    replicaCount: 3
+    replicaCount: 5
     resources:
       limits: {}
       requests:
