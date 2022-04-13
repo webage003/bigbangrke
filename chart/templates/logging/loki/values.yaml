@@ -25,11 +25,19 @@ monitoring:
 istio:
   enabled: {{ .Values.istio.enabled }} 
 
-{{- if .Values.loki.enterprise.enabled }}
 global:
   createGlobalConfig: true
   existingSecretForConfig: loki-config
-{{- end }}
+
+  objectStorage:
+    endpoint: {{ .Values.loki.objectStorage.endpoint }}
+    region: {{ .Values.loki.objectStorage.region }}
+    bucketnames: {{ .Values.loki.objectStorage.bucketNames }}
+    access_key_id: {{ .Values.loki.objectStorage.accessKey }}
+    secret_access_key: {{ .Values.loki.objectStorage.accessSecret }}
+
+minio:
+  enabled: {{ eq .Values.loki.objectStorage.type "minio" }}
 
 {{- if .Values.istio.enabled }}
 podAnnotations:
@@ -57,10 +65,6 @@ loki-simple-scalable:
   {{- if .Values.loki.enterprise.enabled }}
   nameOverride: loki
 
-  gateway:
-    enabled: true
-    service:
-      port: 3100
   loki:
     image:
       registry: registry.dso.mil
