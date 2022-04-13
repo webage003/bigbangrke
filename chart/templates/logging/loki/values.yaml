@@ -25,8 +25,11 @@ monitoring:
 istio:
   enabled: {{ .Values.istio.enabled }} 
 
-serviceMonitor:
-  enabled: {{ .Values.monitoring.enabled }}
+{{- if .Values.loki.enterprise.enabled }}
+global:
+  createGlobalConfig: true
+  existingSecretForConfig: loki-config
+{{- end }}
 
 {{- if .Values.istio.enabled }}
 podAnnotations:
@@ -35,43 +38,22 @@ podAnnotations:
 
 loki:
   enabled: {{ eq .Values.loki.strategy "monolith" }}
-  readinessProbe:
-    initialDelaySeconds: 60
-  livenessProbe:
-    initialDelaySeconds: 60
-  extraVolumeMounts:
-    - name: storage
-      mountPath: "/var"
-  replicas: 1
 {{- if .Values.loki.enterprise.enabled }}
   image:
-    registry: docker.io
-    repository: grafana/enterprise-logs
+    registry: registry.dso.mil
+    repository: platform-one/big-bang/apps/sandbox/loki/enterprise-logs
     tag: v1.3.0
     pullPolicy: IfNotPresent
-  config: 
-    existingSecret: enterprise-logs-config
-  podLabels:
-    app.kubernetes.io/part-of: memberlist
-  extraPorts:
-    - name: grpc
-      port: 9095
-      targetPort: grpc
-      protocol: TCP
-    - name: tcp-memberlist
-      port: 7946
-      protocol: TCP
 {{- end }}
+
+  serviceMonitor:
+    enabled: {{ .Values.monitoring.enabled }}
 
 loki-simple-scalable:
   enabled: {{ eq .Values.loki.strategy "scalable" }}
 
   imagePullSecrets:
     - name: private-registry
-
-  gateway:
-    affinity: ""
-
   {{- if .Values.loki.enterprise.enabled }}
   nameOverride: loki
 
@@ -81,24 +63,23 @@ loki-simple-scalable:
       port: 3100
   loki:
     image:
-      registry: docker.io
-      repository: grafana/enterprise-logs
+      registry: registry.dso.mil
+      repository: platform-one/big-bang/apps/sandbox/loki/enterprise-logs
       tag: v1.3.0
       pullPolicy: IfNotPresent
-
-    existingSecretForConfig: enterprise-logs-config
   {{- end }}
+  serviceMonitor:
+    enabled: {{ .Values.monitoring.enabled }}
 
 gel:
   enabled: {{ .Values.loki.enterprise.enabled }}
+
+  image:
+    pullSecrets:
+    - private-registry
   tokengen:
     annotations:
       sidecar.istio.io/inject: "false"
   license:
     contents: {{ .Values.loki.enterprise.licenseContents }}
-
-minio:
-  makeBucketJob:
-    podAnnotations:
-      sidecar.istio.io/inject: "false"
 {{- end -}}
