@@ -1,4 +1,4 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: master
+    ref:  network_down_fix
     file: '/pipelines/bigbang.yaml'
