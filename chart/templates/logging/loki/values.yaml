@@ -50,14 +50,40 @@ podAnnotations:
 
 loki:
   enabled: {{ eq .Values.loki.strategy "monolith" }}
+{{- if .Values.loki.enterprise.enabled }}
+  image:
+    registry: registry1.dso.mil
+    repository: ironbank/grafana/grafana-enterprise-logs
+    tag: v1.3.0
+{{- end }}
+
   serviceMonitor:
     enabled: {{ .Values.monitoring.enabled }}
 
 loki-simple-scalable:
   enabled: {{ eq .Values.loki.strategy "scalable" }}
+
   imagePullSecrets:
     - name: private-registry
+  {{- if .Values.loki.enterprise.enabled }}
+  loki:
+    image:
+      registry: registry1.dso.mil
+      repository: ironbank/grafana/grafana-enterprise-logs
+      tag: v1.3.0
+  {{- end }}
   serviceMonitor:
     enabled: {{ .Values.monitoring.enabled }}
 
+gel:
+  enabled: {{ .Values.loki.enterprise.enabled }}
+
+  image:
+    pullSecrets:
+    - private-registry
+  tokengen:
+    annotations:
+      sidecar.istio.io/inject: "false"
+  license:
+    contents: {{ .Values.loki.enterprise.licenseContents }}
 {{- end -}}

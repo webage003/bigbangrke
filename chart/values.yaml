@@ -521,6 +521,13 @@ loki:
   # -- Loki architecture.  Options are monolith and scalable
   strategy: monolith
 
+  # -- Grafana Enterprise Logging functionality.
+  enterprise:
+    enabled: false
+
+    licenseContents: |
+      FULL LICENSE
+
   objectStorage:
     # -- S3 compatible endpoint to use for connection information.
     # examples: "https://s3.amazonaws.com" "https://s3.us-gov-west-1.amazonaws.com" "http://minio.minio.svc.cluster.local:9000"
@@ -587,6 +594,12 @@ monitoring:
   # -- Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public".
   ingress:
     gateway: ""
+
+  grafana:
+    enterprise:
+      enabled: false
+      licenseContents: |
+        FULL LICENSE
 
   sso:
     # -- Toggle SSO for monitoring components on and off
