@@ -2,3 +2,5 @@ include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
     ref:  network_down_fix
     file: '/pipelines/bigbang.yaml'
+variables:
+  PIPELINE_REPO_BRANCH: "network_down_fix"
