@@ -1,6 +1,6 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: check-change-fix
+    ref: master
     file: '/pipelines/bigbang.yaml'
 variables:
-  PIPELINE_REPO_BRANCH: check-change-fix
+  PIPELINE_REPO_BRANCH: master
