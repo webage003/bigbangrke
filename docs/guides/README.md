@@ -4,6 +4,10 @@
 
 Guides on handling backups/migrations using Velero for specific Big Bang packages.
 
+## cluster_backup_and_restore
+
+Guides on handling cluster disaster recovery scenarios using Velero. 
+
 ## deployment_scenarios
 
 Beginner friendly how to guides are intended to be added to these subfolders over time.
