@@ -389,8 +389,9 @@ policies:
           - logging-fluent-bit*
           {{- end }}
           {{- if .Values.promtail.enabled }}
-          # NEEDS FURTHER JUSTIFICATION
           # Promtail needs selinux option type spc_t
+          # Promtail requires access to journalctl as well as /var/log.  This would require modifications to the host operating system, creating a user, adding that user to the systems-journal user group and then granting permissions recursively on /var/log.
+          # In order to see everything that root does in regard to journalctl would require a lot of manual, granular permissions or a widening of system permissions which is inherently insecure.
           - logging-promtail*
           {{- end }}
       {{- end }}
@@ -435,7 +436,8 @@ policies:
           - logging-fluent-bit*
           {{- end }}
           {{- if .Values.promtail.enabled }}
-          # NEEDS FURTHER JUSTIFICATION
+          # Promtail requires access to journalctl as well as /var/log.  This would require modifications to the host operating system, creating a user, adding that user to the systems-journal user group and then granting permissions recursively on /var/log.
+          # In order to see everything that root does in regard to journalctl would require a lot of manual, granular permissions or a widening of system permissions which is inherently insecure.
           # Promtail requires HostPath volume types
           # https://github.com/grafana/helm-charts/blob/main/charts/promtail/templates/daemonset.yaml#L120
           - logging-promtail*
