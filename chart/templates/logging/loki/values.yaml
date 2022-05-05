@@ -54,7 +54,7 @@ loki:
   image:
     registry: registry1.dso.mil
     repository: ironbank/grafana/grafana-enterprise-logs
-    tag: v1.3.0
+    tag: 1.3.0
 {{- end }}
 
   serviceMonitor:
@@ -70,7 +70,7 @@ loki-simple-scalable:
     image:
       registry: registry1.dso.mil
       repository: ironbank/grafana/grafana-enterprise-logs
-      tag: v1.3.0
+      tag: 1.3.0
   {{- end }}
   serviceMonitor:
     enabled: {{ .Values.monitoring.enabled }}
