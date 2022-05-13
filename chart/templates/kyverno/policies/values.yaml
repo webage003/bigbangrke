@@ -210,7 +210,18 @@ policies:
           names:
           - restic*
         {{- end }}
-    {{- end }}
+  
+  {{- if .Values.promtail.enabled }}
+  restrict-apparmor:
+    exclude:
+      any:
+      # Promtail requires access to the host filesystem as root user to access logs and the journald service and related files.
+      - resources:
+          namespaces:
+          - logging
+          names:
+          - logging-promtail*
+  {{- end }}
 
   {{- if .Values.twistlock.enabled }}
   restrict-apparmor:
