@@ -35,7 +35,8 @@ policies:
     validationFailureAction: enforce
 
   disallow-istio-injection-bypass:
-    enabled: {{ .Values.istio.enabled }}
+    enabled: false
+    # enabled: {{ .Values.istio.enabled }}
     exclude:
       any:
       # Istio does not inject itself
@@ -159,10 +160,12 @@ policies:
   {{- end }}
 
   require-drop-all-capabilities:
+    enabled: false
     validationFailureAction: audit
 
   require-istio-on-namespaces:
-    enabled: {{ .Values.istio.enabled }}
+    enabled: false
+    # enabled: {{ .Values.istio.enabled }}
     exclude:
       any:
       - resources:
@@ -226,6 +229,7 @@ policies:
   {{- end }}
 
   restrict-capabilities:
+    enabled: false
     validationFailureAction: audit
     # NEEDS FURTHER JUSTIFICATION
     # Twistlock Defenders require the following capabilities
