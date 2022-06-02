@@ -5,7 +5,13 @@ component-definition:
     last-modified: 0001-01-01T00:00:00Z
     version: 1.35.0
     oscal-version: ""
-    parties: []
+    parties:
+    - uuid: 72134592-08C2-4A77-ABAD-C880F109367A 
+      type: organization
+      name: Platform One
+      links:
+      - href: <https://p1.dso.mil>
+        rel: website
   components:
   - uuid: 81F6EC5D-9B8D-408F-8477-F8A04F493690
     type: software
