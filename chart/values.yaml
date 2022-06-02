@@ -813,7 +813,7 @@ addons:
 
   gitlab:
     # -- Toggle deployment of Gitlab
-    enabled: false
+    enabled: true
 
     hostnames:
       # host name only without the domain
@@ -835,10 +835,10 @@ addons:
     sso:
       # -- Toggle OIDC SSO for Gitlab on and off.
       # Enabling this option will auto-create any required secrets.
-      enabled: false
+      enabled: true
 
       # -- Gitlab OIDC client ID
-      client_id: ""
+      client_id: platform1_a8604cc9-f5e9-4656-802d-d05624370245_bb8-gitlab
 
       # -- Gitlab OIDC client secret
       client_secret: ""
@@ -961,7 +961,7 @@ addons:
       # -- handles SAML SSO, a Client must be configured in Keycloak or IdP
       # -- to complete setup.
       # -- https://support.sonatype.com/hc/en-us/articles/1500000976522-SAML-integration-for-Nexus-Repository-Manager-Pro-3-and-Nexus-IQ-Server-with-Keycloak#h_01EV7CWCYH3YKAPMAHG8XMQ599
-      enabled: false
+      enabled: true
 
       # -- NXRM SAML SSO Integration data
       idp_data:
@@ -1324,7 +1324,7 @@ addons:
     # -- Toggle deployment of Keycloak.
     # if you enable Keycloak you should uncomment the istio passthrough configurations above
     # istio.ingressGateways.passthrough-ingressgateway and istio.gateways.passthrough
-    enabled: false
+    enabled: true
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak.git
       path: "./chart"
