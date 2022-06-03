@@ -807,7 +807,16 @@ addons:
             size: 256Mi
 
   gitlab:
+<<<<<<< HEAD
     enabled: false
+=======
+    enabled: true
+    git:
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
+      path: "./chart"
+      tag: ""
+      branch: keycloak_integration_test
+>>>>>>> d54519b7... Fix branch name
     sso:
       enabled: false
       client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_gitlab
