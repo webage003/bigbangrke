@@ -1,5 +1,8 @@
 include:
   - project: 'platform-one/big-bang/pipeline-templates/pipeline-templates'
-    ref: master
+    ref: passthrough-vault-fix
     file: '/pipelines/bigbang.yaml'
+variables:
+  PIPELINE_REPO_BRANCH: passthrough-vault-fix 
+  DEBUG_ENABLED: "true"
 
