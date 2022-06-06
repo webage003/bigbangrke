@@ -60,7 +60,7 @@ sso:
   certificate_authority: ""
 
   # -- Keycloak realm's json web key output, obtained at https://<keycloak-server>/auth/realms/<realm>/protocol/openid-connect/certs
-  jwks: ''
+  jwks: ""
 
   # -- OIDC client ID used for packages authenticated through authservice
   client_id: ""
@@ -389,7 +389,6 @@ kyverno:
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
 
-
 kyvernopolicies:
   # -- Toggle deployment of Kyverno policies
   enabled: false
@@ -552,7 +551,7 @@ tempo:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/tempo.git
     path: "./chart"
-    tag: "0.15.1-bb.0"
+    tag: "0.15.1-bb.1"
 
   # -- Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public".
   ingress:
@@ -814,7 +813,7 @@ addons:
 
       # -- Gitlab SSO Scopes, default is ["Gitlab"]
       scopes:
-      - Gitlab
+        - Gitlab
 
       # -- GitLab SSO Issuer URI,
       # Only needed if your SSO is non-Keycloak
@@ -952,7 +951,7 @@ addons:
 
         # -- IDP SAML Metadata XML as a single line string in single quotes
         # -- this information is public and does not require a secret
-        idpMetadata: ''
+        idpMetadata: ""
 
       # -- NXRM Role
       role:
