@@ -1,10 +1,10 @@
 component-definition:
-  uuid: ""
+  uuid: "4DEDC09C-B2ED-407B-82C6-229F77DDDC8C"
   metadata:
     title: Big Bang
-    last-modified: 0001-01-01T00:00:00Z
+    last-modified: '2022-06-06T15:26:59.676009+00:00'
     version: 1.35.0
-    oscal-version: ""
+    oscal-version: 1.0.2
     parties:
     - uuid: 72134592-08C2-4A77-ABAD-C880F109367A 
       type: organization
