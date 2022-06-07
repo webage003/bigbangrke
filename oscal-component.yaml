@@ -21,77 +21,91 @@ component-definition:
     purpose: Istio Service Mesh
     responsible-roles:
     - role-id: provider
-      party-uuid: 72134592-08C2-4A77-ABAD-C880F109367A
+      party-uuids:
+      - 72134592-08C2-4A77-8BAD-C880F109367A
     control-implementations:
     - uuid: 06717F3D-CE1E-494C-8F36-99D1316E0D13
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
-      description: Controls implemented by authservice for inheritance by applications
+      description: 
+        Controls implemented by authservice for inheritance by applications
       implemented-requirements:
       - uuid: 1822457D-461B-482F-8564-8929C85C04DB
         control-id: ac-3
-        description: |-
+        description: >-
           Istio RequestAuthentication and AuthorizationPolicies are applied after Authservice.  Istio is configured to only allow access to applications if they have a valid JWT,  denying access by default. Applications that do not use Authservice do not have these
-           policies.
+          policies.
       - uuid: D7717A9B-7604-45EF-8DCF-EE4DF0417F9C
         control-id: ac-4
-        description: All HTTP(S) connections into the system via Istio ingress gateways
+        description: >-
+          All HTTP(S) connections into the system via Istio ingress gateways
           and throughout the system with Istio sidecars.
       - uuid: 1D1E8705-F6EB-4A21-A24F-1DF7427BA491
         control-id: ac-4.4
-        description: All encrypted HTTPS connections are terminated at the istio ingress
+        description: >-
+          All encrypted HTTPS connections are terminated at the istio ingress
           gateway.
       - uuid: CD1315BF-91FE-490A-B6A6-5616690D78A8
         control-id: ac-6.3
-        description: Can be configured with an "admin" gateway to restrict access
+        description: >-
+          Can be configured with an "admin" gateway to restrict access
           to applications that only need sysadmin access. Not standard in BB itself
           though.
       - uuid: 6109E09A-8279-44AB-8CA4-2051AF895648
         control-id: ac-14
-        description: Istio RequestAuthentication and AuthorizationPolicies are applied
+        description: >-
+          Istio RequestAuthentication and AuthorizationPolicies are applied
           after Authservice. Istio is configured to only allow access to applications
           if they have a valid JWT, denying access by default. Applications that do
           not use Authservice do not have these policies.
       - uuid: 9B6BA674-E6ED-4FB6-B216-3C8733F36411
         control-id: au-2
-        description: Istio provides access logs for all HTTP network requests, including
+        description: >-
+          Istio provides access logs for all HTTP network requests, including
           mission applications.
       - uuid: D3CBC898-F938-4FAA-B1B1-2597A69B5600
         control-id: au-3
-        description: |-
+        description: >-
           By default, Istio uses the Common Log Format with additional information for access logs.
           The default configuration does not include the identity of individuals associated with the event.
       - uuid: D01F6B2D-F18E-47E9-94DC-95C0B5675E13
         control-id: cm-5
-        description: Configured via Kubernetes resources. Inherited from cluster and
+        description: >-
+          Configured via Kubernetes resources. Inherited from cluster and
           flux/ArgoCD.
       - uuid: 6370B2DA-1E35-4916-8591-91FB9EDBE72B
         control-id: cm-8
-        description: 'Provides an inventory of all workloads (including mission apps)
-          in the service mesh, viewable in Kiali. '
+        description: >- 
+          Provides an inventory of all workloads (including mission apps)
+          in the service mesh, viewable in Kiali.
       - uuid: AB9189FF-34E2-4D7E-8018-EB346C7AE967
         control-id: cm-8.1
-        description: Provides an inventory of all workloads (including mission apps)
+        description: >-
+          Provides an inventory of all workloads (including mission apps)
           in the service mesh, viewable in Kiali. The inventory is automatically and
           continuously updated.
       - uuid: A740C741-23B4-4ED9-937C-E0276A9B92EE
         control-id: cm-8.2
-        description: Provides an inventory of all workloads (including mission apps)
+        description: >-
+          Provides an inventory of all workloads (including mission apps)
           in the service mesh, viewable in Kiali. The inventory is automatically and
           continuously updated.
       - uuid: 61615706-5395-4168-8AD0-5C4ACBCC5D7E
         control-id: ia-2
-        description: Istio RequestAuthentication and AuthorizationPolicies are applied
+        description: >-
+          Istio RequestAuthentication and AuthorizationPolicies are applied
           after Authservice. Istio is configured to only allow access to applications
           if they have a valid JWT, denying access by default. Applications that do
           not use Authservice do not have these policies.
       - uuid: 3004BB1D-0F50-48F1-ABFE-40CC522B1C15
         control-id: ia-4
-        description: Istio uses Kubernetes namespaces and resource names to identifiy
+        description: >-
+          Istio uses Kubernetes namespaces and resource names to identifiy
           workloads in the service mesh. This provides management of identifiers for
           all services in the cluster.
       - uuid: FE110D6B-CCB5-41E8-B2DE-287ED843D417
         control-id: ia-9
-        description: Istio registers all workload identities in the service mesh.
+        description: >-
+          Istio registers all workload identities in the service mesh.
           The identity is transmitted in the mTLS certificate when establishing communication
           between services, and is validated by Istio sidecars.
   - uuid: CB9B1F61-3CEC-4B32-A679-89011E596374
@@ -102,11 +116,13 @@ component-definition:
     purpose: Operator for Istio Service Mesh
     responsible-roles:
     - role-id: provider
-      party-uuid: 72134592-08C2-4A77-ABAD-C880F109367A
+      party-uuids: 
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-A542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
-      description: Controls implemented by authservice for inheritance by applications
+      description:
+        Controls implemented by authservice for inheritance by applications
       implemented-requirements: []
   - uuid: 50EE9EB1-0DA4-411C-8771-AA1725B27E22
     type: software
@@ -116,7 +132,8 @@ component-definition:
     purpose: Implementation of Service Mesh
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-8542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -136,7 +153,8 @@ component-definition:
     purpose: Observibility into Istio Service Mesh
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-A542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -154,7 +172,8 @@ component-definition:
     purpose: Display policy violations
     responsible-roles:
     - role-id: provider
-      party-uuid: 72134592-08C2-4A77-ABAD-C880F109367A
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-A542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -181,7 +200,8 @@ component-definition:
       as a customizable Kubernetes Admission Webhook
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-A542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -230,7 +250,8 @@ component-definition:
     purpose: Provides storage and UI for log aggregation in the cluster
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-A542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -269,7 +290,8 @@ component-definition:
     purpose: Managing Elasticsearch and Kibana instances
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-A542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -283,7 +305,8 @@ component-definition:
     purpose: Collects logs from the cluster
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 6358159C-2710-46EF-ACC5-39FD3117391D
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -319,7 +342,8 @@ component-definition:
     purpose: Display policy violations
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-A542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -424,7 +448,8 @@ component-definition:
     purpose: GitOps continuous delivery
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 909C0D05-5BF7-4D89-B82F-38488A02CC85
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -530,7 +555,8 @@ component-definition:
     purpose: Provides authn/authz capabilites to applications via Istio Service Mesh
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-A542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -706,7 +732,8 @@ component-definition:
     purpose: Provides backup and restore capabilities to a Kubernetes cluster
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 5108E5FC-C45F-477B-8542-9C5611A92485
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
@@ -801,7 +828,8 @@ component-definition:
       authorization.
     responsible-roles:
     - role-id: provider
-      party-uuid: ""
+      party-uuids:
+      - 72134592-08C2-4A77-ABAD-C880F109367A
     control-implementations:
     - uuid: 44bb0268-355d-455b-be33-7fc6ecc89668
       source: https://raw.githubusercontent.com/usnistgov/oscal-content/master/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
