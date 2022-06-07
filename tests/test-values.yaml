@@ -92,8 +92,11 @@ jaeger:
 
 kiali:
   enabled: true
+  git:
+    tag: ""
+    branch: keycloak_integration_test
   sso:
-    enabled: false
+    enabled: true
     client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_kiali
   values:
     cr:
@@ -108,10 +111,16 @@ kiali:
         envs:
           cypress_url: 'https://kiali.bigbang.dev'
           cypress_check_data: 'true'
+<<<<<<< HEAD
           # uncomment these next 3 lines if enabling the keycloak SSO integration test
           #cypress_keycloak_test_enable: "true"
           #cypress_keycloak_username: "cypress"
           #cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
+=======
+          cypress_keycloak_test_enable: "true"
+          cypress_keycloak_username: "cypress"
+          cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
+>>>>>>> b4b7f60b... Enable keycloak sso testing for kiali
 
 clusterAuditor:
   enabled: true
@@ -904,6 +913,8 @@ addons:
           envs:
             cypress_baseUrl: https://gitlab.bigbang.dev
             cypress_keycloak_test_enable: "true"
+            cypress_keycloak_username: "cypress"
+            cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
         scripts:
           envs:
             GITLAB_REPOSITORY: https://gitlab.bigbang.dev
