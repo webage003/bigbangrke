@@ -102,25 +102,17 @@ kiali:
     cr:
       spec:
         auth:
-          # if enabling the keycloak SSO integration test, set strategy to "openid"
-          #strategy: "openid"
-          strategy: "anonymous"
+          strategy: "openid"
     bbtests:
       enabled: true
       cypress:
         envs:
           cypress_url: 'https://kiali.bigbang.dev'
           cypress_check_data: 'true'
-<<<<<<< HEAD
           # uncomment these next 3 lines if enabling the keycloak SSO integration test
           #cypress_keycloak_test_enable: "true"
           #cypress_keycloak_username: "cypress"
           #cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
-=======
-          cypress_keycloak_test_enable: "true"
-          cypress_keycloak_username: "cypress"
-          cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
->>>>>>> b4b7f60b... Enable keycloak sso testing for kiali
 
 clusterAuditor:
   enabled: true
