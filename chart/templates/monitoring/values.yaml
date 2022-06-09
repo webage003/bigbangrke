@@ -58,6 +58,8 @@ istio:
     gateways:
     - istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}
   injection: {{ dig "istio" "injection" "enabled" .Values.monitoring }}
+  mtls:
+    mode: "PERMISSIVE"
 
 alertmanager:
   alertmanagerSpec:
