@@ -1361,3 +1361,46 @@ addons:
 
     # -- Post Renderers.  See docs/postrenders.md
     postRenderers: []
+
+  # ----------------------------------------------------------------------------------------------------------------------
+  # Knative Operator
+  #
+  knativeoperator:
+    # -- Toggle deployment of Knative Operator.
+    enabled: false
+    git:
+      repo: https://github.com/defenseunicorns/knative-exploration.git
+      path: "./charts/knative-operator/chart"
+      tag: null
+      branch: "main"
+
+    # -- Flux reconciliation overrides specifically for the Knative Operator Package
+    flux: {}
+
+    # -- Values to passthrough to the Knative Operator chart: https://github.com/defenseunicorns/knative-exploration.git
+    values: {}
+
+    # -- Post Renderers.  See docs/postrenders.md
+    postRenderers: []
+
+
+  # ----------------------------------------------------------------------------------------------------------------------
+  # Knative Serving
+  #
+  knativeserving:
+    # -- Toggle deployment of Knative Serving.
+    enabled: false
+    git:
+      repo: https://github.com/defenseunicorns/knative-exploration.git
+      path: "./charts/knative-serving/chart"
+      tag: null
+      branch: "main"
+
+    # -- Flux reconciliation overrides specifically for the Knative Serving Package
+    flux: {}
+
+    # -- Values to passthrough to the Knative Serving chart: https://github.com/defenseunicorns/knative-exploration.git
+    values: {}
+
+    # -- Post Renderers.  See docs/postrenders.md
+    postRenderers: []

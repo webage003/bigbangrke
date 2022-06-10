@@ -1,0 +1,18 @@
+{{- if .Values.addons.knativeserving.enabled }}
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: knative-serving
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: knative-serving
+    app.kubernetes.io/component: "addons"
+    {{- include "commonLabels" . | nindent 4}}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.addons.knativeserving.git.repo }}
+  ref:
+    {{- include "validRef" .Values.addons.knativeserving.git | nindent 4 }}
+  {{ include "gitIgnore" . }}
+  {{- include "gitCreds" . | nindent 2 }}
+{{- end }}

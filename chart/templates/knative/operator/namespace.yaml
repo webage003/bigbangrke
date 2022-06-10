@@ -1,0 +1,11 @@
+{{- if .Values.addons.knativeoperator.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: knative-operator
+  labels:
+    istio-injection: disabled
+    app.kubernetes.io/name: knative-operator
+    app.kubernetes.io/component: "addons"
+    {{- include "commonLabels" . | nindent 4}}
+{{- end }}

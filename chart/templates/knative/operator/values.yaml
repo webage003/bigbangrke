@@ -1,0 +1,16 @@
+{{- if .Values.addons.knativeoperator.enabled }}
+{{- include "values-secret" (dict "root" $ "package" .Values.addons.knativeoperator "name" "knative-operator" "defaults" (include "bigbang.defaults.knativeoperator" .)) }}
+{{- end }}
+
+{{- define "bigbang.defaults.knativeoperator" -}}
+createNamespace: false
+
+imagePullPolicy: {{ .Values.imagePullPolicy }}
+
+imagePullSecrets:
+  - name: private-registry
+
+networkPolicies:
+  enabled: {{ .Values.networkPolicies.enabled }}
+  controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
+{{- end -}}

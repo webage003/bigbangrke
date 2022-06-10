@@ -1,0 +1,42 @@
+{{- $fluxSettingsKnativeOperator := merge .Values.addons.knativeoperator.flux .Values.flux -}}
+{{- if .Values.addons.knativeoperator.enabled }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: knative-operator
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: knative-operator
+    app.kubernetes.io/component: "addons"
+    {{- include "commonLabels" . | nindent 4}}
+spec:
+  targetNamespace: knative-operator
+  chart:
+    spec:
+      chart: {{ .Values.addons.knativeoperator.git.path }}
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: knative-operator
+        namespace: {{ .Release.Namespace }}
+
+  {{- toYaml $fluxSettingsKnativeOperator | nindent 2 }}
+
+  {{- if .Values.addons.knativeoperator.postRenderers }}
+  postRenderers:
+  {{ toYaml .Values.addons.knativeoperator.postRenderers | nindent 4 }}
+  {{- end }}
+  valuesFrom:
+    - name: {{ .Release.Name }}-knative-operator-values
+      kind: Secret
+      valuesKey: "common"
+    - name: {{ .Release.Name }}-knative-operator-values
+      kind: Secret
+      valuesKey: "defaults"
+    - name: {{ .Release.Name }}-knative-operator-values
+      kind: Secret
+      valuesKey: "overlays"
+  dependsOn:
+    - name: istio
+      namespace: {{ .Release.Namespace }}
+{{- end }}

@@ -1,0 +1,27 @@
+{{- if .Values.addons.knativeserving.enabled }}
+{{- include "values-secret" (dict "root" $ "package" .Values.addons.knativeserving "name" "knative-serving" "defaults" (include "bigbang.defaults.knativeserving" .)) }}
+{{- end }}
+
+{{- define "bigbang.defaults.knativeserving" -}}
+createNamespace: false
+
+imagePullPolicy: {{ .Values.imagePullPolicy }}
+
+imagePullSecrets:
+  - name: private-registry
+
+networkPolicies:
+  enabled: {{ .Values.networkPolicies.enabled }}
+  controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
+
+knative:
+  domain: {{ .Values.domain }}
+
+tls:
+  enabled: true
+  autoTLS:
+    enabled: false
+  clusterIssuer: letsencrypt-dns-issuer
+  nscert:
+    enabled: false
+{{- end -}}
