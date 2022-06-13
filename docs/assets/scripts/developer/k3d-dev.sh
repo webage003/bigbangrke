@@ -464,8 +464,7 @@ if [[ "$METAL_LB" == true ]]; then
   sudo sed -i '/bigbang.dev/d' /etc/hosts
   sudo bash -c "echo '## begin bigbang.dev section' >> /etc/hosts"
   sudo bash -c "echo 172.20.1.240  keycloak.bigbang.dev >> /etc/hosts"
-  sudo bash -c "echo 172.20.1.241  kiali.bigbang.dev >> /etc/hosts"
-  sudo bash -c "echo 172.20.1.242  gitlab.bigbang.dev >> /etc/hosts"
+  sudo bash -c "echo 172.20.1.241  kiali.bigbang.dev anchore-api.bigbang.dev anchore.bigbang.dev argocd.bigbang.dev haproxy.bigbang.dev gitlab.bigbang.dev registry.bigbang.dev tracing.bigbang.dev kiali.bigbang.dev kibana.bigbang.dev chat.bigbang.dev minio.bigbang.dev alertmanager.bigbang.dev grafana.bigbang.dev prometheus.bigbang.dev nexus.bigbang.dev sonarqube.bigbang.dev twistlock.bigbang.dev minimal.bigbang.dev vault.bigbang.dev >> /etc/hosts"
   sudo bash -c "echo '## end bigbang.dev section' >> /etc/hosts"
 	ENDSSH
 fi

@@ -539,6 +539,11 @@ logging:
         envs:
           cypress_expect_logs: "true"
           cypress_kibana_url: "https://kibana.bigbang.dev"
+          cypress_keycloak_test_enable: "true"
+
+eckoperator:
+  license: 
+    trial: true
 
 fluentbit:
   enabled: true
