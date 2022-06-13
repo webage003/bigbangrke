@@ -1,6 +1,7 @@
 domain: bigbang.dev
 
 sso:
+  enabled: true
   # LetsEncrypt certificate authority
   certificate_authority: |
     -----BEGIN CERTIFICATE-----
@@ -115,7 +116,7 @@ kiali:
           #cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
 
 clusterAuditor:
-  enabled: true
+  enabled: false
   values:
     resources:
       requests:
@@ -132,7 +133,7 @@ clusterAuditor:
           cypress_url: 'https://grafana.bigbang.dev/d/YBgRZG6Mz/opa-violations?orgId=1'
 
 gatekeeper:
-  enabled: true
+  enabled: false
   values:
     replicas: 1
     controllerManager:
