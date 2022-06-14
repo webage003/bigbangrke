@@ -545,6 +545,8 @@ logging:
           cypress_expect_logs: "true"
           cypress_kibana_url: "https://kibana.bigbang.dev"
           cypress_keycloak_test_enable: "true"
+          cypress_keycloak_username: "cypress"
+          cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
 
 eckoperator:
   license: 
@@ -825,7 +827,7 @@ addons:
       tag: ""
       branch: keycloak_integration_test
     sso:
-      enabled: false
+      enabled: true
       client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_gitlab
     flux:
       timeout: 30m
