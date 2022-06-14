@@ -55,7 +55,7 @@ Important limitations of this quick start guide's implementation of k3d to be aw
 * Customer Controlled Private Git Repo Prerequisite isn't required due to substituting declarative git ops installation of the Big Bang Helm chart with an imperative helm cli based installation.
 * Encrypting Secrets as code Prerequisite is substituted with clear text secrets on your local machine.
 * Installing and Configuring Flux Prerequisite: Not using GitOps for the quick start eliminates the need to configure flux, and installation is covered within this guide.
-* HTTPS Certificate and hostname configuration Prerequisites: Are satisfied by leveraging default hostname values and the demo HTTPS wildcard certificate that's uploaded to the Big Bang repo, which is valid for *.bigbang.dev, *.admin.bigbang.dev, and a few others. The demo HTTPS wildcard certificate is signed by the Lets Encrypt Free, a Certificate Authority trusted on the public internet, so demo sites like grafana.bigbang.dev will show a trusted HTTPS certificate.
+* HTTPS Certificate and hostname configuration Prerequisites: Are satisfied by leveraging default hostname values and the demo HTTPS wildcard certificate that's uploaded to the Big Bang repo, which is valid for `*.bigbang.dev`, `*.admin.bigbang.dev`, and a few others. The demo HTTPS wildcard certificate is signed by the Lets Encrypt Free, a Certificate Authority trusted on the public internet, so demo sites like `grafana.bigbang.dev` will show a trusted HTTPS certificate.
 * DNS Prerequisite: is substituted by making use of your workstation's Hosts file.
 
 ## Step 1: Provision a Virtual Machine
@@ -100,10 +100,10 @@ The following requirements are recommended for Demonstration Purposes:
     chmod 600 ~/.ssh/config
     temp="""##########################
     Host k3d
-      Hostname x.x.x.x  #IP Address of k3d node
-      IdentityFile ~/.ssh/bb-onboarding-attendees.ssh.privatekey   #ssh key authorized to access k3d node
+      Hostname x.x.x.x  # IP Address of k3d node
+      IdentityFile ~/.ssh/bb-onboarding-attendees.ssh.privatekey  # ssh key authorized to access k3d node
       User ubuntu
-      StrictHostKeyChecking no   #Useful for vagrant where you'd reuse IP from repeated tear downs
+      StrictHostKeyChecking no  # Useful for vagrant where you'd reuse IP from repeated tear downs
     #########################"""
     echo "$temp" | tee -a ~/.ssh/config  #tee -a, appends to preexisting config file
     ```
@@ -249,7 +249,12 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
     # 1159c5c17c964257123b10e7d8864e9fe7f9a580d4124a388e746e4003added3
     # came from https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/checksums.txt
 
-    if [ $? == 0 ]; then tar -xvf kustomize.tar.gz && chmod +x kustomize && sudo mv kustomize /usr/local/bin/kustomize && rm kustomize.tar.gz ; fi
+    if [ $? == 0 ]; then
+      tar -xvf kustomize.tar.gz \
+      && chmod +x kustomize \
+      && sudo mv kustomize /usr/local/bin/kustomize \
+      && rm kustomize.tar.gz
+    fi
     ```
 
     ```shell
@@ -282,7 +287,13 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
     # d643f48fe28eeb47ff68a1a7a26fc5142f348d02c8bc38d699674016716f61cd
     # came from https://github.com/helm/helm/releases/tag/v3.8.1
 
-    if [ $? == 0 ]; then tar -xvf helm.tar.gz && chmod +x linux-amd64/helm && sudo mv linux-amd64/helm /usr/local/bin/helm && rm -rf linux-amd64 && rm helm.tar.gz ; fi
+    if [ $? == 0 ]; then
+      tar -xvf helm.tar.gz \
+      && chmod +x linux-amd64/helm \
+      && sudo mv linux-amd64/helm /usr/local/bin/helm \
+      && rm -rf linux-amd64 \
+      && rm helm.tar.gz
+    fi
     ```
 
     ```shell
@@ -309,12 +320,12 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
   # [ubuntu@Ubuntu_VM:~]
   # Needed for ECK to run correctly without OOM errors
   sudo sysctl -w vm.max_map_count=524288
-  # Alternatively can use:
+  # Alternatively:
   # echo 'vm.max_map_count=524288' | sudo tee -a /etc/sysctl.d/vm-max_map_count.conf
 
   # Needed by Sonarqube
   sudo sysctl -w fs.file-max=131072
-  # Alternatively can use:
+  # Alternatively:
   # echo 'fs.file-max=131072' | sudo tee -a /etc/sysctl.d/fs-file-max.conf
 
   # Relabel files for SELinux:
@@ -506,6 +517,7 @@ The `echo $REGISTRY1_USERNAME` is there to verify that the value of your environ
 ```shell
 # [ubuntu@Ubuntu_VM:~]
 cat << EOF > ~/ib_creds.yaml
+---
 registryCredentials:
   registry: registry1.dso.mil
   username: "$REGISTRY1_USERNAME"
@@ -514,6 +526,7 @@ EOF
 
 
 cat << EOF > ~/demo_values.yaml
+---
 logging:
   values:
     kibana:
@@ -581,19 +594,21 @@ gatekeeper:
 
 istio:
   values:
-    values: # possible values found here https://istio.io/v1.5/docs/reference/config/installation-options (ignore 1.5, latest docs point here)
-      global: # global istio operator values
-        proxy: # mutating webhook injected istio sidecar proxy's values
+    # possible values found here (latest documentation is 1.5):
+    # https://istio.io/v1.5/docs/reference/config/installation-options
+    values:
+      global:  # global istio operator values
+        proxy:  # mutating webhook injected istio sidecar proxy's values
           resources:
             requests:
-              cpu: 0m # null get ignored if used here
+              cpu: 0m  # null get ignored if used here
               memory: 0Mi
             limits:
               cpu: 0m
               memory: 0Mi
 
 twistlock:
-  enabled: false # twistlock requires a license to work, so we're disabling it
+  enabled: false  # twistlock requires a license to work, so we're disabling it
 EOF
 ```
 
@@ -617,7 +632,7 @@ This makes the command more idempotent by allowing the exact same command to wor
 bigbang is the name of the helm release that you'd see if you run `helm list -n=bigbang`. `$HOME/bigbang/chart` is a reference to the helm chart being installed.
 
 `--values https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml`:
-References demonstration HTTPS certificates embedded in the public repository. The *.bigbang.dev wildcard certificate is signed by Let's Encrypt, a free public internet Certificate Authority. Note the URL path to the copy of the cert on master branch is used instead of `$HOME/bigbang/chart/ingress-certs.yaml`, because the Let's Encrypt certs expire after 3 months, and if you deploy a tagged release of BigBang, like 1.15.0, the version of the cert stored in the tagged git commit / release of Big Bang could be expired. Referencing the master branches copy via URL ensures you receive the latest version of the cert, which won't be expired.
+References demonstration HTTPS certificates embedded in the public repository. The `*.bigbang.dev` wildcard certificate is signed by Let's Encrypt, a free public internet Certificate Authority. Note the URL path to the copy of the cert on master branch is used instead of `$HOME/bigbang/chart/ingress-certs.yaml`, because the Let's Encrypt certs expire after 3 months, and if you deploy a tagged release of BigBang, like 1.15.0, the version of the cert stored in the tagged git commit / release of Big Bang could be expired. Referencing the master branches copy via URL ensures you receive the latest version of the cert, which won't be expired.
 
 `--namespace=bigbang --create-namespace`:
 Means it will install the bigbang helm chart in the bigbang namespace and create the namespace if it doesn't exist.
@@ -738,7 +753,7 @@ In a browser, visit one of the sites listed using the `kubectl get vs -A` comman
 
 ## Step 14: Play
 
-Here's an example of post deployment customization of Big Bang.
+Here is an example of post deployment customization of Big Bang.
 After looking at <https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/chart/values.yaml>
 It should make sense that the following is a valid edit
 

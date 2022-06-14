@@ -12,7 +12,7 @@ The following diagram illustrates a typical multiple ingress architecture for Bi
 - Single sign on (SSO) connected to the internet through a dedicated public network load balancer
 - A service mesh ([Istio](https://istio.io/latest/)) handling TLS for all apps except SSO
 
-Big Bang is capable of setting up everything within the private subnet using configuration. The public load balancers would need to be configured outside of Big Bang's deployment.
+Big Bang is capable of setting up everything within the private subnet using configuration.  The public load balancers would need to be configured outside of Big Bang's deployment.
 
 ```mermaid
 graph LR
@@ -52,7 +52,7 @@ graph LR
 
 ### Load Balancers
 
-Load balancers are used to ensure traffic is distributed to Istio's control plane running across the Kubernetes nodes.  In the diagram above, we only show one Kubernetes node for simplicity.  But, most clusters are run with multiple nodes.  Load balancers should be connected to all of the nodes.  It is recommended that you use Layer 3/4 network load balancers in Big Bang since Istio can handle layer 7 routing and balancing.
+Load balancers are used to insure traffic is distributed to Istio's control plane running across the Kubernetes nodes.  In the diagram above, we only show one Kubernetes node for simplicity.  But, most clusters are run with multiple nodes.  Load balancers should be connected to all of the nodes.  It is recommended that you use Layer 3/4 network load balancers in Big Bang since Istio can handle layer 7 routing and balancing.
 
 #### Public Load Balancer
 
