@@ -146,9 +146,7 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
     && sudo apt update -y \
     && sudo apt install docker-ce docker-ce-cli containerd.io -y \
     && sudo usermod --append --groups docker $USER
-    ```
 
-    ```shell
     # Alternative command (less safe due to curl | bash, but more generic):
     # curl -fsSL https://get.docker.com | bash && sudo usermod --append --groups docker $USER
     ```
@@ -255,13 +253,11 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
       && sudo mv kustomize /usr/local/bin/kustomize \
       && rm kustomize.tar.gz
     fi
-    ```
 
-    ```shell
     # Alternative commands (less safe due to curl | bash, but more generic):
-    curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-    chmod +x kustomize
-    sudo mv kustomize /usr/bin/kustomize
+    # curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+    # chmod +x kustomize
+    # sudo mv kustomize /usr/bin/kustomize
     ```
 
 1. Verify Kustomize installation
@@ -291,8 +287,7 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
       tar -xvf helm.tar.gz \
       && chmod +x linux-amd64/helm \
       && sudo mv linux-amd64/helm /usr/local/bin/helm \
-      && rm -rf linux-amd64 \
-      && rm helm.tar.gz
+      && rm -rf linux-amd64 helm.tar.gz
     fi
     ```
 
@@ -328,7 +323,7 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
   # Alternatively:
   # echo 'fs.file-max=131072' | sudo tee -a /etc/sysctl.d/fs-file-max.conf
 
-  # Relabel files for SELinux:
+  # Relabel files for SELinux if using RedHat based distribution:
   # restorecon -RvvF /etc/sysctl.d
 
   # Also Needed by Sonarqube
@@ -517,7 +512,6 @@ The `echo $REGISTRY1_USERNAME` is there to verify that the value of your environ
 ```shell
 # [ubuntu@Ubuntu_VM:~]
 cat << EOF > ~/ib_creds.yaml
----
 registryCredentials:
   registry: registry1.dso.mil
   username: "$REGISTRY1_USERNAME"
@@ -526,7 +520,6 @@ EOF
 
 
 cat << EOF > ~/demo_values.yaml
----
 logging:
   values:
     kibana:
