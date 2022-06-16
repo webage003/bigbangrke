@@ -507,7 +507,8 @@ logging:
     tag: ""
     branch: keycloak_integration_test
   sso:
-    enabled: true
+    # need to set up role mapping in keycloak before enabling
+    enabled: false
     client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_kibana
   license:
     trial: true
@@ -544,7 +545,7 @@ logging:
         envs:
           cypress_expect_logs: "true"
           cypress_kibana_url: "https://kibana.bigbang.dev"
-          cypress_keycloak_test_enable: "true"
+          #cypress_keycloak_test_enable: "true"
           cypress_keycloak_username: "cypress"
           cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
 
