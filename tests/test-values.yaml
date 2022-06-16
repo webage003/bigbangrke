@@ -542,7 +542,7 @@ logging:
         envs:
           cypress_expect_logs: "true"
           cypress_kibana_url: "https://kibana.bigbang.dev"
-          cypress_keycloak_test_enable: "true"
+          #cypress_keycloak_test_enable: "true"
           cypress_keycloak_username: "cypress"
           cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
 
