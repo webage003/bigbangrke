@@ -4,3 +4,4 @@ include:
     file: '/pipelines/bigbang.yaml'
 variables:
   PIPELINE_REPO_BRANCH: metrics-fixes-for-master 
+  CI_COMMIT_TAG: not-a-real-tag
