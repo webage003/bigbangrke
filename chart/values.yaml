@@ -458,7 +458,9 @@ eckoperator:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
-    tag: "2.0.0-bb.2"
+    branch: "24-upgrade"
+    tag: null
+    #tag: "2.0.0-bb.2"
 
   # -- Flux reconciliation overrides specifically for the ECK Operator Package
   flux: {}
