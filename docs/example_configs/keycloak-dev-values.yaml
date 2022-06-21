@@ -19,8 +19,8 @@ comments: |
 
   /docs/developer/development-environment.md#multi-ingress-gateway-support-with-metallb-and-k3d
 
-  Here are some of the URL paths that are available in KeyCloak:
-    - Admin UI. Default credentials for development are "admin:password":
+  Here are some URL paths available in KeyCloak:
+    - Admin UI (default credentials for development are "admin:password"):
       https://keycloak.bigbang.dev/auth/admin
     - User registration and/or account page:
       https://keycloak.bigbang.dev/
