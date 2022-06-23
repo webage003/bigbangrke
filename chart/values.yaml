@@ -261,7 +261,9 @@ jaeger:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
     path: "./chart"
-    tag: "2.32.2-bb.0"
+    branch: "31-dropall"
+    tag: null
+    #tag: "2.32.2-bb.0"
 
   # -- Flux reconciliation overrides specifically for the Jaeger Package
   flux:
@@ -374,7 +376,7 @@ gatekeeper:
 #
 kyverno:
   # -- Toggle deployment of Kyverno.
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno.git
     path: "./chart"
@@ -392,7 +394,7 @@ kyverno:
 
 kyvernopolicies:
   # -- Toggle deployment of Kyverno policies
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-policies.git
     path: ./chart
