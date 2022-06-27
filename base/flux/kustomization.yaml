@@ -73,6 +73,11 @@ patches:
                 requests:
                   cpu: 500m
                   memory: 1Gi
+              args:
+              - --events-addr=http://notification-controller.flux-system.svc.cluster.local./
+              - --watch-all-namespaces=true
+              - --log-level=info
+              - --log-encoding=json
   - target:
       kind: Deployment
       name: kustomize-controller
