@@ -743,9 +743,9 @@ twistlock:
 # Addons are toggled based on labels in CI
 addons:
   argocd:
-    enabled: false
+    enabled: true
     sso:
-      enabled: false
+      enabled: true
       client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_argocd
       client_secret: anything-for-dev
       provider_name: "P1 SSO"
@@ -797,6 +797,9 @@ addons:
         cypress:
           envs:
             cypress_url: "https://argocd.bigbang.dev"
+            cypress_keycloak_test_enable: "true"
+            cypress_keycloak_username: "cypress"
+            cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
 
   authservice:
     enabled: false
