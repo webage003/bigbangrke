@@ -1,0 +1,7 @@
+{{- range $pkgName, $pkg := .Values.addons -}}
+{{- $name := kebabcase $pkgName -}}
+{{- if and (dig "enabled" false $pkg) (dig "useGenericTemplate" false $pkg) }}
+---
+{{- include "values-secret" (dict "root" $ "package" (dict "values" (fromYaml (tpl (toYaml $pkg.values) $))) "name" $name "defaults" (tpl ($.Files.Get (printf "defaults/%s.yaml" $pkgName)) $)) }}
+{{- end }}
+{{- end }}

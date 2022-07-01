@@ -661,10 +661,19 @@ addons:
   argocd:
     # -- Toggle deployment of ArgoCD.
     enabled: false
+
+    # -- Temporary variable to use the generic bigbang template for namespace, secrets, flux, and values
+    useGenericTemplate: true
+
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd.git
       path: "./chart"
       tag: "4.2.3-bb.3"
+
+    # -- Insures the following packages are deployed before this one
+    dependsOn:
+    - istio
+    - monitoring
 
     # -- Flux reconciliation overrides specifically for the ArgoCD Package
     flux: {}
@@ -736,10 +745,20 @@ addons:
   minioOperator:
     # -- Toggle deployment of minio operator and instance.
     enabled: false
+
+    # -- Temporary variable to use the generic bigbang template for namespace, secrets, flux, and values
+    useGenericTemplate: true
+
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git
       path: "./chart"
       tag: "4.4.16-bb.3"
+
+    # -- Insures the following packages are deployed before this one
+    dependsOn:
+    - gatekeeper
+    - istio
+    - kyvernopolicies
 
     # -- Flux reconciliation overrides specifically for the Minio Operator Package
     flux: {}
@@ -1381,3 +1400,46 @@ addons:
 
     # -- Post Renderers.  See docs/postrenders.md
     postRenderers: []
+
+  # -- Example extension of Big Bang
+  neuvector:
+    enabled: false
+    useGenericTemplate: true
+    istio:
+      injection: disabled
+    git:
+      tag: 1.9.1-bb.0
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git
+      path: "./chart"
+    flux: {}
+    dependsOn:
+    - gatekeeper
+    values:
+      domain: "{{ default .Values.domain .Values.hostname }}"
+      prometheus:
+        servicemonitor:
+          enabled: "{{ .Values.monitoring.enabled }}"
+      imagePullSecrets:
+      - name: private-registry
+      istio:
+        enabled: "{{ .Values.istio.enabled }}"
+
+  dependencyTrack:
+    enabled: false
+    useGenericTemplate: true
+    istio:
+      injection: disabled
+    git:
+      branch: getting-sorted-out
+      repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/dependency-track.git
+      path: "./chart"
+    flux: {}
+    values:
+      domain: "{{ default .Values.domain .Values.hostname }}"
+      prometheus:
+        servicemonitor:
+          enabled: "{{ .Values.monitoring.enabled }}"
+      imagePullSecrets:
+      - name: private-registry
+      istio:
+        enabled: "{{ .Values.istio.enabled }}"

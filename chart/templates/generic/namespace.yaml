@@ -1,0 +1,19 @@
+{{- range $pkgName, $pkg := .Values.addons -}}
+{{- $name := kebabcase $pkgName -}}
+{{- if and (dig "enabled" false $pkg) (dig "useGenericTemplate" false $pkg) }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    {{- include "commonLabels" $ | nindent 4 }}
+    {{- if $.Values.istio.enabled }}
+    istio-injection: {{ dig "istio" "injection" "enabled" $pkg }}
+    {{- end }}
+    {{- if (dig "namespace" "additionalLabels" "" $pkg) }}
+      {{- toYaml $pkg.namespace.additionalLabels | nindent 4 }}
+    {{- end }}
+  name: {{ default $name (dig "namespace" "name" "" $pkg) }}
+{{- end -}}
+{{- end -}}

@@ -1,0 +1,22 @@
+{{- range $pkgName, $pkg := .Values.addons -}}
+{{- $name := kebabcase $pkgName -}}
+{{- $flux := merge (dig "flux" dict $pkg) $.Values.flux -}}
+{{- if and (not $.Values.offline) (dig "enabled" false $pkg) (dig "useGenericTemplate" false $pkg) }}
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    {{- include "commonLabels" $ | nindent 4 }}
+spec:
+  interval: {{ $flux.interval }}
+  url: {{ $pkg.git.repo }}
+  ref:
+    {{- include "validRef" $pkg.git | nindent 4 }}
+  {{ include "gitIgnore" $ }}
+  {{- include "gitCreds" $ | nindent 2 }}
+{{- end }}
+{{- end }}
