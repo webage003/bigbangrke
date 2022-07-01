@@ -92,7 +92,7 @@ jaeger:
           cypress_url: "https://tracing.bigbang.dev"
 
 kiali:
-  enabled: false
+  enabled: true
   sso:
     enabled: true
     client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_kiali
