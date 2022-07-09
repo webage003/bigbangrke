@@ -92,7 +92,7 @@ jaeger:
           cypress_url: "https://tracing.bigbang.dev"
 
 kiali:
-  enabled: true
+  enabled: false
   sso:
     enabled: true
     client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_kiali
@@ -498,7 +498,7 @@ kyvernopolicies:
               - gitlab-minio-*
 
 logging:
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     tag: ""
