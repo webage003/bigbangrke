@@ -77,7 +77,7 @@ istio:
           strategy: "anonymous"
 
 jaeger:
-  enabled: true
+  enabled: false
   sso:
     enabled: false
     client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_jaeger
@@ -92,7 +92,7 @@ jaeger:
           cypress_url: "https://tracing.bigbang.dev"
 
 kiali:
-  enabled: true
+  enabled: false
   sso:
     enabled: true
     client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_kiali
@@ -498,7 +498,7 @@ kyvernopolicies:
               - gitlab-minio-*
 
 logging:
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     tag: ""
@@ -650,7 +650,7 @@ tempo:
           memory: 128Mi
 
 monitoring:
-  enabled: true
+  enabled: false
   sso:
     enabled: false
     prometheus:
@@ -720,7 +720,7 @@ monitoring:
           cypress_check_istio_dashboards: 'true'
 
 twistlock:
-  enabled: true
+  enabled: false
   sso:
     enabled: false
     client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_twistlock-saml
@@ -824,7 +824,7 @@ addons:
             size: 256Mi
 
   gitlab:
-    enabled: true
+    enabled: false
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
