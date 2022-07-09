@@ -797,9 +797,9 @@ addons:
         cypress:
           envs:
             cypress_url: "https://argocd.bigbang.dev"
-            cypress_keycloak_test_enable: "true"
-            cypress_keycloak_username: "cypress"
-            cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
+            #cypress_keycloak_test_enable: "true"
+            #cypress_keycloak_username: "cypress"
+            #cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
 
   authservice:
     enabled: false
