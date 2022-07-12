@@ -108,9 +108,9 @@ kiali:
           cypress_url: 'https://kiali.bigbang.dev'
           cypress_check_data: 'true'
           # uncomment these next 3 lines if enabling the keycloak SSO integration test
-          #cypress_keycloak_test_enable: "true"
-          #cypress_keycloak_username: "cypress"
-          #cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
+          cypress_keycloak_test_enable: "true"
+          cypress_keycloak_username: "cypress"
+          cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
 
 clusterAuditor:
   enabled: false
