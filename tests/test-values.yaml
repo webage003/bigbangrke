@@ -749,8 +749,8 @@ addons:
       client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_argocd
       client_secret: anything-for-dev
       provider_name: "P1 SSO"
-      groups: |
-        g, Impact Level 2 Authorized, role:admin
+      rbac:
+        policy.default: role:admin
     values:
       controller:
         resources:
