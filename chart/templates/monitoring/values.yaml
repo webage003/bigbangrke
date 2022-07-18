@@ -133,6 +133,17 @@ prometheus:
         vault.hashicorp.com/agent-inject-token: "true"
         vault.hashicorp.com/role: "prometheus"
         {{- end }}
+        {{- if or $istioInjection (and (eq .Values.istio.mtls.mode "STRICT") .Values.istio.enabled) }}
+        sidecar.istio.io/inject: "true"
+        traffic.sidecar.istio.io/includeInboundPorts: "" # do not intercept any inbound ports
+        traffic.sidecar.istio.io/includeOutboundIPRanges: "" # do not intercept any outbound traffic
+        proxy.istio.io/config:
+          | # configure an env variable `OUTPUT_CERTS` to write certificates to the given folder
+          proxyMetadata:
+            OUTPUT_CERTS: /etc/istio-output-certs
+        sidecar.istio.io/userVolume: '[{"name": "istio-certs", "emptyDir": {"medium":"Memory"}}]' # mount the shared volume
+        sidecar.istio.io/userVolumeMount: '[{"name": "istio-certs", "mountPath": "/etc/istio-output-certs"}]'
+        {{- end }}
       {{- end }}
     {{- end }}
   {{- if $istioInjection }}
@@ -378,15 +389,17 @@ prometheusOperator:
     patch:
       image:
         pullPolicy: {{ .Values.imagePullPolicy }}
-
-  {{- if $istioInjection }}
+  {{- if or $istioInjection (and (eq .Values.istio.mtls.mode "STRICT") .Values.istio.enabled (eq .Values.istio.injection "enabled")) }}
   podAnnotations:
     {{ include "istioAnnotation" . }}
+    {{- if and (eq .Values.istio.mtls.mode "STRICT") (.Values.istio.enabled) (eq .Values.istio.injection "enabled") }}
     traffic.sidecar.istio.io/includeInboundPorts: ""   # do not intercept any inbound ports
     traffic.sidecar.istio.io/includeOutboundIPRanges: ""  # do not intercept any outbound traffic
     proxy.istio.io/config: |  # configure an env variable `OUTPUT_CERTS` to write certificates to the given folder
       proxyMetadata:
         OUTPUT_CERTS: /etc/istio-output-certs
     sidecar.istio.io/userVolumeMount: '[{"name": "istio-certs", "mountPath": "/etc/istio-output-certs"}]'
+    {{- end }}
   {{- end }}
-{{- end -}}
+
+{{- end }}

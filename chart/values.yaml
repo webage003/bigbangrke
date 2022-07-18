@@ -143,6 +143,8 @@ istio:
       type: "LoadBalancer" # or "NodePort"
       kubernetesResourceSpec: {} # https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#KubernetesResourcesSpec
 
+  mtls:
+    mode: "PERMISSIVE"
     # private-ingressgateway:
     #   type: "LoadBalancer" # or "NodePort"
     #   kubernetesResourceSpec: # https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#KubernetesResourcesSpec
