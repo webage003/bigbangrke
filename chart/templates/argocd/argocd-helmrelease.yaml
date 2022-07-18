@@ -14,7 +14,7 @@ spec:
   chart:
     spec:
       chart: {{ .Values.addons.argocd.git.path }}
-      interval: 10m
+      interval: 5m
       sourceRef:
         kind: GitRepository
         name: argocd
