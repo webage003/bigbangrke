@@ -59,7 +59,7 @@ istio:
     - istio-system/{{ default "public" .Values.monitoring.ingress.gateway }}
   injection: {{ dig "istio" "injection" "enabled" .Values.monitoring }}
   mtls:
-    mode: "PERMISSIVE"
+    mode: {{default "PERMISSIVE" .Values.istio.mtls.mode }}
 
 alertmanager:
   alertmanagerSpec:
@@ -83,7 +83,7 @@ alertmanager:
         {{ include "istioAnnotation" . }}
       {{- end }}
     {{- end }}
-  {{- if $istioInjection }}
+  {{- if or $istioInjection (and (eq .Values.istio.mtls.mode "STRICT") .Values.istio.enabled (eq .Values.istio.injection "enabled")) }}
     volumes:
       - name: istio-certs-dir
         emptyDir:
@@ -146,7 +146,7 @@ prometheus:
         {{- end }}
       {{- end }}
     {{- end }}
-  {{- if $istioInjection }}
+  {{- if or $istioInjection (and (eq .Values.istio.mtls.mode "STRICT") .Values.istio.enabled (eq .Values.istio.injection "enabled")) }}
   thanosServiceMonitor:
     scheme: "https"
     tlsConfig:
