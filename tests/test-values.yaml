@@ -551,7 +551,7 @@ eckoperator:
     trial: true
 
 fluentbit:
-  enabled: true
+  enabled: false
   values:
     securityContext:
       privileged: true
