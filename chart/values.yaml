@@ -56,7 +56,7 @@ sso:
     # -- Keycloak realm containing clients
     realm: baby-yoda
 
-  # -- Keycloak's certificate authority (PEM Format). Entered using chomp modifier (see ./docs/example_configs/dev-sso-values.yaml for example). Used by authservice to support SSO for various packages
+  # -- Keycloak's certificate authority (PEM Format). Entered using chomp modifier (see docs/assets/configs/example/dev-sso-values.yaml for example). Used by authservice to support SSO for various packages
   certificate_authority: ""
 
   # -- Keycloak realm's json web key output, obtained at https://<keycloak-server>/auth/realms/<realm>/protocol/openid-connect/certs
@@ -128,7 +128,7 @@ istio:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    tag: "1.13.4-bb.1"
+    tag: "1.13.5-bb.1"
 
   # -- Tetrate Istio Distribution - Tetrate provides FIPs verified Istio and Envoy software and support,
   # validated through the FIPs Boring Crypto module. Find out more from Tetrate - https://www.tetrate.io/tetrate-istio-subscription
@@ -244,7 +244,7 @@ istiooperator:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
     path: "./chart"
-    tag: "1.13.4-bb.0"
+    tag: "1.13.5-bb.1"
 
   # -- Flux reconciliation overrides specifically for the Istio Operator Package
   flux: {}
@@ -261,7 +261,7 @@ jaeger:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
     path: "./chart"
-    tag: "2.32.2-bb.0"
+    tag: "2.33.0-bb.0"
 
   # -- Flux reconciliation overrides specifically for the Jaeger Package
   flux:
@@ -296,7 +296,7 @@ kiali:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
     path: "./chart"
-    tag: "1.51.0-bb.0"
+    tag: "1.51.0-bb.3"
 
   # -- Flux reconciliation overrides specifically for the Kiali Package
   flux: {}
@@ -353,7 +353,7 @@ gatekeeper:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
-    tag: "3.8.1-bb.0"
+    tag: "3.8.1-bb.4"
 
   # -- Flux reconciliation overrides specifically for the OPA Gatekeeper Package
   flux:
@@ -396,7 +396,7 @@ kyvernopolicies:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-policies.git
     path: ./chart
-    tag: "1.0.0-bb.12"
+    tag: "1.0.1-bb.0"
 
   # -- Flux reconciliation overrides specifically for the Kyverno Package
   flux: {}
@@ -418,7 +418,7 @@ logging:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
-    tag: "0.7.1-bb.0"
+    tag: "0.8.0-bb.1"
 
   # -- Flux reconciliation overrides specifically for the Logging (EFK) Package
   flux:
@@ -458,7 +458,7 @@ eckoperator:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
     path: "./chart"
-    tag: "2.0.0-bb.2"
+    tag: "2.3.0-bb.0"
 
   # -- Flux reconciliation overrides specifically for the ECK Operator Package
   flux: {}
@@ -472,7 +472,7 @@ fluentbit:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
     path: "./chart"
-    tag: "0.20.2-bb.0"
+    tag: "0.20.3-bb.0"
 
   # -- Flux reconciliation overrides specifically for the Fluent-Bit Package
   flux: {}
@@ -492,7 +492,7 @@ promtail:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail.git
     path: "./chart"
-    tag: "4.2.0-bb.1"
+    tag: "4.2.0-bb.2"
 
   # -- Flux reconciliation overrides specifically for the Promtail Package
   flux: {}
@@ -509,7 +509,7 @@ loki:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
     path: "./chart"
-    tag: "3.0.4-bb.5"
+    tag: "3.0.5-bb.4"
 
   # -- Flux reconciliation overrides specifically for the Loki Package
   flux: {}
@@ -552,7 +552,7 @@ tempo:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/tempo.git
     path: "./chart"
-    tag: "0.15.1-bb.3"
+    tag: "0.15.1-bb.7"
 
   # -- Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public".
   ingress:
@@ -560,6 +560,40 @@ tempo:
 
   # -- Flux reconciliation overrides specifically for the Tempo Package
   flux: {}
+
+  sso:
+    # -- Toggle SSO for Tempo on and off
+    enabled: false
+
+    # -- OIDC Client ID to use for Tempo
+    client_id: ""
+
+    # -- OIDC Client Secret to use for Tempo
+    client_secret: ""
+
+  objectStorage:
+    # -- S3 compatible endpoint to use for connection information.
+    # examples: "s3.amazonaws.com" "s3.us-gov-west-1.amazonaws.com" "minio.minio.svc.cluster.local:9000"
+    # Note: tempo does not require protocol prefix for URL.
+    endpoint: ""
+
+    # -- S3 compatible region to use for connection information.
+    region: ""
+
+    # -- Access key for connecting to object storage endpoint.
+    accessKey: ""
+
+    # -- Secret key for connecting to object storage endpoint.
+    # Unencoded string data. This should be placed in the secret values and then encrypted
+    accessSecret: ""
+
+    # -- Bucket Names for Loki as a comma delimited list.
+    # examples: "tempo-traces"
+    bucket: ""
+
+    # -- Whether or not objectStorage connection should require HTTPS, if connecting to in-cluster object
+    # storage on port 80/9000 set this value to true.
+    insecure: false
 
   # -- Values to passthrough to the Tempo chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/tempo.git
   values: {}
@@ -578,7 +612,7 @@ monitoring:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
     path: "./chart"
-    tag: "35.5.1-bb.0"
+    tag: "36.2.1-bb.2"
 
   # -- Flux reconciliation overrides specifically for the Monitoring Package
   flux:
@@ -639,7 +673,7 @@ twistlock:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
-    tag: "0.9.0-bb.0"
+    tag: "0.9.0-bb.3"
 
   # -- Flux reconciliation overrides specifically for the Twistlock Package
   flux: {}
@@ -664,7 +698,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd.git
       path: "./chart"
-      tag: "4.2.3-bb.3"
+      tag: "4.9.12-bb.2"
 
     # -- Flux reconciliation overrides specifically for the ArgoCD Package
     flux: {}
@@ -716,7 +750,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/authservice.git
       path: "./chart"
-      tag: "0.5.1-bb.2"
+      tag: "0.5.1-bb.5"
 
     # -- Flux reconciliation overrides specifically for the Authservice Package
     flux: {}
@@ -739,7 +773,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git
       path: "./chart"
-      tag: "4.4.16-bb.2"
+      tag: "4.4.16-bb.3"
 
     # -- Flux reconciliation overrides specifically for the Minio Operator Package
     flux: {}
@@ -789,7 +823,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git
       path: "./chart"
-      tag: "6.0.1-bb.2"
+      tag: "6.1.2-bb.1"
 
     # -- Flux reconciliation overrides specifically for the Gitlab Package
     flux: {}
@@ -913,7 +947,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git
       path: "./chart"
-      tag: "38.0.0-bb.2"
+      tag: "40.1.0-bb.0"
 
     # -- Base64 encoded license file.
     license_key: ""
@@ -978,7 +1012,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube.git
       path: "./chart"
-      tag: "1.0.26-bb.2"
+      tag: "1.0.29-bb.2"
 
     # -- Flux reconciliation overrides specifically for the Sonarqube Package
     flux: {}
@@ -1064,7 +1098,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/anchore-enterprise.git
       path: "./chart"
-      tag: "1.18.6-bb.3"
+      tag: "1.18.6-bb.7"
 
     # -- Flux reconciliation overrides specifically for the Anchore Package
     flux:
@@ -1150,7 +1184,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator.git
       path: "./chart"
-      tag: "1.18.0-bb.1"
+      tag: "1.18.1-bb.0"
 
     # -- Flux reconciliation overrides specifically for the Mattermost Operator Package
     flux: {}
@@ -1167,7 +1201,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost.git
       path: "./chart"
-      tag: "6.7.0-bb.0"
+      tag: "7.0.1-bb.1"
 
     # -- Flux reconciliation overrides specifically for the Mattermost Package
     flux: {}
@@ -1266,7 +1300,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero.git
       path: "./chart"
-      tag: "2.29.0-bb.4"
+      tag: "2.30.1-bb.0"
 
     # -- Flux reconciliation overrides specifically for the Velero Package
     flux: {}
@@ -1294,7 +1328,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak.git
       path: "./chart"
-      tag: "18.1.1-bb.2"
+      tag: "18.2.1-bb.0"
 
     database:
       # -- Hostname of a pre-existing database to use for Keycloak.
@@ -1343,7 +1377,7 @@ addons:
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/vault.git
       path: "./chart"
-      tag: "0.20.1-bb.0"
+      tag: "0.20.1-bb.4"
 
     # -- Flux reconciliation overrides specifically for the Vault Package
     flux: {}
@@ -1366,8 +1400,10 @@ addons:
   # Metrics Server
   #
   metricsServer:
-    # -- Toggle deployment of metrics server.
-    enabled: false
+    # -- Toggle deployment of metrics server
+    # Acceptable options are enabled: true, enabled: false, enabled: auto
+    # true = enabled / false = disabled / auto = automatic (Installs only if metrics API endpoint is not present)
+    enabled: auto
     git:
       repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/metrics-server.git
       path: "./chart"
