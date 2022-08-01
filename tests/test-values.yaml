@@ -745,7 +745,7 @@ addons:
       tag: ""
       branch: "keycloak_integration_test"
     sso:
-      enabled: true
+      enabled: false
       client_id: dev_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_argocd
       client_secret: anything-for-dev
       provider_name: "P1 SSO"
@@ -796,7 +796,7 @@ addons:
         enabled: true
         cypress:
           envs:
-            cypress_url: "https://argocd.bigbang.dev"
+            #cypress_url: "https://argocd.bigbang.dev"
             cypress_keycloak_test_enable: "true"
             cypress_keycloak_username: "cypress"
             cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
