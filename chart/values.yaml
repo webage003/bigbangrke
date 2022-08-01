@@ -296,7 +296,7 @@ kiali:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
     path: "./chart"
-    branch: "30-upgrade-unblocked"
+    branch: "3-upgrade-unblocked"
     tag: null
     #tag: "1.51.0-bb.3"
 
