@@ -749,6 +749,9 @@ addons:
       rbac:
         policy.default: role:admin
     values:
+      sso:
+        rbac:
+          policy.default: role:admin
       controller:
         resources:
           requests:

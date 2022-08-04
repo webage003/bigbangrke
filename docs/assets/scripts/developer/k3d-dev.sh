@@ -1,6 +1,23 @@
 #!/bin/bash
 
+#### Global variables - These allow the script to be run by non-bigbang devs easily
+if [[ -z "${VPC_ID}" ]]; then
+  # default
+  VPC_ID=vpc-065ffa1c7b2a2b979
+fi
+
+if [[ -z "${AMI_ID}" ]]; then
+  # default
+  AMI_ID=ami-84556de5
+fi
+
 #### Preflight Checks
+# Check that the VPC is available 
+EXISTING_VPC=$(aws ec2 describe-vpcs | grep ${VPC_ID})
+if [[ -z "${EXISTING_VPC}" ]]; then
+  echo "VPC is not available in the current AWS_PROFILE - Update VPC_ID"
+  exit 1
+fi
 # check for tools
 tooldependencies=(jq sed aws ssh ssh-keygen scp kubectl)
 for tooldependency in "${tooldependencies[@]}"
@@ -43,7 +60,7 @@ KeyName="${AWSUSERNAME}-dev"
 # Assign a name for your Security Group.  Typically, people use their username to make it easy to identify
 SGname="${AWSUSERNAME}-dev"
 # Identify which VPC to create the spot instance in
-VPC="vpc-2ffbd44b"  # default VPC
+VPC="${VPC_ID}"  # default VPC
 
 
 while [ -n "$1" ]; do # while loop starts
@@ -186,8 +203,8 @@ VolumeSize=120
 # ImageId=$(aws ec2 describe-images --output json --no-cli-pager --filters "Name=name,Values=${AMIName}" --query "reverse(sort_by(Images, &CreationDate))[:1].ImageId" --output text)
 #echo done
 # Hardcode the latest image instead of searching for it to avoid unexpected changes
-echo Using AMI image id ami-84556de5
-ImageId=ami-84556de5
+echo "Using AMI image id ${AMI_ID}"
+ImageId="${AMI_ID}"
 
 # Create the launch spec
 echo -n Creating launch_spec.json ...
@@ -359,7 +376,7 @@ echo
 echo
 # install k3d on instance
 echo "Installing k3d on instance"
-ssh -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP} "wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v5.2.2 bash"
+ssh -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP} "wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v5.4.4 bash"
 echo
 echo "k3d version"
 ssh -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP} "k3d version"
@@ -371,7 +388,7 @@ if [[ "$METAL_LB" == true ]]
 then
   # create docker network for k3d cluster
   echo creating docker network for k3d cluster
-  ssh -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP} "docker network create k3d-network --driver=bridge --subnet=172.20.0.0/16"
+  ssh -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP} "docker network create k3d-network --driver=bridge --subnet=172.20.0.0/16 --gateway 172.20.0.1"
 
   # create k3d cluster
   if [[ "$PRIVATE_IP" == true ]]
@@ -417,7 +434,7 @@ then
 
   echo
   echo
-  echo "copy kubeconfig"
+  echo "copying kubeconfig to workstation..."
   scp -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP}:/home/ubuntu/.kube/config ~/.kube/${AWSUSERNAME}-dev-config
   if [[ "$PRIVATE_IP" == true ]]
   then
@@ -425,6 +442,7 @@ then
   else  # default is to use public ip
     $sed_gsed -i "s/0\.0\.0\.0/${PublicIP}/g" ~/.kube/${AWSUSERNAME}-dev-config
   fi
+  echo
 elif [[ "$PRIVATE_IP" == true ]]
 then
   echo "using private ip for k3d"
@@ -433,21 +451,21 @@ then
   ssh -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP} "kubectl cluster-info"
   echo
   echo
-  echo "copy kubeconfig"
+  echo "copying kubeconfig to workstation..."
   scp -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP}:/home/ubuntu/.kube/config ~/.kube/${AWSUSERNAME}-dev-config
   $sed_gsed -i "s/0\.0\.0\.0/${PrivateIP}/g" ~/.kube/${AWSUSERNAME}-dev-config
-
+  echo
 else # default is public ip
   echo "using public ip for k3d"
   ssh -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP} "k3d cluster create --servers 1  --agents 3 --volume /etc/machine-id:/etc/machine-id@server:0 --volume /etc/machine-id:/etc/machine-id@agent:0,1,2 --k3s-arg "--disable=traefik@server:0"  --k3s-arg "--disable=metrics-server@server:0" --k3s-arg "--tls-san=${PublicIP}@server:0" --port 80:80@loadbalancer --port 443:443@loadbalancer --api-port 6443"
   ssh -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP} "kubectl config use-context k3d-k3s-default"
   ssh -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP} "kubectl cluster-info"
-
   echo
   echo
-  echo "copy kubeconfig"
+  echo "copying kubeconfig to workstation..."
   scp -i ~/.ssh/${KeyName}.pem -o StrictHostKeyChecking=no ubuntu@${PublicIP}:/home/ubuntu/.kube/config ~/.kube/${AWSUSERNAME}-dev-config
   $sed_gsed -i "s/0\.0\.0\.0/${PublicIP}/g" ~/.kube/${AWSUSERNAME}-dev-config
+  echo
 fi
 
 # add tools
@@ -479,48 +497,61 @@ echo "SAVE THE FOLLOWING INSTRUCTIONS INTO A TEMPORARY TEXT DOCUMENT SO THAT YOU
 echo "NOTE: The EC2 instance will automatically terminate at 08:00 UTC unless you delete the cron job"
 echo
 echo "ssh to instance:"
-echo "ssh -i ~/.ssh/${KeyName}.pem ubuntu@${PublicIP}"
-echo
-
-if [[ "$METAL_LB" == true ]]
-then
-  if [[ "$PRIVATE_IP" == true ]]
-  then
-    echo "Start sshuttle:"
-    echo "sshuttle --dns -vr ubuntu@${PublicIP} 172.31.0.0/16 --ssh-cmd 'ssh -i ~/.ssh/${KeyName}.pem -D 127.0.0.1:12345'"
-  else  # using metal lb and public ip
-    echo "To access apps from browser start ssh with application-level port forwarding:"
-    echo "ssh -i ~/.ssh/${KeyName}.pem ubuntu@${PublicIP} -D 127.0.0.1:12345"
-  fi
-elif [[ "$PRIVATE_IP" == true ]]
-then	
-  echo "Start sshuttle:"
-  echo "sshuttle --dns -vr ubuntu@${PublicIP} 172.31.0.0/16 --ssh-cmd 'ssh -i ~/.ssh/${KeyName}.pem'"
-fi
-
+echo "  ssh -i ~/.ssh/${KeyName}.pem ubuntu@${PublicIP}"
 echo
 echo "To use kubectl from your local workstation you must set the KUBECONFIG environment variable:"
-echo "export KUBECONFIG=~/.kube/${AWSUSERNAME}-dev-config"
+echo "  export KUBECONFIG=~/.kube/${AWSUSERNAME}-dev-config"
+if [[ "$PRIVATE_IP" == true ]]
+then
+  echo "The cluster connection will not work until you start sshuttle as described below."
+fi
 echo
 
-if [[ "$METAL_LB" == true ]]
+if [[ "$METAL_LB" == true ]] # using MetalLB
 then
-  echo "Do not edit /etc/hosts on your local workstation."
-  echo "To access apps from a browser edit /etc/hosts on the EC2 instance. Sample /etc/host entries have already been added there."
-  echo "Manually add more hostnames as needed."
-  echo "The IPs to use come from the istio-system services of type LOADBALANCER EXTERNAL-IP that are created when Istio is deployed."
-  echo "You must use Firefox browser with with manual SOCKs v5 proxy configuration to localhost with port 12345."
-  echo "Also ensure 'Proxy DNS when using SOCKS v5' is checked."
-  echo "Or, with other browsers like Chrome you could use a browser plugin like foxyproxy to do the same thing as Firefox."
+  if [[ "$PRIVATE_IP" == true ]]
+  then   # using MetalLB and private IP
+    echo "Start sshuttle in a separate terminal window:"
+    echo "  sshuttle --dns -vr ubuntu@${PublicIP} 172.31.0.0/16 --ssh-cmd 'ssh -i ~/.ssh/${KeyName}.pem -D 127.0.0.1:12345'"
+    echo "Do not edit /etc/hosts on your local workstation."
+    echo "Edit /etc/hosts on the EC2 instance. Sample /etc/host entries have already been added there."
+    echo "Manually add more hostnames as needed."
+    echo "The IPs to use come from the istio-system services of type LOADBALANCER EXTERNAL-IP that are created when Istio is deployed."
+    echo "You must use Firefox browser with with manual SOCKs v5 proxy configuration to localhost with port 12345."
+    echo "Also ensure 'Proxy DNS when using SOCKS v5' is checked."
+    echo "Or, with other browsers like Chrome you could use a browser plugin like foxyproxy to do the same thing as Firefox."    
+  else  # using MetalLB and public IP
+    echo "OPTION 1: ACCESS APPLICATIONS WITH WEB BROWSER ONLY"
+    echo "To access apps from browser only start ssh with application-level port forwarding:"
+    echo "  ssh -i ~/.ssh/${KeyName}.pem ubuntu@${PublicIP} -D 127.0.0.1:12345"
+    echo "Do not edit /etc/hosts on your local workstation."
+    echo "Edit /etc/hosts on the EC2 instance. Sample /etc/host entries have already been added there."
+    echo "Manually add more hostnames as needed."
+    echo "The IPs to use come from the istio-system services of type LOADBALANCER EXTERNAL-IP that are created when Istio is deployed."
+    echo "You must use Firefox browser with with manual SOCKs v5 proxy configuration to localhost with port 12345."
+    echo "Also ensure 'Proxy DNS when using SOCKS v5' is checked."
+    echo "Or, with other browsers like Chrome you could use a browser plugin like foxyproxy to do the same thing as Firefox."
+    echo
+    echo "OPTION 2: ACCESS APPLICATIONS WITH WEB BROWSER AND COMMAND LINE"
+    echo "To access apps from browser and from the workstation command line start sshuttle in a separate terminal window."
+    echo "  sshuttle --dns -vr ubuntu@${PublicIP} 172.20.1.0/24 --ssh-cmd 'ssh -i ~/.ssh/${KeyName}.pem'"
+    echo "Edit your workstation /etc/hosts to add the LOADBALANCER EXTERNAL-IPs from the istio-sytem servcies with application hostnames."
+    echo "Here is an example. You might have to change this depending on the number of gateways you configure for k8s cluster."
+    echo "  # METALLB ISTIO INGRESS IPs"
+    echo "  172.20.1.240 keycloak.bigbang.dev vault.bigbang.dev"
+    echo "  172.20.1.241 sonarqube.bigbang.dev prometheus.bigbang.dev nexus.bigbang.dev gitlab.bigbang.dev"
+  fi
+elif [[ "$PRIVATE_IP" == true ]]  # not using MetalLB
+then	# Not using MetalLB and using private IP
+  echo "Start sshuttle in a separate terminal window:"
+  echo "  sshuttle --dns -vr ubuntu@${PublicIP} 172.31.0.0/16 --ssh-cmd 'ssh -i ~/.ssh/${KeyName}.pem'"
   echo
-elif [[ "$PRIVATE_IP" == true ]]
-then
-  echo "To access apps from a browser edit your /etc/hosts to add the private IP of your instance with application hostnames. Example:"
-  echo "${PrivateIP}	gitlab.bigbang.dev prometheus.bigbang.dev kibana.bigbang.dev"
-  echo
-else   # default is to use the public ip
-  echo "To access apps from a browser edit your /etc/hosts to add the public IP of your instance with application hostnames."
+  echo "To access apps from a browser edit your /etc/hosts to add the private IP of your EC2 instance with application hostnames. Example:"
+  echo "  ${PrivateIP}	gitlab.bigbang.dev prometheus.bigbang.dev kibana.bigbang.dev"
+  echo 
+else   # Not using MetalLB and using pubilc IP. This is the default
+  echo "To access apps from a browser edit your /etc/hosts to add the public IP of your EC2 instance with application hostnames."
   echo "Example:"
-  echo "${PublicIP}	gitlab.bigbang.dev prometheus.bigbang.dev kibana.bigbang.dev"
+  echo "  ${PublicIP}	gitlab.bigbang.dev prometheus.bigbang.dev kibana.bigbang.dev"
   echo
 fi
