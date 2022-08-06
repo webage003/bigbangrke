@@ -134,7 +134,7 @@ clusterAuditor:
           cypress_url: 'https://grafana.bigbang.dev/d/YBgRZG6Mz/opa-violations?orgId=1'
 
 gatekeeper:
-  enabled: false
+  enabled: true
   values:
     replicas: 1
     controllerManager:
@@ -502,7 +502,7 @@ kyvernopolicies:
               - gitlab-minio-*
 
 logging:
-  enabled: false
+  enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     tag: ""
@@ -654,7 +654,7 @@ tempo:
           memory: 128Mi
 
 monitoring:
-  enabled: false
+  enabled: true
   sso:
     enabled: false
     prometheus:
