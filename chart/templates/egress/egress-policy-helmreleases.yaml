@@ -1,0 +1,28 @@
+{{- range $name, $value := .Values.istio.egressGateways }}
+{{- range $value.rules }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: {{$name}}-{{ .host | replace "*" "any" | replace "." "-" }}
+  namespace: istio-system
+spec:
+  chart:
+    spec:
+      chart: chart
+      sourceRef:
+        kind: GitRepository
+        name: egress-policy
+  interval: 1m0s
+  values:
+    host: {{ .host | quote }}
+    # ports:
+    # - number: 53
+    #   name: tcp
+    #   protocol: TCP
+    rules:
+    {{ toYaml .rules | nindent 6 }}
+    egressGateway:
+      name: {{ $name }}
+---
+{{- end }}
+{{- end }}

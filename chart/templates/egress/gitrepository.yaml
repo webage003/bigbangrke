@@ -1,0 +1,18 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: egress-policy
+  namespace: istio-system
+spec:
+  gitImplementation: go-git
+  ignore: |
+    # exclude file extensions
+    /**/*.md
+    /**/*.txt
+    /**/*.sh
+    !/chart/tests/scripts/*.sh
+  interval: 2m
+  ref:
+    branch: main
+  timeout: 60s
+  url: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/egress-policy.git

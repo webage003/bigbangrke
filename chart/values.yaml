@@ -128,7 +128,8 @@ istio:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
     path: "./chart"
-    tag: "1.14.3-bb.0"
+    # tag: "1.14.3-bb.0"
+    branch: "egress"
 
   # -- Tetrate Istio Distribution - Tetrate provides FIPs verified Istio and Envoy software and support,
   # validated through the FIPs Boring Crypto module. Find out more from Tetrate - https://www.tetrate.io/tetrate-istio-subscription
@@ -156,6 +157,57 @@ istio:
     #   # Node port will be assigned as follows: Port 15021 (Status) = nodePortBase, Port 80 = nodePortBase+1, Port 443 = nodePortBase+2, Port 15443 (SNI) = nodePortBase+3
     #   # Node port base should be in the range from 30000 to 32764
     #   nodePortBase: 32000  # Alternatively, the kubernetesResourceSpec can be used to configure all port parameters
+  egressGateways: {}
+    # this is the name of the gateay
+    # egress-gateway:
+    #   enabled: true
+    #   # -- Labels to use for selecting the egress gateway from the service
+    #   # Automatic labels: 'app: {egress gateway name}' and `istio: egressgateway`
+    #   extraLabels: {}
+    #   # -- Set any value from https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#KubernetesResourcesSpec
+    #   k8s:
+    #     # hpaSpec:  By default, HPA is set from 1-5 instances with a target average utilization of 80%
+    #     resources: {}
+    #     service:
+    #       # -- "LoadBalancer" or "NodePort"
+    #       type: "LoadBalancer"
+    #       # ports: By default ports 15021 (status), 80, 443, and 15443 (SNI Routing) are setup
+    #     # -- https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    #     podAnnotations: {}
+    #     # -- https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    #     serviceAnnotations: {}
+    #     # -- https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+    #     nodeSelector: {}
+    #     # -- https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+    #     affinity: {}
+    #     # -- https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    #     tolerations: []
+
+    #   # authorization policy rules
+    #   rules:
+    #   - host: "oauth2.googleapis.com"
+    #     # ports:
+    #     rules:
+    #     - from:
+    #       - source:
+    #           principals:
+    #           - "*"
+    #   - host: "httpbin.org"
+    #     rules:
+    #     - from:
+    #       - source:
+    #           principals:
+    #           - "cluster.local/ns/default/sa/noone"
+    # enabled: false
+    # hosts:
+    # - host: foobar.com
+    #   rules:
+    #   - from:
+    #     - source:
+    #         principals:
+    #         - "cluster.local/ns/default/sa/default"
+    #     - source:
+    #         namespaces: ["istio-system"]
 
   gateways:
     public:

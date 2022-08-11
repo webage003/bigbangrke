@@ -1,0 +1,51 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: sidecar
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: istiod
+  action: ALLOW
+  rules:
+  - to:
+    - operation:
+        ports:
+        - "10250"
+---
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  namespace: istio-system
+  name: audit
+spec:
+  action: AUDIT
+  rules:
+  - {}
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: ingress
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  action: ALLOW
+  rules:
+  - {}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Sidecar
+metadata:
+  name: scraping
+  namespace: monitoring
+spec:
+  workloadSelector:
+    labels:
+      kubernetes.io/name: prometheus
+  outboundTrafficPolicy:
+    mode: ALLOW_ANY

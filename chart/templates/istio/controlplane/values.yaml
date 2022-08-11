@@ -21,11 +21,34 @@ tracing:
 {{- end }}
 {{- end }}
 
-{{- if .Values.tempo.enabled }}
+{{ if or .Values.tempo.enabled .Values.istio.egressGateways }}
 meshConfig:
+{{- if .Values.tempo.enabled }}
   accessLogFormat: |
     [%START_TIME%] "%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %PROTOCOL%" %RESPONSE_CODE% %RESPONSE_FLAGS% %RESPONSE_CODE_DETAILS% %CONNECTION_TERMINATION_DETAILS% "%UPSTREAM_TRANSPORT_FAILURE_REASON%" %BYTES_RECEIVED% %BYTES_SENT% %DURATION% %RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)% "%REQ(X-FORWARDED-FOR)%" "%REQ(USER-AGENT)%" "%REQ(X-REQUEST-ID)%" "%REQ(:AUTHORITY)%" "%UPSTREAM_HOST%" %UPSTREAM_CLUSTER% %UPSTREAM_LOCAL_ADDRESS% %DOWNSTREAM_LOCAL_ADDRESS% %DOWNSTREAM_REMOTE_ADDRESS% %REQUESTED_SERVER_NAME% %ROUTE_NAME% traceID=%REQ(x-b3-traceid)%
 {{- end }}
+{{- if .Values.istio.egressGateways }}
+  outboundTrafficPolicy:
+    mode: REGISTRY_ONLY
+{{- end }}
+{{- end }}
+
+{{- if .Values.istio.egressGateways }}
+egressGateways:
+{{- range $name, $values := .Values.istio.egressGateways -}}
+  {{ $name | nindent 2 }}:
+    enabled: {{ $values.enabled }}
+{{- if $values.k8s }}
+    k8s:
+    {{- toYaml $values.k8s | nindent 4 }}
+{{- end }} 
+    {{- if $values.extraLabels }}
+    extraLabels:
+      {{- toYaml $values.extraLabels | nindent 4 }}
+    {{- end }} 
+  {{- end }} 
+{{- end }} 
+
 
 imagePullSecrets:
   - private-registry
@@ -138,3 +161,4 @@ k8s:
       nodePort: {{ add .nodePortBase 3 }}
     {{- end }}
 {{- end }}
+
