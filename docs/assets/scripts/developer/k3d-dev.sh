@@ -79,6 +79,10 @@ while [ -n "$1" ]; do # while loop starts
       METAL_LB=true
   ;; 
 
+  -t) echo "-t option passed to install Defenders for Twistlock" 
+      DEFENDERS=true
+  ;; 
+
   -d) echo "-d option passed to destroy the AWS resources"
       AWSINSTANCEIDs=$( aws ec2 describe-instances \
         --output text \
@@ -115,7 +119,8 @@ while [ -n "$1" ]; do # while loop starts
       echo " -b   use BIG M5 instance. Default is t3.2xlarge"
       echo " -p   use private IP for security group and k3d cluster"
       echo " -m   create k3d cluster with metalLB"
-	  echo " -d   destroy related AWS resources"
+      echo " -t   create k3d cluster with Defenders for Twitlock"
+	    echo " -d   destroy related AWS resources"
       echo " -h   output help"
       exit 0
   ;;
