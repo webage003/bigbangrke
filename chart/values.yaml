@@ -241,7 +241,7 @@ istio:
 spire:
   enabled: true
   git:
-    repo: https://github.com/Racer159/spire-experimental.git
+    repo: https://github.com/defenseunicorns/spire-experimental.git
     path: "./chart"
     branch: "main"
 
