@@ -1,0 +1,13 @@
+{{- if .Values.spire.enabled }}
+{{- include "values-secret" (dict "root" $ "package" .Values.spire "name" "spire" "defaults" (include "bigbang.defaults.spire" .)) }}
+{{- end }}
+
+{{- define "bigbang.defaults.spire" -}}
+createNamespace: false
+
+imagePullPolicy: {{ .Values.imagePullPolicy }}
+
+imagePullSecrets:
+  - private-registry
+
+{{- end -}}

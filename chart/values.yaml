@@ -238,6 +238,16 @@ istio:
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
 
+spire:
+  enabled: true
+  git:
+    repo: https://github.com/Racer159/spire-experimental.git
+    path: "./chart"
+    branch: "main"
+
+  # -- Flux reconciliation overrides specifically for the Minio Package
+  flux: {}
+
 istiooperator:
   # -- Toggle deployment of Istio Operator.
   enabled: true

@@ -1,0 +1,39 @@
+{{- $fluxSettingsSpire := merge .Values.spire.flux .Values.flux -}}
+{{- if .Values.spire.enabled }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: spire
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: spire
+    app.kubernetes.io/component: "core"
+    {{- include "commonLabels" . | nindent 4}}
+spec:
+  targetNamespace: spire
+  chart:
+    spec:
+      chart: {{ .Values.spire.git.path }}
+      interval: 5m
+      sourceRef:
+        kind: GitRepository
+        name: spire
+        namespace: {{ .Release.Namespace }}
+
+  {{- toYaml $fluxSettingsSpire | nindent 2 }}
+
+  {{- if .Values.spire.postRenderers }}
+  postRenderers:
+  {{ toYaml .Values.spire.postRenderers | nindent 4 }}
+  {{- end }}
+  valuesFrom:
+    - name: {{ .Release.Name }}-spire-values
+      kind: Secret
+      valuesKey: "common"
+    - name: {{ .Release.Name }}-spire-values
+      kind: Secret
+      valuesKey: "defaults"
+    - name: {{ .Release.Name }}-spire-values
+      kind: Secret
+      valuesKey: "overlays"
+{{- end }}
