@@ -1,4 +1,4 @@
-# Big Bang Package: Pipeline Integration
+# Pipeline Integration
 
 Big Bang contains and uses a continuous deployment tool to deploy packages using Helm charts sourced from Git.  This document will cover how to integrate a Helm chart from a mission application or other package into the pattern Big Bang requires.  Once complete, you will be able to deploy your package with Big Bang.
 
@@ -10,6 +10,11 @@ Big Bang contains and uses a continuous deployment tool to deploy packages using
    > You will need to have the Container Registry enabled.This can be requested from the Big Bang team.
 
 > Throughout this document, we will be setting up an application called `podinfo` as a demonstration.
+
+
+## Branching
+
+Each package will have a default branch of `main`.  Immutable tags will be used to identify releases and will follow a semver versioning scheme. 
 
 ## Package Pipeline
 
