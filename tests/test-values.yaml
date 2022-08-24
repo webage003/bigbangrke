@@ -114,10 +114,6 @@ kiali:
 
 clusterAuditor:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
-    tag: ""
-    branch: no_data_check_fix
   values:
     resources:
       requests:
