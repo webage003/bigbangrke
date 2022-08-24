@@ -1,12 +1,10 @@
-# The Basics
+# Values Guide
 
 Big Bang uses [Helm](https://helm.sh/) to handle configuration values for Big Bang, so in order to understand how Big Bang works it is first essential to understand Helm. Under the hood, Helm is essentially just a template rendering engine: template files are defined where variables are used as placeholders for values, Helm takes those values and interpolates them into the template, then outputs the rendered template file (for Kubernetes, this means YAML). For anyone that has experience with configuration management tools, it is similar in function to Jinja for Ansible and ERB templates for Puppet and Chef.
 
 Big Bang takes this basic functionality and uses it to create a somewhat complex set of layers that the values get passed through. Each layer includes a set of separate templates that are unique, yet share some standards, which receive values from the layer above and pass them through to the templates in the layer below. The purpose of this guide is to walk through how this works at a high level to increase the level of understanding amongst the community of Big Bang users.
 
 For additional information regarding Helm templates/values in general, read through the upstream [documentation](https://helm.sh/docs/topics/charts/#templates-and-values).
-
-# Big Bang Specifics
 
 ## Hierarchy
 
@@ -102,4 +100,4 @@ kiali:
 
 In some cases customers run into limitations that even values passthrough cannot solve. In cases where the package chart/template file itself does not provide a value for configuration you can make use of Post Renderers.
 
-These are an advanced capability within Helm and Flux that allows end users to make modifications to the chart after it has been rendered. For more information and specific on how to leverage this capability see [this document](../../postrenderers.md).
+These are an advanced capability within Helm and Flux that allows end users to make modifications to the chart after it has been rendered. For more information and specific on how to leverage this capability see [this document](../../understanding-bigbang/configuration/postrenderers.md).
