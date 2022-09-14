@@ -37,20 +37,4 @@ spec:
     - name: {{ .Release.Name }}-mattermost-values
       kind: Secret
       valuesKey: "overlays"
-
-  dependsOn:
-    - name: mattermost-operator
-      namespace: {{ .Release.Namespace }}
-
-    {{- with .Values.addons.mattermost.objectStorage }}
-    {{- if not (and .endpoint .accessKey .accessSecret .bucket) }}
-    - name: minio-operator
-      namespace: {{ $.Release.Namespace }}
-    {{- end }}
-    {{- end }}
-
-    {{- if and .Values.addons.mattermost.elasticsearch.enabled .Values.logging.enabled }}
-    - name: ek
-      namespace: {{ $.Release.Namespace }}
-    {{- end }}
 {{- end }}
