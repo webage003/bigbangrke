@@ -3,6 +3,11 @@
 {{- end }}
 
 {{- define "bigbang.defaults.spire" -}}
+
+{{- $domainName := default .Values.domain .Values.hostname }}
+hostname: {{ $domainName }}
+domain: {{ $domainName }}
+
 createNamespace: false
 
 imagePullPolicy: {{ .Values.imagePullPolicy }}
