@@ -99,7 +99,6 @@ policies:
     # Subpath volumes can be used in combination with symlinks to break out into the host filesystem
     exclude:
       any:
-      
       - resources:
           namespaces:
           - gitlab
