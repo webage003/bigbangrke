@@ -675,7 +675,9 @@ twistlock:
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
-    tag: "0.10.0-bb.1"
+    branch: "37-resolve"
+    tag: null
+    #tag: "0.10.0-bb.2"
 
   # -- Flux reconciliation overrides specifically for the Twistlock Package
   flux: {}
@@ -711,6 +713,9 @@ twistlock:
 
     # -- X.509 Certificate from Identity Provider (i.e. Keycloak). See https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock/-/blob/main/docs/KEYCLOAK.md for format. Use the `|-` syntax for multiline string.
     cert: ""
+  
+  # -- This value should only be enabled when upgrading from a version <=0.10.0-bb.1 and only when you have locally created volumes
+  localVolumeUpgrade: false
 
   # -- Values to passthrough to the twistlock chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
   values: {}
