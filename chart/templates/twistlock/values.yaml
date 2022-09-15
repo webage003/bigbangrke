@@ -37,7 +37,9 @@ annotations:
 console:
   image:
     imagePullPolicy: {{ .Values.imagePullPolicy }}
+  {{- if .Release.IsUpgrade }}
   localVolumeUpgrade: {{ .Values.twistlock.localVolumeUpgrade }}
+  {{- end }}
 
 sso:
   enabled: {{ .Values.twistlock.sso.enabled }}
