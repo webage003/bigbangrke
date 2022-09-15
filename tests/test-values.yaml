@@ -727,7 +727,9 @@ twistlock:
     console:
       persistence:
         size: 256Mi
+      {{ if .Release.IsUpgrade }}
       localVolumeUpgrade: true
+      {{- end }}
     bbtests:
       enabled: true
       cypress:
