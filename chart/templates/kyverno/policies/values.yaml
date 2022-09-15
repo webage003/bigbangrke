@@ -100,11 +100,14 @@ policies:
     # Subpath volumes can be used in combination with symlinks to break out into the host filesystem
     exclude:
       any:
-      {{- if .Values.addons.gitlab.enabled }}
+      
       - resources:
           namespaces:
           - gitlab
+          - twistlock
           names:
+          - init-pvc-permissions-change
+          {{- if .Values.addons.gitlab.enabled }}
           # Volume `toolbox-secrets` is an emptyDir mounted read/write in initContainer `configure`
           # It is also mounted in the container `toolbox` using a subPath, making it open to the
           # vulnerability.  The initContainer uses a shell script, stored in a configmap, to copies
@@ -155,7 +158,7 @@ policies:
           # values from a readOnly projected volume holding secrets/configmap items, into the shared
           # volume. The shared volume is mounted with subpaths pointing to specific files in the container.
           - gitlab-gitaly*
-      {{- end }}
+          {{- end }}
   {{- end }}
 
   {{- if or .Values.fluentbit.enabled .Values.monitoring.enabled .Values.twistlock.enabled }}
