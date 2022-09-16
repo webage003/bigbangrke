@@ -94,7 +94,7 @@ policies:
       {{- end }}
   {{- end }}
 
-  {{- if or (.Values.addons.gitlab.enabled) (and .Values.twistlock.localVolumeUpgrade .Release.IsUpgrade) }}
+  {{- if or (.Values.addons.gitlab.enabled) (and (dig "console" "localVolumeUpgrade" false .Values.twistlock.values) (.Release.IsUpgrade)) }}
   disallow-shared-subpath-volume-writes:
     # Subpath volumes can be used in combination with symlinks to break out into the host filesystem
     exclude:
@@ -104,11 +104,11 @@ policies:
           {{- if .Values.addons.gitlab.enabled }}
           - gitlab
           {{- end }}
-          {{- if .Values.twistlock.localVolumeUpgrade }}
+          {{- if dig "console" "localVolumeUpgrade" false .Values.twistlock.values }}
           - twistlock
           {{- end }}
           names:
-          {{- if .Values.twistlock.localVolumeUpgrade }}
+          {{- if dig "console" "localVolumeUpgrade" false .Values.twistlock.values }}
           - twistlock-console*
           {{- end }}
           {{- if .Values.addons.gitlab.enabled }}
