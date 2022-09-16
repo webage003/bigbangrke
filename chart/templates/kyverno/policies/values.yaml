@@ -109,7 +109,7 @@ policies:
           {{- end }}
           names:
           {{- if .Values.twistlock.console.localVolumeUpgrade }}
-          - init-pvc-permissions-*
+          - init-pvc-permissions-change
           {{- end }}
           {{- if .Values.addons.gitlab.enabled }}
           # Volume `toolbox-secrets` is an emptyDir mounted read/write in initContainer `configure`
