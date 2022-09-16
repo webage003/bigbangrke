@@ -95,17 +95,23 @@ policies:
       {{- end }}
   {{- end }}
 
-  {{- if .Values.addons.gitlab.enabled }}
+  {{- if or (.Values.addons.gitlab.enabled) (and .Values.twistlock.console.localVolumeUpgrade .Release.IsUpgrade) }}
   disallow-shared-subpath-volume-writes:
     # Subpath volumes can be used in combination with symlinks to break out into the host filesystem
     exclude:
       any:
       - resources:
           namespaces:
+          {{- if .Values.addons.gitlab.enabled }}
           - gitlab
+          {{- end }}
+          {{- if .Values.twistlock.console.localVolumeUpgrade }}
           - twistlock
+          {{- end }}
           names:
-          - init-pvc-permissions-change*
+          {{- if .Values.twistlock.console.localVolumeUpgrade }}
+          - init-pvc-permissions-*
+          {{- end }}
           {{- if .Values.addons.gitlab.enabled }}
           # Volume `toolbox-secrets` is an emptyDir mounted read/write in initContainer `configure`
           # It is also mounted in the container `toolbox` using a subPath, making it open to the
