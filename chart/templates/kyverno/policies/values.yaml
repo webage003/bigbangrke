@@ -104,7 +104,7 @@ policies:
           - gitlab
           - twistlock
           names:
-          - init-pvc-permissions-change
+          - init-pvc-permissions-change*
           {{- if .Values.addons.gitlab.enabled }}
           # Volume `toolbox-secrets` is an emptyDir mounted read/write in initContainer `configure`
           # It is also mounted in the container `toolbox` using a subPath, making it open to the
