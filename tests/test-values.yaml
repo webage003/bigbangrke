@@ -727,7 +727,7 @@ twistlock:
     console:
       persistence:
         size: 256Mi
-      localVolumeUpgrade: true
+  localVolumeUpgrade: true
     bbtests:
       enabled: true
       cypress:
