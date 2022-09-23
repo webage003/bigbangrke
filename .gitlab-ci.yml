@@ -3,4 +3,5 @@ include:
     ref: eks-support
     file: '/pipelines/bigbang.yaml'
 variables:
+  PIPELINE_REPO_BRANCH: 'eks-support'
   DEBUG_ENABLED: "true"
