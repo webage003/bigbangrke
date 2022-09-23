@@ -4,4 +4,3 @@ include:
     file: '/pipelines/bigbang.yaml'
 variables:
   DEBUG_ENABLED: "true"
-  
