@@ -110,7 +110,7 @@ policies:
           {{- end }}
           names:
           {{- if (dig "console" "localVolumeUpgrade" false .Values.twistlock.values) }}
-          - twistlock-consol*
+          - volume-upgrade-job*
           {{- end }}
           {{- if .Values.addons.gitlab.enabled }}
           # Volume `toolbox-secrets` is an emptyDir mounted read/write in initContainer `configure`
