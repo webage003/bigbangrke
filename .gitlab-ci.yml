@@ -4,4 +4,3 @@ include:
     file: '/pipelines/bigbang.yaml'
 variables:
   PIPELINE_REPO_BRANCH: add-kyvernoreporter
-  DEBUG_ENABLED: "true"
