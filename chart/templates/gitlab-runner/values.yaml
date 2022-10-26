@@ -28,4 +28,10 @@ podAnnotations:
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}
 
+# autoRegister requires kyverno
+{{- if .Values.kyverno.enabled }}
+autoRegister:
+  enabled: {{ dig  "autoRegister" "enabled" "true" .Values.addons.gitlabRunner }}
+{{- end }}
+
 {{- end -}}
