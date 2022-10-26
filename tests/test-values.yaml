@@ -163,7 +163,7 @@ gatekeeper:
           - nexus-repository-manager/nexus-repository-manager-cypress-test
           - cluster-auditor/cluster-auditor-cypress-test
           - gitlab/gitlab-cypress-test
-          - gitlab/gitlab-runner-cypress-test
+          - gitlab-runner/gitlab-runner-cypress-test
           - kiali/kiali-operator-cypress-test
           - mattermost/mattermost-cypress-test
           - keycloak/keycloak-cypress-test
@@ -265,7 +265,7 @@ gatekeeper:
           - nexus-repository-manager/nexus-repository-manager-cypress-test
           - cluster-auditor/cluster-auditor-cypress-test
           - gitlab/gitlab-cypress-test
-          - gitlab/gitlab-runner-cypress-test
+          - gitlab-runner/gitlab-runner-cypress-test
           - kiali/kiali-operator-cypress-test
           - mattermost/mattermost-cypress-test
           - keycloak/keycloak-cypress-test
@@ -390,6 +390,7 @@ kyvernopolicies:
           - resources:
               namespaces:
               - gitlab
+              - gitlab-runner
               - kiali
               - cluster-auditor
               - mattermost
@@ -421,6 +422,7 @@ kyvernopolicies:
           - resources:
               namespaces:
               - gitlab
+              - gitlab-runner
               - kiali
               - cluster-auditor
               - mattermost
@@ -462,6 +464,7 @@ kyvernopolicies:
           - resources:
               namespaces:
               - gitlab
+              - gitlab-runner
               - kiali
               - cluster-auditor
               - mattermost
