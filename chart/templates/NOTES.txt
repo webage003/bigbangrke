@@ -148,6 +148,11 @@ PLATFORM ONE TRACING WARNING:
   After the beta period, only one Tracing engine will be supported at one time, with Tempo becoming the default supported engine over a direct Jaeger installation. Tempo will deploy with Tempo-Query, a Jaeger frontend with Tempo as the backend.
 {{- end }}
 
+{{- if and .Values.addons.sonarqube.enabled (dig "values" "[*]" "env" "name" "JAVA_JDK_OPTIONS" "JAVA_JDK_OPTIONS" $.Values.addons.sonarqube) }}
+PLATFORM ONE SONARQUBE WARNING:
+  You have sonarqube running and set your own 'JAVA_JDK_OPTIONS', if you are running on a FIPS enabled node, ensure '-Dcom.redhat.fips=false' is present within the JAVA_JDK_OPTIONS environment variable.
+{{- end }}
+
 {{- if $.Values.addons.mattermost.enabled }}
 Mattermost is enabled.
 {{- with .Values.addons.mattermost.database }}
