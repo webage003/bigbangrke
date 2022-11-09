@@ -1,39 +1,39 @@
-{{- $fluxSettingsTwistlock := merge .Values.twistlock.flux .Values.flux -}}
-{{- if .Values.twistlock.enabled }}
+{{- $fluxSettingsPrismaCloud := merge .Values.prismaCloud.flux .Values.flux -}}
+{{- if .Values.prismaCloud.enabled }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: twistlock
+  name: prisma-cloud
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: twistlock
+    app.kubernetes.io/name: prisma-cloud
     app.kubernetes.io/component: "security"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: twistlock
+  targetNamespace: prisma-cloud
   chart:
     spec:
-      chart: {{ .Values.twistlock.git.path }}
+      chart: {{ .Values.prismaCloud.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: twistlock
+        name: prisma-cloud
         namespace: {{ .Release.Namespace }}
 
-  {{- toYaml $fluxSettingsTwistlock | nindent 2 }}
+  {{- toYaml $fluxSettingsPrismaCloud | nindent 2 }}
   
-  {{- if .Values.twistlock.postRenderers }}
+  {{- if .Values.prismaCloud.postRenderers }}
   postRenderers:
-  {{ toYaml .Values.twistlock.postRenderers | nindent 4 }}
+  {{ toYaml .Values.prismaCloud.postRenderers | nindent 4 }}
   {{- end }}
   valuesFrom:
-    - name: {{ .Release.Name }}-twistlock-values
+    - name: {{ .Release.Name }}-prisma-cloud-values
       kind: Secret
       valuesKey: "common"
-    - name: {{ .Release.Name }}-twistlock-values
+    - name: {{ .Release.Name }}-prisma-cloud-values
       kind: Secret
       valuesKey: "defaults"
-    - name: {{ .Release.Name }}-twistlock-values
+    - name: {{ .Release.Name }}-prisma-cloud-values
       kind: Secret
       valuesKey: "overlays"
 

@@ -1,10 +1,10 @@
-{{- if .Values.twistlock.enabled }}
+{{- if .Values.prismaCloud.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: twistlock
+  name: prisma-cloud
   labels:
-    app.kubernetes.io/name: twistlock
+    app.kubernetes.io/name: prisma-cloud
     app.kubernetes.io/component: "security"
     {{- include "commonLabels" . | nindent 4}}
     istio-injection: enabled

@@ -1,8 +1,8 @@
-{{- if .Values.twistlock.enabled }}
-{{- include "values-secret" (dict "root" $ "package" .Values.twistlock "name" "twistlock" "defaults" (include "bigbang.defaults.twistlock" .)) }}
+{{- if .Values.prismaCloud.enabled }}
+{{- include "values-secret" (dict "root" $ "package" .Values.prismaCloud "name" "prisma-cloud" "defaults" (include "bigbang.defaults.prisma-cloud" .)) }}
 {{- end }}
 
-{{- define "bigbang.defaults.twistlock" -}}
+{{- define "bigbang.defaults.prisma-cloud" -}}
 # hostname is deprecated and replaced with domain. But if hostname exists then use it.
 domain: {{ default .Values.domain .Values.hostname }}
 
@@ -13,7 +13,7 @@ monitoring:
   serviceMonitor:
     enabled: {{ .Values.monitoring.enabled }}
     # conditional passes only for default istio: enabled, mTLS: SCRICT
-    {{- if and .Values.istio.enabled (eq (dig "istio" "mtls" "mode" "STRICT" .Values.twistlock.values) "STRICT") }}
+    {{- if and .Values.istio.enabled (eq (dig "istio" "mtls" "mode" "STRICT" .Values.prismaCloud.values) "STRICT") }}
     scheme: https
     tlsConfig:
       caFile: /etc/prom-certs/root-cert.pem
@@ -28,7 +28,7 @@ imagePullSecrets:
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
   ingressLabels:
-    {{- $gateway := default "public" .Values.twistlock.ingress.gateway }}
+    {{- $gateway := default "public" .Values.prismaCloud.ingress.gateway }}
     {{- $default := dict "app" (dig "gateways" $gateway "ingressGateway" nil .Values.istio) "istio" nil }}
     {{- toYaml (dig "values" "gateways" $gateway "selector" $default .Values.istio) | nindent 4 }}
   controlPlaneCidr: {{ .Values.networkPolicies.controlPlaneCidr }}
@@ -38,7 +38,7 @@ istio:
   enabled: {{ .Values.istio.enabled }}
   console:
     gateways:
-    - istio-system/{{ default "public" .Values.twistlock.ingress.gateway }}
+    - istio-system/{{ default "public" .Values.prismaCloud.ingress.gateway }}
 
 {{- if .Values.istio.enabled }}
 annotations:
@@ -50,14 +50,14 @@ console:
     imagePullPolicy: {{ .Values.imagePullPolicy }}
 
 sso:
-  enabled: {{ .Values.twistlock.sso.enabled }}
-  client_id: {{ .Values.twistlock.sso.client_id }}
-  provider_name: {{ .Values.twistlock.sso.provider_name }}
-  provider_type: {{ .Values.twistlock.sso.provider_type }}
-  issuer_uri: {{ tpl .Values.twistlock.sso.issuer_uri . }}
-  idp_url: {{ tpl .Values.twistlock.sso.idp_url . }}
-  console_url: {{ tpl .Values.twistlock.sso.console_url . }}
-  groups: {{ .Values.twistlock.sso.groups }}
-  cert: {{ .Values.twistlock.sso.cert | quote }}
+  enabled: {{ .Values.prismaCloud.sso.enabled }}
+  client_id: {{ .Values.prismaCloud.sso.client_id }}
+  provider_name: {{ .Values.prismaCloud.sso.provider_name }}
+  provider_type: {{ .Values.prismaCloud.sso.provider_type }}
+  issuer_uri: {{ tpl .Values.prismaCloud.sso.issuer_uri . }}
+  idp_url: {{ tpl .Values.prismaCloud.sso.idp_url . }}
+  console_url: {{ tpl .Values.prismaCloud.sso.console_url . }}
+  groups: {{ .Values.prismaCloud.sso.groups }}
+  cert: {{ .Values.prismaCloud.sso.cert | quote }}
 
 {{- end -}}

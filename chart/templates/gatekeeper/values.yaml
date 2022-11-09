@@ -43,7 +43,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
         - registry1.dso.mil
         - registry.dso.mil
 
-  {{- if or .Values.monitoring.enabled .Values.fluentbit.enabled .Values.twistlock.enabled .Values.promtail.enabled (and .Values.addons.velero.enabled .Values.addons.velero.values.deployRestic)}}
+  {{- if or .Values.monitoring.enabled .Values.fluentbit.enabled .Values.prismaCloud.enabled .Values.promtail.enabled (and .Values.addons.velero.enabled .Values.addons.velero.values.deployRestic)}}
   allowedHostFilesystem:
     parameters:
       excludedResources:
@@ -55,7 +55,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
       # Fluentbit pods need access to host to get log files
       - logging/logging-fluent-bit-.*
       {{- end }}
-      {{- if .Values.twistlock.enabled }}
+      {{- if .Values.prismaCloud.enabled }}
       - twistlock/twistlock-defender-ds-.*
       {{- end }}
       {{- if .Values.promtail.enabled }}
@@ -69,7 +69,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
       {{- end }}
   {{- end }}
 
-  {{- if .Values.twistlock.enabled }}
+  {{- if .Values.prismaCloud.enabled }}
   hostNetworking:
     parameters:
       excludedResources:
@@ -106,7 +106,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
         - istio-operator
         - istio-system
 
-  {{- if or .Values.monitoring.enabled .Values.twistlock.enabled }}
+  {{- if or .Values.monitoring.enabled .Values.prismaCloud.enabled }}
   restrictedTaint:
     parameters:
       excludedResources:
@@ -114,12 +114,12 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
       # Prometheus Node Exporter needs to be able to run on all nodes, regardless of taint, to gather node metrics
       - monitoring/monitoring-monitoring-prometheus-node-exporter-.*
       {{- end }}
-      {{- if .Values.twistlock.enabled }}
+      {{- if .Values.prismaCloud.enabled }}
       - twistlock/twistlock-defender-ds-.*
       {{- end }}
   {{- end }}
 
-  {{- if or .Values.fluentbit.enabled .Values.twistlock.enabled .Values.promtail.enabled }}
+  {{- if or .Values.fluentbit.enabled .Values.prismaCloud.enabled .Values.promtail.enabled }}
   selinuxPolicy:
     parameters:
       excludedResources:
@@ -127,7 +127,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
       # FluentBit needs selinux option type spc_t
       - logging/fluent-bit
       {{- end }}
-      {{- if .Values.twistlock.enabled }}
+      {{- if .Values.prismaCloud.enabled }}
       # Twistlock Defenders need selinux option type spc_t
       - twistlock/twistlock-defender
       {{- end }}
@@ -137,7 +137,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
       {{- end }}
   {{- end }}
 
-  {{- if or .Values.fluentbit.enabled .Values.twistlock.enabled .Values.monitoring.enabled .Values.promtail.enabled (and .Values.addons.velero.enabled .Values.addons.velero.values.deployRestic) }}
+  {{- if or .Values.fluentbit.enabled .Values.prismaCloud.enabled .Values.monitoring.enabled .Values.promtail.enabled (and .Values.addons.velero.enabled .Values.addons.velero.values.deployRestic) }}
   volumeTypes:
     parameters:
       excludedResources:
@@ -146,7 +146,7 @@ violations:  # Try to keep this in alpha order to make it easier to find keys
         # https://docs.fluentbit.io/manual/pipeline/filters/kubernetes#workflow-of-tail-kubernetes-filter
         - logging/logging-fluent-bit-.*
        {{- end }}
-       {{- if .Values.twistlock.enabled }}
+       {{- if .Values.prismaCloud.enabled }}
         # Twistlock requires /dev/log for its syslog daemon.
         # https://docs.paloaltonetworks.com/prisma/prisma-cloud/prisma-cloud-admin-compute/audit/logging.html#
         - twistlock/twistlock-defender-ds-.*

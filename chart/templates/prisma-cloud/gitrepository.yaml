@@ -1,18 +1,18 @@
-{{- if and (not .Values.offline) .Values.twistlock.enabled }}
+{{- if and (not .Values.offline) .Values.prismaCloud.enabled }}
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
 metadata:
-  name: twistlock
+  name: prisma-cloud
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: twistlock
+    app.kubernetes.io/name: prisma-cloud
     app.kubernetes.io/component: "security"
     {{- include "commonLabels" . | nindent 4}}
 spec:
   interval: {{ .Values.flux.interval }}
-  url: {{ .Values.twistlock.git.repo }}
+  url: {{ .Values.prismaCloud.git.repo }}
   ref:
-    {{- include "validRef" .Values.twistlock.git | nindent 4 }}
+    {{- include "validRef" .Values.prismaCloud.git | nindent 4 }}
   {{ include "gitIgnore" . }}
     !/chart/scripts/*.sh
   {{- include "gitCreds" . | nindent 2 }}

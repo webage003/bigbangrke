@@ -684,17 +684,17 @@ monitoring:
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------
-# Twistlock
+# Prisma Cloud (Compute Edition)
 #
-twistlock:
-  # -- Toggle deployment of Twistlock.
+prismaCloud:
+  # -- Toggle deployment of Prisma Cloud.
   enabled: true
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
     path: "./chart"
     tag: "0.11.3-bb.2"
 
-  # -- Flux reconciliation overrides specifically for the Twistlock Package
+  # -- Flux reconciliation overrides specifically for the Prisma Cloud Package
   flux: {}
 
   # -- Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public".
@@ -711,7 +711,7 @@ twistlock:
     # -- SAML Povider Alias (optional)
     provider_name: ""
 
-    # -- SAML Identity Provider. `shibboleth` is recommended by Twistlock support for Keycloak
+    # -- SAML Identity Provider. `shibboleth` is recommended by Prisma Cloud support for Keycloak
     provider_type: "shibboleth"
 
     # -- Identity Provider url with path to realm
@@ -720,7 +720,7 @@ twistlock:
     # -- SAML Identity Provider SSO URL
     idp_url: "https://{{ .Values.sso.oidc.host }}/auth/realms/{{ .Values.sso.oidc.realm }}/protocol/saml"
 
-    # -- Console URL of the Twistlock app (optional)
+    # -- Console URL of the Prisma Cloud app (optional)
     console_url: "https://twistlock.{{ .Values.domain }}"
 
     # -- Groups attribute (optional)
@@ -729,7 +729,7 @@ twistlock:
     # -- X.509 Certificate from Identity Provider (i.e. Keycloak). See https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock/-/blob/main/docs/KEYCLOAK.md for format. Use the `|-` syntax for multiline string.
     cert: ""
 
-  # -- Values to passthrough to the twistlock chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
+  # -- Values to passthrough to the Prisma Cloud chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
   values: {}
 
   # -- Post Renderers.  See docs/postrenders.md
