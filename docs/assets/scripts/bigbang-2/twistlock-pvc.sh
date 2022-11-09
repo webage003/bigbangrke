@@ -5,7 +5,6 @@
 # - Patch retain policy into PV
 # - Patch out uid/resourceVersion from claimRef in PV
 # - Patch name/namespace from claimRef in PV to the new name/namespace
-# - Patch out uid/resourceVersion
 # - Upgrade, PVC will automatically use the existing PVC *magic*
 
 kubectl scale deploy --replicas 0 twistlock-console -n twistlock
