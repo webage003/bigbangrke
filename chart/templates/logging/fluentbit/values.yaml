@@ -147,9 +147,4 @@ podAnnotations:
 
 openshift: {{ .Values.openshift }}
 
-{{- if .Values.openshift }}
-podSecurityContext:
-  seLinuxOptions:
-    type: "spc_t"
-{{- end }}
 {{- end -}}
