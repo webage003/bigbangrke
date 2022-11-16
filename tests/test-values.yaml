@@ -128,10 +128,6 @@ clusterAuditor:
           cypress_grafana_url: 'https://grafana.bigbang.dev'
           cypress_prometheus_url: 'https://prometheus.bigbang.dev'
           cypress_url: 'https://grafana.bigbang.dev/d/YBgRZG6Mz/opa-violations?orgId=1'
-          # OPA violations table and violations by kind chart
-          cypress_table_bar_allownodata: '0'
-          # violations over time graph
-          cypress_graph_allownodata: '1'
 
 gatekeeper:
   enabled: true
@@ -170,7 +166,7 @@ gatekeeper:
           - jaeger/jaeger-operator-cypress-test
           - monitoring/kube-prometheus-stack-cypress-test
           - vault/vault-cypress-test
-          - logging/loki-simple-scalable-cypress-test
+          - logging/loki-cypress-test
           - twistlock/twistlock-cypress-test
           - sonarqube/sonarqube-cypress-test
           - logging/logging-cypress-test
@@ -272,7 +268,7 @@ gatekeeper:
           - jaeger/jaeger-operator-cypress-test
           - monitoring/kube-prometheus-stack-cypress-test
           - vault/vault-cypress-test
-          - logging/loki-simple-scalable-cypress-test
+          - logging/loki-cypress-test
           - twistlock/twistlock-cypress-test
           - sonarqube/sonarqube-cypress-test
           - logging/logging-cypress-test
@@ -292,6 +288,15 @@ kyverno:
     replicaCount: 1
     bbtests:
       enabled: true
+
+kyvernoreporter:
+  enabled: false
+  values:
+    bbtests:
+      cypress:
+        envs:
+          cypress_grafana_url: https://grafana.bigbang.dev
+          cypress_prometheus_url: https://prometheus.bigbang.dev
 
 kyvernopolicies:
   enabled: false
@@ -1208,6 +1213,7 @@ addons:
       bbtests:
         enabled: true
         cypress:
+          image: registry.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates/cypress/kubectl:8.3.1
           envs:
             cypress_url: https://chat.bigbang.dev
 
@@ -1499,3 +1505,5 @@ addons:
     enabled: false
     values:
       replicas: 1
+      bbtests:
+        enabled: true
