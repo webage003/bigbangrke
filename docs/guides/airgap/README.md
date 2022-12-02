@@ -1,12 +1,8 @@
 # Airgap
 
-Currently this is in proof of concept mode, so play around with this to get an idea of it.
-
-This work was quickly developed to entertain certain paths for image packaging and deployment.
+This guide is only intended to demonstrate how Big Bang can be deployed into an airgap kubernetes cluster, not the one and only method. Big Bang release artifacts contain all the necessary components for Big Bang to install in an airgap kubernetes cluster, implementation is unique to each environment.
 
 ## Image Packaging / Deployment
-
-`package_images.sh` - Proof of concept script for image packaging
 
 * Dependencies
   * `docker` - The docker CLI tool
@@ -20,53 +16,27 @@ This work was quickly developed to entertain certain paths for image packaging a
     * `/etc/docker/registry/config.yml` is templated to use new registry folder
     * This is due to the fact that `/var/lib/registry` is a docker volume
 
-`deploy_images.sh` - Proof of concept script for image deployment
-
 * Dependencies
   * `docker` - The docker CLI tool
   * `registry:package.tar.gz` - Modified `registry:2` container loaded with airgap images
 * Deliverables
   * Running `registry` container with airgap images deployed and retrievable
 
-Hack commands:
-
-* `curl -sX GET http://localhost:5000/v2/_catalog | jq -r .`
-  * Verify the catalog of a local running registry container
-
 ## Repository Packaging / Deployment
 
-Airgap Deployment is a form of deployment which does not have any direct connection to the Internet or external network during cluster setup or runtime. During installation, bigbang requires certain images and git repositories for installation. Since we will be installing in internet-disconnected environment, we need to perform extra steps to make sure these resources are available.
+Airgap deployment is a form of deployment which does not have any direct connection to the internet or external network during cluster setup or runtime. During installation Big Bang requires certain images and git repositories for installation, so extra steps are required to make sure these resources are available in airgap environments.
 
 ## Requirements and Prerequisites
 
 ### General Prerequisites
 
 * A kubernetes cluster with container mirroring support. There is a section below that covers mirroring in more detail with examples for supported clusters.
-* BigBang(BB) [release artifacts](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/releases).
+* Big Bang(BB) [release artifacts](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/releases).
 * Utility Server.
-
-### Package Specific Prerequisites
-
-#### Elastic (Logging)
-
-Elastic requires a larger number of memory map areas than some OSes support by default. This can be change at startup with a cloud config or later using sysctl.
-
-```shell
-MIME-Version: 1.0
-    Content-Type: multipart/mixed; boundary="==MYBOUNDARY=="
-    
-    --==MYBOUNDARY==
-    Content-Type: text/x-shellscript; charset="us-ascii"
-
-    #!/bin/bash
-    # Set the vm.max_map_count to 262144. 
-    # Required for Elastic to run correctly without OOM errors.
-    sysctl -w vm.max_map_count=262144
-```
 
 ## Utility Server
 
-Utility Server is an internet-disconnected server that will host the private registry and git server that are required to deploy bigbang. It should include these command-line tools below;
+Utility Server is an internet-disconnected server that will host the private registry and git server that are required to deploy Big Bang. It should include these command-line tools below;
 
 * `docker`: for running docker registry.
   * `registry:2` image
@@ -97,7 +67,7 @@ ssh-keygen  -b 4096 -t rsa -f ~/.ssh/identity -q -N ""
   touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
   exit
   ```
-  
+
 * Add client ssh key to `git` user `authorized_keys`
 
   ```shell
@@ -115,22 +85,25 @@ ssh-keygen  -b 4096 -t rsa -f ~/.ssh/identity -q -N ""
 * Add Hostname alias
 
   ```shell
+  #AWS Only
   PRIVATEIP=$( curl http://169.254.169.254/latest/meta-data/local-ipv4 )
+  # All others
+  PRIVATEIP="HOST_IP_HERE"
   sudo sed -i -e '1i'$PRIVATEIP'   'myhostname.com'\' /etc/hosts
   sudo sed -i -e '1i'$PRIVATEIP'   'host.k3d.internal'\' /etc/hosts #only for k3d
   ```
-  
+
 * To test the client key;
 
   ```shell
   GIT_SSH_COMMAND='ssh -i /[client-private-key-path] -o IdentitiesOnly=yes' git clone git@[hostname/IP]:/home/git/repos/[sample-repo]
-  
+
   #For example;
-  GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:/home/git/repos/bigbang 
+  GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:/home/git/repos/bigbang
   #checkout release branch
   git checkout 1.3.0
   ```
-  
+
 ### Option Two
 
 There are some cases where you do not have access to or cannot create an ssh user on the utility server. It is possible to run an ssh git server on a non-standard port using Docker.
@@ -159,7 +132,7 @@ You will now be able to test by checking out some of the code.
 GIT_SSH_COMMAND='ssh -i /[client-private-key-path] -o IdentitiesOnly=yes' git clone git@[hostname/IP]:[PORT]/home/git/repos/[sample-repo]
 
 # For example;
-GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:[PORT]/home/git/repos/bigbang 
+GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:[PORT]/home/git/repos/bigbang
 # Check out release branch
 git checkout 1.3.0
 ```
@@ -172,7 +145,7 @@ Images needed to run BB in your cluster is packaged as part of the release in `i
 
 To setup the registry, we will be using `registry:2` to run a  private registry with  self-signed certificate.
 
-* First, untar `images.tar.gz`;
+* Unpack `images.tar.gz`;
 
 ```shell
 tar -xvf images.tar.gz -C .
@@ -238,7 +211,8 @@ A folder is created with TLS certs that we are going to supply to our k8s cluste
 You can ensure the images are now loaded in the registry;
 
 ```shell
- curl -k https://myhostname.com:5443/v2/_catalog 
+ curl -k https://myhostname.com:5443/v2/_catalog
+ #output should similar to...
 {"repositories":["ironbank/anchore/engine/engine","ironbank/anchore/enterprise/enterprise","ironbank/anchore/enterpriseui/enterpriseui","ironbank/big-bang/argocd","ironbank/bitnami/analytics/redis-exporter","ironbank/elastic/eck-operator/eck-operator","ironbank/elastic/elasticsearch/elasticsearch","ironbank/elastic/kibana/kibana","ironbank/fluxcd/helm-controller","ironbank/fluxcd/kustomize-controller","ironbank/fluxcd/notification-controller","ironbank/fluxcd/source-controller","ironbank/gitlab/gitlab/alpine-certificates","ironbank/gitlab/gitlab/cfssl-self-sign","ironbank/gitlab/gitlab/gitaly",...]
 ```
 
@@ -314,40 +288,25 @@ configs:
 cd bigbang
 ```
 
-Install flux
-
-Install Flux 2 into the cluster using the provided artifacts. These are located in the scripts section of the Big Bang repository.
+Install FluxCD
 
 ```shell
-kubectl apply -f ./scripts/deploy/flux.yaml
+kubectl apply -f ./scripts/install_flux.sh
 ```
 
-After Flux is up and running you are ready to deploy Big Bang. We will do this using Helm. To first check to see if Flux is ready you can do.
-
-You can watch to see if Flux is reconciling the projects by watching the progress.
+Verify FluxCD is running
 
 ```shell
-watch kubectl get all -n flux-system
+kubectl get all -n flux-system
 ```
 
-We need a namespace for our preparations and eventually for Big Bang to deploy into.
+Create the Big Bang namespace
 
 ```shell
 kubectl create ns bigbang
 ```
 
-Installing Big Bang in an air gap environment currently uses the Helm charts from the **[Big Bang Repo](https://repo1.dso.mil/platform-one/big-bang/bigbang)**.
-
-All changes are modified in the custom [values.yaml](../../assets/scripts/airgap-dev/values.yaml) file. Modify as needed and replace IP.
-
-Change the hostname for the installation. It is currently set to the development domain:
-
-```yaml
-# -- Domain used for BigBang created exposed services, can be overridden by individual packages.
-hostname: bigbang.dev
-```
-
-Add your registry URL. This will be the IP address or URL of the utility server or the registry in which you have loaded all of the Big Bang images (note: it is possible that your registry doesn't have a username or password, there will be ignored for insecure registries.):
+Add your registry URL. This will be the IP address or URL of the utility server or the registry in which you have loaded all of the Big Bang images.
 
 ```yaml
 # -- Single set of registry credentials used to pull all images deployed by BigBang.
@@ -365,7 +324,7 @@ Option 1: Use an existing secret.
 ```shell
 cd ~/.ssh
 ssh-keygen  -b 4096 -t rsa -f ~/.ssh/identity -q -N ""
-ssh-keyscan  <YOUR GIT URL HERE> ./known_hosts
+ssh-keyscan  YOUR_GIT_URL_HERE ./known_hosts
 
 kubectl create secret generic -n bigbang ssh-credentials \
     --from-file=./identity \
@@ -397,9 +356,8 @@ git:
 
 ** Note that we substituted the name of the secret from the example to the secret created above. This value is arbitrary, so if you created your secret with a different name use that name instead.
 
-Option 2: Put the values of your ssh keys directly in the values.yaml file.
+Option 2: Storing ssh keys directly in `values.yaml`.
 
-You can also elect to just put the key values and the known hosts directly into the chart's values.yaml file.
 
 ```shell
 ssh-keygen -q -N "" -f ./identity
@@ -410,7 +368,7 @@ cat identity.pub
 cat known_hosts
 ```
 
-Take the values from each of these files and place in the correct fields in the values.yaml.
+Use the above output to configure `values.yaml`.
 
 ```yaml
 git:
@@ -447,18 +405,17 @@ git:
     knownHosts: "10.0.52.144 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPFZzQ6BmaswdhT8UWD5a/VYmZYrGv1qD3T+euf/gFjkPkeySYRIyM+Kg/UdHCHVBzc4aaFdBDmugHimZ4lbWpE="
 ```
 
-** Note the above values are all examples and are intentionally not operational keys.
-
-Then install Big Bang using Helm.
+Install Big Bang using Helm. This method is not recommended for production use, please refer to [Big Bang Template](https://repo1.dso.mil/platform-one/big-bang/customers/template)
 
 ```shell
     helm upgrade -i bigbang chart -n bigbang --create-namespace -f values.yaml
-    watch kubectl get gitrepositories,kustomizations,hr,po -A
 ```
 
-** Note that the --create-namespace isn't needed if you created it earlier, but it doesn't hurt anything.
+To observe the Big Bang install reconcile.
 
-You should see the different projects configure working through their reconciliation starting with "gatekeeper".
+```shell
+    watch kubectl get gitrepositories,kustomizations,hr,po -A
+```
 
 ## Using 3rd Party Packages
 
