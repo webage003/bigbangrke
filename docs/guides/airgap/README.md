@@ -405,7 +405,7 @@ git:
     knownHosts: "10.0.52.144 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPFZzQ6BmaswdhT8UWD5a/VYmZYrGv1qD3T+euf/gFjkPkeySYRIyM+Kg/UdHCHVBzc4aaFdBDmugHimZ4lbWpE="
 ```
 
-Install Big Bang using Helm. This method is not recommended for production use, please refer to [Big Bang Template](https://repo1.dso.mil/platform-one/big-bang/customers/template)
+Install Big Bang using Helm. This method is not recommended for production use, please refer to the [Big Bang Customer Template](https://repo1.dso.mil/platform-one/big-bang/customers/template) for a more production ready approach.
 
 ```shell
     helm upgrade -i bigbang chart -n bigbang --create-namespace -f values.yaml
