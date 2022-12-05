@@ -291,7 +291,7 @@ cd bigbang
 Install FluxCD
 
 ```shell
-kubectl apply -f ./scripts/install_flux.sh
+./scripts/install_flux.sh
 ```
 
 Verify FluxCD is running
