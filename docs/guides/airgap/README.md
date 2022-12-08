@@ -212,7 +212,7 @@ You can ensure the images are now loaded in the registry;
 
 ```shell
  curl -k https://myhostname.com:5443/v2/_catalog
- #output should similar to...
+ # output should be similar to...
 {"repositories":["ironbank/anchore/engine/engine","ironbank/anchore/enterprise/enterprise","ironbank/anchore/enterpriseui/enterpriseui","ironbank/big-bang/argocd","ironbank/bitnami/analytics/redis-exporter","ironbank/elastic/eck-operator/eck-operator","ironbank/elastic/elasticsearch/elasticsearch","ironbank/elastic/kibana/kibana","ironbank/fluxcd/helm-controller","ironbank/fluxcd/kustomize-controller","ironbank/fluxcd/notification-controller","ironbank/fluxcd/source-controller","ironbank/gitlab/gitlab/alpine-certificates","ironbank/gitlab/gitlab/cfssl-self-sign","ironbank/gitlab/gitlab/gitaly",...]
 ```
 
