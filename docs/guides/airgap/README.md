@@ -35,6 +35,7 @@ Airgap deployment is a form of deployment which does not have any direct connect
 * A kubernetes cluster with container mirroring support. There is a section below that covers mirroring in more detail with examples for supported clusters.
 * Big Bang(BB) [release artifacts](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/releases).
 * Utility Server.
+* See [Prerequisites](../../prerequisites/)
 
 ## Utility Server
 

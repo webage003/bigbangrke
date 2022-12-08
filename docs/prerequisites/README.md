@@ -1,4 +1,4 @@
-# Prerequisits
+# Prerequisites
 
 [[_TOC_]]
 
