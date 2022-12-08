@@ -16,6 +16,8 @@ This guide is only intended to demonstrate how Big Bang can be deployed into an 
     * `/etc/docker/registry/config.yml` is templated to use new registry folder
     * This is due to the fact that `/var/lib/registry` is a docker volume
 
+`deploy_images.sh` - Proof of concept script for image deployment
+
 * Dependencies
   * `docker` - The docker CLI tool
   * `registry:package.tar.gz` - Modified `registry:2` container loaded with airgap images
@@ -85,22 +87,22 @@ ssh-keygen  -b 4096 -t rsa -f ~/.ssh/identity -q -N ""
 * Add Hostname alias
 
   ```shell
-  #AWS Only
+  # AWS Only
   PRIVATEIP=$( curl http://169.254.169.254/latest/meta-data/local-ipv4 )
   # All others
-  PRIVATEIP="HOST_IP_HERE"
+  PRIVATEIP="HOST_IP_HERE" # hostname -I
   sudo sed -i -e '1i'$PRIVATEIP'   'myhostname.com'\' /etc/hosts
-  sudo sed -i -e '1i'$PRIVATEIP'   'host.k3d.internal'\' /etc/hosts #only for k3d
+  # only for k3d
+  sudo sed -i -e '1i'$PRIVATEIP'   'host.k3d.internal'\' /etc/hosts
   ```
 
 * To test the client key;
 
   ```shell
   GIT_SSH_COMMAND='ssh -i /[client-private-key-path] -o IdentitiesOnly=yes' git clone git@[hostname/IP]:/home/git/repos/[sample-repo]
-
-  #For example;
+  # For example;
   GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:/home/git/repos/bigbang
-  #checkout release branch
+  # checkout release branch
   git checkout 1.3.0
   ```
 
@@ -265,7 +267,7 @@ spec:
 #### RKE2 cluster
 
 ```yaml
-#registries.yaml
+# registries.yaml
 mirrors:
   registry.dso.mil:
     endpoint:
@@ -306,14 +308,16 @@ Create the Big Bang namespace
 kubectl create ns bigbang
 ```
 
-Add your registry URL. This will be the IP address or URL of the utility server or the registry in which you have loaded all of the Big Bang images.
+In `chart/values.yaml` add your registry URL. This will be the IP address or URL of the utility server or the registry which contains all of the Big Bang images.
+
+For further airgap configuration examples reference `docs/assets/scripts/airgap-dev/values.yaml`
 
 ```yaml
 # -- Single set of registry credentials used to pull all images deployed by BigBang.
 registryCredentials:
   registry: 10.0.52.144
-  username: "asdfasdfasdf"
-  password: "asdfasdfasdfasdfasdf"
+  username: "USERNAME"
+  password: "PASSWORD123"
   email: ""
 ```
 
