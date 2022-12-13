@@ -1,46 +1,48 @@
-{{- $fluxSettingsPromtail := merge .Values.promtail.flux .Values.flux -}}
-{{- if .Values.promtail.enabled }}
+{{- $fluxSettingsLoki := merge .Values.loki.flux .Values.flux -}}
+{{- if .Values.loki.enabled }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: promtail
+  name: loki
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: logging
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
 spec:
+  releaseName: {{ default "logging-loki" .Values.loki.releaseName }}
   targetNamespace: logging
   chart:
     spec:
-      chart: {{ .Values.promtail.git.path }}
+      chart: {{ .Values.loki.git.path }}
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: promtail
+        name: loki
         namespace: {{ .Release.Namespace }}
 
-  {{- toYaml $fluxSettingsPromtail | nindent 2 }}
+  {{- toYaml $fluxSettingsLoki | nindent 2 }}
 
-  {{- if .Values.promtail.postRenderers }}
+  {{- if .Values.loki.postRenderers }}
   postRenderers:
-  {{ toYaml .Values.promtail.postRenderers | nindent 4 }}
+  {{ toYaml .Values.loki.postRenderers | nindent 4 }}
   {{- end }}
   valuesFrom:
-    - name: {{ .Release.Name }}-promtail-values
+    - name: {{ .Release.Name }}-loki-values
       kind: Secret
       valuesKey: "common"
-    - name: {{ .Release.Name }}-promtail-values
+    - name: {{ .Release.Name }}-loki-values
       kind: Secret
       valuesKey: "defaults"
-    - name: {{ .Release.Name }}-promtail-values
+    - name: {{ .Release.Name }}-loki-values
       kind: Secret
       valuesKey: "overlays"
-
-{{/* promtail _always_ depend on .Values.loki being enabled, so can assume they exist here */}}
+  {{- if or .Values.monitoring.enabled .Values.gatekeeper.enabled .Values.istio.enabled .Values.kyvernopolicies.enabled }}
   dependsOn:
-    - name: loki
+    {{- if  .Values.monitoring.enabled }}
+    - name: monitoring
       namespace: {{ .Release.Namespace }}
+    {{- end }}
     {{- if  .Values.gatekeeper.enabled }}
     - name: gatekeeper
       namespace: {{ .Release.Namespace }}
@@ -53,4 +55,11 @@ spec:
     - name: kyvernopolicies
       namespace: {{ .Release.Namespace }}
     {{- end }}
+    {{- with .Values.loki.objectStorage }}
+    {{- if and (eq $.Values.loki.strategy "scalable") (not (and .endpoint .bucketNames)) }}
+    - name: minio-operator
+      namespace: {{ $.Release.Namespace }}
+    {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
