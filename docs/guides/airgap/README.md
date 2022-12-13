@@ -2,31 +2,15 @@
 
 This guide is only intended to demonstrate how Big Bang can be deployed into an airgap kubernetes cluster, not the one and only method. Big Bang release artifacts contain all the necessary components for Big Bang to install in an airgap kubernetes cluster, implementation is unique to each environment.
 
-## Image Packaging / Deployment
-
-* Dependencies
-  * `docker` - The docker CLI tool
-  * `images.txt` - A list of all requires airgap images
-  * `jq` - The jq CLI tool
-* Deliverables
-  * `registry:package.tar.gz` - Modified `registry:2` container loaded with airgap images
-    * NOTE - `registry:2` vs `harbor` vs anything else is trivial, we can use whatever we want
-    * Packaged images are loaded and retrievable immediately upon container start
-    * `/var/lib/registry-package` is created and populated with images
-    * `/etc/docker/registry/config.yml` is templated to use new registry folder
-    * This is due to the fact that `/var/lib/registry` is a docker volume
-
-`deploy_images.sh` - Proof of concept script for image deployment
-
-* Dependencies
-  * `docker` - The docker CLI tool
-  * `registry:package.tar.gz` - Modified `registry:2` container loaded with airgap images
-* Deliverables
-  * Running `registry` container with airgap images deployed and retrievable
+* Requirements
+  * `images.tar.gz` - release artifact
+  * `images.txt` - release artifact
+  * `repositories.tar.gz` - release artifact
+  * `docker` if a registry does not already exist
 
 ## Repository Packaging / Deployment
 
-Airgap deployment is a form of deployment which does not have any direct connection to the internet or external network during cluster setup or runtime. During installation Big Bang requires certain images and git repositories for installation, so extra steps are required to make sure these resources are available in airgap environments.
+An airgap deployment is a form of deployment which does not have any direct connection to the internet or external network during cluster setup or runtime. During installation Big Bang requires certain images and git repositories for installation, extra steps are required to make sure these resources are available in airgap environments.
 
 ## Requirements and Prerequisites
 
