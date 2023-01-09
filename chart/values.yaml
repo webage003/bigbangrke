@@ -1384,10 +1384,10 @@ addons:
     plugins: []
     # - aws
 
-    # -- Overrides the default plugin image provider for the plugin defined at the matching index (optional).
+    # -- Overrides the default plugin image provider for the plugin(s) defined at the matching indices (optional).
     pluginsImageOverride: []
 
-    # -- Overrides the default plugin image tag for the plugin defined at the matching index (optional).
+    # -- Overrides the default plugin image tag for the plugin(s) defined at the matching indices (optional).
     pluginsTagOverride: []
 
     # -- Values to passthrough to the Velero chart: https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/-/blob/main/chart/values.yaml
