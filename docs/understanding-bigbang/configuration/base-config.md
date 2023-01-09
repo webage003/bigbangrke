@@ -431,6 +431,8 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.velero.git.tag | string | `"2.32.2-bb.0"` |  |
 | addons.velero.flux | object | `{}` | Flux reconciliation overrides specifically for the Velero Package |
 | addons.velero.plugins | list | `[]` | Plugin provider for Velero - requires at least one plugin installed. Current supported values: aws, azure, csi |
+| addons.velero.pluginsImageOverride | list | `[]` | Overrides the default plugin image provider for the plugin(s) defined at the matching indices (optional). |
+| addons.velero.pluginsTagOverride | list | `[]` | Overrides the default plugin image tag for the plugin(s) defined at the matching indices (optional). |
 | addons.velero.values | object | `{}` | Values to passthrough to the Velero chart: https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/-/blob/main/chart/values.yaml |
 | addons.velero.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.keycloak.enabled | bool | `false` | Toggle deployment of Keycloak. if you enable Keycloak you should uncomment the istio passthrough configurations above istio.ingressGateways.passthrough-ingressgateway and istio.gateways.passthrough |
