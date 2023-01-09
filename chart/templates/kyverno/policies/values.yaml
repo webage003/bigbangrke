@@ -14,7 +14,7 @@ waitforready:
 
 policies:
 
-  {{- if .Values.twistlock.enabled }}
+  {{- if or .Values.twistlock.enabled .Values.neuvector.enabled }}
   disallow-host-namespaces:
     exclude:
       any:
@@ -28,7 +28,14 @@ policies:
           - twistlock
           names:
           - twistlock-defender-ds*
-        {{- end }}
+      {{- end }}
+      {{- if .Values.neuvector.enabled }}
+      - resources:
+          namespaces:
+          - neuvector
+          names:
+          - neuvector-enforcer-pod*
+      {{- end }}
   {{- end }}
 
   {{- $nodePortIngressGateways := list }}
@@ -62,7 +69,17 @@ policies:
     {{- end }}
 
   disallow-image-tags:
+    enabled: true
     validationFailureAction: enforce
+    {{- if .Values.neuvector.enabled }}
+    exclude:
+      any:
+      - resources:
+          namespaces:
+          - neuvector
+          names:
+          - neuvector-scanner-pod*
+    {{- end }}
 
   disallow-istio-injection-bypass:
     enabled: {{ .Values.istio.enabled }}
@@ -74,13 +91,14 @@ policies:
           - istio-system
 
   disallow-namespaces:
+    enabled: true
     validationFailureAction: enforce
     parameters:
       disallow:
       - bigbang
       - default
 
-  {{- if .Values.fluentbit.enabled }}
+  {{- if or .Values.fluentbit.enabled .Values.neuvector.enabled}}
   disallow-privileged-containers:
     exclude:
       any:
@@ -93,9 +111,17 @@ policies:
           names:
           - logging-fluent-bit*
       {{- end }}
+      {{- if .Values.neuvector.enabled }}
+      - resources:
+          namespaces:
+          - neuvector
+          names:
+          - neuvector-enforcer-pod*
+          - neuvector-controller-pod*
+      {{- end }}
   {{- end }}
 
-{{- if or (.Values.addons.gitlab.enabled) (and (dig "console" "localVolumeUpgrade" false .Values.twistlock.values) (.Release.IsUpgrade)) }}
+{{- if or (.Values.addons.gitlab.enabled) (and (dig "console" "localVolumeUpgrade" false .Values.twistlock.values) (.Release.IsUpgrade)) .Values.addons.keycloak.enabled }}
   disallow-shared-subpath-volume-writes:
     # Subpath volumes can be used in combination with symlinks to break out into the host filesystem
     exclude:
@@ -107,6 +133,9 @@ policies:
           {{- end }}
           {{- if (dig "console" "localVolumeUpgrade" false .Values.twistlock.values) }}
           - twistlock
+          {{- end }}
+          {{- if .Values.addons.keycloak.enabled }}
+          - keycloak
           {{- end }}
           names:
           {{- if (dig "console" "localVolumeUpgrade" false .Values.twistlock.values) }}
@@ -163,6 +192,10 @@ policies:
           # values from a readOnly projected volume holding secrets/configmap items, into the shared
           # volume. The shared volume is mounted with subpaths pointing to specific files in the container.
           - gitlab-gitaly*
+          {{- end }}
+          {{- if .Values.addons.keycloak.enabled }}
+          # Volumes using emptyDir shared with initContainers to inject custom provider plugins or custom themes
+          - keycloak-*
           {{- end }}
   {{- end }}
 
@@ -396,7 +429,7 @@ policies:
 
   restrict-host-path-mount:
     validationFailureAction: enforce
-    {{- if or .Values.fluentbit.enabled .Values.monitoring.enabled .Values.promtail.enabled .Values.twistlock.enabled $deployRestic }}
+    {{- if or .Values.fluentbit.enabled .Values.monitoring.enabled .Values.promtail.enabled .Values.twistlock.enabled .Values.neuvector.enabled $deployRestic }}
     exclude:
       any:
       {{- if or .Values.fluentbit.enabled .Values.promtail.enabled }}
@@ -454,6 +487,14 @@ policies:
           names:
           - twistlock-defender-ds*
       {{- end }}
+      {{- if .Values.neuvector.enabled }}
+      - resources:
+          namespaces:
+          - neuvector
+          names: 
+          - neuvector-enforcer-pod*
+          - neuvector-controller-pod*
+      {{- end }}
       {{- if $deployRestic }}
       # Velero.  The restic backup tool requires root user access to the host's runtime pod directory which is
       # mounted inside velero/restic pods.  Since the host's pod runtime directory may expose sensitive information, 
@@ -474,7 +515,7 @@ policies:
 
   restrict-host-path-write:
     validationFailureAction: enforce
-    {{- if .Values.twistlock.enabled }}
+    {{- if or .Values.neuvector.enabled .Values.twistlock.enabled }}
     exclude:
       any:
       # NEEDS FURTHER JUSTIFICATION
@@ -486,11 +527,20 @@ policies:
       # - `/var/log/audit`: Audit logs
       # Because the mounts are dynamically created for defenders at runtime, we cannot
       # anticipate all of the paths it may mount and must exclude it from the policy
+      {{- if .Values.twistlock.enabled }}
       - resources:
           namespaces:
           - twistlock
           names:
           - twistlock-defender-ds*
+      {{- end }}
+      {{- if .Values.neuvector.enabled }}
+      - resources:
+          namespaces:
+          - neuvector
+          names:
+          - neuvector-controller-pod*
+      {{- end }}
     {{- end }}
     {{- if or .Values.fluentbit.enabled .Values.promtail.enabled }}
     parameters:
@@ -562,7 +612,7 @@ policies:
       {{- end }}
   {{- end }}
 
-  {{- if or .Values.fluentbit.enabled .Values.monitoring.enabled .Values.promtail.enabled .Values.twistlock.enabled $deployRestic }}
+  {{- if or .Values.fluentbit.enabled .Values.monitoring.enabled .Values.promtail.enabled .Values.twistlock.enabled .Values.neuvector.enabled $deployRestic }}
   restrict-volume-types:
     exclude:
       any:
@@ -599,6 +649,16 @@ policies:
           - twistlock
           names:
           - twistlock-defender-ds*
+      {{- end }}
+      {{- if .Values.neuvector.enabled }}
+      # Neuvector requires HostPath volume types
+      # https://github.com/neuvector/neuvector-helm/blob/master/charts/core/templates/enforcer-daemonset.yaml#L108
+      - resources:
+          namespaces:
+          - neuvector
+          names:
+          - neuvector-enforcer-pod*
+          - neuvector-controller-pod*
       {{- end }}
       {{- if $deployRestic }}
       # Velero.  The restic backup tool requires root user access to the host's runtime pod directory which is
