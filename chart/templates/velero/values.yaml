@@ -54,10 +54,18 @@ image:
 
 {{- if eq (len .Values.addons.velero.plugins) 0 }}{{- fail "At least one plugin in '.Values.addons.velero.plugins' required. Supported values: aws, azure, csi" }}{{- end }}
 initContainers:
-{{- range .Values.addons.velero.plugins }}
-{{- if eq . "aws" }}
+{{- range $index, $plugin := .Values.addons.velero.plugins }}
+{{- if eq $plugin "aws" }}
+  {{$imageName := "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws"}}
+  {{$imageTag := "v1.5.2"}}
+  {{- if ge (len $.Values.addons.velero.pluginsImageOverride) (add $index 1) }}
+    {{ $imageName = index $.Values.addons.velero.pluginsImageOverride $index }}
+  {{- end}}
+  {{- if ge (len $.Values.addons.velero.pluginsTagOverride) (add $index 1) }}
+    {{ $imageTag = index $.Values.addons.velero.pluginsTagOverride $index }}
+  {{- end}}
   - name: velero-plugin-for-aws
-    image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-aws:v1.5.2
+    image: {{$imageName}}:{{$imageTag}}
     imagePullPolicy: {{ dig "image" "pullPolicy" "IfNotPresent" $.Values.addons.velero.values }}
     volumeMounts:
       - mountPath: /target
@@ -75,8 +83,16 @@ initContainers:
           - ALL
 {{- end }}
 {{- if eq . "azure" }}
+  {{$imageName := "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-microsoft-azure"}}
+  {{$imageTag := "v1.5.2"}}
+  {{- if ge (len $.Values.addons.velero.pluginsImageOverride) (add $index 1) }}
+    {{ $imageName = index $.Values.addons.velero.pluginsImageOverride $index }}
+  {{- end}}
+  {{- if ge (len $.Values.addons.velero.pluginsTagOverride) (add $index 1) }}
+    {{ $imageTag = index $.Values.addons.velero.pluginsTagOverride $index }}
+  {{- end}}
   - name: velero-plugin-for-azure
-    image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-microsoft-azure:v1.5.2
+    image: {{$imageName}}:{{$imageTag}}
     imagePullPolicy: {{ dig "image" "pullPolicy" "IfNotPresent" $.Values.addons.velero.values }}
     volumeMounts:
       - mountPath: /target
@@ -94,8 +110,16 @@ initContainers:
           - ALL
 {{- end }}
 {{- if eq . "csi" }}
+  {{$imageName := "registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-csi"}}
+  {{$imageTag := "v0.3.2"}}
+  {{- if ge (len $.Values.addons.velero.pluginsImageOverride) (add $index 1) }}
+    {{ $imageName = index $.Values.addons.velero.pluginsImageOverride $index }}
+  {{- end}}
+  {{- if ge (len $.Values.addons.velero.pluginsTagOverride) (add $index 1) }}
+    {{ $imageTag = index $.Values.addons.velero.pluginsTagOverride $index }}
+  {{- end}}
   - name: velero-plugin-for-csi
-    image: registry1.dso.mil/ironbank/opensource/velero/velero-plugin-for-csi:v0.3.2
+    image: {{$imageName}}:{{$imageTag}}
     imagePullPolicy: {{ dig "image" "pullPolicy" "IfNotPresent" $.Values.addons.velero.values }}
     volumeMounts:
       - mountPath: /target
