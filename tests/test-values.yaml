@@ -1397,6 +1397,8 @@ addons:
     enabled: false
     plugins:
     - aws
+    pluginsImageOverride: []
+    pluginsTagOverride: []
     values:
       serviceAccount:
         server:
