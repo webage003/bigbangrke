@@ -398,20 +398,6 @@ kyvernopolicies:
         parameters:
           require:
           - imageReferences:
-            - "registry1.dso.mil/ironbank/*"
-            attestors:
-            - count: 1
-              entries:
-              - keys:
-                  publicKeys: |-
-                    -----BEGIN PUBLIC KEY-----
-                    MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7CjMGH005DFFz6mffqTIGurBt6fL
-                    UfTZxuEDFRBS8mFJx1xw8DEVvjMibLTtqmAoJxUmzmGFgzz+LV875syVEg==
-                    -----END PUBLIC KEY-----
-            # Ironbank images are rebuilt nightly and tags are not immutable
-            mutateDigest: false
-            verifyDigest: false
-          - imageReferences:
             - "ghcr.io/kyverno/test-verify-image:*"
             attestors:
             - count: 1
@@ -422,6 +408,20 @@ kyvernopolicies:
                     MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE8nXRh950IZbRj8Ra/N9sbqOPZrfM
                     5/KAQN0/KjHcorm/J5yctVd7iEcnessRQjU917hmKO6JWVGHpDguIyakZA==
                     -----END PUBLIC KEY-----
+          # - imageReferences:
+          #   - "registry1.dso.mil/ironbank/*"
+          #   attestors:
+          #   - count: 1
+          #     entries:
+          #     - keys:
+          #         publicKeys: |-
+          #           -----BEGIN PUBLIC KEY-----
+          #           MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7CjMGH005DFFz6mffqTIGurBt6fL
+          #           UfTZxuEDFRBS8mFJx1xw8DEVvjMibLTtqmAoJxUmzmGFgzz+LV875syVEg==
+          #           -----END PUBLIC KEY-----
+          #   # Ironbank images are rebuilt nightly and tags are not immutable
+          #   mutateDigest: false
+          #   verifyDigest: false
       require-labels:
         parameters:
           require:
@@ -779,7 +779,7 @@ monitoring:
     bbtests:
       enabled: true
       cypress:
-        image: registry.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates/cypress/kubectl:8.3.1
+        image: registry1.dso.mil/bigbang-ci/cypress-kubectl:8.3.1
         envs:
           cypress_prometheus_url: 'https://prometheus.bigbang.dev'
           cypress_grafana_url: 'https://grafana.bigbang.dev'
@@ -995,7 +995,7 @@ addons:
         scripts:
           envs:
             GITLAB_REPOSITORY: https://gitlab.bigbang.dev
-            GITLAB_ORIGIN: https://testuser:12345678@gitlab.bigbang.dev
+            GITLAB_ORIGIN: https://testuser:Password123h56a78@gitlab.bigbang.dev
             GITLAB_REGISTRY: registry.bigbang.dev
 
   gitlabRunner:
@@ -1018,7 +1018,7 @@ addons:
             cypress_gitlab_last_name: "userrunner"
             cypress_gitlab_email: "gitlab@bigbang.dev"
             cypress_gitlab_username: "gitlabrunner_user"
-            cypress_gitlab_password: "gitlabrunner_pass"
+            cypress_gitlab_password: "Runner_PaSsw0rd123"
             cypress_gitlab_project: "runner-hello-world"
           secretEnvs:
             - name: cypress_adminpassword
@@ -1288,7 +1288,7 @@ addons:
       bbtests:
         enabled: true
         cypress:
-          image: registry.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates/cypress/kubectl:8.3.1
+          image: registry1.dso.mil/bigbang-ci/cypress-kubectl:8.3.1
           envs:
             cypress_url: https://chat.bigbang.dev
 
