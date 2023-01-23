@@ -256,6 +256,7 @@ policies:
           - neuvector
           names:
           - neuvector-enforcer*
+          - neuvector-controller*
       {{- end }}
       {{- if $deployNodeAgent }}
       # Velero.  The node agent backup tool requires root user access to the host's runtime pod directory which is
