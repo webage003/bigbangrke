@@ -246,9 +246,17 @@ policies:
       excludeContainers:
         - istio-init
     {{- end }}
-    {{- if or $deployNodeAgent .Values.twistlock.enabled .Values.fluentbit.enabled .Values.promtail.enabled .Values.addons.gitlab.enabled }}
+    {{- if or $deployNodeAgent .Values.twistlock.enabled .Values.fluentbit.enabled .Values.promtail.enabled .Values.addons.gitlab.enabled .Values.neuvector.enabled }}
     exclude:
       any:
+      {{- if .Values.neuvector.enabled }}
+      # Neuvector Enforcers run as root to perform real time scanning on the nodes/cluster
+      - resources:
+          namespaces:
+          - neuvector
+          names:
+          - neuvector-enforcer*
+      {{- end }}
       {{- if $deployNodeAgent }}
       # Velero.  The node agent backup tool requires root user access to the host's runtime pod directory which is
       # mounted inside velero/node agent pods.
