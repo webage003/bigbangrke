@@ -22,6 +22,16 @@ istio:
 
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}
+  # conditional passes only for istio enabled, istio injection enabled, and mTLS STRICT
+  {{- if and $istioInjection (eq (dig "istio" "mtls" "mode" "STRICT" .Values.addons.sonarqube.values) "STRICT") }}
+  serviceMonitor:
+    scheme: https
+    tlsConfig:
+      caFile: /etc/prom-certs/root-cert.pem
+      certFile: /etc/prom-certs/cert-chain.pem
+      keyFile: /etc/prom-certs/key.pem
+      insecureSkipVerify: true  # Prometheus does not support Istio security naming, thus skip verifying target pod certificate
+  {{- end }}
 
 networkPolicies:
   enabled: {{ .Values.networkPolicies.enabled }}
