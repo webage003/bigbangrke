@@ -352,7 +352,7 @@ clusterAuditor:
 #
 gatekeeper:
   # -- Toggle deployment of OPA Gatekeeper.
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
     path: "./chart"
@@ -434,7 +434,7 @@ kyvernoreporter:
 #
 logging:
   # -- Toggle deployment of Logging (EFK).
-  enabled: true
+  enabled: false
   git:
     repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
     path: "./chart"
