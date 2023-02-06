@@ -42,7 +42,7 @@ Airgap Deployment is a form of deployment which does not have any direct connect
 ### General Prerequisites
 
 * A kubernetes cluster with container mirroring support. There is a section below that covers mirroring in more detail with examples for supported clusters.
-* BigBang(BB) [release artifacts](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/releases).
+* BigBang(BB) [release artifacts](https://repo1.dso.mil/big-bang/bigbang/-/releases).
 * Utility Server.
 
 ### Package Specific Prerequisites
@@ -54,12 +54,12 @@ Elastic requires a larger number of memory map areas than some OSes support by d
 ```shell
 MIME-Version: 1.0
     Content-Type: multipart/mixed; boundary="==MYBOUNDARY=="
-    
+
     --==MYBOUNDARY==
     Content-Type: text/x-shellscript; charset="us-ascii"
 
     #!/bin/bash
-    # Set the vm.max_map_count to 262144. 
+    # Set the vm.max_map_count to 262144.
     # Required for Elastic to run correctly without OOM errors.
     sysctl -w vm.max_map_count=262144
 ```
@@ -97,7 +97,7 @@ ssh-keygen  -b 4096 -t rsa -f ~/.ssh/identity -q -N ""
   touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
   exit
   ```
-  
+
 * Add client ssh key to `git` user `authorized_keys`
 
   ```shell
@@ -119,18 +119,18 @@ ssh-keygen  -b 4096 -t rsa -f ~/.ssh/identity -q -N ""
   sudo sed -i -e '1i'$PRIVATEIP'   'myhostname.com'\' /etc/hosts
   sudo sed -i -e '1i'$PRIVATEIP'   'host.k3d.internal'\' /etc/hosts #only for k3d
   ```
-  
+
 * To test the client key;
 
   ```shell
   GIT_SSH_COMMAND='ssh -i /[client-private-key-path] -o IdentitiesOnly=yes' git clone git@[hostname/IP]:/home/git/repos/[sample-repo]
-  
+
   #For example;
-  GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:/home/git/repos/bigbang 
+  GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:/home/git/repos/bigbang
   #checkout release branch
   git checkout 1.3.0
   ```
-  
+
 ### Option Two
 
 There are some cases where you do not have access to or cannot create an ssh user on the utility server. It is possible to run an ssh git server on a non-standard port using Docker.
@@ -159,7 +159,7 @@ You will now be able to test by checking out some of the code.
 GIT_SSH_COMMAND='ssh -i /[client-private-key-path] -o IdentitiesOnly=yes' git clone git@[hostname/IP]:[PORT]/home/git/repos/[sample-repo]
 
 # For example;
-GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:[PORT]/home/git/repos/bigbang 
+GIT_SSH_COMMAND='ssh -i ~/.ssh/identity -o IdentitiesOnly=yes' git clone git@host.k3d.internal:[PORT]/home/git/repos/bigbang
 # Check out release branch
 git checkout 1.3.0
 ```
@@ -238,7 +238,7 @@ A folder is created with TLS certs that we are going to supply to our k8s cluste
 You can ensure the images are now loaded in the registry;
 
 ```shell
- curl -k https://myhostname.com:5443/v2/_catalog 
+ curl -k https://myhostname.com:5443/v2/_catalog
 {"repositories":["ironbank/anchore/engine/engine","ironbank/anchore/enterprise/enterprise","ironbank/anchore/enterpriseui/enterpriseui","ironbank/big-bang/argocd","ironbank/bitnami/analytics/redis-exporter","ironbank/elastic/eck-operator/eck-operator","ironbank/elastic/elasticsearch/elasticsearch","ironbank/elastic/kibana/kibana","ironbank/fluxcd/helm-controller","ironbank/fluxcd/kustomize-controller","ironbank/fluxcd/notification-controller","ironbank/fluxcd/source-controller","ironbank/gitlab/gitlab/alpine-certificates","ironbank/gitlab/gitlab/cfssl-self-sign","ironbank/gitlab/gitlab/gitaly",...]
 ```
 
@@ -336,7 +336,7 @@ We need a namespace for our preparations and eventually for Big Bang to deploy i
 kubectl create ns bigbang
 ```
 
-Installing Big Bang in an air gap environment currently uses the Helm charts from the **[Big Bang Repo](https://repo1.dso.mil/platform-one/big-bang/bigbang)**.
+Installing Big Bang in an air gap environment currently uses the Helm charts from the **[Big Bang Repo](https://repo1.dso.mil/big-bang/bigbang)**.
 
 All changes are modified in the custom [values.yaml](../../assets/scripts/airgap-dev/values.yaml) file. Modify as needed and replace IP.
 
@@ -469,7 +469,7 @@ The third party guide assumes that you already have or are planning to install B
 Packaging your repository from Git
 
 ```shell
-git clone --no-checkout https://repo1.dso.mil/platform-one/big-bang/apps/third-party/kafka.git && tar -zcvf kafka-repo.tar.gz kafka
+git clone --no-checkout https://repo1.dso.mil/big-bang/apps/third-party/kafka.git && tar -zcvf kafka-repo.tar.gz kafka
 ```
 
 This creates a tar of a full git repo without a checkout. After you have placed this git repo in its destination you can get the files to view by doing.

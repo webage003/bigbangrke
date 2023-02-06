@@ -54,7 +54,7 @@
 * AO: Authorizing Official (Government Official who determines OS and Kubernetes Cluster hardening requirements, that result in a level of acceptable remaining risk that they're willing to sign off on for a Kubernetes Cluster to receive an ATO, and a BigBang Cluster to receive a cATO)
 * IaC: Infrastructure as Code
 * CaC: Configuration as Code
-* CAC: Common Access Card  
+* CAC: Common Access Card
 
 ## Prerequisites
 
@@ -66,7 +66,7 @@
 * We are still migrating some docs from IL2 Confluence, and the BigBang Onboarding Engineering Cohort into to this repositories' /docs folder, the planned future state is for this to be a primary location for docs going forward. (Any docs hosted in other repositories, will at least have pointers hosted here.)
 * There are multiple implementations of Helm Charts (Helm repositories, .tgz, and files and folders in a git repo), whenever P1 refers to a helm chart we're always referring to the files and folders in a git repo implementation, which is stored in /chart folder in a git repo.
 * Additional pre-reading materials to develop a better understanding of BigBang before deploying can be found in this understanding_bigbang folder.
-* If you see an issue with docs or packages, please [open an issue against the main BigBang Repo](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/issues), instead of the individual package repo.
+* If you see an issue with docs or packages, please [open an issue against the main BigBang Repo](https://repo1.dso.mil/big-bang/bigbang/-/issues), instead of the individual package repo.
 
 ## Note about Snippets of Architecture Diagrams in this folder
 

@@ -13,7 +13,7 @@ graph LR
   subgraph "Anchore Engine"
     anchorepods("Anchore Pods")
     anchoreservice{{"API Service"}} --> anchorepods("Anchore Pods")
-  end      
+  end
 
   subgraph "Ingress"
     ig(Ingress Gateway) --> anchoreservice
@@ -36,7 +36,7 @@ graph LR
     anchorepods("Anchore Pods")
     anchoreservice1{{"API Service"}} --> anchorepods("Anchore Pods")
     anchoreservice2{{"Enterprise UI Service"}} --> anchorepods("Anchore Pods")
-  end      
+  end
 
   subgraph "Session Storage (Redis)"
     anchoreservice2 --> database3[("Enterprise UI DB")]
@@ -111,7 +111,7 @@ Anchore relies on a PostgreSQL database as its primary data store. By default, A
 
 Since Anchore relies on a PostgreSQL database, it is recommended that production users utilize their database service's HA and scaling capabilities (e.g. Amazon Aurora, Google Cloud SQL, etc.). For users who need scaling or redundancy for their object storage, S3 or Swift are recommended. By default, Anchore Enterprise will utilize an HA redis deployment, but it can also be configured to use an external redis such as Elasticache).
 
-Anchore Enterprise can run one or more analyzer services to scale out the processing of images. There may be many of these analyzers but best practice is to not have more than one per node since analysis is very IO intensive (see [Affinity](https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/anchore-enterprise/-/blob/main/docs/Affinity.md) for an example of how to specify nodeSelector/affinity/anti-affinity). By specifying a `replicaCount` for the analyzers, the number of analysis pods can be scaled up or down:
+Anchore Enterprise can run one or more analyzer services to scale out the processing of images. There may be many of these analyzers but best practice is to not have more than one per node since analysis is very IO intensive (see [Affinity](https://repo1.dso.mil/big-bang/apps/security-tools/anchore-enterprise/-/blob/main/docs/Affinity.md) for an example of how to specify nodeSelector/affinity/anti-affinity). By specifying a `replicaCount` for the analyzers, the number of analysis pods can be scaled up or down:
 
 ```yaml
 addons:

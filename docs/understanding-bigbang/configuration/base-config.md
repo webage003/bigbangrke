@@ -6,7 +6,7 @@ Big Bang is a declarative, continuous delivery tool for core DoD hardened and ap
 
 ## Getting Started
 
-To start using Big Bang, you will need to create your own Big Bang environment tailored to your needs.  The [Big Bang customer template](https://repo1.dso.mil/platform-one/big-bang/customers/template/) is provided for you to copy into your own Git repository and begin modifications.
+To start using Big Bang, you will need to create your own Big Bang environment tailored to your needs.  The [Big Bang customer template](https://repo1.dso.mil/big-bang/customers/template/) is provided for you to copy into your own Git repository and begin modifications.
 
 ## Maintainers
 
@@ -20,7 +20,7 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 
 ## Source Code
 
-* <https://repo1.dso.mil/platform-one/big-bang/bigbang>
+* <https://repo1.dso.mil/big-bang/bigbang>
 
 ## Values
 
@@ -65,7 +65,7 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | networkPolicies.vpcCidr | string | `"0.0.0.0/0"` | VPC CIDR, defaults to 0.0.0.0/0 In a production environment, it is recommended to setup a Private Endpoint for your AWS services like KMS or S3. Please review https://docs.aws.amazon.com/kms/latest/developerguide/kms-vpc-endpoint.html to setup routing to AWS services that never leave the AWS network. Once created update `networkPolicies.vpcCidr` to match the CIDR of your VPC so Vault will be able to reach your VPCs DNS and new KMS endpoint. |
 | imagePullPolicy | string | `"IfNotPresent"` | Global ImagePullPolicy value for all packages Permitted values are: None, Always, IfNotPresent |
 | istio.enabled | bool | `true` | Toggle deployment of Istio. |
-| istio.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git"` |  |
+| istio.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/istio-controlplane.git"` |  |
 | istio.git.path | string | `"./chart"` |  |
 | istio.git.tag | string | `"1.16.1-bb.0"` |  |
 | istio.enterprise | bool | `false` | Tetrate Istio Distribution - Tetrate provides FIPs verified Istio and Envoy software and support, validated through the FIPs Boring Crypto module. Find out more from Tetrate - https://www.tetrate.io/tetrate-istio-subscription |
@@ -77,17 +77,17 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | istio.gateways.public.tls.key | string | `""` |  |
 | istio.gateways.public.tls.cert | string | `""` |  |
 | istio.flux | object | `{}` | Flux reconciliation overrides specifically for the Istio Package |
-| istio.values | object | `{}` | Values to passthrough to the istio-controlplane chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git |
+| istio.values | object | `{}` | Values to passthrough to the istio-controlplane chart: https://repo1.dso.mil/big-bang/apps/core/istio-controlplane.git |
 | istio.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | istiooperator.enabled | bool | `true` | Toggle deployment of Istio Operator. |
-| istiooperator.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git"` |  |
+| istiooperator.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/istio-operator.git"` |  |
 | istiooperator.git.path | string | `"./chart"` |  |
 | istiooperator.git.tag | string | `"1.16.1-bb.0"` |  |
 | istiooperator.flux | object | `{}` | Flux reconciliation overrides specifically for the Istio Operator Package |
-| istiooperator.values | object | `{}` | Values to passthrough to the istio-operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git |
+| istiooperator.values | object | `{}` | Values to passthrough to the istio-operator chart: https://repo1.dso.mil/big-bang/apps/core/istio-operator.git |
 | istiooperator.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | jaeger.enabled | bool | `true` | Toggle deployment of Jaeger. |
-| jaeger.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git"` |  |
+| jaeger.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/jaeger.git"` |  |
 | jaeger.git.path | string | `"./chart"` |  |
 | jaeger.git.tag | string | `"2.38.0-bb.1"` |  |
 | jaeger.flux | object | `{"install":{"crds":"CreateReplace"},"upgrade":{"crds":"CreateReplace"}}` | Flux reconciliation overrides specifically for the Jaeger Package |
@@ -95,10 +95,10 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | jaeger.sso.enabled | bool | `false` | Toggle SSO for Jaeger on and off |
 | jaeger.sso.client_id | string | `""` | OIDC Client ID to use for Jaeger |
 | jaeger.sso.client_secret | string | `""` | OIDC Client Secret to use for Jaeger |
-| jaeger.values | object | `{}` | Values to pass through to Jaeger chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git |
+| jaeger.values | object | `{}` | Values to pass through to Jaeger chart: https://repo1.dso.mil/big-bang/apps/core/jaeger.git |
 | jaeger.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | kiali.enabled | bool | `true` | Toggle deployment of Kiali. |
-| kiali.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git"` |  |
+| kiali.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/kiali.git"` |  |
 | kiali.git.path | string | `"./chart"` |  |
 | kiali.git.tag | string | `"1.60.0-bb.1"` |  |
 | kiali.flux | object | `{}` | Flux reconciliation overrides specifically for the Kiali Package |
@@ -106,45 +106,45 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | kiali.sso.enabled | bool | `false` | Toggle SSO for Kiali on and off |
 | kiali.sso.client_id | string | `""` | OIDC Client ID to use for Kiali |
 | kiali.sso.client_secret | string | `""` | OIDC Client Secret to use for Kiali |
-| kiali.values | object | `{}` | Values to pass through to Kiali chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali |
+| kiali.values | object | `{}` | Values to pass through to Kiali chart: https://repo1.dso.mil/big-bang/apps/core/kiali |
 | kiali.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | clusterAuditor.enabled | bool | `true` | Toggle deployment of Cluster Auditor. |
-| clusterAuditor.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git"` |  |
+| clusterAuditor.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/cluster-auditor.git"` |  |
 | clusterAuditor.git.path | string | `"./chart"` |  |
 | clusterAuditor.git.tag | string | `"1.5.0-bb.2"` |  |
 | clusterAuditor.flux | object | `{}` | Flux reconciliation overrides specifically for the Cluster Auditor Package |
-| clusterAuditor.values | object | `{}` | Values to passthrough to the cluster auditor chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git |
+| clusterAuditor.values | object | `{}` | Values to passthrough to the cluster auditor chart: https://repo1.dso.mil/big-bang/apps/core/cluster-auditor.git |
 | clusterAuditor.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | gatekeeper.enabled | bool | `true` | Toggle deployment of OPA Gatekeeper. |
-| gatekeeper.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git"` |  |
+| gatekeeper.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/policy.git"` |  |
 | gatekeeper.git.path | string | `"./chart"` |  |
 | gatekeeper.git.tag | string | `"3.10.0-bb.0"` |  |
 | gatekeeper.flux | object | `{"install":{"crds":"CreateReplace"},"upgrade":{"crds":"CreateReplace"}}` | Flux reconciliation overrides specifically for the OPA Gatekeeper Package |
-| gatekeeper.values | object | `{}` | Values to passthrough to the gatekeeper chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git |
+| gatekeeper.values | object | `{}` | Values to passthrough to the gatekeeper chart: https://repo1.dso.mil/big-bang/apps/core/policy.git |
 | gatekeeper.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | kyverno.enabled | bool | `false` | Toggle deployment of Kyverno. |
-| kyverno.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno.git"` |  |
+| kyverno.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/sandbox/kyverno.git"` |  |
 | kyverno.git.path | string | `"./chart"` |  |
 | kyverno.git.tag | string | `"2.6.5-bb.0"` |  |
 | kyverno.flux | object | `{}` | Flux reconciliation overrides specifically for the Kyverno Package |
-| kyverno.values | object | `{}` | Values to passthrough to the kyverno chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno.git |
+| kyverno.values | object | `{}` | Values to passthrough to the kyverno chart: https://repo1.dso.mil/big-bang/apps/sandbox/kyverno.git |
 | kyverno.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | kyvernopolicies.enabled | bool | `false` | Toggle deployment of Kyverno policies |
-| kyvernopolicies.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-policies.git"` |  |
+| kyvernopolicies.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/sandbox/kyverno-policies.git"` |  |
 | kyvernopolicies.git.path | string | `"./chart"` |  |
 | kyvernopolicies.git.tag | string | `"1.1.0-bb.0"` |  |
 | kyvernopolicies.flux | object | `{}` | Flux reconciliation overrides specifically for the Kyverno Package |
-| kyvernopolicies.values | object | `{}` | Values to passthrough to the kyverno policies chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-policies.git |
+| kyvernopolicies.values | object | `{}` | Values to passthrough to the kyverno policies chart: https://repo1.dso.mil/big-bang/apps/sandbox/kyverno-policies.git |
 | kyvernopolicies.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | kyvernoreporter.enabled | bool | `false` | Toggle deployment of Kyverno Reporter |
-| kyvernoreporter.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-reporter.git"` |  |
+| kyvernoreporter.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/sandbox/kyverno-reporter.git"` |  |
 | kyvernoreporter.git.path | string | `"./chart"` |  |
 | kyvernoreporter.git.tag | string | `"2.13.4-bb.1"` |  |
 | kyvernoreporter.flux | object | `{}` | Flux reconciliation overrides specifically for the Kyverno Reporter Package |
-| kyvernoreporter.values | object | `{}` | Values to passthrough to the kyverno reporter chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/kyverno-reporter.git |
+| kyvernoreporter.values | object | `{}` | Values to passthrough to the kyverno reporter chart: https://repo1.dso.mil/big-bang/apps/sandbox/kyverno-reporter.git |
 | kyvernoreporter.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | logging.enabled | bool | `true` | Toggle deployment of Logging (EFK). |
-| logging.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git"` |  |
+| logging.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/elasticsearch-kibana.git"` |  |
 | logging.git.path | string | `"./chart"` |  |
 | logging.git.tag | string | `"0.14.2-bb.0"` |  |
 | logging.flux | object | `{"timeout":"20m"}` | Flux reconciliation overrides specifically for the Logging (EFK) Package |
@@ -153,31 +153,31 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | logging.sso.client_id | string | `""` | Elasticsearch/Kibana OIDC client ID |
 | logging.sso.client_secret | string | `""` | Elasticsearch/Kibana OIDC client secret |
 | logging.license.trial | bool | `false` | Toggle trial license installation of elasticsearch.  Note that enterprise (non trial) is required for SSO to work. |
-| logging.license.keyJSON | string | `""` | Elasticsearch license in json format seen here: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana#enterprise-license |
-| logging.values | object | `{}` | Values to passthrough to the elasticsearch-kibana chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git |
+| logging.license.keyJSON | string | `""` | Elasticsearch license in json format seen here: https://repo1.dso.mil/big-bang/apps/core/elasticsearch-kibana#enterprise-license |
+| logging.values | object | `{}` | Values to passthrough to the elasticsearch-kibana chart: https://repo1.dso.mil/big-bang/apps/core/elasticsearch-kibana.git |
 | logging.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | eckoperator.enabled | bool | `true` | Toggle deployment of ECK Operator. |
-| eckoperator.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git"` |  |
+| eckoperator.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/eck-operator.git"` |  |
 | eckoperator.git.path | string | `"./chart"` |  |
 | eckoperator.git.tag | string | `"2.5.0-bb.0"` |  |
 | eckoperator.flux | object | `{}` | Flux reconciliation overrides specifically for the ECK Operator Package |
-| eckoperator.values | object | `{}` | Values to passthrough to the eck-operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git |
+| eckoperator.values | object | `{}` | Values to passthrough to the eck-operator chart: https://repo1.dso.mil/big-bang/apps/core/eck-operator.git |
 | fluentbit.enabled | bool | `true` | Toggle deployment of Fluent-Bit. |
-| fluentbit.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git"` |  |
+| fluentbit.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/fluentbit.git"` |  |
 | fluentbit.git.path | string | `"./chart"` |  |
 | fluentbit.git.tag | string | `"0.21.7-bb.0"` |  |
 | fluentbit.flux | object | `{}` | Flux reconciliation overrides specifically for the Fluent-Bit Package |
-| fluentbit.values | object | `{}` | Values to passthrough to the fluentbit chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git |
+| fluentbit.values | object | `{}` | Values to passthrough to the fluentbit chart: https://repo1.dso.mil/big-bang/apps/core/fluentbit.git |
 | fluentbit.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | promtail.enabled | bool | `false` | Toggle deployment of Promtail. |
-| promtail.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail.git"` |  |
+| promtail.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/sandbox/promtail.git"` |  |
 | promtail.git.path | string | `"./chart"` |  |
 | promtail.git.tag | string | `"6.7.2-bb.0"` |  |
 | promtail.flux | object | `{}` | Flux reconciliation overrides specifically for the Promtail Package |
-| promtail.values | object | `{}` | Values to passthrough to the promtail chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git |
+| promtail.values | object | `{}` | Values to passthrough to the promtail chart: https://repo1.dso.mil/big-bang/apps/core/fluentbit.git |
 | promtail.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | loki.enabled | bool | `false` | Toggle deployment of Loki. |
-| loki.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git"` |  |
+| loki.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/sandbox/loki.git"` |  |
 | loki.git.path | string | `"./chart"` |  |
 | loki.git.tag | string | `"3.7.0-bb.1"` |  |
 | loki.flux | object | `{}` | Flux reconciliation overrides specifically for the Loki Package |
@@ -187,18 +187,18 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | loki.objectStorage.accessKey | string | `""` | Access key for connecting to object storage endpoint. |
 | loki.objectStorage.accessSecret | string | `""` | Secret key for connecting to object storage endpoint. Unencoded string data. This should be placed in the secret values and then encrypted |
 | loki.objectStorage.bucketNames | object | `{}` | Bucket Names for the Loki buckets as YAML chunks: loki-logs ruler: loki-ruler admin: loki-admin |
-| loki.values | object | `{}` | Values to passthrough to the Loki chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git |
+| loki.values | object | `{}` | Values to passthrough to the Loki chart: https://repo1.dso.mil/big-bang/apps/sandbox/loki.git |
 | loki.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | neuvector.enabled | bool | `false` | Toggle deployment of Neuvector. |
-| neuvector.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git"` |  |
+| neuvector.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/sandbox/neuvector.git"` |  |
 | neuvector.git.path | string | `"./chart"` |  |
 | neuvector.git.tag | string | `"2.4.0-bb.2"` |  |
 | neuvector.ingress | object | `{"gateway":""}` | Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public". |
 | neuvector.flux | object | `{}` | Flux reconciliation overrides specifically for the Neuvector Package |
-| neuvector.values | object | `{}` | Values to passthrough to the Neuvector chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/neuvector.git |
+| neuvector.values | object | `{}` | Values to passthrough to the Neuvector chart: https://repo1.dso.mil/big-bang/apps/sandbox/neuvector.git |
 | neuvector.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | tempo.enabled | bool | `false` | Toggle deployment of Tempo. |
-| tempo.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/tempo.git"` |  |
+| tempo.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/sandbox/tempo.git"` |  |
 | tempo.git.path | string | `"./chart"` |  |
 | tempo.git.tag | string | `"0.16.1-bb.3"` |  |
 | tempo.ingress | object | `{"gateway":""}` | Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public". |
@@ -212,10 +212,10 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | tempo.objectStorage.accessSecret | string | `""` | Secret key for connecting to object storage endpoint. Unencoded string data. This should be placed in the secret values and then encrypted |
 | tempo.objectStorage.bucket | string | `""` | Bucket Name for Tempo examples: "tempo-traces" |
 | tempo.objectStorage.insecure | bool | `false` | Whether or not objectStorage connection should require HTTPS, if connecting to in-cluster object storage on port 80/9000 set this value to true. |
-| tempo.values | object | `{}` | Values to passthrough to the Tempo chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/tempo.git |
+| tempo.values | object | `{}` | Values to passthrough to the Tempo chart: https://repo1.dso.mil/big-bang/apps/sandbox/tempo.git |
 | tempo.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | monitoring.enabled | bool | `true` | Toggle deployment of Monitoring (Prometheus, Grafana, and Alertmanager). |
-| monitoring.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git"` |  |
+| monitoring.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/monitoring.git"` |  |
 | monitoring.git.path | string | `"./chart"` |  |
 | monitoring.git.tag | string | `"43.1.2-bb.1"` |  |
 | monitoring.flux | object | `{"install":{"crds":"CreateReplace"},"upgrade":{"crds":"CreateReplace"}}` | Flux reconciliation overrides specifically for the Monitoring Package |
@@ -230,15 +230,15 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | monitoring.sso.grafana.scopes | string | `""` | Grafana OIDC client scopes, comma separated, see https://grafana.com/docs/grafana/latest/auth/generic-oauth/ |
 | monitoring.sso.grafana.allow_sign_up | string | `"true"` |  |
 | monitoring.sso.grafana.role_attribute_path | string | `"Viewer"` |  |
-| monitoring.values | object | `{}` | Values to passthrough to the monitoring chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git |
+| monitoring.values | object | `{}` | Values to passthrough to the monitoring chart: https://repo1.dso.mil/big-bang/apps/core/monitoring.git |
 | monitoring.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | twistlock.enabled | bool | `true` | Toggle deployment of Twistlock. |
-| twistlock.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git"` |  |
+| twistlock.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/security-tools/twistlock.git"` |  |
 | twistlock.git.path | string | `"./chart"` |  |
 | twistlock.git.tag | string | `"0.11.4-bb.2"` |  |
 | twistlock.flux | object | `{}` | Flux reconciliation overrides specifically for the Twistlock Package |
 | twistlock.ingress | object | `{"gateway":""}` | Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public". |
-| twistlock.sso.enabled | bool | `false` | Toggle SAML SSO, requires a license and enabling the init job - see https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock/-/blob/main/docs/initialization.md |
+| twistlock.sso.enabled | bool | `false` | Toggle SAML SSO, requires a license and enabling the init job - see https://repo1.dso.mil/big-bang/apps/security-tools/twistlock/-/blob/main/docs/initialization.md |
 | twistlock.sso.client_id | string | `""` | SAML client ID |
 | twistlock.sso.provider_name | string | `""` | SAML Povider Alias (optional) |
 | twistlock.sso.provider_type | string | `"shibboleth"` | SAML Identity Provider. `shibboleth` is recommended by Twistlock support for Keycloak |
@@ -246,11 +246,11 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | twistlock.sso.idp_url | string | `"https://{{ .Values.sso.oidc.host }}/auth/realms/{{ .Values.sso.oidc.realm }}/protocol/saml"` | SAML Identity Provider SSO URL |
 | twistlock.sso.console_url | string | `"https://twistlock.{{ .Values.domain }}"` | Console URL of the Twistlock app (optional) |
 | twistlock.sso.groups | string | `""` | Groups attribute (optional) |
-| twistlock.sso.cert | string | `""` | X.509 Certificate from Identity Provider (i.e. Keycloak). See https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock/-/blob/main/docs/KEYCLOAK.md for format. Use the `|-` syntax for multiline string. |
-| twistlock.values | object | `{}` | Values to passthrough to the twistlock chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git |
+| twistlock.sso.cert | string | `""` | X.509 Certificate from Identity Provider (i.e. Keycloak). See https://repo1.dso.mil/big-bang/apps/security-tools/twistlock/-/blob/main/docs/KEYCLOAK.md for format. Use the `|-` syntax for multiline string. |
+| twistlock.values | object | `{}` | Values to passthrough to the twistlock chart: https://repo1.dso.mil/big-bang/apps/security-tools/twistlock.git |
 | twistlock.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.argocd.enabled | bool | `false` | Toggle deployment of ArgoCD. |
-| addons.argocd.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd.git"` |  |
+| addons.argocd.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/argocd.git"` |  |
 | addons.argocd.git.path | string | `"./chart"` |  |
 | addons.argocd.git.tag | string | `"5.16.1-bb.1"` |  |
 | addons.argocd.flux | object | `{}` | Flux reconciliation overrides specifically for the ArgoCD Package |
@@ -262,37 +262,37 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.argocd.sso.client_secret | string | `""` | ArgoCD OIDC client secret |
 | addons.argocd.sso.provider_name | string | `""` | ArgoCD SSO login text |
 | addons.argocd.sso.groups | string | `"g, Impact Level 2 Authorized, role:admin\n"` | ArgoCD SSO group roles, see docs for more details: https://argo-cd.readthedocs.io/en/stable/operator-manual/rbac/ |
-| addons.argocd.values | object | `{}` | Values to passthrough to the argocd chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/argocd.git |
+| addons.argocd.values | object | `{}` | Values to passthrough to the argocd chart: https://repo1.dso.mil/big-bang/apps/core/argocd.git |
 | addons.argocd.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.authservice.enabled | bool | `false` | Toggle deployment of Authservice. if enabling authservice, a filter needs to be provided by either enabling sso for monitoring or istio, or manually adding a filter chain in the values here: values:   chain:     minimal:       callback_uri: "https://somecallback" |
-| addons.authservice.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/core/authservice.git"` |  |
+| addons.authservice.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/core/authservice.git"` |  |
 | addons.authservice.git.path | string | `"./chart"` |  |
 | addons.authservice.git.tag | string | `"0.5.3-bb.2"` |  |
 | addons.authservice.flux | object | `{}` | Flux reconciliation overrides specifically for the Authservice Package |
-| addons.authservice.values | object | `{}` | Values to passthrough to the authservice chart: https://repo1.dso.mil/platform-one/big-bang/apps/core/authservice.git |
+| addons.authservice.values | object | `{}` | Values to passthrough to the authservice chart: https://repo1.dso.mil/big-bang/apps/core/authservice.git |
 | addons.authservice.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.authservice.chains | object | `{}` | Additional authservice chain configurations. |
 | addons.minioOperator.enabled | bool | `false` | Toggle deployment of minio operator and instance. |
-| addons.minioOperator.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git"` |  |
+| addons.minioOperator.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/application-utilities/minio-operator.git"` |  |
 | addons.minioOperator.git.path | string | `"./chart"` |  |
 | addons.minioOperator.git.tag | string | `"4.5.4-bb.0"` |  |
 | addons.minioOperator.flux | object | `{}` | Flux reconciliation overrides specifically for the Minio Operator Package |
-| addons.minioOperator.values | object | `{}` | Values to passthrough to the minio operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio-operator.git |
+| addons.minioOperator.values | object | `{}` | Values to passthrough to the minio operator chart: https://repo1.dso.mil/big-bang/apps/application-utilities/minio-operator.git |
 | addons.minioOperator.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.minio.enabled | bool | `false` | Toggle deployment of minio. |
-| addons.minio.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git"` |  |
+| addons.minio.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/application-utilities/minio.git"` |  |
 | addons.minio.git.path | string | `"./chart"` |  |
 | addons.minio.git.tag | string | `"4.5.4-bb.3"` |  |
 | addons.minio.flux | object | `{}` | Flux reconciliation overrides specifically for the Minio Package |
 | addons.minio.ingress | object | `{"gateway":""}` | Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public". |
 | addons.minio.accesskey | string | `""` | Default access key to use for minio. |
 | addons.minio.secretkey | string | `""` | Default secret key to intstantiate with minio, you should change/delete this after installation. |
-| addons.minio.values | object | `{}` | Values to passthrough to the minio instance chart: https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio.git |
+| addons.minio.values | object | `{}` | Values to passthrough to the minio instance chart: https://repo1.dso.mil/big-bang/apps/application-utilities/minio.git |
 | addons.minio.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.gitlab.enabled | bool | `false` | Toggle deployment of Gitlab |
 | addons.gitlab.hostnames.gitlab | string | `"gitlab"` |  |
 | addons.gitlab.hostnames.registry | string | `"registry"` |  |
-| addons.gitlab.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git"` |  |
+| addons.gitlab.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab.git"` |  |
 | addons.gitlab.git.path | string | `"./chart"` |  |
 | addons.gitlab.git.tag | string | `"6.7.5-bb.0"` |  |
 | addons.gitlab.flux | object | `{}` | Flux reconciliation overrides specifically for the Gitlab Package |
@@ -319,17 +319,17 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.gitlab.objectStorage.iamProfile | string | `""` | NOTE: Current bug with AWS IAM Profiles and Object Storage where only artifacts are stored. Fixed in Gitlab 14.5 -- Name of AWS IAM profile to use. -- If using an AWS IAM profile, the accessKey and accessSecret values must be left as empty strings eg: "" |
 | addons.gitlab.smtp.password | string | `""` | Passwords should be placed in an encrypted file. Example: environment-bb-secret.enc.yaml If a value is provided BigBang will create a k8s secret named gitlab-smtp-password in the gitlab namespace |
 | addons.gitlab.redis.password | string | `""` | Redis plain text password to connect to the redis server.  If empty (""), the gitlab charts will create the gitlab-redis-secret with a random password. -- This needs to be set to a non-empty value in order for the Grafana Redis Datasource and Dashboards to be installed. |
-| addons.gitlab.values | object | `{}` | Values to passthrough to the gitlab chart: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab.git |
+| addons.gitlab.values | object | `{}` | Values to passthrough to the gitlab chart: https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab.git |
 | addons.gitlab.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.gitlabRunner.enabled | bool | `false` | Toggle deployment of Gitlab Runner |
-| addons.gitlabRunner.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git"` |  |
+| addons.gitlabRunner.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab-runner.git"` |  |
 | addons.gitlabRunner.git.path | string | `"./chart"` |  |
 | addons.gitlabRunner.git.tag | string | `"0.48.2-bb.0"` |  |
 | addons.gitlabRunner.flux | object | `{}` | Flux reconciliation overrides specifically for the Gitlab Runner Package |
-| addons.gitlabRunner.values | object | `{}` | Values to passthrough to the gitlab runner chart: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git |
+| addons.gitlabRunner.values | object | `{}` | Values to passthrough to the gitlab runner chart: https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab-runner.git |
 | addons.gitlabRunner.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.nexusRepositoryManager.enabled | bool | `false` | Toggle deployment of Nexus Repository Manager. |
-| addons.nexusRepositoryManager.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus.git"` |  |
+| addons.nexusRepositoryManager.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/developer-tools/nexus.git"` |  |
 | addons.nexusRepositoryManager.git.path | string | `"./chart"` |  |
 | addons.nexusRepositoryManager.git.tag | string | `"45.0.0-bb.2"` |  |
 | addons.nexusRepositoryManager.license_key | string | `""` | Base64 encoded license file. |
@@ -344,10 +344,10 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.nexusRepositoryManager.sso.idp_data.idpMetadata | string | `""` | IDP SAML Metadata XML as a single line string in single quotes -- this information is public and does not require a secret |
 | addons.nexusRepositoryManager.sso.role | list | `[{"description":"","id":"","name":"","privileges":[],"roles":[]}]` | NXRM Role |
 | addons.nexusRepositoryManager.flux | object | `{}` | Flux reconciliation overrides specifically for the Nexus Repository Manager Package |
-| addons.nexusRepositoryManager.values | object | `{}` | Values to passthrough to the nxrm chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/nexus.git |
+| addons.nexusRepositoryManager.values | object | `{}` | Values to passthrough to the nxrm chart: https://repo1.dso.mil/big-bang/apps/sandbox/nexus.git |
 | addons.nexusRepositoryManager.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.sonarqube.enabled | bool | `false` | Toggle deployment of SonarQube. |
-| addons.sonarqube.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube.git"` |  |
+| addons.sonarqube.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/developer-tools/sonarqube.git"` |  |
 | addons.sonarqube.git.path | string | `"./chart"` |  |
 | addons.sonarqube.git.tag | string | `"1.0.31-bb.4"` |  |
 | addons.sonarqube.flux | object | `{}` | Flux reconciliation overrides specifically for the Sonarqube Package |
@@ -365,24 +365,24 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.sonarqube.database.database | string | `""` | Database name to connect to on host. |
 | addons.sonarqube.database.username | string | `""` | Username to connect as to external database, the user must have all privileges on the database. |
 | addons.sonarqube.database.password | string | `""` | Database password for the username used to connect to the existing database. |
-| addons.sonarqube.values | object | `{}` | Values to passthrough to the sonarqube chart: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube.git |
+| addons.sonarqube.values | object | `{}` | Values to passthrough to the sonarqube chart: https://repo1.dso.mil/big-bang/apps/developer-tools/sonarqube.git |
 | addons.sonarqube.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
-| addons.haproxy.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/haproxy.git"` |  |
+| addons.haproxy.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/developer-tools/haproxy.git"` |  |
 | addons.haproxy.git.path | string | `"./chart"` |  |
 | addons.haproxy.git.tag | string | `"1.12.0-bb.0"` |  |
 | addons.haproxy.flux | object | `{}` | Flux reconciliation overrides specifically for the HAProxy Package |
 | addons.haproxy.ingress | object | `{"gateway":""}` | Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public". |
-| addons.haproxy.values | object | `{}` | Values to passthrough to the haproxy chart: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/haproxy.git |
+| addons.haproxy.values | object | `{}` | Values to passthrough to the haproxy chart: https://repo1.dso.mil/big-bang/apps/developer-tools/haproxy.git |
 | addons.haproxy.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.anchore.enabled | bool | `false` | Toggle deployment of Anchore. |
-| addons.anchore.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/anchore-enterprise.git"` |  |
+| addons.anchore.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/security-tools/anchore-enterprise.git"` |  |
 | addons.anchore.git.path | string | `"./chart"` |  |
 | addons.anchore.git.tag | string | `"1.21.1-bb.1"` |  |
 | addons.anchore.flux | object | `{"upgrade":{"disableWait":true}}` | Flux reconciliation overrides specifically for the Anchore Package |
 | addons.anchore.adminPassword | string | `""` | Initial admin password used to authenticate to Anchore. |
 | addons.anchore.enterprise | object | `{"enabled":false,"licenseYaml":"FULL LICENSE\n"}` | Anchore Enterprise functionality. |
 | addons.anchore.enterprise.enabled | bool | `false` | Toggle the installation of Anchore Enterprise.  This must be accompanied by a valid license. |
-| addons.anchore.enterprise.licenseYaml | string | `"FULL LICENSE\n"` | License for Anchore Enterprise. For formatting examples see https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/anchore-enterprise/-/blob/main/docs/CHART.md#enabling-enterprise-services |
+| addons.anchore.enterprise.licenseYaml | string | `"FULL LICENSE\n"` | License for Anchore Enterprise. For formatting examples see https://repo1.dso.mil/big-bang/apps/security-tools/anchore-enterprise/-/blob/main/docs/CHART.md#enabling-enterprise-services |
 | addons.anchore.ingress | object | `{"gateway":""}` | Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public". |
 | addons.anchore.sso.enabled | bool | `false` | Toggle OIDC SSO for Anchore on and off. Enabling this option will auto-create any required secrets (Note: SSO requires an Enterprise license). |
 | addons.anchore.sso.client_id | string | `""` | Anchore OIDC client ID |
@@ -392,22 +392,22 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.anchore.database.username | string | `""` | Username to connect as to external database, the user must have all privileges on the database. |
 | addons.anchore.database.password | string | `""` | Database password for the username used to connect to the existing database. |
 | addons.anchore.database.database | string | `""` | Database name to connect to on host (Note: database name CANNOT contain hyphens). |
-| addons.anchore.database.feeds_database | string | `""` | Feeds database name to connect to on host (Note: feeds database name CANNOT contain hyphens). Only required for enterprise edition of anchore. By default, feeds database will be configured with the same username and password as the main database. For formatting examples on how to use a separate username and password for the feeds database see https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/anchore-enterprise/-/blob/main/docs/CHART.md#handling-dependencies |
+| addons.anchore.database.feeds_database | string | `""` | Feeds database name to connect to on host (Note: feeds database name CANNOT contain hyphens). Only required for enterprise edition of anchore. By default, feeds database will be configured with the same username and password as the main database. For formatting examples on how to use a separate username and password for the feeds database see https://repo1.dso.mil/big-bang/apps/security-tools/anchore-enterprise/-/blob/main/docs/CHART.md#handling-dependencies |
 | addons.anchore.redis.host | string | `""` | Hostname of a pre-existing Redis to use for Anchore Enterprise. Entering connection info will enable external redis and will auto-create any required secrets. Anchore only requires redis for enterprise deployments and will not provision an instance if using external |
 | addons.anchore.redis.port | string | `""` | Port of a pre-existing Redis to use for Anchore Enterprise. |
 | addons.anchore.redis.username | string | `""` | OPTIONAL: Username to connect to a pre-existing Redis (for password-only auth leave empty) |
 | addons.anchore.redis.password | string | `""` | Password to connect to pre-existing Redis. |
-| addons.anchore.values | object | `{}` | Values to passthrough to the anchore chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/anchore-enterprise.git |
+| addons.anchore.values | object | `{}` | Values to passthrough to the anchore chart: https://repo1.dso.mil/big-bang/apps/security-tools/anchore-enterprise.git |
 | addons.anchore.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.mattermostoperator.enabled | bool | `false` |  |
-| addons.mattermostoperator.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator.git"` |  |
+| addons.mattermostoperator.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/collaboration-tools/mattermost-operator.git"` |  |
 | addons.mattermostoperator.git.path | string | `"./chart"` |  |
 | addons.mattermostoperator.git.tag | string | `"1.19.0-bb.0"` |  |
 | addons.mattermostoperator.flux | object | `{}` | Flux reconciliation overrides specifically for the Mattermost Operator Package |
-| addons.mattermostoperator.values | object | `{}` | Values to passthrough to the mattermost operator chart: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost-operator/-/blob/main/chart/values.yaml |
+| addons.mattermostoperator.values | object | `{}` | Values to passthrough to the mattermost operator chart: https://repo1.dso.mil/big-bang/apps/collaboration-tools/mattermost-operator/-/blob/main/chart/values.yaml |
 | addons.mattermostoperator.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.mattermost.enabled | bool | `false` | Toggle deployment of Mattermost. |
-| addons.mattermost.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost.git"` |  |
+| addons.mattermost.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/collaboration-tools/mattermost.git"` |  |
 | addons.mattermost.git.path | string | `"./chart"` |  |
 | addons.mattermost.git.tag | string | `"7.5.1-bb.4"` |  |
 | addons.mattermost.flux | object | `{}` | Flux reconciliation overrides specifically for the Mattermost Package |
@@ -418,9 +418,9 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.mattermost.sso.enabled | bool | `false` | Toggle OIDC SSO for Mattermost on and off. Enabling this option will auto-create any required secrets. |
 | addons.mattermost.sso.client_id | string | `""` | Mattermost OIDC client ID |
 | addons.mattermost.sso.client_secret | string | `""` | Mattermost OIDC client secret |
-| addons.mattermost.sso.auth_endpoint | string | `""` | Mattermost OIDC auth endpoint To get endpoint values, see here: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost/-/blob/main/docs/keycloak.md#helm-values |
-| addons.mattermost.sso.token_endpoint | string | `""` | Mattermost OIDC token endpoint To get endpoint values, see here: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost/-/blob/main/docs/keycloak.md#helm-values |
-| addons.mattermost.sso.user_api_endpoint | string | `""` | Mattermost OIDC user API endpoint To get endpoint values, see here: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost/-/blob/main/docs/keycloak.md#helm-values |
+| addons.mattermost.sso.auth_endpoint | string | `""` | Mattermost OIDC auth endpoint To get endpoint values, see here: https://repo1.dso.mil/big-bang/apps/collaboration-tools/mattermost/-/blob/main/docs/keycloak.md#helm-values |
+| addons.mattermost.sso.token_endpoint | string | `""` | Mattermost OIDC token endpoint To get endpoint values, see here: https://repo1.dso.mil/big-bang/apps/collaboration-tools/mattermost/-/blob/main/docs/keycloak.md#helm-values |
+| addons.mattermost.sso.user_api_endpoint | string | `""` | Mattermost OIDC user API endpoint To get endpoint values, see here: https://repo1.dso.mil/big-bang/apps/collaboration-tools/mattermost/-/blob/main/docs/keycloak.md#helm-values |
 | addons.mattermost.database.host | string | `""` | Hostname of a pre-existing PostgreSQL database to use for Mattermost. Entering connection info will disable the deployment of an internal database and will auto-create any required secrets. |
 | addons.mattermost.database.port | string | `""` | Port of a pre-existing PostgreSQL database to use for Mattermost. |
 | addons.mattermost.database.username | string | `""` | Username to connect as to external database, the user must have all privileges on the database. |
@@ -431,20 +431,20 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.mattermost.objectStorage.accessKey | string | `""` | Access key for connecting to object storage endpoint. |
 | addons.mattermost.objectStorage.accessSecret | string | `""` | Secret key for connecting to object storage endpoint. Unencoded string data. This should be placed in the secret values and then encrypted |
 | addons.mattermost.objectStorage.bucket | string | `""` | Bucket name to use for Mattermost - will be auto-created. |
-| addons.mattermost.elasticsearch | object | `{"enabled":false}` | Mattermost Elasticsearch integration - requires enterprise E20 license - https://docs.mattermost.com/deployment/elasticsearch.html Connection info defaults to the BB deployed Elastic, all values can be overridden via the "values" passthrough for other connections. See values spec in MM chart "elasticsearch" yaml block - https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost/-/blob/main/chart/values.yaml |
+| addons.mattermost.elasticsearch | object | `{"enabled":false}` | Mattermost Elasticsearch integration - requires enterprise E20 license - https://docs.mattermost.com/deployment/elasticsearch.html Connection info defaults to the BB deployed Elastic, all values can be overridden via the "values" passthrough for other connections. See values spec in MM chart "elasticsearch" yaml block - https://repo1.dso.mil/big-bang/apps/collaboration-tools/mattermost/-/blob/main/chart/values.yaml |
 | addons.mattermost.elasticsearch.enabled | bool | `false` | Toggle interaction with Elastic for optimized search indexing |
-| addons.mattermost.values | object | `{}` | Values to passthrough to the Mattermost chart: https://repo1.dso.mil/platform-one/big-bang/apps/collaboration-tools/mattermost/-/blob/main/chart/values.yaml |
+| addons.mattermost.values | object | `{}` | Values to passthrough to the Mattermost chart: https://repo1.dso.mil/big-bang/apps/collaboration-tools/mattermost/-/blob/main/chart/values.yaml |
 | addons.mattermost.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.velero.enabled | bool | `false` | Toggle deployment of Velero. |
-| addons.velero.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero.git"` |  |
+| addons.velero.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/cluster-utilities/velero.git"` |  |
 | addons.velero.git.path | string | `"./chart"` |  |
 | addons.velero.git.tag | string | `"3.1.0-bb.1"` |  |
 | addons.velero.flux | object | `{}` | Flux reconciliation overrides specifically for the Velero Package |
 | addons.velero.plugins | list | `[]` | Plugin provider for Velero - requires at least one plugin installed. Current supported values: aws, azure, csi |
-| addons.velero.values | object | `{}` | Values to passthrough to the Velero chart: https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/-/blob/main/chart/values.yaml |
+| addons.velero.values | object | `{}` | Values to passthrough to the Velero chart: https://repo1.dso.mil/big-bang/apps/cluster-utilities/velero/-/blob/main/chart/values.yaml |
 | addons.velero.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.keycloak.enabled | bool | `false` | Toggle deployment of Keycloak. if you enable Keycloak you should uncomment the istio passthrough configurations above istio.ingressGateways.passthrough-ingressgateway and istio.gateways.passthrough |
-| addons.keycloak.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak.git"` |  |
+| addons.keycloak.git.repo | string | `"https://repo1.dso.mil/big-bang/product/packages/keycloak.git"` |  |
 | addons.keycloak.git.path | string | `"./chart"` |  |
 | addons.keycloak.git.tag | string | `"18.3.0-bb.2"` |  |
 | addons.keycloak.database.host | string | `""` | Hostname of a pre-existing database to use for Keycloak. Entering connection info will disable the deployment of an internal database and will auto-create any required secrets. |
@@ -456,21 +456,21 @@ To start using Big Bang, you will need to create your own Big Bang environment t
 | addons.keycloak.flux | object | `{}` | Flux reconciliation overrides specifically for the OPA Gatekeeper Package |
 | addons.keycloak.ingress | object | `{"cert":"","gateway":"passthrough","key":""}` | Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public". |
 | addons.keycloak.ingress.key | string | `""` | Certificate/Key pair to use as the certificate for exposing Keycloak Setting the ingress cert here will automatically create the volume and volumemounts in the Keycloak Package chart |
-| addons.keycloak.values | object | `{}` | Values to passthrough to the keycloak chart: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak.git |
+| addons.keycloak.values | object | `{}` | Values to passthrough to the keycloak chart: https://repo1.dso.mil/big-bang/product/packages/keycloak.git |
 | addons.keycloak.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.vault.enabled | bool | `false` | Toggle deployment of Vault. |
-| addons.vault.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/vault.git"` |  |
+| addons.vault.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/sandbox/vault.git"` |  |
 | addons.vault.git.path | string | `"./chart"` |  |
 | addons.vault.git.tag | string | `"0.23.0-bb.2"` |  |
 | addons.vault.flux | object | `{}` | Flux reconciliation overrides specifically for the Vault Package |
 | addons.vault.ingress | object | `{"cert":"","gateway":"","key":""}` | Redirect the package ingress to a specific Istio Gateway (listed in `istio.gateways`).  The default is "public". |
 | addons.vault.ingress.key | string | `""` | Certificate/Key pair to use as the certificate for exposing Vault Setting the ingress cert here will automatically create the volume and volumemounts in the Vault package chart |
-| addons.vault.values | object | `{}` | Values to passthrough to the vault chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/vault.git |
+| addons.vault.values | object | `{}` | Values to passthrough to the vault chart: https://repo1.dso.mil/big-bang/apps/sandbox/vault.git |
 | addons.vault.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |
 | addons.metricsServer.enabled | string | `"auto"` | Toggle deployment of metrics server Acceptable options are enabled: true, enabled: false, enabled: auto true = enabled / false = disabled / auto = automatic (Installs only if metrics API endpoint is not present) |
-| addons.metricsServer.git.repo | string | `"https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/metrics-server.git"` |  |
+| addons.metricsServer.git.repo | string | `"https://repo1.dso.mil/big-bang/apps/sandbox/metrics-server.git"` |  |
 | addons.metricsServer.git.path | string | `"./chart"` |  |
 | addons.metricsServer.git.tag | string | `"3.8.3-bb.0"` |  |
 | addons.metricsServer.flux | object | `{}` | Flux reconciliation overrides specifically for the metrics server Package |
-| addons.metricsServer.values | object | `{}` | Values to passthrough to the metrics server chart: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/metrics-server.git |
+| addons.metricsServer.values | object | `{}` | Values to passthrough to the metrics server chart: https://repo1.dso.mil/big-bang/apps/sandbox/metrics-server.git |
 | addons.metricsServer.postRenderers | list | `[]` | Post Renderers.  See docs/postrenders.md |

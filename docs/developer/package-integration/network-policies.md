@@ -13,7 +13,7 @@ To increase the overall security posture of Big Bang, network policies are put i
 
 ## Integration
 
-All examples in this documentation will center on [podinfo](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/podinfo).
+All examples in this documentation will center on [podinfo](https://repo1.dso.mil/big-bang/apps/sandbox/podinfo).
 
 ### Default Deny
 
@@ -137,7 +137,7 @@ spec:
           app: prometheus
     ports:
     # Port numbers will vary, dependent on the pod
-    - port: 9797  
+    - port: 9797
   podSelector:
     matchLabels:
       app.kubernetes.io/name: podinfo
@@ -156,12 +156,12 @@ networkPolicies:
   # See `kubectl cluster-info` and then resolve to IP
   controlPlaneCidr: 0.0.0.0/0
 
-  ingressLabels: 
+  ingressLabels:
     app: istio-ingressgateway
     istio: ingressgateway
 ```
 
-- Use the `enabled: false` code above in order to disable networkPolicy templates for the package. The networkPolicy templates will be enabled by default when deployed from BigBang because it will inherit the `networkPolicies.enabled` [value](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/chart/values.yaml#L102).
+- Use the `enabled: false` code above in order to disable networkPolicy templates for the package. The networkPolicy templates will be enabled by default when deployed from BigBang because it will inherit the `networkPolicies.enabled` [value](https://repo1.dso.mil/big-bang/bigbang/-/blob/master/chart/values.yaml#L102).
 - The ingressLabels portion supports packages that have an externally accessible UIs. Values from BigBang will also be inherited in this portion to ensure traffic from the correct istio ingressgateway is whitelisted.
 
 Example of a BigBang value configuration, `bigbang/templates/podinfo/values.yaml`, when adding a package into BigBang with networkPolicies:

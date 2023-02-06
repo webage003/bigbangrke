@@ -17,9 +17,9 @@
 
 ![kube-apiserver_webhooks_diagram.app.diagrams.net.png](../../assets/imgs/understanding-bigbang/kube-apiserver-webhooks-diagram.app.diagrams.net.png)
 
-### Notes  
+### Notes
 
-#### 1. Git Repo  
+#### 1. Git Repo
 
 * Can be HTTPS or SSH based, can exist on the Internet or in Private IP Space
 * Airgap deployments are recommended to use SSH based Git Repo in Private IP Space
@@ -33,5 +33,5 @@
 #### 3. Validating Admission Controllers
 
 * Open Policy Agent Gatekeeper is used as a Validating Admission Controller.
-* As of BigBang 1.7.0 OPA GK defaults to dry-run/warn and not blocking/enforcing mode,  [there are plans to change the default behavior to blocking/enforcing mode.](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/issues/468)
+* As of BigBang 1.7.0 OPA GK defaults to dry-run/warn and not blocking/enforcing mode,  [there are plans to change the default behavior to blocking/enforcing mode.](https://repo1.dso.mil/big-bang/bigbang/-/issues/468)
 * OPA GK can enforce security policy such as only allowing whitelisted container registries, PodSecurityPolicies equivalent functionality, and more.

@@ -24,7 +24,7 @@ graph LR
     release("Release") --> stage3(prod)
   end
 
-  subgraph "Monitoring" 
+  subgraph "Monitoring"
     prometheus("Prometheus") --> servicemonitor("Service Monitor")
     servicemonitor("Service Monitor") --> nexusrepositorymanager("Nexus Repository Manager")
   end
@@ -51,7 +51,7 @@ Nexus requires access to persistent storage for storing repos, docker registries
 ```yaml
 addons:
   nexusRepositoryManager:
-    values:  
+    values:
       persistence:
         storageSize: 8Gi
         accessMode: ReadWriteOnce
@@ -75,7 +75,7 @@ Nexus provides a helpful upstream guide on resiliency and high availability [her
 
 ## Single Sign on (SSO)
 
-SSO can be configured for Nexus by the following the instructions from the package documentation [here](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/nexus/-/blob/main/docs/keycloak.md)
+SSO can be configured for Nexus by the following the instructions from the package documentation [here](https://repo1.dso.mil/big-bang/apps/developer-tools/nexus/-/blob/main/docs/keycloak.md)
 
 ## Licensing
 

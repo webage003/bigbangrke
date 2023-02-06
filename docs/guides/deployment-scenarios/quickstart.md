@@ -44,9 +44,9 @@ Additionally, if your network has a proxy that has custom/internal SSL certifica
 
 ## Important Background Contextual Information
 
-`BLUF:` This quick start guide optimizes the speed at which a demonstrable and tinker-able deployment of Big Bang can be achieved by minimizing prerequisite dependencies and substituting them with quickly implementable alternatives. Refer to the [Customer Template Repo](https://repo1.dso.mil/platform-one/big-bang/customers/template) for guidance on production deployments.
+`BLUF:` This quick start guide optimizes the speed at which a demonstrable and tinker-able deployment of Big Bang can be achieved by minimizing prerequisite dependencies and substituting them with quickly implementable alternatives. Refer to the [Customer Template Repo](https://repo1.dso.mil/big-bang/customers/template) for guidance on production deployments.
 
-`Details of how each prerequisite/dependency is quickly satisfied:`  
+`Details of how each prerequisite/dependency is quickly satisfied:`
 
 * Operating System Prerequisite: Any Linux distribution that supports Docker should work.
 * Operating System Pre-configuration: This quick start includes easy paste-able commands to quickly satisfy this prerequisite.
@@ -240,7 +240,7 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
     # 1159c5c17c964257123b10e7d8864e9fe7f9a580d4124a388e746e4003added3
     # came from https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/checksums.txt
 
-    if [ $? == 0 ]; then tar -xvf kustomize.tar.gz && chmod +x kustomize && sudo mv kustomize /usr/local/bin/kustomize && rm kustomize.tar.gz ; fi  
+    if [ $? == 0 ]; then tar -xvf kustomize.tar.gz && chmod +x kustomize && sudo mv kustomize /usr/local/bin/kustomize && rm kustomize.tar.gz ; fi
 
 
     # Alternative commands (less safe due to curl | bash, but more generic):
@@ -272,7 +272,7 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
     # d643f48fe28eeb47ff68a1a7a26fc5142f348d02c8bc38d699674016716f61cd
     # came from https://github.com/helm/helm/releases/tag/v3.8.1
 
-    if [ $? == 0 ]; then tar -xvf helm.tar.gz && chmod +x linux-amd64/helm && sudo mv linux-amd64/helm /usr/local/bin/helm && rm -rf linux-amd64 && rm helm.tar.gz ; fi  
+    if [ $? == 0 ]; then tar -xvf helm.tar.gz && chmod +x linux-amd64/helm && sudo mv linux-amd64/helm /usr/local/bin/helm && rm -rf linux-amd64 && rm helm.tar.gz ; fi
 
 
     # Alternative command (less safe due to curl | bash, but more generic):
@@ -304,7 +304,7 @@ Note: This guide follows the DevOps best practice of left-shifting feedback on m
 
   # Needed by Sonarqube
   echo 'fs.file-max=131072' | sudo tee -a /etc/sysctl.d/fs-file-max.conf
-  # Alternatively can use (not persistent after restart):  
+  # Alternatively can use (not persistent after restart):
   # sudo sysctl -w fs.file-max=131072
 
   # Also Needed by Sonarqube
@@ -337,8 +337,8 @@ After reading the notes on the purpose of k3d's command flags, you will be able 
 
 ### Explanation of k3d Command Flags, Relevant to the Quick Start
 
-* `SERVER_IP="10.10.16.11"` and `--k3s-arg "--tls-san=$SERVER_IP@server:0"`:  
-  These associate an extra IP to the Kubernetes API server's generated HTTPS certificate.  
+* `SERVER_IP="10.10.16.11"` and `--k3s-arg "--tls-san=$SERVER_IP@server:0"`:
+  These associate an extra IP to the Kubernetes API server's generated HTTPS certificate.
 
   **Explanation of the effect:**
 
@@ -348,27 +348,27 @@ After reading the notes on the purpose of k3d's command flags, you will be able 
 
   **Tips for looking up the value to plug into SERVER_IP:**
 
-  * Method 1: If your k3d server is a remote box, then run the following command from your workstation.  
+  * Method 1: If your k3d server is a remote box, then run the following command from your workstation.
   `cat ~/.ssh/config | grep k3d -A 6`
-  * Method 2: If the remote server was provisioned with a Public IP, then run the following command from the server hosting k3d.  
+  * Method 2: If the remote server was provisioned with a Public IP, then run the following command from the server hosting k3d.
   `curl ifconfig.me --ipv4`
-  * Method 3: If the server hosting k3d only has a Private IP, then run the following command from the server hosting k3d  
-  `ip address`  
-  (You will see more than one address, use the one in the same subnet as your workstation)  
+  * Method 3: If the server hosting k3d only has a Private IP, then run the following command from the server hosting k3d
+  `ip address`
+  (You will see more than one address, use the one in the same subnet as your workstation)
 
-* `--volume /etc/machine-id:/etc/machine-id`:  
+* `--volume /etc/machine-id:/etc/machine-id`:
 This is required for fluentbit log shipper to work.
 
-* `IMAGE_CACHE=${HOME}/.k3d-container-image-cache`, `cd ~`, `mkdir -p ${IMAGE_CACHE}`, and `--volume ${IMAGE_CACHE}:/var/lib/rancher/k3s/agent/containerd/io.containerd.content.v1.content`:  
+* `IMAGE_CACHE=${HOME}/.k3d-container-image-cache`, `cd ~`, `mkdir -p ${IMAGE_CACHE}`, and `--volume ${IMAGE_CACHE}:/var/lib/rancher/k3s/agent/containerd/io.containerd.content.v1.content`:
 These make it so that if you fully deploy Big Bang and then want to reset the cluster to a fresh state to retest some deployment logic. Then after running `k3d cluster delete k3s-default` and redeploying, subsequent deployments will be faster because all container images used will have been prefetched.
 
-* `--servers 1 --agents 3`:  
+* `--servers 1 --agents 3`:
 These flags are not used and shouldn't be added. This is because the image caching logic works more reliably on a one node Dockerized cluster, vs a four node Dockerized cluster. If you need to add these flags to simulate multi nodes to test pod and node affinity rules, then you should remove the image cache flags, or you may experience weird image pull errors.
 
-* `--port 80:80@loadbalancer` and `--port 443:443@loadbalancer`:  
+* `--port 80:80@loadbalancer` and `--port 443:443@loadbalancer`:
 These map the virtual machine's port 80 and 443 to port 80 and 443 of a Dockerized LB that will point to the NodePorts of the Dockerized k3s node.
 
-* `--k3s-arg "--disable=traefik@server:0"`:  
+* `--k3s-arg "--disable=traefik@server:0"`:
 This flag prevents the traefik ingress controller from being deployed. Without this flag traefik would provision a service of type LoadBalancer, and claim k3d's only LoadBalancer that works with ports 80 and 443. Disabling this makes it so the Istio Ingress Gateway will be able to claim the service of type LoadBalancer.
 
 ### k3d Cluster Creation Commands
@@ -440,7 +440,7 @@ k3d-k3s-default-server-0   Ready    control-plane,master   11m   v1.22.7+k3s1
 ```shell
 # [ubuntu@Ubuntu_VM:~]
 cd ~
-git clone https://repo1.dso.mil/platform-one/big-bang/bigbang.git
+git clone https://repo1.dso.mil/big-bang/bigbang.git
 
 # Checkout version latest stable version of Big Bang
 cd ~/bigbang
@@ -483,7 +483,7 @@ The `echo $REGISTRY1_USERNAME` is there to verify that the value of your environ
   helm-controller-746d586c6-ln7dl           1/1     Running   0          3m8s
   notification-controller-f6658d796-fdzjx   1/1     Running   0          3m8s
   kustomize-controller-5887bb8dd7-jzp7m     1/1     Running   0          3m8s
-  source-controller-7c4564d74c-7ffrf        1/1     Running   0          3m8s  
+  source-controller-7c4564d74c-7ffrf        1/1     Running   0          3m8s
   ```
 
 ## Step 9: Create Helm Values .yaml Files To Act as Input Variables for the Big Bang Helm Chart
@@ -589,7 +589,7 @@ EOF
 ```shell
 # [ubuntu@Ubuntu_VM:~]
 helm upgrade --install bigbang $HOME/bigbang/chart \
-  --values https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml \
+  --values https://repo1.dso.mil/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml \
   --values $HOME/ib_creds.yaml \
   --values $HOME/demo_values.yaml \
   --namespace=bigbang --create-namespace
@@ -597,16 +597,16 @@ helm upgrade --install bigbang $HOME/bigbang/chart \
 
 Explanation of flags used in the imperative helm install command:
 
-`upgrade --install`:  
+`upgrade --install`:
 This makes the command more idempotent by allowing the exact same command to work for both the initial installation and upgrade use cases.
 
-`bigbang $HOME/bigbang/chart`:  
+`bigbang $HOME/bigbang/chart`:
 bigbang is the name of the helm release that you'd see if you run `helm list -n=bigbang`. `$HOME/bigbang/chart` is a reference to the helm chart being installed.
 
-`--values https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml`:  
+`--values https://repo1.dso.mil/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml`:
 References demonstration HTTPS certificates embedded in the public repository. The *.bigbang.dev wildcard certificate is signed by Let's Encrypt, a free public internet Certificate Authority. Note the URL path to the copy of the cert on master branch is used instead of `$HOME/bigbang/chart/ingress-certs.yaml`, because the Let's Encrypt certs expire after 3 months, and if you deploy a tagged release of BigBang, like 1.15.0, the version of the cert stored in the tagged git commit / release of Big Bang could be expired. Referencing the master branches copy via URL ensures you receive the latest version of the cert, which won't be expired.
 
-`--namespace=bigbang --create-namespace`:  
+`--namespace=bigbang --create-namespace`:
 Means it will install the bigbang helm chart in the bigbang namespace and create the namespace if it doesn't exist.
 
 ## Step 11: Verify Big Bang Has Had Enough Time To Finish Installing
@@ -727,8 +727,8 @@ Note, default credentials for Big Bang packages can be found [here](../using-big
 
 ## Step 14: Play
 
-Here's an example of post deployment customization of Big Bang.  
-After looking at <https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/chart/values.yaml>  
+Here's an example of post deployment customization of Big Bang.
+After looking at <https://repo1.dso.mil/big-bang/bigbang/-/blob/master/chart/values.yaml>
 It should make sense that the following is a valid edit
 
 ```shell
@@ -741,7 +741,7 @@ addons:
 EOF
 
 helm upgrade --install bigbang $HOME/bigbang/chart \
---values https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml \
+--values https://repo1.dso.mil/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml \
 --values $HOME/ib_creds.yaml \
 --values $HOME/demo_values.yaml \
 --values $HOME/tinkering.yaml \
@@ -759,17 +759,17 @@ kubectl get po -n=argocd
 > Remember to un-edit your Hosts file when you are finished tinkering.
 
 ## Troubleshooting
-This section will provide guidance for troubleshooting problems that may occur during your Big Bang installation and instructions for additional configuration changes that may be required in restricted networks. 
+This section will provide guidance for troubleshooting problems that may occur during your Big Bang installation and instructions for additional configuration changes that may be required in restricted networks.
 
 ### Changing CoreDNS upstream DNS server:
-After completing step 5, if you are unable to connect to external DNS providers using the command `nslookup google.com 8.8.8.8`, to test the connection. Then use the steps below to change the upstream DNS server to your networks DNS server. Please note that this change will not perist after a restart of the host server therefore, if you restart or shutdown your server you will need to re-apply these changes to CoreDNS. 
+After completing step 5, if you are unable to connect to external DNS providers using the command `nslookup google.com 8.8.8.8`, to test the connection. Then use the steps below to change the upstream DNS server to your networks DNS server. Please note that this change will not perist after a restart of the host server therefore, if you restart or shutdown your server you will need to re-apply these changes to CoreDNS.
 
 1. Open config editor to change the CoreDNS pod configuration
 
     ```shell
-    kubectl -n kube-system edit configmaps CoreDNS -o yaml 
+    kubectl -n kube-system edit configmaps CoreDNS -o yaml
     ```
-2. Change: 
+2. Change:
 
      ```plaintext
      forward . /etc/resolv.conf
@@ -781,16 +781,16 @@ After completing step 5, if you are unable to connect to external DNS providers 
      forward . <DNS Server IP>
      ```
 3. Save changes in editor (for vi use `:wq`)
-4. Verify changes in terminal output that prints new config 
+4. Verify changes in terminal output that prints new config
 
 ### Useful Commands for Obtaining Detailed Logs from Kubernetes Cluster or Containers
-* Print all pods including information related to the status of each pod 
+* Print all pods including information related to the status of each pod
 	```shell
 	kubectl get pods --all-namespaces
 	```
 * Print logs for specified pod
-	```shell 
-	kubectl logs <pod name> -n=<namespace of pod> 
+	```shell
+	kubectl logs <pod name> -n=<namespace of pod>
 	```
 * Print a dump of relevent information for debugging and diagnosing your kubernetes cluster
 	```shell
@@ -798,7 +798,7 @@ After completing step 5, if you are unable to connect to external DNS providers 
 	```
 
 ### Documentation References for command line tools used
-* Kubectl - https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands 
+* Kubectl - https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 * k3d - https://k3d.io/v5.4.3/usage/k3s/
 * Docker - https://docs.docker.com/desktop/linux/troubleshoot/#diagnosing-from-the-terminal
 * Helm - https://helm.sh/docs/helm/helm/

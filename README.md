@@ -2,15 +2,15 @@
 
 Big Bang is a declarative, continuous delivery tool for deploying DoD hardened and approved packages into a Kubernetes cluster.
 
-> _If viewing this from Github, note that this is a mirror of a government repo hosted on [Repo1](https://repo1.dso.mil/) by [DoD Platform One](http://p1.dso.mil/).  Please direct all code changes, issues and comments to [https://repo1.dso.mil/platform-one/big-bang/bigbang](https://repo1.dso.mil/platform-one/big-bang/bigbang)_
+> _If viewing this from Github, note that this is a mirror of a government repo hosted on [Repo1](https://repo1.dso.mil/) by [DoD Platform One](http://p1.dso.mil/).  Please direct all code changes, issues and comments to [https://repo1.dso.mil/big-bang/bigbang](https://repo1.dso.mil/big-bang/bigbang)_
 
 ## Usage & Scope
 
 Big Bang's scope is to provide publicly available installation manifests for:
 
-- A specific set of packages that adhere to the DevSecOps Reference Architecture. The core list of packages can be found [here](https://repo1.dso.mil/platform-one/big-bang/apps/core).
+- A specific set of packages that adhere to the DevSecOps Reference Architecture. The core list of packages can be found [here](https://repo1.dso.mil/big-bang/apps/core).
 
-- Packages that facilitate development of applications that adhere to the DevSecOps Reference Architecture. The full list of packages can be found [here](https://repo1.dso.mil/platform-one/big-bang/apps).
+- Packages that facilitate development of applications that adhere to the DevSecOps Reference Architecture. The full list of packages can be found [here](https://repo1.dso.mil/big-bang/apps).
 
 Big Bang also builds tooling around the testing and validation of Big Bang packages. These tools are provided as-is, without support.
 
@@ -20,17 +20,17 @@ Additional information can be found at [Big Bang Docs](https://docs-bigbang.dso.
 
 ## Getting Started
 
-- You will need to instantiate a Big Bang environment tailored to your needs.  [The Big Bang customer template](https://repo1.dso.mil/platform-one/big-bang/customers/template/) is provided for you to copy into your own Git repository and begin modifications.
+- You will need to instantiate a Big Bang environment tailored to your needs.  [The Big Bang customer template](https://repo1.dso.mil/big-bang/customers/template/) is provided for you to copy into your own Git repository and begin modifications.
 
 ## Contributing to Big Bang
 
 There are 3 main ways to contribute to Big Bang:
 
-- [Contribute to the Big Bang Team's Backlog](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/issues)
+- [Contribute to the Big Bang Team's Backlog](https://repo1.dso.mil/big-bang/bigbang/-/issues)
 - [Contribute to open-source projects under the Big Bang Technical Oversight Committee (BBTOC)](https://repo1.dso.mil/platform-one/bbtoc/-/blob/master/CONTRIBUTING.md)
 - [Submit new package proposals](https://repo1.dso.mil/platform-one/bbtoc/-/issues/new?issue%5Bmilestone_id%5D=)
   - Please review the [package integration guide](./docs/developer/package-integration/README.md) if you are interested in submitting a new package
-  - A shepherd will be assigned to the project to create a repo in the [BB sandbox](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox)
+  - A shepherd will be assigned to the project to create a repo in the [BB sandbox](https://repo1.dso.mil/big-bang/apps/sandbox)
 
 Additional information can be found in the [contributing guide](./CONTRIBUTING.md).
 
@@ -47,4 +47,4 @@ Big Bang Documentation is located in the following locations:
 - [Key Big Bang Concept Overviews](./docs/understanding-bigbang/README.md)
 - [User Guides for Big Bang](./docs/guides/README.md)
 - [Big Bang Prerequisites](./docs/prerequisites/README.md)
-- [Big Bang Example Configurations](https://repo1.dso.mil/platform-one/big-bang/bigbang/-/tree/master/docs/assets/configs/example/)
+- [Big Bang Example Configurations](https://repo1.dso.mil/big-bang/bigbang/-/tree/master/docs/assets/configs/example/)

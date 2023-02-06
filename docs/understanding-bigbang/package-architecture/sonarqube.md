@@ -14,7 +14,7 @@ graph TB
 
   subgraph "Sonarqube"
     ingressgateway --> sonarqube
-  end      
+  end
 
   subgraph "Metrics"
     sonarqube --> prometheus
@@ -66,7 +66,7 @@ istio:
   enabled: true
 ```
 
-These values get passed into the sonarqube chart [here](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/sonarqube/-/blob/main/chart/values.yaml#L358). This creates the virtual service and maps to the istio gateway.
+These values get passed into the sonarqube chart [here](https://repo1.dso.mil/big-bang/apps/developer-tools/sonarqube/-/blob/main/chart/values.yaml#L358). This creates the virtual service and maps to the istio gateway.
 
 ## High Availability
 
@@ -112,7 +112,7 @@ subgraph "Sonarqube namespace"
         IP["istio proxy"] --> K
         IP --> S
     end
-end  
+end
 ```
 
 ## Licencing
@@ -122,4 +122,4 @@ Sonarqube is released under the [Lesser GNU General Public License](https://en.w
 ## Dependencies
 
 Node kernel mods:
-<https://repo1.dso.mil/platform-one/big-bang/bigbang/-/blob/master/docs/guides/prerequisites/os_preconfiguration.md#sonarqube-specific-configuration-sonarqube-is-a-bb-addon-app>
+<https://repo1.dso.mil/big-bang/bigbang/-/blob/master/docs/guides/prerequisites/os_preconfiguration.md#sonarqube-specific-configuration-sonarqube-is-a-bb-addon-app>

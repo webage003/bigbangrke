@@ -13,21 +13,21 @@ There are multiple phases of testing for an application to get into a customer e
 
 Big Bang Applications will leverage GitLab Runners to execute these common BigBang Pipelines.  Each Big Bang application is required to use the Big Bang Pipelines, whose functionality is outlined here.
 
-A detailed description of the pipelines and how to execute the testing process on a local system is described in the README.md in <https://repo1.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates>.  
+A detailed description of the pipelines and how to execute the testing process on a local system is described in the README.md in <https://repo1.dso.mil/big-bang/pipeline-templates/pipeline-templates>.
 
 ## Application Testing
 
-When a Big Bang application developer submits changes to a particular Big Bang application, the application needs to be tested to ensure functionality, as well as compliance with core [Package Requirements](./package-integration/README.md).  
+When a Big Bang application developer submits changes to a particular Big Bang application, the application needs to be tested to ensure functionality, as well as compliance with core [Package Requirements](./package-integration/README.md).
 
 A core feature of all testing capabilities is its ability to be run locally by developers using their own environment, or by other teams looking to test proposed changes to the application (e.g. IronBank as part of container creation).  The GitLab pipelines will be simple wrappers around these common testing and deployment tools.
 
 ### Linting
 
-Initial phases of the applications tests will focus on compliance with approved formatting and rendering policies for BigBang.  
+Initial phases of the applications tests will focus on compliance with approved formatting and rendering policies for BigBang.
 
 ### Smoke Deployments
 
-The next phase of testing for each application will be to stand up healthy on a lightweight Kubernetes cluster.  The GitLab Runners will standup a ephemeral Kubernetes cluster for use for the deployment, deploy the application and its dependencies and ensure the application comes up "Healthy". The testing configuration will allow for a configuration of the application and the ability to define and test functionality.  
+The next phase of testing for each application will be to stand up healthy on a lightweight Kubernetes cluster.  The GitLab Runners will standup a ephemeral Kubernetes cluster for use for the deployment, deploy the application and its dependencies and ensure the application comes up "Healthy". The testing configuration will allow for a configuration of the application and the ability to define and test functionality.
 
 Each "Test" scenario will contain the following information:
 
@@ -42,7 +42,7 @@ The Smoke tests will be run internal on the Kubernetes cluster via a Job.  The t
 The Big Bang application pipelines have the ability to execute one or more [Helm Chart tests](https://helm.sh/docs/topics/chart_tests)
 after a chart has been deployed to the cluster.  Helm tests deploy one or more pods/containers and any other supporting
 kubernetes objects in order to verify that the application is operational.
-  
+
 For example, the  Minio instance package has additional CLI testing capabilities via the use of Helm Chart Tests.  These
 tests invoke the MC command line tool to create, delete, populate, and retrieve information from Minio buckets.  Examples of
 other types of Helm Chart Tests including:

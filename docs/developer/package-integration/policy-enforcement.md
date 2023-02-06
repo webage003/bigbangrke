@@ -1,6 +1,6 @@
 # Policy Enforcement
 
-Big Bang has several policies for Kubernetes resources to ensure best practices and security.  For example, images must be pulled from Iron Bank, or containers must be run as non-root.  These policies are currently enforced by [OPA Gatekeeper](https://repo1.dso.mil/platform-one/big-bang/apps/core/policy), which gets deployed as the first package in Big Bang.
+Big Bang has several policies for Kubernetes resources to ensure best practices and security.  For example, images must be pulled from Iron Bank, or containers must be run as non-root.  These policies are currently enforced by [OPA Gatekeeper](https://repo1.dso.mil/big-bang/apps/core/policy), which gets deployed as the first package in Big Bang.
 
 When integrating your package, you must adhere to the policies that are enforced or your resources will be denied by the Kubernetes admission controller.  The following is how to identify and fix policy violations.
 
@@ -17,12 +17,12 @@ The policy enforcement tool is deployed as the first package in the default Big 
 
 ### 2. Identifying Violations Found on Your Application
 
-In the following section, you will be shown how to identify violations found in your package. The app [PodInfo](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/podinfo) will be used for all of the examples. Gatekeeper has three enforcement actions `deny`, `dryrun`, and `warn`. Only `deny` will prohibit access to the cluster, but the `warn` and `dryrun` constraints should be fixed as well as they are generally best practice.
+In the following section, you will be shown how to identify violations found in your package. The app [PodInfo](https://repo1.dso.mil/big-bang/apps/sandbox/podinfo) will be used for all of the examples. Gatekeeper has three enforcement actions `deny`, `dryrun`, and `warn`. Only `deny` will prohibit access to the cluster, but the `warn` and `dryrun` constraints should be fixed as well as they are generally best practice.
 
 In this example we will be attempting to install PodInfo onto our cluster:
 
 ```bash
-➜ helm install flux-podinfo chart                              
+➜ helm install flux-podinfo chart
 NAME: flux-podinfo
 LAST DEPLOYED: Mon Feb 14 11:24:26 2022
 NAMESPACE: default
@@ -115,15 +115,15 @@ kubectl get K8sPSPPrivilegedContainer2.constraints.gatekeeper.sh/no-privileged-c
 }
 ```
 
-The annotations provide us documentation information for specific policies as well as the source code to view that policy.  
+The annotations provide us documentation information for specific policies as well as the source code to view that policy.
 
-To fix this issue, navigate to your package's `chart/values.yaml` or `deployment.yaml` and remove `privileged: true` or explicitly set it to `false`.  
+To fix this issue, navigate to your package's `chart/values.yaml` or `deployment.yaml` and remove `privileged: true` or explicitly set it to `false`.
 
 ### 4. Exemptions to Policy Exceptions
 
-Fixing the violation in the application is preferred, but sometimes we need to make an exception to the policy and leave the violation in place.  
+Fixing the violation in the application is preferred, but sometimes we need to make an exception to the policy and leave the violation in place.
 
-If you require an exception to a policy, please reference our [exception doc](https://repo1.dso.mil/platform-one/big-bang/apps/core/policy/-/blob/main/docs/exceptions.md) for more information.
+If you require an exception to a policy, please reference our [exception doc](https://repo1.dso.mil/big-bang/apps/core/policy/-/blob/main/docs/exceptions.md) for more information.
 
 ## Validation
 

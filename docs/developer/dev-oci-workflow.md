@@ -30,8 +30,8 @@ TODO: Make this all happen with a flag in the dev script, this should not be too
 
     ```console
     mkdir certs
-    curl -sS https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml | yq '.istio.gateways.public.tls.key' > certs/tls.key
-    curl -sS https://repo1.dso.mil/platform-one/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml | yq '.istio.gateways.public.tls.cert' > certs/tls.crt
+    curl -sS https://repo1.dso.mil/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml | yq '.istio.gateways.public.tls.key' > certs/tls.key
+    curl -sS https://repo1.dso.mil/big-bang/bigbang/-/raw/master/chart/ingress-certs.yaml | yq '.istio.gateways.public.tls.cert' > certs/tls.crt
     ```
 
 1. Setup a docker registry, mounting the certs to expose this as a TLS (HTTPS) registry.
@@ -104,7 +104,7 @@ One option is to push your OCI artifacts to the Big Bang Staging area of Registr
     ```console
     ❯ helm registry login registry1.dso.mil
     Username: myusername
-    Password: 
+    Password:
     Login Succeeded
     ```
 
@@ -126,7 +126,7 @@ One option is to push your OCI artifacts to the Big Bang Staging area of Registr
     - name: "staging"
       repository: "oci://registry1.dso.mil/bigbang-staging"
       existingSecret: "private-registry"
-    
+
     addons:
       anchore:
         oci:
@@ -145,10 +145,10 @@ Currently you could leverage any of the following as your OCI registry:
 
 1. Install a minimal Big Bang on your cluster, not including the package you want to test. You should at least install Istio and the registry (Gitlab, Nexus, Harbor).
 
-1. Modify CoreDNS for your cluster to route traffic to `x.bigbang.dev` (ex: `harbor.bigbang.dev`) to the IP of the public ingress gateway. 
+1. Modify CoreDNS for your cluster to route traffic to `x.bigbang.dev` (ex: `harbor.bigbang.dev`) to the IP of the public ingress gateway.
 
 1. Modify `/etc/hosts` to route `x.bigbang.dev` to the Public IP of your instance (if using a remote/ec2 based cluster).
 
 1. Push Helm tgz to your chosen registry.
 
-1. Configure your Big Bang values to setup an additional `HelmRepository` and point the package to that repository. 
+1. Configure your Big Bang values to setup an additional `HelmRepository` and point the package to that repository.

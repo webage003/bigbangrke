@@ -544,7 +544,7 @@ kyvernopolicies:
       require-drop-all-capabilities:
         exclude:
           any:
-          # Gitlab Minio sub-chart does not have configurable securityContext values from upstream. Minio installation 
+          # Gitlab Minio sub-chart does not have configurable securityContext values from upstream. Minio installation
           # is only recommended for Dev/CI environments.
           - resources:
               namespaces:
@@ -554,7 +554,7 @@ kyvernopolicies:
       require-non-root-group:
         exclude:
           any:
-          # Gitlab Minio sub-chart does not have configurable securityContext values from upstream. Minio installation 
+          # Gitlab Minio sub-chart does not have configurable securityContext values from upstream. Minio installation
           # is only recommended for Dev/CI environments.
           - resources:
               namespaces:
@@ -564,7 +564,7 @@ kyvernopolicies:
       require-non-root-user:
         exclude:
           any:
-          # Gitlab Minio sub-chart does not have configurable securityContext values from upstream. Minio installation 
+          # Gitlab Minio sub-chart does not have configurable securityContext values from upstream. Minio installation
           # is only recommended for Dev/CI environments.
           - resources:
               namespaces:
@@ -1231,7 +1231,7 @@ addons:
             runAsNonRoot: true
       bbtests:
         # There have been intermittent failures of the tests in the past.   The issue is tracked in the below issue.
-        # https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio/-/issues/7
+        # https://repo1.dso.mil/big-bang/apps/application-utilities/minio/-/issues/7
         # This issue can be reopened if problems reappear.
         enabled: true
         cypress:
@@ -1289,7 +1289,7 @@ addons:
 
   nexusRepositoryManager:
     enabled: false
-    # Nexus requires manual configuration in Keycloak client and cannot be tested with 
+    # Nexus requires manual configuration in Keycloak client and cannot be tested with
     # you must test with your own dev deployment.  Example: keycloak.bigbang.dev
     # See more info in Nexus Package docs /docs/keycloak.md
     # Nexus SSO is behind a paywall. You must have a valid license to enable SSO
@@ -1494,7 +1494,7 @@ addons:
           command:
           - sh
           - -c
-          - | 
+          - |
             cp /app/p1-keycloak-plugin.jar /init
             ls -l /init
           volumeMounts:

@@ -11,7 +11,7 @@ graph TB
 
   subgraph "Promtail"
     promtail
-  end      
+  end
 
   subgraph "Loki"
     promtail --> loki
@@ -19,7 +19,7 @@ graph TB
 
 ```
 
-### Architecture: 
+### Architecture:
 - [Promtail Client](https://grafana.com/docs/loki/latest/clients/promtail/)
 
 ### Storage
@@ -35,7 +35,7 @@ istio:
   enabled: true
 ```
 
-These values get passed into the promtail chart [here](https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail/-/blob/main/chart/values.yaml#L428). 
+These values get passed into the promtail chart [here](https://repo1.dso.mil/big-bang/apps/sandbox/promtail/-/blob/main/chart/values.yaml#L428).
 
 ## High Availability
 

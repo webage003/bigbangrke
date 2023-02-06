@@ -11,7 +11,7 @@ graph TB
 
   subgraph "Velero"
     velero
-  end      
+  end
 
   subgraph "Metrics"
     velero --> prometheus
@@ -22,12 +22,12 @@ graph TB
   end
 ```
 
-### Architecture: 
+### Architecture:
 - [How Velero works](https://velero.io/docs/main/how-velero-works/)
 
 ### Storage
 
-Data from velero is stored in object storage and configuration is based upon the [provider](https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/-/blob/main/chart/values.yaml#L226). 
+Data from velero is stored in object storage and configuration is based upon the [provider](https://repo1.dso.mil/big-bang/apps/cluster-utilities/velero/-/blob/main/chart/values.yaml#L226).
 
 ### Istio Configuration
 
@@ -38,7 +38,7 @@ istio:
   enabled: true
 ```
 
-These values get passed into the velero chart [here](https://repo1.dso.mil/platform-one/big-bang/apps/cluster-utilities/velero/-/blob/main/chart/values.yaml#L477). 
+These values get passed into the velero chart [here](https://repo1.dso.mil/big-bang/apps/cluster-utilities/velero/-/blob/main/chart/values.yaml#L477).
 
 ## High Availability
 

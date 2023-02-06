@@ -6,7 +6,7 @@
 
 Big Bang's implementation uses the [Gitlab Helm Chart](https://docs.gitlab.com/charts/) to provide custom resources and manage the application.
 
-A more detail view of Big Bang's implementation of Gitlab can be found in the [package docs](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab/-/tree/main/chart/doc).
+A more detail view of Big Bang's implementation of Gitlab can be found in the [package docs](https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab/-/tree/main/chart/doc).
 
 ## Big Bang Touch Points
 
@@ -72,7 +72,7 @@ More information can be found in the gitlab documentation [here](https://docs.gi
 
 ## High Availability
 
-GitLab deployed on a Kubernetes(K8S) cluster can achieve “self healing”. In other words, if a container goes down, K8S replaces it with a new one. K8S can also provide rolling upgrades. However, a K8S deployment by itself does not provide full high availablity(HA). Refer to the upstream [Gitlab HA reference achitectures](https://docs.gitlab.com/ee/administration/reference_architectures/). The Gitlab helm chart provides the ability to set replica counts for some of the services as shown in the BigBang values override example below. 
+GitLab deployed on a Kubernetes(K8S) cluster can achieve “self healing”. In other words, if a container goes down, K8S replaces it with a new one. K8S can also provide rolling upgrades. However, a K8S deployment by itself does not provide full high availablity(HA). Refer to the upstream [Gitlab HA reference achitectures](https://docs.gitlab.com/ee/administration/reference_architectures/). The Gitlab helm chart provides the ability to set replica counts for some of the services as shown in the BigBang values override example below.
 
 Note that the gitaly service requires a significant and non-trivial amout of configuration to acheive HA. Gitaly provides high-level RPC access to Git repositories. It is used by GitLab to read and write Git data. A Gitaly cluster must be created on Praefect nodes. The Big Bang Product Team has not yet tested use of a Gitaly cluster and will not be able to provide support. If you require Gitaly HA refer to the upstream [Gitaly Cluster documentation](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) and leverage a support contact with Gitlab. For small to medum sized deployments you can simply increase the gitaly resources as shown in the example below.
 ```yaml
@@ -105,7 +105,7 @@ addons:
 
 ## Single Sign On (SSO)
 
-Gitlab can be integrated with Keycloak for single sign on. Full documentation can be found in the package docs [here](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab/-/blob/main/docs/keycloak.md).
+Gitlab can be integrated with Keycloak for single sign on. Full documentation can be found in the package docs [here](https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab/-/blob/main/docs/keycloak.md).
 
 ## Licensing
 
@@ -185,6 +185,6 @@ Gitlab uses S3, Minio, or another S3-style storage for file storage. By default 
 Additional pass-throughs for dependencies that deviate from rationalized standards can be passed using the values: tag in the main Bigbang values.yaml.
 
 ```yaml
-# -- Values to passthrough to the gitlab runner chart: https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab-runner.git
+# -- Values to passthrough to the gitlab runner chart: https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab-runner.git
     values: {}
 ```

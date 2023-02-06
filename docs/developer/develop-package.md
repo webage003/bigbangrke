@@ -2,11 +2,11 @@
 
 Package is the term we use for an application that has been prepared to be deployed with the BigBang helm chart. BigBang Packages are wrappers around Helm charts. All of the pertinent information should be included in the chart/values.yaml for configuration of the Package. These values are then available to be overridden in the BigBang chart/values.yaml file. The goal of these Packages is to take something that might be very complex and simplify it for consumers of BigBang. Rational and safe defaults should be used where possible while also allowing for overriding values when fine-grained control is needed. As much as possible test after each step so that the errors don't pile up, "code a little, test a little". Here are the steps:
 
-1. Create a repository under the appropriate group ( example: Security Tools, Developer Tools, Collaboration Tools) in [Repo1](https://repo1.dso.mil/platform-one/big-bang/apps).
+1. Create a repository under the appropriate group ( example: Security Tools, Developer Tools, Collaboration Tools) in [Repo1](https://repo1.dso.mil/big-bang/apps).
 
 1. Create a "main" branch that will serve as the master branch.
 
-1. There are two ways to start a new Package.  
+1. There are two ways to start a new Package.
    A. If there is no upstream helm chart we create a helm chart from scratch. Here is a T3 video that demonstrates creating a new helm chart. Create a directory called "chart" in your repo, change to the chart directory, and scaffold a new chart in the chart directory
 
    ```shell
@@ -60,19 +60,19 @@ Package is the term we use for an application that has been prepared to be deplo
 
 1. Add a VirtualService if your application has a back-end API or a front-end GUI. Create the VirtualService in the sub-directory  "chart/templates/bigbang/VirtualService.yaml". You will need to manually create the "bigbang" directory. It is convenient to copy VirtualService code from one of the other Packages and then modify it. You should be able to load the application in your browser if all the configuration is correct.
 
-1. Add NetworkPolices templates in the sub-directory "chart/templates/bigbang/networkpolicies/*.yaml". The intent is to lock down all ingress and egress traffic except for what is required for the application to function properly. Start with a deny-all policy and then add additional policies to open traffic as needed. Refer to the other Packages code for examples. The [Gitlab package](https://repo1.dso.mil/platform-one/big-bang/apps/developer-tools/gitlab/-/tree/main/chart/templates/bigbang/networkpolicies) is a good/complete example.
+1. Add NetworkPolices templates in the sub-directory "chart/templates/bigbang/networkpolicies/*.yaml". The intent is to lock down all ingress and egress traffic except for what is required for the application to function properly. Start with a deny-all policy and then add additional policies to open traffic as needed. Refer to the other Packages code for examples. The [Gitlab package](https://repo1.dso.mil/big-bang/apps/developer-tools/gitlab/-/tree/main/chart/templates/bigbang/networkpolicies) is a good/complete example.
 
-1. Add a continuous integration (CI) pipeline to the Package. A Package should be able to be deployed by itself, independently from the BigBang chart. The Package pipeline takes advantage of this to run a Package pipeline test. The package testing is done with a helm test library. Reference the [pipeline documentation](https://repo1.dso.mil/platform-one/big-bang/pipeline-templates/pipeline-templates#using-the-infrastructure-in-your-package-ci-gitlab-pipeline) for how to create a pipeline and also [detailed instructions](https://repo1.dso.mil/platform-one/big-bang/apps/library-charts/gluon/-/blob/master/docs/bb-tests.md) in the gluon library. Instructions are not repeated here.
+1. Add a continuous integration (CI) pipeline to the Package. A Package should be able to be deployed by itself, independently from the BigBang chart. The Package pipeline takes advantage of this to run a Package pipeline test. The package testing is done with a helm test library. Reference the [pipeline documentation](https://repo1.dso.mil/big-bang/pipeline-templates/pipeline-templates#using-the-infrastructure-in-your-package-ci-gitlab-pipeline) for how to create a pipeline and also [detailed instructions](https://repo1.dso.mil/big-bang/apps/library-charts/gluon/-/blob/master/docs/bb-tests.md) in the gluon library. Instructions are not repeated here.
 
 1. Documentation for the Package should be included. A "docs" directory would include all detailed documentation. Reference other that Packages for examples.
 
 1. Add the following markdown files to complete the Package. Reference other that Packages for examples of how to create them.
 
    ```shell
-   CHANGELOG.md      <  standard history of changes made  
-   CODEOWNERS        <  list of the code maintainers. Minimum of two people from separate organizations  
-   CONTRIBUTING.md   <  instructions for how to contribute to the project  
-   README.md         <  introduction and high level information  
+   CHANGELOG.md      <  standard history of changes made
+   CODEOWNERS        <  list of the code maintainers. Minimum of two people from separate organizations
+   CONTRIBUTING.md   <  instructions for how to contribute to the project
+   README.md         <  introduction and high level information
    ```
 
 1. Create a top-level tests directory and inside put a test-values.yaml file that includes any special values overrides that are needed for CI pipeline testing. Refer to other packages for examples. But this is specific to what is needed for your package.
@@ -82,7 +82,7 @@ Package is the term we use for an application that has been prepared to be deplo
    touch test-values.yaml
    ```
 
-1. At a high level, a Package structure should look like this when you are finished  
+1. At a high level, a Package structure should look like this when you are finished
 
    ```plaintext
    ├── chart/
@@ -106,12 +106,12 @@ Package is the term we use for an application that has been prepared to be deplo
    └── README.md
    ```
 
-1. Merging code should require approval from a minimum of 2 codeowners. To setup merge requests to work properly with CODEOWNERS approval change these settings in your project:  
-Under Settings → General → Merge Request Approvals, change "Any eligible user" "Approvals required" to 1. Also ensure that "Require new approvals when new commits are added to an MR" is checked.  
-Under Settings → Repository → Protected Branches, add the main branch with "Developers + Maintainers" allowed to merge, "No one" allowed to push, and "Codeowner approval required" turned on.  
-Under Settings → Repository → Default Branch, ensure that main is selected.  
+1. Merging code should require approval from a minimum of 2 codeowners. To setup merge requests to work properly with CODEOWNERS approval change these settings in your project:
+Under Settings → General → Merge Request Approvals, change "Any eligible user" "Approvals required" to 1. Also ensure that "Require new approvals when new commits are added to an MR" is checked.
+Under Settings → Repository → Protected Branches, add the main branch with "Developers + Maintainers" allowed to merge, "No one" allowed to push, and "Codeowner approval required" turned on.
+Under Settings → Repository → Default Branch, ensure that main is selected.
 
-1. Development Testing Cycle: Test your Package chart by deploying with helm. Test frequently so you don't pile up multiple layers of errors. The goal is for Packages to be deployable independently of the bigbang chart. Most upstream helm charts come with internal services like a database that can be toggled on or off. If available use them for testing and CI pipelines. In some cases this is not an option. You can manually deploy required in-cluster services in order to complete your development testing.  
+1. Development Testing Cycle: Test your Package chart by deploying with helm. Test frequently so you don't pile up multiple layers of errors. The goal is for Packages to be deployable independently of the bigbang chart. Most upstream helm charts come with internal services like a database that can be toggled on or off. If available use them for testing and CI pipelines. In some cases this is not an option. You can manually deploy required in-cluster services in order to complete your development testing.
    Here is an example of an in-cluster postgres database
 
    ```shell

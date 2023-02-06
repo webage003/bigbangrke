@@ -1,20 +1,20 @@
 comments: |
   Operational deployments use a different configuration including but not limited to:
-  - a custom realm would not automatically be loaded. 
+  - a custom realm would not automatically be loaded.
   - needed secrets would be created independently through a GitOps process rather than using the keycolak chart to create secrets
   - the certificate would not be inlined in the values.yaml but instead the keycloak-tlscert and keycloak-tlskey secrets are created independently through a GitOps process
   - an external database would be used
   - master realm would be disabled or restricted to prevent admin login
 
-  Here are some of the URL paths that are available in Keycloak 
-  Admin UI. Default credentials for development are admin:password  
-  https://keycloak.bigbang.dev/auth/admin   
-  User registration and/or account page  
-  https://keycloak.bigbang.dev/  
-  
+  Here are some of the URL paths that are available in Keycloak
+  Admin UI. Default credentials for development are admin:password
+  https://keycloak.bigbang.dev/auth/admin
+  User registration and/or account page
+  https://keycloak.bigbang.dev/
+
   For an example "baby-yoda" keycloak realm file that already has sso clients configured see
-    https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/-/blob/main/chart/resources/dev/baby-yoda.json
-  Within the Keycloak Admin Console UI import your custom realm.json file. 
+    https://repo1.dso.mil/big-bang/product/packages/keycloak/-/blob/main/chart/resources/dev/baby-yoda.json
+  Within the Keycloak Admin Console UI import your custom realm.json file.
 
 
 domain: bigbang.dev
@@ -129,7 +129,7 @@ addons:
 
       # This config includes an example of injecting a custom theme jar on startup
       # Instructions for building a custom theme can be found in the Big Bang Keycloak repository
-      #    https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/keycloak/-/blob/main/development/README.md
+      #    https://repo1.dso.mil/big-bang/product/packages/keycloak/-/blob/main/development/README.md
       extraInitContainers: |-
         - name: plugin
           image: registry1.dso.mil/ironbank/big-bang/p1-keycloak-plugin:X.X.X
@@ -137,7 +137,7 @@ addons:
           command:
           - sh
           - -c
-          - | 
+          - |
             cp /app/p1-keycloak-plugin.jar /init
             ls -l /init
           volumeMounts:
@@ -154,7 +154,7 @@ addons:
             ls -l /init
           volumeMounts:
           - name: custom-theme
-            mountPath: "/init"    
+            mountPath: "/init"
       extraVolumes: |-
         - name: customreg
           secret:
