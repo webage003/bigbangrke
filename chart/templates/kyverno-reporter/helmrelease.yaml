@@ -1,4 +1,4 @@
-{{- $pkg := "kyvernoreporter" }}
+{{- $pkg := "kyvernoReporter" }}
 {{- $fluxSettings := merge (get .Values $pkg).flux .Values.flux -}}
 {{- if (get .Values $pkg).enabled }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
