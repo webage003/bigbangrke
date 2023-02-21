@@ -270,7 +270,7 @@ When deploying BigBang, monitoring depends on gatekeeper/kyverno and istio being
       namespace: {{ .Release.Namespace }}
   {{- end }}
   {{- if .Values.kyvernopolicies.enabled }}
-    - name: kyvernopolicies
+    - name: kyverno-policies
       namespace: {{ .Release.Namespace }}
   {{- end }}
   {{- end }}

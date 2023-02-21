@@ -41,7 +41,7 @@ spec:
       namespace: {{ $.Release.Namespace }}
     {{- end }}
     {{- if $kyvernoDep }}
-    - name: kyvernopolicies
+    - name: kyverno-policies
       namespace: {{ $.Release.Namespace }}
     {{- end }}
     {{- if $istioOpDep }}
