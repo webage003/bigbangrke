@@ -1,4 +1,4 @@
-{{- $pkg := "kyvernoPolicies" }}
+{{- $pkg := "kyvern-policies" }}
 {{- if and (eq (include "checkGitRef" (get .Values $pkg)) "true") (get .Values $pkg).enabled }}
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
