@@ -59,14 +59,14 @@ kyverno:
     tag: "2.6.1-bb.0"
     repo: "registry1"
 
-kyverno-policies:
+kyvernoPolicies:
   git: null
   oci:
     name: "kyverno-policies"
     tag: "1.0.1-bb.8"
     repo: "registry1"
 
-kyverno-reporter:
+kyvernoReporter:
   git: null
   oci:
     name: "policy-reporter"

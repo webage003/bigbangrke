@@ -409,7 +409,7 @@ kyverno:
   postRenderers: []
 
 
-kyverno-policies:
+kyvernoPolicies:
   # -- Toggle deployment of Kyverno policies
   enabled: false
   git:
@@ -426,7 +426,7 @@ kyverno-policies:
   # -- Post Renderers.  See docs/postrenders.md
   postRenderers: []
 
-kyverno-reporter:
+kyvernoReporter:
   # -- Toggle deployment of Kyverno Reporter
   enabled: false
   git:
