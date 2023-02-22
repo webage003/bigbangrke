@@ -1,4 +1,7 @@
 {{- $fluxSettingsSonarqube := merge .Values.addons.sonarqube.flux .Values.flux -}}
+{{- $kyvernoOldPoliciesValues := default dict .Values.kyvernopolicies -}}
+{{- $kyvernoNewPoliciesValues := default dict .Values.kyvernoPolicies -}}
+{{- $kyvernoPoliciesValues := merge $kyvernoOldPoliciesValues $kyvernoNewPoliciesValues -}}
 {{- if .Values.addons.sonarqube.enabled }}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -50,7 +53,7 @@ spec:
 
   values:
 
-  {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.kyvernopolicies.enabled .Values.monitoring.enabled }}
+  {{- if or .Values.gatekeeper.enabled .Values.istio.enabled $kyvernoPoliciesValues.enabled .Values.monitoring.enabled }}
   dependsOn:
   {{- if .Values.gatekeeper.enabled }}
     - name: gatekeeper
@@ -60,7 +63,7 @@ spec:
     - name: istio
       namespace: {{ .Release.Namespace }}
   {{- end }}
-  {{- if .Values.kyvernopolicies.enabled }}
+  {{- if $kyvernoPoliciesValues.enabled }}
     - name: kyverno-policies
       namespace: {{ .Release.Namespace }}
   {{- end }}
