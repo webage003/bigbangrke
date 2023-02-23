@@ -18,6 +18,7 @@ monitoring:
   enabled: true
 
 controller:
+  replicas: 1
   podAnnotations:
     checksum/metrics-pass: {{ sha256sum $neuvectorMetricsPass }}
   secret:
