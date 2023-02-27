@@ -812,6 +812,9 @@ addons:
     # -- Post Renderers.  See docs/postrenders.md
     postRenderers: []
 
+  argocdApps:
+
+
   authservice:
     # -- Toggle deployment of Authservice.
     # if enabling authservice, a filter needs to be provided by either enabling
