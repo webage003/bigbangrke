@@ -510,7 +510,7 @@ promtail:
   # -- Toggle deployment of Promtail.
   enabled: false
   git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/promtail.git
+    repo: https://repo1.dso.mil/bigbang/packages/promtail/
     path: "./chart"
     tag: "6.7.2-bb.0"
 
@@ -527,7 +527,7 @@ loki:
   # -- Toggle deployment of Loki.
   enabled: false
   git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/sandbox/loki.git
+    repo: https://repo1.dso.mil/bigbang/packages/loki/
     path: "./chart"
     tag: "3.7.0-bb.0"
 
