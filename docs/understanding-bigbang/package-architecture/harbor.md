@@ -25,7 +25,7 @@ graph LR
     harborpods("Harbor Pods") --> bucket[(Harbor Bucket)]
   end
 
-  subgraph "Image Scanning (Anchore Enterprise/Trivy)"
+  subgraph "Image Scanner"
     harborpods("Harbor Pods") --> Anchore("Anchore Enterprise/Trivy")
   end
 
@@ -135,5 +135,5 @@ The Big Bang Anchore Helm chart has been modified to use your `monitoring:` valu
 
 ### Dependent Packages
 
-- PostgreSQL 9.6+ (in-cluster by default; can be configured to use an external postgres)
+- PostgreSQL (in-cluster by default; can be configured to use an external postgres)
 - Redis (in-cluster by default; can be configured to use an external redis)
