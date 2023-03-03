@@ -268,6 +268,11 @@ packages:
     # -- Toggle deployment of this package
     # @default -- true
     enabled: false
+
+    # -- Toggle wrapper deployment of this package
+    # @default -- true
+    wrapper:
+      enabled: true
     # -- Use a kustomize deployment rather than Helm
     kustomize: false
 

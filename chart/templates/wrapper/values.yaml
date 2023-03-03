@@ -1,6 +1,7 @@
 {{- /* Used for creating values to use for Helm wrapper and package Helm charts. */ -}}
 {{- range $pkg, $vals := .Values.packages -}}
 {{- if (dig "enabled" true $vals) -}}
+{{- if (dig "wrapper" "enabled" true $vals) -}}
 {{- $pkg = include "resourceName" $pkg -}}
 apiVersion: v1
 kind: Secret
@@ -55,5 +56,6 @@ stringData:
       {{- end -}}
       {{- end }}
 ---
+{{ end -}}
 {{ end -}}
 {{- end -}}
