@@ -276,6 +276,10 @@ packages:
     # -- Use a kustomize deployment rather than Helm
     kustomize: false
 
+    # -- Toggle wrapper deployment of this package
+    # @default -- false
+    imagepullsecret: true
+
     # -- OCI source is supported and recommended for Helm deployments
     oci:
       # -- Name of the OCI chart in `repo`

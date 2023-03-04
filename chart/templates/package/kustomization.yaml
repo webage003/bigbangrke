@@ -16,6 +16,7 @@ metadata:
     app.kubernetes.io/name: {{ $pkg }}
     {{- include "commonLabels" $ | nindent 4 }}
 spec:
+  targetNamespace: {{ dig "namespace" "name" $pkg $vals }}
   interval: 10m
   path: {{ dig "git" "path" "" $vals }}
   sourceRef:
@@ -23,6 +24,11 @@ spec:
     name: {{ $pkg }}
     namespace: {{ dig "namespace" "name" $pkg $vals }}
   prune: true
+  postBuild:
+    substitute:
+      bb_domain: {{ $.Values.domain }}
+      bb_istio_enabled: "{{ $.Values.istio.enabled }}"
+      bb_gateway: "public"
 ---
 {{ end -}}
 {{- end -}}
