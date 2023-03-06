@@ -1,0 +1,70 @@
+{{- $fluxSettingsPodInfo := merge .Values.addons.podinfo.flux .Values.flux -}}
+{{- if .Values.addons.podinfo.enabled }}
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: podinfo-bigbang
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: podinfo
+    app.kubernetes.io/component: "test-tools"
+    {{- include "commonLabels" . | nindent 4}}
+spec:
+  releaseName: podinfo
+  targetNamespace: podinfo
+  chart:
+    spec:
+      {{- if eq (include "checkGitRef" .Values.addons.podinfo) "true" }}
+      chart: {{ .Values.addons.podinfo.git.path }}
+      sourceRef:
+        kind: GitRepository
+        name: podinfo
+        namespace: {{ .Release.Namespace }}
+      {{- else }}
+      chart: {{ .Values.addons.podinfo.oci.name }}
+      version: {{ .Values.addons.podinfo.oci.tag }}
+      sourceRef:
+        kind: HelmRepository
+        name: {{ .Values.addons.podinfo.oci.repo }}
+        namespace: {{ .Release.Namespace }}
+      {{- end }}
+      interval: 5m
+
+
+  {{- toYaml $fluxSettingsPodInfo | nindent 2 }}
+
+  {{- if .Values.addons.podinfo.postRenderers }}
+  postRenderers:
+  {{ toYaml .Values.addons.podinfo.postRenderers | nindent 4 }}
+  {{- end }}
+  # valuesFrom:
+  #   - name: {{ .Release.Name }}-podinfo-values
+  #     kind: Secret
+  #     valuesKey: "common"
+  #   - name: {{ .Release.Name }}-podinfo-values
+  #     kind: Secret
+  #     valuesKey: "defaults"
+  #   - name: {{ .Release.Name }}-podinfo-values
+  #     kind: Secret
+  #     valuesKey: "overlays"
+
+  {{- if or .Values.gatekeeper.enabled .Values.istio.enabled .Values.kyvernopolicies.enabled .Values.monitoring.enabled }}
+  dependsOn:
+  {{- if .Values.gatekeeper.enabled }}
+  - name: gatekeeper
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- if .Values.istio.enabled }}
+  - name: istio
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- if .Values.kyvernopolicies.enabled }}
+  - name: kyvernopolicies
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- if .Values.monitoring.enabled }}
+  - name: monitoring
+    namespace: {{ .Release.Namespace }}
+  {{- end }}
+  {{- end }}
+{{- end }}

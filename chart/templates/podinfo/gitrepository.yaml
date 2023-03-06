@@ -1,0 +1,14 @@
+{{- if and (eq (include "checkGitRef" .Values.addons.podinfo) "true") (not .Values.offline) .Values.addons.podinfo.enabled }}
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: podinfo
+  namespace: {{ .Release.Namespace }}
+spec:
+  interval: {{ .Values.flux.interval }}
+  url: {{ .Values.addons.podinfo.git.repo }}
+  ref:
+    {{- include "validRef" .Values.addons.podinfo.git | nindent 4 }}
+  {{ include "gitIgnore" . }}
+  {{- include "gitCreds" . | nindent 2 }}
+{{- end }}
