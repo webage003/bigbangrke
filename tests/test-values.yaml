@@ -113,6 +113,9 @@ kiali:
 
 clusterAuditor:
   enabled: true
+  git:
+    tag: ""
+    branch: "sso_test"
   values:
     resources:
       requests:
@@ -123,6 +126,9 @@ clusterAuditor:
       enabled: true
       cypress:
         envs:
+          cypress_keycloak_test_enable: "true"
+          cypress_keycloak_username: "cypress"
+          cypress_keycloak_password: "tnr_w!G33ZyAt@C8"
           cypress_grafana_url: 'https://grafana.bigbang.dev'
           cypress_prometheus_url: 'https://prometheus.bigbang.dev'
           cypress_url: 'https://grafana.bigbang.dev/d/YBgRZG6Mz/opa-violations?orgId=1'
