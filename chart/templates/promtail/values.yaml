@@ -5,8 +5,6 @@
 {{- define "bigbang.defaults.promtail" -}}
 hostname: {{ .Values.hostname }}
 
-namespace: {{ .Values.namespace }}
-
 image:
   pullPolicy: {{ .Values.imagePullPolicy }}
 

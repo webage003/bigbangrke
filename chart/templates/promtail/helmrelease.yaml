@@ -4,13 +4,12 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: promtail
-  namespace: {{ default "promtail" $.Values.promtail.namespace }}
-  labels:
+  namespace: promtail
     app.kubernetes.io/name: promtail
     app.kubernetes.io/component: "core"
     {{- include "commonLabels" . | nindent 4}}
 spec:
-  targetNamespace: {{ default "promtail" $.Values.promtail.namespace }}
+  targetNamespace: promtail
   chart:
     spec:
       {{- if eq (include "checkGitRef" .Values.promtail) "true" }}
