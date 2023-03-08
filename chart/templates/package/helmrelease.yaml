@@ -1,6 +1,6 @@
 {{- /* Used for deploying a package using a Helm chart */ -}}
 {{- range $pkg, $vals := .Values.packages -}}
-{{- if and (dig "enabled" true $vals) (not $vals.kustomize) -}}
+{{- if and (dig "enabled" true $vals) $vals.kustomize -}}
 {{- $pkg := include "resourceName" $pkg -}}
 {{- $defaults := $.Files.Get (printf "defaults/%s.yaml" $pkg) -}}
 {{- if $defaults -}}
@@ -10,7 +10,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: {{ $pkg }}
+  name: {{ $pkg }}-bigbang
   namespace: {{ dig "namespace" "name" $pkg $vals }}
   labels:
     app.kubernetes.io/name: {{ $pkg }}
