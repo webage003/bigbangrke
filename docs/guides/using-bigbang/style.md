@@ -41,3 +41,4 @@ value.
 
 * YAML files should be indented using _two spaces_ (and never tabs).
 * Keys are camelCase and alphanumeric. No special characters
+* All Kubernetes resource names, repository names, and namespaces are lowercase, alphanumeric or -, and kebab-case.
