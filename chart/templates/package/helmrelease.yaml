@@ -43,6 +43,8 @@ spec:
   valuesFrom:
   - name: {{ $pkg }}-values
     kind: Secret
+  - name: bigbang-values
+    kind: Secret
 
   {{- /* Always wait on policy enforcement */ -}}
   {{- $gatekeeperDep := $.Values.gatekeeper.enabled -}}
