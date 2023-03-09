@@ -2,16 +2,12 @@ This Style Guide explains general conventions.
 
 ## Package Names
 
-Package names must be lowercase letters and numbers. Words _may_ be separated
+* Package names must be lowercase letters and numbers. Words _may_ be separated
 with dashes (-):
-
-
-Neither uppercase letters nor underscores can be used in package names. Dots
+* Neither uppercase letters nor underscores can be used in package names. Dots
 should not be used in package names.
-
-Package names should be consistent between the git repository, namespace, resource prefixes and labels.
-
-Package names from yaml can be translated to Kubernetes resource names using Helm's kebab-case function. This replaces capital letters with a - and the lowercase version of the letter.
+* Package names should be consistent between the git repository, namespace, resource prefixes and labels.
+* Package names from yaml can be translated to Kubernetes resource names using Helm's kebab-case function. This replaces capital letters with a - and the lowercase version of the letter.
 
 #### Notable exceptions:
      
@@ -37,7 +33,7 @@ When SemVer versions are stored in Kubernetes labels, we conventionally alter
 the `+` character to an `_` character, as labels do not allow the `+` sign as a
 value.
 
-## Formatting YAML
+## Formatting YAML 
 
 * YAML files should be indented using _two spaces_ (and never tabs).
 * Keys are camelCase and alphanumeric. No special characters
