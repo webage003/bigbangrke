@@ -25,13 +25,6 @@ The following items for each package should have the same name:
 ## Version Numbers
 
 ### WIP Lots of discourse on this topic suggest updating this section when finalized
-Wherever possible, Helm uses [SemVer 2](https://semver.org) to represent version
-numbers. (Note that Docker image tags do not necessarily follow SemVer, and are
-thus considered an unfortunate exception to the rule.)
-
-When SemVer versions are stored in Kubernetes labels, we conventionally alter
-the `+` character to an `_` character, as labels do not allow the `+` sign as a
-value.
 
 ## Formatting YAML 
 
