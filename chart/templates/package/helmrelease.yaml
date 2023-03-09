@@ -1,6 +1,6 @@
 {{- /* Used for deploying a package using a Helm chart */ -}}
 {{- range $pkg, $vals := .Values.packages -}}
-{{- if and (dig "enabled" true $vals) $vals.kustomize -}}
+{{- if (dig "enabled" true $vals) -}}
 {{- $pkg := include "resourceName" $pkg -}}
 {{- $defaults := $.Files.Get (printf "defaults/%s.yaml" $pkg) -}}
 {{- if $defaults -}}

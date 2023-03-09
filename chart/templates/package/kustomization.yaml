@@ -28,6 +28,8 @@ spec:
     substituteFrom:
     - name: {{ $pkg }}-values
       kind: Secret
+    substitute:
+      bb_domain: {{ $.Values.domain }}
 
   {{- /* Always wait on policy enforcement */ -}}
   {{- $gatekeeperDep := $.Values.gatekeeper.enabled -}}
